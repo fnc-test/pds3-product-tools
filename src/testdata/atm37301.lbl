@@ -1,0 +1,29 @@
+PDS_VERSION_ID                = PDS3
+FILE_NAME                     = "ATM37301.TAB"
+RECORD_TYPE                   = FIXED_LENGTH
+RECORD_BYTES                  = 130
+FILE_RECORDS                  = 59597
+^TABLE                        = "atm37301.tab"
+SPACECRAFT_ID                 = MGS
+INSTRUMENT_ID                 = TES
+MISSION_PHASE_NAME            = "EXTENDED-EXTENDED MISSION"
+TARGET_NAME                   = MARS
+PRODUCT_ID                    = "TES137301"
+PRODUCER_ID                   = MGS_TES_TEAM
+DATA_SET_ID                   = "MGS-M-TES-3-TSDR-V2.0"
+PRODUCT_RELEASE_DATE          = 2004-10-05
+PRODUCT_CREATION_TIME         = 2004-10-05T01:16:44
+START_TIME                    = 2004-03-11T00:58:52
+STOP_TIME                     = 2004-03-12T14:16:14
+SPACECRAFT_CLOCK_START_COUNT  = 763433970
+SPACECRAFT_CLOCK_STOP_COUNT   = 763568212
+START_ORBIT_NUMBER            = 24060
+STOP_ORBIT_NUMBER             = 24078
+
+OBJECT                        = TABLE
+  START_PRIMARY_KEY           = ( 763433970 )
+  STOP_PRIMARY_KEY            = ( 763568212 )
+  ROWS                        = 59587
+  ^STRUCTURE                  = "ATM.FMT"
+END_OBJECT                    = TABLE
+END
