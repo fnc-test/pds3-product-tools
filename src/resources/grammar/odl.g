@@ -1,4 +1,8 @@
 // PARSER
+header {
+    package gov.nasa.jpl.pds.tools.label.parser;
+}
+
 class ODLParser extends Parser;
 options {
     exportVocab = ODL;
