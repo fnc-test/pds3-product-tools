@@ -1,0 +1,395 @@
+************************************************************************
+*                                                                      *
+*               Planetary Data System Validation Report                *
+*                     Label Verifier Version 2.19                      *
+*                                                                      *
+*                      Tue Apr 25 13:26:22 2006                        *
+*                                                                      *
+*           Toolbox Data Dictionary Name: c:\pdsdd\pdsdd.idx            *
+*                                                                      *
+*                  Data Dictionary Validation is ON                    *
+*                    Verbose Error Reporting is ON                     *
+*                        Screen Display is OFF                         *
+*                        Name Aliasing is ON                           *
+*                   Itemized Error Reporting is ON                     *
+*                   Expand Structure Pointers is ON                    *
+*                     Saving Expanded Files is OFF                     *
+*                DOS Recursive Directory Searching is ON               *
+*            Maximum Number of Errors Allowed is set to 300            *
+*                  Warning Messages will be displayed                  *
+*                   Info messages will be displayed                    *
+*             Label Validation and Pointer File Verification           *
+*                          Label Detection Enabled                     *
+*                   Error Message Wrapping is ON                        *
+*                                                                       *
+************************************************************************
+
+
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+>                                                                      <
+#     c:\PDS_TEST_DVD\TEST_PRODUCTS\IMAGES\1N131838249THN05A6P1732L0M1.IMG <
+>                                                                      <
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+------------------------------------------------------------------------
+
+Searching for pointer files in c:\PDS_TEST_DVD\TEST_PRODUCTS\IMAGES\1N131838249THN05A6P1732L0M1.IMG
+
+           -------------------------------------------------------      
+1DESCRIPTION pointer with keyword value of VICAR2.TXT at line 476
+2   Results of file search :
+3      c:\PDS_TEST_DVD\TEST_PRODUCTS\IMAGES\VICAR2.TXT
+
+------------------------------------------------------------------------
+*****          The hierarchy of objects in this label is:          *****
+------------------------------------------------------------------------
+
+   ROVER_COORDINATE_SYSTEM (line 82)
+   IDD_COORDINATE_SYSTEM (line 97)
+   PMA_ARTICULATION_STATE (line 111)
+   HGA_ARTICULATION_STATE (line 127)
+   FILTER_ARTICULATION_STATE (line 136)
+   IDD_ARTICULATION_STATE (line 148)
+   PMA_COORDINATE_SYSTEM (line 184)
+   CHASSIS_ARTICULATION_STATE (line 199)
+   OBSERVATION_REQUEST_PARMS (line 218)
+   IMAGE_REQUEST_PARMS (line 246)
+   REFERENCE_PIXEL_REQUEST_PARMS (line 264)
+   THUMBNAIL_REQUEST_PARMS (line 278)
+   SUBFRAME_REQUEST_PARMS (line 295)
+   ROW_SUM_REQUEST_PARMS (line 307)
+   COLUMN_SUM_REQUEST_PARMS (line 315)
+   SUN_FIND_REQUEST_PARMS (line 323)
+   HISTOGRAM_REQUEST_PARMS (line 332)
+   INSTRUMENT_STATE_PARMS (line 340)
+   COMPRESSION_PARMS (line 384)
+   ROVER_DERIVED_GEOMETRY_PARMS (line 407)
+   SITE_DERIVED_GEOMETRY_PARMS (line 416)
+   IMAGE (line 427)
+   GEOMETRIC_CAMERA_MODEL (line 450)
+   DERIVED_IMAGE_PARMS (line 466)
+   IMAGE_HEADER (line 472)
+
+------------------------------------------------------------------------
+*****           The ODL syntax errors in this file are:            *****
+------------------------------------------------------------------------
+
+1ERROR:   Line 167 -- syntax error
+1ERROR:   Line 167 -- ')' at end of a sequence is missing
+1ERROR:   Line 167 -- Expected '=' after name
+1ERROR:   Line 167 -- Expected '=' after name
+1ERROR:   Line 167 -- Expected '=' after name
+1WARNING: Line 478 -- Label reading complete with 5 errors, 0 warnings.
+
+------------------------------------------------------------------------
+*****            The semantic errors in this file are:             *****
+------------------------------------------------------------------------
+
+ 
+Keywords of ROOT (line 0):
+ 
+1    WARNING: Line 28 -- INSTRUMENT_ID:  Value is not a standard value:
+2                        NAVCAM_LEFT
+1    WARNING: Line 29 -- INSTRUMENT_NAME:  Value is not a standard value:
+2                        NAVIGATION CAMERA LEFT
+1    WARNING: Line 40 -- PRODUCER_INSTITUTION_NAME:  Value is not a
+2                        standard value: MULTIMISSION IMAGE PROCESSING
+3                        SUBSYSTEM , JET PROPULSION LAB
+1    WARNING: Line 46 -- ROVER_MOTION_COUNTER_NAME:  Sequence or set
+2                        value is not a standard value: SITE DRIVE IDD
+3                        PMA HGA
+ 
+Sub-objects of ROVER_COORDINATE_SYSTEM (line 82):
+ 
+1    WARNING: Line 82 -- ROVER_COORDINATE_SYSTEM:  Not in the data
+2                        dictionary.  (Sub-objects and keywords will not
+3                        be validated against required and optional
+4                        lists)
+ 
+Keywords of ROVER_COORDINATE_SYSTEM (line 82):
+ 
+1    WARNING: Line 84 -- COORDINATE_SYSTEM_INDEX_NAME:  Sequence or set
+2                        value is not a standard value: SITE DRIVE IDD
+3                        PMA HGA
+ 
+Sub-objects of IDD_COORDINATE_SYSTEM (line 97):
+ 
+1    WARNING: Line 97 -- IDD_COORDINATE_SYSTEM:  Not in the data
+2                        dictionary.  (Sub-objects and keywords will not
+3                        be validated against required and optional
+4                        lists)
+ 
+Keywords of IDD_COORDINATE_SYSTEM (line 97):
+ 
+1    WARNING: Line 99 -- COORDINATE_SYSTEM_INDEX_NAME:  Sequence or set
+2                        value is not a standard value: SITE DRIVE IDD
+3                        PMA HGA
+ 
+Sub-objects of PMA_ARTICULATION_STATE (line 111):
+ 
+1    WARNING: Line 111 -- PMA_ARTICULATION_STATE:  Not in the data
+2                         dictionary.  (Sub-objects and keywords will not
+3                         be validated against required and optional
+4                         lists)
+ 
+Keywords of PMA_ARTICULATION_STATE (line 111):
+ 
+1    WARNING: Line 117 -- ARTICULATION_DEVICE_ANGLE_NAME:  Sequence or
+2                         set value is not a standard value:
+3                         AZIMUTH-MEASURED ELEVATION-MEASURED
+4                         AZIMUTH-REQUESTED ELEVATION-REQUESTED
+5                         AZIMUTH-INITIAL ELEVATION-INITIAL
+ 
+Sub-objects of HGA_ARTICULATION_STATE (line 127):
+ 
+1    WARNING: Line 127 -- HGA_ARTICULATION_STATE:  Not in the data
+2                         dictionary.  (Sub-objects and keywords will not
+3                         be validated against required and optional
+4                         lists)
+ 
+Keywords of HGA_ARTICULATION_STATE (line 127):
+ 
+1    WARNING: Line 131 -- ARTICULATION_DEVICE_ANGLE_NAME:  Sequence or
+2                         set value is not a standard value: AZIMUTH
+3                         ELEVATION
+ 
+Sub-objects of FILTER_ARTICULATION_STATE (line 136):
+ 
+1    WARNING: Line 136 -- FILTER_ARTICULATION_STATE:  Not in the data
+2                         dictionary.  (Sub-objects and keywords will not
+3                         be validated against required and optional
+4                         lists)
+ 
+Keywords of FILTER_ARTICULATION_STATE (line 136):
+ 
+1    WARNING: Line 140 -- ARTICULATION_DEV_POSITION_ID:  Sequence or set
+2                         value is not a standard value:
+3                         PANCAM_L8_440NM_SOL_ND5 PANCAM_R1_440NM
+4                         MI_CLOSED
+1    WARNING: Line 142 -- ARTICULATION_DEV_POSITION_NAME:  Sequence or
+2                         set value is not a standard value: LEFT PANCAM
+3                         FILTER RIGHT PANCAM FILTER MI DUST COVER
+ 
+Sub-objects of IDD_ARTICULATION_STATE (line 148):
+ 
+1    WARNING: Line 148 -- IDD_ARTICULATION_STATE:  Not in the data
+2                         dictionary.  (Sub-objects and keywords will not
+3                         be validated against required and optional
+4                         lists)
+ 
+Keywords of IDD_ARTICULATION_STATE (line 148):
+ 
+1    WARNING: Line 156 -- ARTICULATION_DEVICE_ANGLE_NAME:  Sequence or
+2                         set value is not a standard value: JOINT 1
+3                         AZIMUTH-ENCODER JOINT 2 ELEVATION-ENCODER JOINT
+4                         3 ELBOW-ENCODER JOINT 4 WRIST-ENCODER JOINT 5
+5                         TURRET-ENCODER JOINT 1 AZIMUTH-POTENTIOMETER
+6                         JOINT 2 ELEVATION-POTENTIOMETER JOINT 3
+7                         ELBOW-POTENTIOMETER JOINT 4 WRIST-POTENTIOMETER
+8                         JOINT 5 TURRET-POTENTIOMETER
+1    WARNING: Line 168 -- ARTICULATION_DEVICE_TEMP_NAME:  Sequence or set
+2                         value is not a standard value: AZIMUTH JOINT 1
+3                         TURRET JOINT 5
+1    WARNING: Line 172 -- CONTACT_SENSOR_STATE:  Sequence or set value is
+2                         not a standard value: NO CONTACT NO CONTACT
+3                         CONTACT CONTACT NO CONTACT NO CONTACT CLOSED NO
+4                         CONTACT
+1    WARNING: Line 175 -- CONTACT_SENSOR_STATE_NAME:  Sequence or set
+2                         value is not a standard value: MI SWITCH 1 MI
+3                         SWITCH 2 RAT SWITCH 1 RAT SWITCH 2 MB SWITCH 1
+4                         MB SWITCH 2 APXS DOOR SWITCH APXS CONTACT
+5                         SWITCH
+ 
+Sub-objects of PMA_COORDINATE_SYSTEM (line 184):
+ 
+1    WARNING: Line 184 -- PMA_COORDINATE_SYSTEM:  Not in the data
+2                         dictionary.  (Sub-objects and keywords will not
+3                         be validated against required and optional
+4                         lists)
+ 
+Keywords of PMA_COORDINATE_SYSTEM (line 184):
+ 
+1    WARNING: Line 186 -- COORDINATE_SYSTEM_INDEX_NAME:  Sequence or set
+2                         value is not a standard value: SITE DRIVE IDD
+3                         PMA HGA
+ 
+Sub-objects of CHASSIS_ARTICULATION_STATE (line 199):
+ 
+1    WARNING: Line 199 -- CHASSIS_ARTICULATION_STATE:  Not in the data
+2                         dictionary.  (Sub-objects and keywords will not
+3                         be validated against required and optional
+4                         lists)
+ 
+Keywords of CHASSIS_ARTICULATION_STATE (line 199):
+ 
+1    WARNING: Line 206 -- ARTICULATION_DEVICE_ANGLE_NAME:  Sequence or
+2                         set value is not a standard value: LEFT FRONT
+3                         WHEEL POTENTIOMETER RIGHT FRONT WHEEL
+4                         POTENTIOMETER LEFT REAR WHEEL POTENTIOMETER
+5                         RIGHT REAR WHEEL POTENTIOMETER LEFT BOGIE
+6                         POTENTIOMETER RIGHT BOGIE POTENTIOMETER
+7                         DIFFERENTIAL BOGIE POTENTIOMETER
+ 
+Sub-objects of OBSERVATION_REQUEST_PARMS (line 218):
+ 
+1    WARNING: Line 218 -- OBSERVATION_REQUEST_PARMS:  Not in the data
+2                         dictionary.  (Sub-objects and keywords will not
+3                         be validated against required and optional
+4                         lists)
+ 
+Keywords of OBSERVATION_REQUEST_PARMS (line 218):
+ 
+1    WARNING: Line 221 -- FILTER_NAME:  Value is not a standard value:
+2                         NONE
+ 
+Sub-objects of IMAGE_REQUEST_PARMS (line 246):
+ 
+1    WARNING: Line 246 -- IMAGE_REQUEST_PARMS:  Not in the data
+2                         dictionary.  (Sub-objects and keywords will not
+3                         be validated against required and optional
+4                         lists)
+ 
+Sub-objects of REFERENCE_PIXEL_REQUEST_PARMS (line 264):
+ 
+1    WARNING: Line 264 -- REFERENCE_PIXEL_REQUEST_PARMS:  Not in the data
+2                         dictionary.  (Sub-objects and keywords will not
+3                         be validated against required and optional
+4                         lists)
+ 
+Sub-objects of THUMBNAIL_REQUEST_PARMS (line 278):
+ 
+1    WARNING: Line 278 -- THUMBNAIL_REQUEST_PARMS:  Not in the data
+2                         dictionary.  (Sub-objects and keywords will not
+3                         be validated against required and optional
+4                         lists)
+ 
+Sub-objects of SUBFRAME_REQUEST_PARMS (line 295):
+ 
+1    WARNING: Line 295 -- SUBFRAME_REQUEST_PARMS:  Not in the data
+2                         dictionary.  (Sub-objects and keywords will not
+3                         be validated against required and optional
+4                         lists)
+ 
+Sub-objects of ROW_SUM_REQUEST_PARMS (line 307):
+ 
+1    WARNING: Line 307 -- ROW_SUM_REQUEST_PARMS:  Not in the data
+2                         dictionary.  (Sub-objects and keywords will not
+3                         be validated against required and optional
+4                         lists)
+ 
+Sub-objects of COLUMN_SUM_REQUEST_PARMS (line 315):
+ 
+1    WARNING: Line 315 -- COLUMN_SUM_REQUEST_PARMS:  Not in the data
+2                         dictionary.  (Sub-objects and keywords will not
+3                         be validated against required and optional
+4                         lists)
+ 
+Sub-objects of SUN_FIND_REQUEST_PARMS (line 323):
+ 
+1    WARNING: Line 323 -- SUN_FIND_REQUEST_PARMS:  Not in the data
+2                         dictionary.  (Sub-objects and keywords will not
+3                         be validated against required and optional
+4                         lists)
+ 
+Sub-objects of HISTOGRAM_REQUEST_PARMS (line 332):
+ 
+1    WARNING: Line 332 -- HISTOGRAM_REQUEST_PARMS:  Not in the data
+2                         dictionary.  (Sub-objects and keywords will not
+3                         be validated against required and optional
+4                         lists)
+ 
+Sub-objects of INSTRUMENT_STATE_PARMS (line 340):
+ 
+1    WARNING: Line 340 -- INSTRUMENT_STATE_PARMS:  Not in the data
+2                         dictionary.  (Sub-objects and keywords will not
+3                         be validated against required and optional
+4                         lists)
+ 
+Keywords of INSTRUMENT_STATE_PARMS (line 340):
+ 
+1    WARNING: Line 351 -- FILTER_NAME:  Value is not a standard value:
+2                         PANCAM_L8_440NM_SOL_ND5
+1    WARNING: Line 361 -- INSTRUMENT_TEMPERATURE_NAME:  Sequence or set
+2                         value is not a standard value: FRONT HAZ
+3                         ELECTRONICS REAR HAZ ELECTRONICS LEFT PAN
+4                         ELECTRONICS LEFT PAN CCD RIGHT PAN CCD LEFT NAV
+5                         CCD MI CCD MI ELECTRONICS DESCENT CAMERA CCD
+1    WARNING: Line 374 -- SUN_FIND_PARM_NAME:  Sequence or set value is
+2                         not a standard value: WINDOW SIZE BRIGHTNESS
+3                         THRESHOLD SUMMED BRIGHTNESS
+ 
+Sub-objects of COMPRESSION_PARMS (line 384):
+ 
+1    WARNING: Line 384 -- COMPRESSION_PARMS:  Not in the data dictionary.
+2                          (Sub-objects and keywords will not be
+3                         validated against required and optional lists)
+ 
+Keywords of COMPRESSION_PARMS (line 384):
+ 
+1    WARNING: Line 387 -- INST_CMPRS_DESC:  Value is not a standard
+2                         value: Lossy compression algorithm developed at
+3                         JPL
+ 
+Sub-objects of ROVER_DERIVED_GEOMETRY_PARMS (line 407):
+ 
+1    WARNING: Line 407 -- ROVER_DERIVED_GEOMETRY_PARMS:  Not in the data
+2                         dictionary.  (Sub-objects and keywords will not
+3                         be validated against required and optional
+4                         lists)
+ 
+Sub-objects of SITE_DERIVED_GEOMETRY_PARMS (line 416):
+ 
+1    WARNING: Line 416 -- SITE_DERIVED_GEOMETRY_PARMS:  Not in the data
+2                         dictionary.  (Sub-objects and keywords will not
+3                         be validated against required and optional
+4                         lists)
+ 
+Sub-objects of IMAGE (line 427):
+ 
+1    INFO:    Line 427 -- IMAGE:  Using PDS GENERIC object definition.
+ 
+Keywords of IMAGE (line 427):
+ 
+1    ERROR:   Line 435 -- CHECKSUM:  Inconsistent data type.  (Value
+2                         should be of type INTEGER)
+ 
+Sub-objects of GEOMETRIC_CAMERA_MODEL (line 450):
+ 
+1    WARNING: Line 450 -- GEOMETRIC_CAMERA_MODEL:  Not in the data
+2                         dictionary.  (Sub-objects and keywords will not
+3                         be validated against required and optional
+4                         lists)
+ 
+Keywords of GEOMETRIC_CAMERA_MODEL (line 450):
+ 
+1    WARNING: Line 453 -- MODEL_COMPONENT_ID:  Sequence or set value is
+2                         not a standard value: C A H V
+1    WARNING: Line 454 -- MODEL_COMPONENT_NAME:  Sequence or set value is
+2                         not a standard value: CENTER AXIS HORIZONTAL
+3                         VERTICAL
+ 
+Sub-objects of DERIVED_IMAGE_PARMS (line 466):
+ 
+1    WARNING: Line 466 -- DERIVED_IMAGE_PARMS:  Not in the data
+2                         dictionary.  (Sub-objects and keywords will not
+3                         be validated against required and optional
+4                         lists)
+ 
+Sub-objects of IMAGE_HEADER (line 472):
+ 
+1    INFO:    Line 472 -- IMAGE_HEADER:  Using PDS GENERIC object
+2                         definition.
+ 
+Semantic validation completed with 47 errors or warnings
+ 
+
+************************************************************************
+*                                                                      *
+*              This is the end of the Validation Report                *
+*                                                                      *
+*                      Tue Apr 25 13:26:22 2006                        *
+*                                                                      *
+************************************************************************

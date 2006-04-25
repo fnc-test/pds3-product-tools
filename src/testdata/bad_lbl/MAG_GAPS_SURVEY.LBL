@@ -1,0 +1,101 @@
+PDS_VERSION_ID                = PDS3                                          
+DATA_SET_ID                   = {"GO-J-MAG-2-RAW-DATA-V1.0",                  
+                                 "GO-J-MAG-3-MAGNETOSPHERIC-SURVEY-V1.0"}     
+STANDARD_DATA_PRODUCT_ID      = "MAG GAP LISTING"                             
+PRODUCT_ID                    = "MAG_GAPS_SURVEY"                             
+PRODUCT_TYPE                  = DOCUMENT                                      
+PRODUCT_CREATION_TIME         = 2003-09-01T14:17:00                           
+                                                                              
+RECORD_TYPE                   = STREAM                                        
+RECORD_BYTES                  = 110                                           
+FILE_RECORDS                  = 732                                           
+                                                                              
+START_TIME                    = 1996-06-24T06:49:05.058                       
+STOP_TIME                     = 2000-02-08T22:36:35.919                       
+                                                                              
+INSTRUMENT_HOST_NAME          = "GALILEO ORBITER"                             
+INSTRUMENT_HOST_ID            = "GO"                                          
+MISSION_PHASE_NAME            = "JUPITER ORBIT OPERATIONS"                    
+TARGET_NAME                   = "JUPITER"                                     
+INSTRUMENT_NAME               = "TRIAXIAL FLUXGATE MAGNETOMETER"              
+INSTRUMENT_ID                 = "MAG"                                         
+                                                                              
+^SPREADSHEET                  = "MAG_GAPS_SURVEY.CSV"                         
+OBJECT                        = SPREADSHEET                                   
+  INTERCHANGE_FORMAT          = ASCII                                         
+  ROWS                        = 732                                           
+  COLUMNS                     = 3                                             
+  ROW_BYTES                   = 110                                           
+  FIELD_DELIMITER             = COMMA                                         
+  DESCRIPTION                 = "                                             
+    List of data gaps of >300 (RTS data) or >7200 (optimal averager           
+    data) seconds that are associated with the                                
+    GO-J-MAG-3-MAGNETOSPHERIC-SURVEY-V1.0 data set.                           
+                                                                              
+    RTS gaps of 60-300 seconds are often associated with instrument           
+    calibration exercises. RTS gaps of less than 60 seconds are often         
+    due to spikes which have been removed. There are numerous gaps of         
+    ~2 hours in optimal averager data which are associated with the           
+    time it takes for the data buffer to be read out, and before which        
+    a new optimal averager on command may not be given."                      
+                                                                              
+  OBJECT                      = FIELD                                         
+    NAME                      = "START TIME"                                  
+    COLUMN_NUMBER             = 1                                             
+    DATA_TYPE                 = TIME                                          
+    START_BYTE                = 1                                             
+    BYTES                     = 23                                            
+    DESCRIPTION               = "                                             
+      Spacecraft event time of the last good record before the gap in         
+      PDS time format."                                                       
+  END_OBJECT                  = FIELD                                         
+                                                                              
+  OBJECT                      = FIELD                                         
+    NAME                      = "STOP TIME"                                   
+    COLUMN_NUMBER             = 2                                             
+    DATA_TYPE                 = TIME                                          
+    START_BYTE                = 25                                            
+    BYTES                     = 23                                            
+    DESCRIPTION               = "                                             
+      Spacecraft event time of the first good record after the gap in         
+      PDS time format."                                                       
+  END_OBJECT                  = FIELD                                         
+                                                                              
+  OBJECT                      = FIELD                                         
+    NAME                      = "GAP DESCRIPTION"                             
+    COLUMN_NUMBER             = 3                                             
+    DATA_TYPE                 = CHARACTER                                     
+    START_BYTE                = 50                                            
+    BYTES                     = 58                                            
+    DESCRIPTION               = "                                             
+      Brief description of reason for gap. Gaps for which no description is   
+      given are typically TELEMETRY OUTAGES, but have not been confirmed.     
+                                                                              
+      Typical reasons include the following:                                  
+                                                                              
+      BUFFER OVERFLOW       - the spacecraft Multi-User Buffer (MUB) has      
+        filled at a time when there is no downlink                            
+      INSTRUMENT ANOMALY    - specifics on instrument anomalies are provided  
+        in the instrument catalog file (/CATALOG/GO_MAG_INST.CAT)             
+      INSTRUMENT COMMANDING - data corruption due to instrument commanding    
+        (includes MAG SENSOR FLIP, and INSTRUMENT MODE CHANGE)                
+      NO COVERAGE           - planned gap in data coverage. Examples include  
+        intervals when there was no data acquisition scheduled in the         
+        sequence, or when ground coverage was released to other spacecraft    
+      ONBOARD AACS OUTAGES  - AACS outages onboard the spacecraft cause RTS   
+        and optimal averager data (which are processed onboard the spacecraft 
+        using the AACS) to become corrupted. AACS outages are frequently      
+        related to THRUSTER FLUSHES (see /CATALOG/GO_MAG_SURVEY_DS.CAT)       
+      SPACECRAFT SAFING     - specifics spacecraft safings are provided in    
+        the instrument catalog file (/CATALOG/GO_MAG_INST.CAT)                
+      TELEMETRY OUTAGE      - loss of communication between the spacecraft    
+        and ground station. Contributing factors may include ground station   
+        malfunction or reallocation, and inclement weather. The reason for a  
+        gap may be found in the Science Data Losses files                     
+        (/DOCUMENT/PROJECT/AR_SEF/.../*_LOST.TXT)                             
+      WRONG ONBOARD MATRIX  - data corrupted because the onboard geometry     
+        matrix, offsets, and gains do not match the configuration of the      
+        instrument; onboard processing is performed incorrectly"              
+  END_OBJECT                  = FIELD                                         
+END_OBJECT                    = SPREADSHEET                                   
+END                                                                           

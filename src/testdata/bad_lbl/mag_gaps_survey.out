@@ -1,0 +1,97 @@
+************************************************************************
+*                                                                      *
+*               Planetary Data System Validation Report                *
+*                     Label Verifier Version 2.19                      *
+*                                                                      *
+*                      Tue Apr 25 09:45:40 2006                        *
+*                                                                      *
+*           Toolbox Data Dictionary Name: c:\pdsdd\pdsdd.idx            *
+*                                                                      *
+*                  Data Dictionary Validation is ON                    *
+*                    Verbose Error Reporting is ON                     *
+*                        Screen Display is OFF                         *
+*                        Name Aliasing is ON                           *
+*                   Itemized Error Reporting is ON                     *
+*                   Expand Structure Pointers is ON                    *
+*                     Saving Expanded Files is OFF                     *
+*                DOS Recursive Directory Searching is ON               *
+*            Maximum Number of Errors Allowed is set to 300            *
+*                  Warning Messages will be displayed                  *
+*                   Info messages will be displayed                    *
+*             Label Validation and Pointer File Verification           *
+*                          Label Detection Enabled                     *
+*                   Error Message Wrapping is ON                        *
+*                                                                       *
+************************************************************************
+
+
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+>                                                                      <
+#     c:\PDS_TEST_DVD\TEST_PRODUCTS\SPREADSHEETS\MAG_GAPS_SURVEY.LBL    <
+>                                                                      <
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+------------------------------------------------------------------------
+
+Searching for pointer files in c:\PDS_TEST_DVD\TEST_PRODUCTS\SPREADSHEETS\MAG_GAPS_SURVEY.LBL
+
+           -------------------------------------------------------      
+1SPREADSHEET pointer with keyword value of MAG_GAPS_SURVEY.CSV at line 23
+2   Results of file search :
+3      c:\PDS_TEST_DVD\TEST_PRODUCTS\SPREADSHEETS\MAG_GAPS_SURVEY.CSV
+
+------------------------------------------------------------------------
+*****          The hierarchy of objects in this label is:          *****
+------------------------------------------------------------------------
+
+   SPREADSHEET (line 24)
+      FIELD - START TIME (line 42)
+      FIELD - STOP TIME (line 53)
+      FIELD - GAP DESCRIPTION (line 64)
+
+------------------------------------------------------------------------
+*****        There were no ODL syntax errors for this file.        *****
+------------------------------------------------------------------------
+
+
+------------------------------------------------------------------------
+*****            The semantic errors in this file are:             *****
+------------------------------------------------------------------------
+
+ 
+Keywords of ROOT (line 0):
+ 
+1    WARNING: Line 2 -- DATA_SET_ID, value 1:  Value is not a standard
+2                       value: GO-J-MAG-2-RAW-DATA-V1.0
+1    WARNING: Line 2 -- DATA_SET_ID, value 2:  Value is not a standard
+2                       value: GO-J-MAG-3-MAGNETOSPHERIC-SURVEY-V1.0
+1    WARNING: Line 18 -- MISSION_PHASE_NAME:  Value is not a standard
+2                        value: JUPITER ORBIT OPERATIONS
+ 
+Sub-objects of SPREADSHEET (line 24):
+ 
+1    INFO:    Line 24 -- SPREADSHEET:  Using PDS GENERIC object
+2                        definition.
+ 
+Keywords of SPREADSHEET (line 24):
+ 
+1    ERROR:   Line 24 -- SPREADSHEET:  The following required keywords
+2                        are missing:  FIELDS
+ 
+Sub-objects of FIELD (line 42):
+ 
+1    INFO:    Line 42 -- FIELD:  Using PDS GENERIC object definition.
+ 
+Semantic validation completed with 4 errors or warnings
+ 
+
+************************************************************************
+*                                                                      *
+*              This is the end of the Validation Report                *
+*                                                                      *
+*                      Tue Apr 25 09:45:40 2006                        *
+*                                                                      *
+************************************************************************

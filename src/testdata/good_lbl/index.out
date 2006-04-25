@@ -1,0 +1,87 @@
+************************************************************************
+*                                                                      *
+*               Planetary Data System Validation Report                *
+*                     Label Verifier Version 2.19                      *
+*                                                                      *
+*                      Tue Apr 25 13:22:14 2006                        *
+*                                                                      *
+*           Toolbox Data Dictionary Name: c:\pdsdd\pdsdd.idx            *
+*                                                                      *
+*                  Data Dictionary Validation is ON                    *
+*                    Verbose Error Reporting is ON                     *
+*                        Screen Display is OFF                         *
+*                        Name Aliasing is ON                           *
+*                   Itemized Error Reporting is ON                     *
+*                   Expand Structure Pointers is ON                    *
+*                     Saving Expanded Files is OFF                     *
+*                DOS Recursive Directory Searching is ON               *
+*            Maximum Number of Errors Allowed is set to 300            *
+*                  Warning Messages will be displayed                  *
+*                   Info messages will be displayed                    *
+*             Label Validation and Pointer File Verification           *
+*                          Label Detection Enabled                     *
+*                   Error Message Wrapping is ON                        *
+*                                                                       *
+************************************************************************
+
+
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+>                                                                      <
+#     c:\test\for_paul\INDEX.LBL                                        <
+>                                                                      <
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+------------------------------------------------------------------------
+
+Searching for pointer files in c:\test\for_paul\INDEX.LBL
+
+           -------------------------------------------------------      
+1INDEX_TABLE pointer with keyword value of INDEX.TAB at line 6
+2   Results of file search :
+3      c:\test\for_paul\INDEX.TAB
+
+------------------------------------------------------------------------
+*****          The hierarchy of objects in this label is:          *****
+------------------------------------------------------------------------
+
+   INDEX_TABLE (line 8)
+      COLUMN - VOLUME_ID (line 30)
+      COLUMN - FILE_SPECIFICATION_NAME (line 39)
+      COLUMN - PRODUCT_ID (line 49)
+      COLUMN - ORIGINAL_PRODUCT_ID (line 59)
+      COLUMN - PRODUCT_TYPE (line 69)
+      COLUMN - START_TIME (line 78)
+      COLUMN - STOP_TIME (line 87)
+      COLUMN - PRODUCT_CREATION_TIME (line 96)
+      COLUMN - RELEASE_ID (line 105)
+      COLUMN - RELEASE_DATE (line 114)
+
+------------------------------------------------------------------------
+*****        There were no ODL syntax errors for this file.        *****
+------------------------------------------------------------------------
+
+
+------------------------------------------------------------------------
+*****            The semantic errors in this file are:             *****
+------------------------------------------------------------------------
+
+ 
+Sub-objects of INDEX_TABLE (line 8):
+ 
+1    INFO:    Line 8 -- INDEX_TABLE:  Using PDS GENERIC object
+2                       definition.
+ 
+Sub-objects of COLUMN (line 30):
+ 
+1    INFO:    Line 30 -- COLUMN:  Using PDS GENERIC object definition.
+
+************************************************************************
+*                                                                      *
+*              This is the end of the Validation Report                *
+*                                                                      *
+*                      Tue Apr 25 13:22:14 2006                        *
+*                                                                      *
+************************************************************************

@@ -1,0 +1,251 @@
+NAME                    = RAD
+COLUMNS                 = 11
+ROW_BYTES               = 32
+INTERCHANGE_FORMAT      = BINARY
+PRIMARY_KEY             = ( "SPACECRAFT_CLOCK_START_COUNT", 
+                           "DETECTOR_NUMBER" )
+DESCRIPTION             = "
+
+    The RAD table contains the raw and calibrated observed radiances.
+    For each observation there can be up to 6 RAD records, one for each
+    active spectrometer detector.  If the Temporal Integration Count
+    (OBS Table, TEMPORAL_AVERAGE_COUNT) is greater than 1, then the data
+    represent the average of the measurements from that many scans.
+
+    The instrument can apply a programmable spectral mask to the raw
+    data causing neighboring channels to be averaged; however, this
+    feature is used only when downlink bandwidth is limited.  When
+    spectrally masked data are received, the averaged-out channels are
+    replaced with the averaged value to expand the spectra back to its
+    original size.  The spectral-mask that was used to perform the
+    averaging is kept in this table.
+
+    The raw spectra are compressed for downlink.  The original
+    bit-packed compression header, containing the size of the
+    compressed data and the compression mode used, is kept in this
+    table in order to be used to evaluate the performance of the compressor."
+
+OBJECT                  = COLUMN
+    NAME                = SPACECRAFT_CLOCK_START_COUNT
+    DATA_TYPE           = MSB_UNSIGNED_INTEGER
+    START_BYTE          = 1
+    BYTES               = 4
+    ALIAS_NAME          = sclk_time
+    DESCRIPTION         = "The value of the spacecraft clock at the
+                          beginning of the observation"
+END_OBJECT              = COLUMN
+
+OBJECT                  = COLUMN
+    NAME                = DETECTOR_NUMBER
+    DATA_TYPE           = MSB_UNSIGNED_INTEGER
+    START_BYTE          = 5
+    BYTES               = 1
+    ALIAS_NAME          = detector
+    DESCRIPTION         = "The number of the spectrometer detector that
+                          made the observation. Detectors are numbered 
+                          from 1 to 6"
+END_OBJECT              = COLUMN
+
+OBJECT                  = COLUMN
+    NAME                = SPECTRAL_MASK
+    DATA_TYPE           = MSB_UNSIGNED_INTEGER
+    START_BYTE          = 6
+    BYTES               = 1
+    ALIAS_NAME          = spectral_mask
+    DESCRIPTION         = "ID number of spectral mask applied.  
+                           See ancillary Masks table"
+END_OBJECT              = COLUMN
+
+OBJECT                  = COLUMN
+    NAME                = COMPRESSION_MODE
+    DATA_TYPE           = MSB_UNSIGNED_INTEGER
+    START_BYTE          = 7
+    BYTES               = 2
+    ALIAS_NAME          = cmode
+    DESCRIPTION         = "16-bit compression header of original data
+                           containing the size and compression mode of the 
+                           original compressed data.  See TES Users Guide."
+END_OBJECT              = COLUMN
+
+OBJECT                  = COLUMN
+    NAME                = RAW_RADIANCE
+    DATA_TYPE           = MSB_INTEGER
+    START_BYTE          = 9
+    BYTES               = 4
+    VAR_DATA_TYPE       = MSB_INTEGER
+    VAR_ITEM_BYTES      = 2
+    VAR_RECORD_TYPE     = Q15
+    ALIAS_NAME          = raw_rad
+    DESCRIPTION         = "Raw spectral radiance"
+    UNIT                = "transformed volts"
+END_OBJECT              = COLUMN
+
+OBJECT                  = COLUMN
+    NAME                = CALIBRATED_RADIANCE
+    DATA_TYPE           = MSB_INTEGER
+    START_BYTE          = 13
+    BYTES               = 4
+    VAR_DATA_TYPE       = MSB_INTEGER
+    VAR_ITEM_BYTES      = 2
+    VAR_RECORD_TYPE     = Q15
+    ALIAS_NAME          = cal_rad
+    DESCRIPTION         = "Calibrated spectral radiance"
+    UNIT                = "watts cm-2 steradian-1 wavenumber-1"
+END_OBJECT              = COLUMN
+
+OBJECT                  = COLUMN
+    NAME                = DETECTOR_TEMPERATURE
+    DATA_TYPE           = MSB_UNSIGNED_INTEGER
+    START_BYTE          = 17
+    BYTES               = 2
+    ALIAS_NAME          = tdet
+    DESCRIPTION         = "Derived temperature of the detector, used to
+                           remove instrument radiance in calibration
+                           algorithm"
+    UNIT                = "K"
+    SCALING_FACTOR      = 0.01
+END_OBJECT              = COLUMN
+
+OBJECT                  = COLUMN
+    NAME                = TARGET_TEMPERATURE
+    DATA_TYPE           = MSB_UNSIGNED_INTEGER
+    START_BYTE          = 19
+    BYTES               = 2
+    ALIAS_NAME          = target_temp
+    DESCRIPTION         = "Derived temperature of the observed target"
+    UNIT                = "K"
+    SCALING_FACTOR      = 0.01
+END_OBJECT              = COLUMN
+
+OBJECT                  = COLUMN
+    NAME                = SPECTRAL_THERMAL_INERTIA
+    DATA_TYPE           = IEEE_REAL
+    START_BYTE          = 21
+    BYTES               = 4
+    ALIAS_NAME          = ti_spc
+    DESCRIPTION         = "Thermal inertia, derived from spectrometer data"
+    UNIT                = "J m-2 s-1/2 K-1"
+END_OBJECT              = COLUMN
+
+OBJECT                  = COLUMN
+    NAME                = RADIANCE_CALIBRATION_ID
+    DATA_TYPE           = CHARACTER
+    START_BYTE          = 25
+    BYTES               = 4
+    ALIAS_NAME          = version_id
+    DESCRIPTION         = "Calibration algorithm version id for 
+                           spectral data." 
+END_OBJECT              = COLUMN
+
+OBJECT                  = COLUMN
+    NAME                = QUALITY
+    DATA_TYPE           = MSB_BIT_STRING
+    START_BYTE          = 29
+    BYTES               = 4
+    ALIAS_NAME          = quality
+    DESCRIPTION         = "32-bit observation quality word.  Bit column 
+                           description and code definitions follow; 
+                           see also quality.txt for more information"
+
+  OBJECT                  = BIT_COLUMN
+      NAME                = MAJOR_PHASE_INVERSION
+      BIT_DATA_TYPE       = MSB_UNSIGNED_INTEGER
+      START_BIT           = 1
+      BITS                = 1
+      ALIAS_NAME          = phase_inversion
+      DESCRIPTION         = "Identifies data that contains major phase 
+                             inversions; 
+                             0 = data does not contain major phase inversions
+                             1 = data does contain major phase inversions"
+  END_OBJECT              = BIT_COLUMN
+
+  OBJECT                  = BIT_COLUMN
+      NAME                = ALGOR_RISK
+      BIT_DATA_TYPE       = MSB_UNSIGNED_INTEGER
+      START_BIT           = 2
+      BITS                = 1
+      ALIAS_NAME          = algor_risk
+      DESCRIPTION         = "Identifies whether data is at low or high risk
+                             for algor phase inversions; 
+                             0 = data at low risk of algor phase inversion
+                             1 = data at high risk of algor phase inversion"
+  END_OBJECT              = BIT_COLUMN
+
+  OBJECT                  = BIT_COLUMN
+      NAME                = CALIBRATION_FAILURE
+      BIT_DATA_TYPE       = MSB_UNSIGNED_INTEGER
+      START_BIT           = 3
+      BITS                = 1
+      ALIAS_NAME          = calib_fail
+      DESCRIPTION         = "Identifies whether radiance calibration fails
+                             and CAL_RAD is set to N/A;
+                             0 = radiance calibration successful
+                             1 = radiance calibration failed"
+  END_OBJECT              = BIT_COLUMN
+
+  OBJECT                  = BIT_COLUMN
+      NAME                = CALIBRATION_QUALITY
+      BIT_DATA_TYPE       = MSB_UNSIGNED_INTEGER
+      START_BIT           = 4
+      BITS                = 2
+      ALIAS_NAME          = calib_quality
+      DESCRIPTION         = "These bits are reserved for future use; value
+                             of these bits currently set to 0"
+  END_OBJECT              = BIT_COLUMN
+
+  OBJECT                  = BIT_COLUMN
+      NAME                = SPECTROMETER_NOISE
+      BIT_DATA_TYPE       = MSB_UNSIGNED_INTEGER
+      START_BIT           = 6
+      BITS                = 2
+      ALIAS_NAME          = spect_noise
+      DESCRIPTION         = "Identifies noise level in data based on space 
+                             observations made at least once every 12 orbits;
+                             0 = instrument noise not calculated
+                             1 = instrument noise at nominal levels
+                             2 = instrument noise at anomalously high levels
+                             3 = not assigned"
+  END_OBJECT              = BIT_COLUMN
+
+  OBJECT                  = BIT_COLUMN
+     NAME                 = SPECTRAL_INERTIA_RATING
+     BIT_DATA_TYPE        = MSB_UNSIGNED_INTEGER
+     START_BIT            = 8
+     BITS                 = 3
+     ALIAS_NAME           = ti_spc_rating
+     DESCRIPTION          = "Values of 0 to 3 rate the uncertainty of the 
+                             modeled spectral thermal inertia based on
+                             design-specified instrument noise levels;
+                             additional sources of uncertainty are present, 
+                             see document/process.asc or process.pdf.
+                             Values of 5 to 7 rate the reasons why valid 
+                             spectral thermal inertia could not be modeled.
+                             0 = best quality
+                             1 = good quality
+                             2 = medium quality
+                             3 = low quality
+                             4 = not assigned
+                             5 = lowest quality - observed temperature 
+                                 outside of model-predicted range
+                             6 = lowest quality - no model temperature 
+                                 variation as a function of thermal inertia
+                             7 = lowest quality - thermal inertia value not 
+                                 computed due to lack of necessary data"
+  END_OBJECT              = BIT_COLUMN
+
+  OBJECT                  = BIT_COLUMN
+      NAME                = DETECTOR_MASK_PROBLEM
+      BIT_DATA_TYPE       = MSB_UNSIGNED_INTEGER
+      START_BIT           = 11
+      BITS                = 1
+      ALIAS_NAME          = det_mask_problem
+      DESCRIPTION         = "Identifies spectra affected by onboard detector 
+                             (spatial) mask processing; use spectra with 
+                             extreme caution. 
+                             0 = spectrum not affected
+                             1 = spectrum affected by the detector mask 1 
+                                 problem"
+  END_OBJECT              = BIT_COLUMN
+
+END_OBJECT              = COLUMN
+

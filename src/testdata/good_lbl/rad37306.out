@@ -1,0 +1,103 @@
+************************************************************************
+*                                                                      *
+*               Planetary Data System Validation Report                *
+*                     Label Verifier Version 2.19                      *
+*                                                                      *
+*                      Tue Apr 25 09:33:30 2006                        *
+*                                                                      *
+*           Toolbox Data Dictionary Name: c:\pdsdd\pdsdd.idx            *
+*                                                                      *
+*                  Data Dictionary Validation is ON                    *
+*                    Verbose Error Reporting is ON                     *
+*                        Screen Display is OFF                         *
+*                        Name Aliasing is ON                           *
+*                   Itemized Error Reporting is ON                     *
+*                   Expand Structure Pointers is ON                    *
+*                     Saving Expanded Files is OFF                     *
+*                DOS Recursive Directory Searching is ON               *
+*            Maximum Number of Errors Allowed is set to 300            *
+*                  Warning Messages will be displayed                  *
+*                   Info messages will be displayed                    *
+*             Label Validation and Pointer File Verification           *
+*                          Label Detection Enabled                     *
+*                   Error Message Wrapping is ON                        *
+*                                                                       *
+************************************************************************
+
+
+------------------------------------------------------------------------
+Expanding ^STRUCTURE pointers in c:\PDS_TEST_DVD\MGST_1373\DATA\MARS\RAD37306.TAB
+
+SUCCESS! Converted file c:\PDS_TEST_DVD\MGST_1373\DATA\MARS\RAD37306.TAB was written to file c:\PDS_TEST_DVD\MGST_1373\DATA\MARS\RAD37306.x00
+
+
+
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+>                                                                      <
+#     c:\PDS_TEST_DVD\MGST_1373\DATA\MARS\RAD37306.x00                  <
+>                                                                      <
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+------------------------------------------------------------------------
+
+Searching for pointer files in c:\PDS_TEST_DVD\MGST_1373\DATA\MARS\RAD37306.x00
+
+           -------------------------------------------------------      
+
+------------------------------------------------------------------------
+*****          The hierarchy of objects in this label is:          *****
+------------------------------------------------------------------------
+
+   TABLE - RAD (line 24)
+      COLUMN - SPACECRAFT_CLOCK_START_COUNT (line 54)
+      COLUMN - DETECTOR_NUMBER (line 64)
+      COLUMN - SPECTRAL_MASK (line 74)
+      COLUMN - COMPRESSION_MODE (line 84)
+      COLUMN - RAW_RADIANCE (line 95)
+      COLUMN - CALIBRATED_RADIANCE (line 108)
+      COLUMN - DETECTOR_TEMPERATURE (line 121)
+      COLUMN - TARGET_TEMPERATURE (line 133)
+      COLUMN - SPECTRAL_THERMAL_INERTIA (line 144)
+      COLUMN - RADIANCE_CALIBRATION_ID (line 154)
+      COLUMN - QUALITY (line 164)
+         BIT_COLUMN - MAJOR_PHASE_INVERSION (line 174)
+         BIT_COLUMN - ALGOR_RISK (line 185)
+         BIT_COLUMN - CALIBRATION_FAILURE (line 196)
+         BIT_COLUMN - CALIBRATION_QUALITY (line 207)
+         BIT_COLUMN - SPECTROMETER_NOISE (line 217)
+         BIT_COLUMN - SPECTRAL_INERTIA_RATING (line 229)
+         BIT_COLUMN - DETECTOR_MASK_PROBLEM (line 247)
+
+------------------------------------------------------------------------
+*****        There were no ODL syntax errors for this file.        *****
+------------------------------------------------------------------------
+
+
+------------------------------------------------------------------------
+*****            The semantic errors in this file are:             *****
+------------------------------------------------------------------------
+
+ 
+Sub-objects of TABLE (line 24):
+ 
+1    INFO:    Line 24 -- TABLE:  Using PDS GENERIC object definition.
+ 
+Sub-objects of COLUMN (line 54):
+ 
+1    INFO:    Line 54 -- COLUMN:  Using PDS GENERIC object definition.
+ 
+Sub-objects of BIT_COLUMN (line 174):
+ 
+1    INFO:    Line 174 -- BIT_COLUMN:  Using PDS GENERIC object
+2                         definition.
+
+************************************************************************
+*                                                                      *
+*              This is the end of the Validation Report                *
+*                                                                      *
+*                      Tue Apr 25 09:33:31 2006                        *
+*                                                                      *
+************************************************************************

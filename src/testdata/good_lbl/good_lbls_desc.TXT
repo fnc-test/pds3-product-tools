@@ -1,0 +1,50 @@
+This file describes the contents of the good_lbl directory for use with testing the
+vtool. 
+
+
+First off, a good label in this case means a label that produces no errors or
+warning messages by the validation tool.
+
+
+All validation reports have a .out extension and were generated from lvtool
+version 2.19. For simplicity, the report files were named after the label
+file names so you can easily associate a report with a label.
+
+
+
+Now onto a brief description of each of the labels contained in this directory.....
+
+
+
+5171172A.LBL
+------------
+A detached label made up of multiple TABLE objects with COLUMN and BIT_COLUMN
+objects. Table data is in BINARY format.
+
+
+CHAN_DATA_TEST.LBL
+------------------
+A combine detached label containing multiple FILE objects. Each FILE object contains
+a SERIES object. Table dats is in BINARY format.
+
+
+INDEX.LBL
+---------
+A detached label that contains an INDEX_TABLE object with multiple COLUMN objects.
+Table data is in ASCII format.
+
+
+RAD37306.TAB
+------------
+An attached label that points to a format file. This label contains 1 TABLE object
+with multiple COLUMN and BIT_COLUMN objects. Table data is in BINARY format.
+
+
+
+
+
+
+
+
+
+

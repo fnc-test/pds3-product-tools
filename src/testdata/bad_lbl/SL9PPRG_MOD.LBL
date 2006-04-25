@@ -1,0 +1,91 @@
+PDS_VERSION_ID                = PDS3                                          
+RECORD_BYTES                  = 46                                            
+FILE_RECORDS                  = 56                                            
+HARDWARE_MODEL_ID             = 'SUN SPARC STATION'                           
+OPERATING_SYSTEM_ID           = 'SUN OS 4.1.3'                                
+^TABLE                        = "SL9PPRG.TAB"                                 
+DATA_SET_ID                   = 'GO-J/C-PPR-3-EDR-SL9-G/H/L/Q1-V1.0'          
+SPACECRAFT_NAME               = 'GALILEO ORBITER'                             
+INSTRUMENT_NAME               = 'PHOTOPOLARIMETER RADIOMETER'                 
+TARGET_NAME                   = {JUPITER, "SHOEMAKER-LEVY 9"}                 
+START_TIME                    = 1994-07-18T07:32:00.48Z                       
+STOP_TIME                     = 1994-07-18T07:39:39.60Z                       
+SPACECRAFT_CLOCK_START_COUNT  = "UNK"                                         
+SPACECRAFT_CLOCK_STOP_COUNT   = "UNK"                                         
+MISSION_PHASE_NAME            = 'SHOEMAKER-LEVY 9 ENCOUNTER'                  
+PRODUCT_NAME                  = "Galileo PPR Data for SL9 Impact G"           
+PRODUCT_ID                    =                                    
+PRODUCT_CREATION_TIME         = 1995-04-26                                    
+NOTE                          = "                                             
+                  GO PPR - SL9 G Data                                         
+                                                                              
+        Galileo Photopolarimeter Radiometer data set for                      
+        Shoemaker-Levy 9 fragment G impact                                    
+                                                                              
+        Reference hour: 07:00 hrs UTC, July 18 1994                           
+        Value used for zero level:       237.5 DN                             
+                                                                              
+        Data columns: Time = minutes from reference hour                      
+        DN = Mean data number (average of two channels)                       
+        Signal = flux, watt per cm^2 per nm                                   
+        Filter = wavelength of passband center "                              
+                                                                              
+OBJECT                        = TABLE                                         
+  INTERCHANGE_FORMAT            = ASCII                                       
+  ROWS                          = 56                                          
+  COLUMNS                       = 3                                           
+  ROW_BYTES                     = 46                                          
+  SAMPLING_PARAMETER_NAME       = TIME                                        
+  SAMPLING_PARAMETER_UNIT       = MINUTE                                      
+  SAMPLING_PARAMETER_INTERVAL  = "N/A"                                        
+                                                                              
+  OBJECT                   = COLUMN                                           
+    NAME                     = 'TIME'                                         
+    COLUMN_NUMBER            = 1                                              
+    UNIT                     = 'MINUTE'                                       
+    DATA_TYPE                = ASCII_REAL                                     
+    START_BYTE               = 1                                              
+    BYTES                    = 13                                             
+    FORMAT                   = F13.4                                          
+    DESCRIPTION              = "                                              
+            Time = minutes from reference hour."                              
+  END_OBJECT               = COLUMN                                           
+                                                                              
+  OBJECT                   = COLUMN                                           
+    NAME                     = 'DN'                                           
+    COLUMN_NUMBER            = 2                                              
+    UNIT                     = 'DATA NUMBER'                                  
+    DATA_TYPE                = ASCII_REAL                                     
+    START_BYTE               = 14                                             
+    BYTES                    = 13                                             
+    FORMAT                   = F13.3                                          
+    DESCRIPTION              = "                                              
+            DN = Mean data number (average of two channels)."                 
+  END_OBJECT               = COLUMN                                           
+                                                                              
+  OBJECT                   = COLUMN                                           
+    NAME                     = 'SIGNAL'                                       
+    COLUMN_NUMBER            = 3                                              
+    UNIT                     = 'FLUX'                                         
+    DATA_TYPE                = CHARACTER                                      
+    NOTE                     = "In scientific notation."                      
+    START_BYTE               = 27                                             
+    BYTES                    = 12                                             
+    FORMAT                   = A12                                            
+    DESCRIPTION              = "                                              
+           Signal = flux, watt per cm^2 per nm."                              
+  END_OBJECT               = COLUMN                                           
+                                                                              
+  OBJECT                   = COLUMN                                           
+    NAME                     = 'WAVELENGTH'                                   
+    COLUMN_NUMBER            = 4                                              
+    UNIT                     = 'NM'                                           
+    DATA_TYPE                = ASCII_INTEGER                                  
+    START_BYTE               = 39                                             
+    FORMAT                   = I5                                             
+    BYTES                    = 5                                              
+    DESCRIPTION              = "                                              
+            Filter = wavelength of passband center."                          
+  END_OBJECT               = COLUMN                                           
+                                                                              
+                                      

@@ -1,0 +1,111 @@
+************************************************************************
+*                                                                      *
+*               Planetary Data System Validation Report                *
+*                     Label Verifier Version 2.19                      *
+*                                                                      *
+*                      Tue Apr 25 10:16:58 2006                        *
+*                                                                      *
+*           Toolbox Data Dictionary Name: c:\pdsdd\lcldd.idx            *
+*                                                                      *
+*                  Data Dictionary Validation is ON                    *
+*                    Verbose Error Reporting is ON                     *
+*                        Screen Display is OFF                         *
+*                        Name Aliasing is ON                           *
+*                   Itemized Error Reporting is ON                     *
+*                   Expand Structure Pointers is ON                    *
+*                     Saving Expanded Files is OFF                     *
+*                DOS Recursive Directory Searching is ON               *
+*            Maximum Number of Errors Allowed is set to 300            *
+*                  Warning Messages will be displayed                  *
+*                   Info messages will be displayed                    *
+*             Label Validation and Pointer File Verification           *
+*                          Label Detection Enabled                     *
+*                   Error Message Wrapping is ON                        *
+*                                                                       *
+************************************************************************
+
+
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+>                                                                      <
+#     c:\PDS_TEST_DVD\TEST_PRODUCTS\LOCAL_KWDS\LCL_LABEL.LBL            <
+>                                                                      <
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+------------------------------------------------------------------------
+
+Searching for pointer files in c:\PDS_TEST_DVD\TEST_PRODUCTS\LOCAL_KWDS\LCL_LABEL.LBL
+
+           -------------------------------------------------------      
+1HEADER pointer with keyword value of I020627_135510_390_B.FIT at line 6
+2   Results of file search :
+3       Error File not found: I020627_135510_390_B.FIT 
+1IMAGE pointer with keyword value of I020627_135510_390_B.FIT at line 7
+2   Results of file search :
+3       Error File not found: I020627_135510_390_B.FIT 
+
+------------------------------------------------------------------------
+*****          The hierarchy of objects in this label is:          *****
+------------------------------------------------------------------------
+
+   HEADER (line 86)
+   IMAGE (line 96)
+
+------------------------------------------------------------------------
+*****        There were no ODL syntax errors for this file.        *****
+------------------------------------------------------------------------
+
+
+------------------------------------------------------------------------
+*****            The semantic errors in this file are:             *****
+------------------------------------------------------------------------
+
+ 
+Keywords of ROOT (line 0):
+ 
+1    WARNING: Line 9 -- DATA_SET_ID:  Value is not a standard value:
+2                       DIF-C-HRIIR-1-EDR-GROUNDCAL-V1.0
+1    WARNING: Line 10 -- INSTRUMENT_HOST_NAME:  Value is not a standard
+2                        value: DEEP IMPACT FLYBY SPACECRAFT
+1    WARNING: Line 11 -- INSTRUMENT_HOST_ID:  Value is not a standard
+2                        value: DIF
+1    WARNING: Line 12 -- INSTRUMENT_NAME:  Value is not a standard value:
+2                        DEEP IMPACT HIGH-RESOLUTION SPECTROMETER
+1    WARNING: Line 13 -- INSTRUMENT_ID:  Value is not a standard value:
+2                        HRIIR
+1    WARNING: Line 32 -- TARGET_NAME:  Value is not a standard value:
+2                        GROUND CALIBRATION
+1    WARNING: Line 33 -- DEEPIMPACT:GROUND_CALIBRATION_ID:  Value is not
+2                        a standard value: TV5
+1    WARNING: Line 38 -- INSTRUMENT_MODE_ID:  Value is not a standard
+2                        value: HRIIR-4-TV2
+1    WARNING: Line 61 -- INSTRUMENT_TEMPERATURE_POINT:  Sequence or set
+2                        value is not a standard value: IC PROCESSING
+3                        BOARD IR SIGNAL PROCESSING BOARD LVPS SIGNAL
+4                        PROCESSING BOARD PRISMS PRIMARY MIRROR SECONDARY
+5                        MIRROR SPECTRAL IMAGING MODULE COVER IR FPA
+6                        ON-CHIP SENSOR
+1    WARNING: Line 72 -- INSTRUMENT_VOLTAGE_POINT:  Sequence or set value
+2                        is not a standard value: IR RESET IR SUBSTRATE
+3                        IR BIASGATE IR CALIB LAMP DAC
+ 
+Sub-objects of HEADER (line 86):
+ 
+1    INFO:    Line 86 -- HEADER:  Using PDS GENERIC object definition.
+ 
+Sub-objects of IMAGE (line 96):
+ 
+1    INFO:    Line 96 -- IMAGE:  Using PDS GENERIC object definition.
+ 
+Semantic validation completed with 10 errors or warnings
+ 
+
+************************************************************************
+*                                                                      *
+*              This is the end of the Validation Report                *
+*                                                                      *
+*                      Tue Apr 25 10:16:58 2006                        *
+*                                                                      *
+************************************************************************
