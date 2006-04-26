@@ -9,12 +9,14 @@ package gov.nasa.jpl.pds.tools.dict;
 import java.net.URL;
 import java.util.Map;
 import java.util.HashMap;
+import java.io.IOException;
 import gov.nasa.jpl.pds.tools.label.Label;
 import gov.nasa.jpl.pds.tools.label.parser.LabelParser;
 import gov.nasa.jpl.pds.tools.label.parser.LabelParserFactory;
 import gov.nasa.jpl.pds.tools.label.parser.ParseException;
 
 /**
+ * This class represents a PDS data dictionary. 
  * @author pramirez
  * @version $Revision$
  * 
@@ -23,8 +25,8 @@ public class Dictionary {
     private Map definitions;
     
     /**
-     * 
-     * @param label
+     * Constructs a dictionary from a {@link Label}
+     * @param label representation of the dictionary
      */
     public Dictionary(Label label) throws InvalidDictionaryException {
         definitions = new HashMap();
@@ -32,10 +34,10 @@ public class Dictionary {
     }
 
     /**
-     * 
+     * Constructs a dictionary from a URL
      * @param file
      */
-    public Dictionary(URL file) throws InvalidDictionaryException {
+    public Dictionary(URL file) throws InvalidDictionaryException, IOException {
         definitions = new HashMap();
         LabelParserFactory factory = LabelParserFactory.newInstance();
         LabelParser parser = factory.newLabelParser();
@@ -51,94 +53,115 @@ public class Dictionary {
     }
     
     /**
-     * 
-     * @param dictionary
+     * Merges dictionary without overwriting
+     * @param dictionary to be merged
      */
     public void merge(Dictionary dictionary) {
         merge(dictionary, false);
     }
     
     /**
-     * 
-     * @param dictionary
-     * @param overwrite
+     * Merges the definitions in the dictionaries
+     * @param dictionary to be merged
+     * @param overwrite flag
      */
     public void merge(Dictionary dictionary, boolean overwrite) {
         if (overwrite)
             definitions.putAll(dictionary.definitions);
-        else
-            dictionary.definitions.putAll(definitions);
+        else {
+            Map d = new HashMap(dictionary.definitions);
+            d.putAll(definitions);
+            definitions = d;
+        }
     }
     
     /**
-     * 
-     * @param identifier
-     * @return
+     * Tests to see whether or not a defintion exists
+     * @param identifier of the definition
+     * @return flag indicating existence
      */
     public boolean containsDefinition(String identifier) {
-        return false;
+        return ((definitions.get(identifier) == null) ? false : true);
     }
     
     /**
-     * 
-     * @param identifier
-     * @return
+     * Tests to see whether or not an object is defined
+     * @param identifier of the object
+     * @return flag indicating existence
      */
     public boolean containsObjectDefinition(String identifier) {
-        return false;
+        Definition definition = (Definition) definitions.get(identifier);
+        if (definition == null || !(definition instanceof ObjectDefinition))
+            return false;
+        return true;
     }
     
     /**
-     * 
-     * @param identifier
-     * @return
+     * Tests to see whether or not a group is defined 
+     * @param identifier of the the group
+     * @return flag indicating existence
      */
     public boolean containsGroupDefinition(String identifier) {
-        return false;
+        Definition definition = (Definition) definitions.get(identifier);
+        if (definition == null || !(definition instanceof GroupDefinition))
+            return false;
+        return true;
     }
     
     /**
-     * 
-     * @param identifier
-     * @return
+     * Tests to see whether or not an element is defined
+     * @param identifier of the element
+     * @return flag indicating existence
      */
     public boolean containsElementDefinition(String identifier) {
-        return false;
+        Definition definition = (Definition) definitions.get(identifier);
+        if (definition == null || !(definition instanceof ElementDefinition))
+            return false;
+        return true;
     }
     
     /**
-     * 
-     * @param identifier
-     * @return
+     * Retrieves the definition from the dictionary or null if not found
+     * @param identifier of the definition
+     * @return the definition
      */
     public Definition getDefinition(String identifier) {
-        return null;
+        return (Definition) definitions.get(identifier);
     }
     
     /**
-     * 
-     * @param identifier
-     * @return
+     * Retrieves the object definition from the dictionary or null if not found
+     * @param identifier of the definition
+     * @return the object definition
      */
     public ObjectDefinition getObjectDefinition(String identifier) {
+        Definition definition = (Definition) definitions.get(identifier);
+        if (definition != null && definition instanceof ObjectDefinition)
+            return (ObjectDefinition) definition;
         return null;
     }
     
     /**
-     * 
-     * @param identifier
-     * @return
+     * Retrieves the group definition from the dictionary or null if not found
+     * @param identifier of the definition
+     * @return the group definition
      */
     public GroupDefinition getGroupDefinition(String identifier) {
+        Definition definition = (Definition) definitions.get(identifier);
+        if (definition != null && definition instanceof GroupDefinition)
+            return (GroupDefinition) definition;
         return null;
     }
     
     /**
-     * 
-     * @param identifier
-     * @return
+     * Retrieves the element definition from the dictionary or null if not found.
+     * @param identifier of the definition
+     * @return the element definition
      */
     public ElementDefinition getElementDefiniton(String identifier) {
+        Definition definition = (Definition) definitions.get(identifier);
+        if (definition != null && definition instanceof ElementDefinition)
+            return (ElementDefinition) definition;
         return null;
     }
 }
