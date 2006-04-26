@@ -1,6 +1,6 @@
 // PARSER
 header {
-    package gov.nasa.jpl.pds.tools.label.parser;
+    package gov.nasa.jpl.pds.tools.label.antlr;
 }
 
 class ODLParser extends Parser;
