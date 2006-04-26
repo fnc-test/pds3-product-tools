@@ -15,6 +15,9 @@ package gov.nasa.jpl.pds.tools.label.parser;
 public class LabelParserFactory {
     private static LabelParserFactory factory = null;
     
+    /**
+     * Constructs a parser factory following the Singleton pattern
+     */
     private LabelParserFactory() {
     }
     
