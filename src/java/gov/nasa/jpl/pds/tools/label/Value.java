@@ -7,6 +7,8 @@
 package gov.nasa.jpl.pds.tools.label;
 
 /**
+ * This class acts a wrapper and is the right hand side
+ * of an {@link AttributeStatement}.
  * @author pramirez
  * @version $Revision$
  * 
