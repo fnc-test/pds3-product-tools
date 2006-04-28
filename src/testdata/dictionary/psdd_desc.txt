@@ -1,0 +1,13 @@
+This directory contains two data dictionary files:
+lcldd.full
+pdsdd.full
+
+lcldd.full is a data dictionary containing some 
+local keywords. This was given to me by Ron Joyner
+back in 2004, so it is a little old. This data
+dictionary was used in generating the lvtool report
+file located in testdata/bad_lbl/lcl_label.out.
+
+
+pdsdd.full is the most recent data dictionary we
+have available online.
