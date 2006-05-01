@@ -20,7 +20,7 @@ import java.util.ListIterator;
  * @version $Revision$
  * 
  */
-public class Sequence implements List {
+public class Sequence implements List, Value {
     private List values;
 
     /**
@@ -41,8 +41,8 @@ public class Sequence implements List {
     /* (non-Javadoc)
      * @see java.util.List#containsAll(java.util.Collection)
      */
-    public boolean containsAll(Collection collection) {
-        return this.values.containsAll(collection);
+    public boolean containsAll(Collection values) {
+        return this.values.containsAll(values);
     }
 
     /* (non-Javadoc)
