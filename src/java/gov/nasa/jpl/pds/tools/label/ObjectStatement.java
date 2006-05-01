@@ -21,6 +21,7 @@ import java.util.Collections;
 public class ObjectStatement extends Statement {
     private Map attributes;
     private Map objects;
+    private List pointers;
 
     /**
      * Constructs a new object statement with no attributes or nested objects
@@ -28,7 +29,7 @@ public class ObjectStatement extends Statement {
      * @param identifier Identifier for the statement.
      */
     protected ObjectStatement(int lineNumber, String identifier) {
-        this(lineNumber, identifier, Collections.EMPTY_LIST, Collections.EMPTY_LIST);
+        this(lineNumber, identifier, Collections.EMPTY_LIST, Collections.EMPTY_LIST, Collections.EMPTY_LIST);
     }
     
     /**
@@ -36,7 +37,7 @@ public class ObjectStatement extends Statement {
      * @param identifier Identifier of the statement
      */
     public ObjectStatement(String identifier) {
-        this(identifier, Collections.EMPTY_LIST, Collections.EMPTY_LIST);
+        this(identifier, Collections.EMPTY_LIST, Collections.EMPTY_LIST, Collections.EMPTY_LIST);
     }
     
     /**
@@ -45,8 +46,8 @@ public class ObjectStatement extends Statement {
      * @param attributes
      * @param objects
      */
-    public ObjectStatement(String identifier, List attributes, List objects) {
-        this(-1, identifier, attributes, objects);
+    public ObjectStatement(String identifier, List attributes, List objects, List pointers) {
+        this(-1, identifier, attributes, objects, pointers);
     }
     
     /**
@@ -56,10 +57,11 @@ public class ObjectStatement extends Statement {
      * @param attributes List of {@link AttributeStatement} associated with this statement
      * @param objects List of {@link ObjectStatement} associated with this statement
      */
-    public ObjectStatement(int lineNumber, String identifier, List attributes, List objects) {
+    public ObjectStatement(int lineNumber, String identifier, List attributes, List objects, List pointers) {
         super(lineNumber, identifier);
         this.attributes = new HashMap();
         this.objects = new HashMap();
+        this.pointers = pointers;
         
         for (Iterator i = attributes.iterator(); i.hasNext();) {
             AttributeStatement attribute = (AttributeStatement) i.next();
@@ -70,6 +72,7 @@ public class ObjectStatement extends Statement {
             ObjectStatement object = (ObjectStatement) i.next();
             this.objects.put(object.getIdentifier(), object);
         }
+        
     }
     
     /**
@@ -122,6 +125,15 @@ public class ObjectStatement extends Statement {
      */
     public void addObject(ObjectStatement object) {
         objects.put(object.getIdentifier(), object);
+    }
+    
+    public void addStatement(Statement statement) {
+        if (statement instanceof ObjectStatement)
+            objects.put(statement.getIdentifier(), statement);
+        else if (statement instanceof AttributeStatement)
+            attributes.put(statement.getIdentifier(), statement);
+        else if (statement instanceof PointerStatement)
+            pointers.add(statement);
     }
 
 }
