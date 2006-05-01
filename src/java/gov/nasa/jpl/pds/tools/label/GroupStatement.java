@@ -18,8 +18,7 @@ import java.util.HashMap;
  */
 public class GroupStatement extends Statement {
     private Map attributes;
-    private Map objects;
-
+    
     /**
      * @param lineNumber
      * @param identifier
@@ -27,7 +26,6 @@ public class GroupStatement extends Statement {
     protected GroupStatement(int lineNumber, String identifier) {
         super(lineNumber, identifier);
         attributes = new HashMap();
-        objects = new HashMap();
     }
     
     /**
@@ -46,22 +44,13 @@ public class GroupStatement extends Statement {
     public List getAttributes() {
         return new ArrayList(attributes.values());
     }
-    
+
     /**
-     * Retrieves the named object.
-     * @param identifier
-     * @return The named ObjectStatment or null if not found.
+     * 
+     * @param attribute
      */
-    public ObjectStatement getObject(String identifier) {
-        return (ObjectStatement) objects.get(identifier);
-    }
-    
-    /**
-     * Retrieves the objects of this group.
-     * @return The list of ObjectStatement.
-     */
-    public List getObjects() {
-        return new ArrayList(objects.values());
+    public void addAttribute(AttributeStatement attribute) {
+        attributes.put(attribute.getIdentifier(), attribute);
     }
     
 }
