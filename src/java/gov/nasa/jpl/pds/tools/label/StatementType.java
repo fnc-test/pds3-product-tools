@@ -11,9 +11,10 @@ package gov.nasa.jpl.pds.tools.label;
  * @version $Revision$
  * 
  */
-public final class StatementType {
+public interface StatementType {
     public final static int ATTRIBUTE = 0;
     public final static int OBJECT = 1;
     public final static int GROUP = 2;
     public final static int POINTER = 3;
+    public final static int COMMENT = 4;
 }
