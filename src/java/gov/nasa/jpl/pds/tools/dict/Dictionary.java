@@ -6,14 +6,9 @@
 
 package gov.nasa.jpl.pds.tools.dict;
 
-import java.net.URL;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.HashMap;
-import java.io.IOException;
-import gov.nasa.jpl.pds.tools.label.Label;
-import gov.nasa.jpl.pds.tools.label.parser.LabelParser;
-import gov.nasa.jpl.pds.tools.label.parser.LabelParserFactory;
-import gov.nasa.jpl.pds.tools.label.parser.ParseException;
 
 /**
  * This class represents a PDS data dictionary. 
@@ -24,32 +19,8 @@ import gov.nasa.jpl.pds.tools.label.parser.ParseException;
 public class Dictionary {
     private Map definitions;
     
-    /**
-     * Constructs a dictionary from a {@link Label}
-     * @param label representation of the dictionary
-     */
-    public Dictionary(Label label) throws InvalidDictionaryException {
+    public Dictionary() {
         definitions = new HashMap();
-        loadDictionary(label);
-    }
-
-    /**
-     * Constructs a dictionary from a URL
-     * @param file
-     */
-    public Dictionary(URL file) throws InvalidDictionaryException, IOException {
-        definitions = new HashMap();
-        LabelParserFactory factory = LabelParserFactory.newInstance();
-        LabelParser parser = factory.newLabelParser();
-        try {
-            loadDictionary(parser.parse(file));
-        } catch (ParseException pe) {
-            throw new InvalidDictionaryException(pe.getMessage());
-        }
-    }
-    
-    private void loadDictionary(Label label) throws InvalidDictionaryException {
-        //TODO: Read label and create definitions
     }
     
     /**
@@ -163,5 +134,29 @@ public class Dictionary {
         if (definition != null && definition instanceof ElementDefinition)
             return (ElementDefinition) definition;
         return null;
+    }
+    
+    /**
+     * Adds a definition to this dictionary to. Overwrites any existing definition.
+     * @param definition to be added to the dictionary
+     */
+    public void addDefinition(Definition definition) {
+        addDefinition(definition, true);
+    }
+    
+    /**
+     * Adds a defintion to this dictionary. The flag indicates whether a definition 
+     * should be overwriten.
+     * @param definition to be added to the dictionary
+     * @param overwrite indicates if definition should be overwriten
+     */
+    public void addDefinition(Definition definition, boolean overwrite) {
+        if (overwrite || (!overwrite && !definitions.containsKey(definition.getIdentifier()))) {
+            definitions.put(definition.getIdentifier(), definition);
+            for (Iterator i = definition.getAliases().iterator(); i.hasNext();) {
+                String alias = (String) i.next();
+                definitions.put(alias, definition);
+            }
+        }
     }
 }
