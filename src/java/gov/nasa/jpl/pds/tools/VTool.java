@@ -361,6 +361,11 @@ public class VTool {
 	
 		VTool vtool = new VTool();
 		
+		if(argv.length == 0) {
+			System.out.println("\nType 'VTool -h' for usage");
+			return;
+		}
+		
 		/* Define options */
 		vtool.buildOpts();
 
