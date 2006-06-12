@@ -10,6 +10,9 @@ import java.util.List;
 import java.util.ArrayList;
 
 /**
+ * This class models a group definition. Groups can only contain optional
+ * and required elements. This class will only contain the identifiers of these 
+ * elements.
  * @author pramirez
  * @version $Revision$
  * 
@@ -18,12 +21,14 @@ public class GroupDefinition extends Definition {
     private List requiredElements;
     private List optionalElements;
     
-    public GroupDefinition() {
+    public GroupDefinition(String identifier) {
+        super(identifier);
         requiredElements = new ArrayList();
         optionalElements = new ArrayList();
     }
     
     /**
+     * Lists the optional elements that can appear in this group
      * @return Returns the names optional elements.
      */
     public List getOptionalElements() {
@@ -51,4 +56,25 @@ public class GroupDefinition extends Definition {
         this.requiredElements = requiredElements;
     }
     
+    /**
+     * 
+     * @param identifier
+     * @return
+     */
+    public boolean mustHaveElement(String identifier) {
+        return requiredElements.contains(identifier);
+    }
+    
+    /**
+     * 
+     * @param identifier
+     * @return
+     */
+    public boolean canHaveElement(String identifier) {
+        boolean exists = false;
+        exists = requiredElements.contains(identifier);
+        if (exists)
+            return exists;
+        return optionalElements.contains(identifier);
+    }
 }
