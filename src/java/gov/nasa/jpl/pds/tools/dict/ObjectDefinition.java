@@ -23,7 +23,8 @@ public class ObjectDefinition extends Definition {
     private List requiredObjects;
     private List optionalObjects;
     
-    public ObjectDefinition() {
+    public ObjectDefinition(String identifier) {
+        super(identifier);
         requiredElements = new ArrayList();
         optionalElements = new ArrayList();
         requiredObjects = new ArrayList();
