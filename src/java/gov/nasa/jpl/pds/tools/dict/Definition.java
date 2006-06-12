@@ -7,6 +7,7 @@
 package gov.nasa.jpl.pds.tools.dict;
 
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  * @author pramirez
@@ -16,11 +17,15 @@ import java.util.List;
 public abstract class Definition {
     private String identifier;
     private String statusType;
-    private String statusNote;
     private String description;
-    private String sourceName;
     private List aliases;
     
+    public Definition(String identifier) {
+        this.identifier = identifier;
+        description = "";
+        statusType = "";
+        aliases = new ArrayList();
+    }
 
     /**
      * The aliases for this definition
@@ -64,34 +69,6 @@ public abstract class Definition {
      */
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    /**
-     * @return Returns the sourceName.
-     */
-    public String getSourceName() {
-        return sourceName;
-    }
-
-    /**
-     * @param sourceName The sourceName to set.
-     */
-    public void setSourceName(String sourceName) {
-        this.sourceName = sourceName;
-    }
-
-    /**
-     * @return Returns the statusNote.
-     */
-    public String getStatusNote() {
-        return statusNote;
-    }
-
-    /**
-     * @param statusNote The statusNote to set.
-     */
-    public void setStatusNote(String statusNote) {
-        this.statusNote = statusNote;
     }
 
     /**
