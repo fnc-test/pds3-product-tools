@@ -9,6 +9,7 @@ package gov.nasa.jpl.pds.tools.dict;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * This class represents a PDS data dictionary. 
@@ -18,9 +19,12 @@ import java.util.HashMap;
  */
 public class Dictionary {
     private Map definitions;
+    private String information;
     
     public Dictionary() {
         definitions = new HashMap();
+        information = "";
+        //TODO: add support for units
     }
     
     /**
@@ -159,4 +163,44 @@ public class Dictionary {
             }
         }
     }
+    
+    /**
+     * Sets the description information for a dictionary. This is often captured informally in 
+     * comments at the top of a dictionary file.
+     * @param information
+     */
+    public void setInformation(String information) {
+        this.information = information;
+    }
+    
+    /**
+     * Return the dictionary's descriptive information.
+     * @return the information
+     */
+    public String getInformation() {
+        return information;
+    }
+    
+    /**
+     * Adds a list of defintions to this dictionary. The flag indicates whether the 
+     * definitions should be overwriten.
+     * @param definitions to be added to the dictionary
+     * @param overwrite
+     */
+    public void addDefinitions(List definitions, boolean overwrite) {
+        for (Iterator i = definitions.iterator(); i.hasNext();) {
+            Definition d = (Definition) i.next();
+            addDefinition(d, overwrite);
+        }
+    }
+    
+    /**
+     * Adds a list of defintions to this dictionary. By default definitions will be 
+     * overwritten.
+     * @param definitions to be added to the dictionary
+     */
+    public void addDefinitions(List definitions) {
+        addDefinitions(definitions, true);
+    }
+    
 }
