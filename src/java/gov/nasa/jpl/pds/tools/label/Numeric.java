@@ -15,16 +15,28 @@ package gov.nasa.jpl.pds.tools.label;
  */
 public class Numeric extends Scalar {
     private String units;
-    private String base;
+    private int radix;
     
     /**
      * Constructs a Numeric with the given value
      * @param value of numeric
      */
     public Numeric(String value) {
+        this(value, null, 10);
+    }
+    
+    public Numeric(String value, String units) {
+        this(value, units, 10);
+    }
+    
+    public Numeric(String value, int radix) {
+        this(value, null, radix);
+    }
+    
+    public Numeric(String value, String units, int radix) {
         super(value);
-        this.units = null;
-        this.base = null;
+        this.units = units;
+        this.radix = radix;
     }
 
     /**
@@ -47,16 +59,16 @@ public class Numeric extends Scalar {
      * Sets the base
      * @param base of the numeric
      */
-    public void setBase(String base) {
-        this.base = base;
+    public void setRadix(int radix) {
+        this.radix = radix;
     }
     
     /**
      * Retrieves the base
      * @return base
      */
-    public String base() {
-        return base;
+    public int radix() {
+        return radix;
     }
 
 }
