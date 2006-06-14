@@ -203,4 +203,29 @@ public class Dictionary {
         addDefinitions(definitions, true);
     }
     
+    /**
+     * Retrieves the class definition for an object with the given identifier. 
+     * This method will search the dictionary for an ObjectDefinition whose 
+     * identifier is the greatest length and matches the end of the given identifier
+     * @param identifier to lookup up class of
+     * @return {@link ObjectDefinition} of class that will constrain object with 
+     * given identifier. Returns null if not found.
+     */
+    public ObjectDefinition findObjectClassDefinition(String identifier) {
+        ObjectDefinition definition = null;
+        
+        //Look for maximum length match of object definition identifier with given identifier
+        for (Iterator i = definitions.keySet().iterator(); i.hasNext();) {
+            String definitionIdentifier = (String) i.next();
+            if (identifier.endsWith(definitionIdentifier) &&
+                    definitions.get(definitionIdentifier) instanceof ObjectDefinition) {
+                ObjectDefinition d = (ObjectDefinition) definitions.get(definitionIdentifier);
+                if (definition == null || d.getIdentifier().length() > definition.getIdentifier().length()) {
+                    definition = d;
+                }
+            }
+        }
+        
+        return definition;
+    }
 }
