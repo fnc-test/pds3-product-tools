@@ -8,6 +8,8 @@ package gov.nasa.jpl.pds.tools.label;
 
 import gov.nasa.jpl.pds.tools.label.antlr.ODLTokenTypes;
 import antlr.collections.AST;
+import java.text.NumberFormat;
+import java.text.ParseException;
 
 /**
  * @author pramirez
@@ -103,10 +105,10 @@ public class StatementFactory implements ODLTokenTypes {
      * @return
      * @throws UnknownStatementException
      */
-    public static PointerStatement createPointer(AST ast) throws UnknownStatementException {
-        PointerStatement pointer = null;
-        
-        return pointer;
+    public static PointerStatement createPointer(AST ast) throws UnknownStatementException, UnknownValueException {
+        if (ast.getType() != POINT_OPERATOR)
+            throw new UnknownStatementException("Not a pointer statement it is type: " + ast.getType());
+        return new PointerStatement(ast.getLine(), ast.getText().trim(), createValue(ast.getFirstChild()));
     }
     
     /**
@@ -116,18 +118,28 @@ public class StatementFactory implements ODLTokenTypes {
      * @throws UnknownStatementException
      */
     public static CommentStatement createComment(AST ast) throws UnknownStatementException {
-        CommentStatement comment = null;
-        
+        if (ast.getType() != COMMENT)
+            throw new UnknownStatementException("Not a comment statement it is type: " + ast.getType());
+        CommentStatement comment = new CommentStatement(ast.getLine());
+        comment.setComment(ast.getText());
         return comment;
     }
     
+    /**
+     * 
+     * @param ast
+     * @return
+     * @throws UnknownValueException
+     */
     public static Value createValue(AST ast) throws UnknownValueException {
         Value value = null;
         
         if (ast.getType() == QUOTED)
             value = createTextString(ast);
+        else if (ast.getType() == SYMBOL)
+            value = createSymbol(ast);
         else if (ast.getType() == IDENT)
-            value = createTextString(ast);
+            value = createIdentifier(ast);
         else if (ast.getType() == SEQUENCE_OPENING)
             value = createSequence(ast);
         else if (ast.getType() == SET_OPENING)
@@ -138,38 +150,99 @@ public class StatementFactory implements ODLTokenTypes {
         return value;
     }
     
+    /**
+     * 
+     * @param ast
+     * @return
+     * @throws UnknownValueException
+     */
     public static TextString createTextString(AST ast) throws UnknownValueException {
-        if (ast.getType() != QUOTED && ast.getType() != IDENT) 
+        if (ast.getType() != QUOTED) 
             throw new UnknownValueException("Value is not a text string it is type: " + ast.getType());
         return new TextString(ast.getText());
     }
     
+    /**
+     * 
+     * @param ast
+     * @return
+     * @throws UnknownValueException
+     */
     public static Sequence createSequence(AST ast) throws UnknownValueException {
         if (ast.getType() != SEQUENCE_OPENING)
             throw new UnknownValueException("Value is not a sequence it is type: " + ast.getType());
         Sequence sequence = new Sequence();
         ast = ast.getFirstChild();
         while (ast != null) {
-            if (ast.getType() != UNITS)
-                sequence.add(createValue(ast));
+            sequence.add(createValue(ast));
             ast = ast.getNextSibling();
+            //Check to see if there were units associated with value
+            //If so skip the next sibling
+            if (ast != null && ast.getType() == UNITS)
+                ast = ast.getNextSibling();
         }
         
         return sequence;
     }
     
+    /**
+     * 
+     * @param ast
+     * @return
+     * @throws UnknownValueException
+     */
     public static Set createSet(AST ast) throws UnknownValueException {
         if (ast.getType() != SET_OPENING)
             throw new UnknownValueException("Value is not a set it is type: " + ast.getType());
         Set set = new Set();
         ast = ast.getFirstChild();
         while (ast != null) {
-            //TODO: Handle units
-            if (ast.getType() != UNITS)
-                set.add(createValue(ast));
+            set.add(createValue(ast));
             ast = ast.getNextSibling();
+            //Check to see if there were units associated with value
+            //If so skip the next sibling
+            if (ast != null && ast.getType() == UNITS)
+                ast = ast.getNextSibling();
         }
         
         return set;
+    }
+    
+    /**
+     * 
+     * @param ast
+     * @return
+     * @throws UnknownValueException
+     */
+    public static Value createIdentifier(AST ast) throws UnknownValueException {
+        Value value = null;
+        
+        //TODO: handle based values
+        //If it has units then we know it is a Numeric value
+        if (ast.getNextSibling() != null && ast.getNextSibling().getType() == UNITS)
+            return new Numeric(ast.getText(), ast.getNextSibling().getText());
+        
+        NumberFormat format = NumberFormat.getInstance();
+        try {
+            format.parse(ast.getText());
+            value = new Numeric(ast.getText());
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        return value;
+    }
+    
+    /**
+     * 
+     * @param ast
+     * @return
+     * @throws UnknownValueException
+     */
+    public static Symbol createSymbol(AST ast) throws UnknownValueException {
+        if (ast.getType() != SYMBOL)
+            throw new UnknownValueException("Value is not a symbol it is type:" + ast.getType());
+        return new Symbol(ast.getText());
     }
 }
