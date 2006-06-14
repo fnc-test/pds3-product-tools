@@ -114,8 +114,14 @@ public class DefaultLabelParser implements LabelParser {
         return "2.1";
     }
     
+    /**
+     * 
+     * @param args
+     * @throws Exception
+     */
     public static void main(String [] args) throws Exception {
-        DefaultLabelParser parser = new DefaultLabelParser();
+        LabelParserFactory factory = LabelParserFactory.newInstance();
+        LabelParser parser = factory.newLabelParser();
         parser.parse(new URL(args[0]));
     }
 
