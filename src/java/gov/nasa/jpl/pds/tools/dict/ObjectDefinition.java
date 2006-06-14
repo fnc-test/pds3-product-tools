@@ -87,4 +87,60 @@ public class ObjectDefinition extends Definition {
         this.requiredObjects = requiredObjects;
     }
     
+    public boolean hasElement(String identifier) {
+        if (requiredElements.contains(identifier) || optionalElements.contains(identifier))
+            return true;
+        return false;
+    }
+    
+    public boolean hasObject(String identifier) {
+        if (requiredObjects.contains(identifier) || optionalObjects.contains(identifier))
+            return true;
+        return false;
+    }
+    
+    /**
+     * 
+     * @param identifier
+     * @return
+     */
+    public boolean mustHaveElement(String identifier) {
+        return requiredElements.contains(identifier);
+    }
+    
+    /**
+     * 
+     * @param identifier
+     * @return
+     */
+    public boolean canHaveElement(String identifier) {
+        boolean exists = false;
+        exists = requiredElements.contains(identifier);
+        if (exists)
+            return exists;
+        return optionalElements.contains(identifier);
+    }
+    
+    /**
+     * 
+     * @param identifier
+     * @return
+     */
+    public boolean mustHaveObject(String identifier) {
+        return requiredObjects.contains(identifier);
+    }
+    
+    /**
+     * 
+     * @param identifier
+     * @return
+     */
+    public boolean canHaveObject(String identifier) {
+        boolean exists = false;
+        exists = requiredObjects.contains(identifier);
+        if (exists)
+            return exists;
+        return optionalObjects.contains(identifier);
+    }
+    
 }
