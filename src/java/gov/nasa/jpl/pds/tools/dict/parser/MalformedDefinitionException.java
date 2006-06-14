@@ -6,8 +6,6 @@
 
 package gov.nasa.jpl.pds.tools.dict.parser;
 
-import gov.nasa.jpl.pds.tools.TraceableException;
-
 /**
  * @author pramirez
  * @version $Revision$
