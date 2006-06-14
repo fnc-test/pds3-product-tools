@@ -16,7 +16,7 @@ import gov.nasa.jpl.pds.tools.label.parser.UnsupportedTypeException;
  * 
  */
 public class DataObjectValidatorFactory {
-    private static DataObjectValidatorFactory validator = null;
+    private static DataObjectValidatorFactory factory = null;
     
     /**
      *  Constructs a parser factory following the Singleton pattern
@@ -29,10 +29,10 @@ public class DataObjectValidatorFactory {
      * This will provide access to a {@link DataObjectValidatorFactory}
      * @return factory to generate data object validators
      */
-    public DataObjectValidatorFactory newInstance() {
-        if (validator == null)
-            validator = new DataObjectValidatorFactory();
-        return validator;
+    public synchronized DataObjectValidatorFactory newInstance() {
+        if (factory == null)
+            factory = new DataObjectValidatorFactory();
+        return factory;
     }
     
     /**
