@@ -12,14 +12,27 @@ package gov.nasa.jpl.pds.tools.label;
  * 
  */
 public class PointerStatement extends Statement {
+    private Value value;
 
     /**
      * @param lineNumber
      * @param identifier
      */
     protected PointerStatement(int lineNumber, String identifier) {
+        this(lineNumber, identifier, null);
+    }
+    
+    public PointerStatement(int lineNumber, String identifier, Value value) {
         super(lineNumber, identifier);
-        // TODO Auto-generated constructor stub
+        this.value = value;   
+    }
+    
+    public PointerStatement(String identifier, Value value) {
+        this(-1, identifier, value);
+    }
+    
+    public Value getValue() { 
+        return value;
     }
 
 }
