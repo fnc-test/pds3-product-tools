@@ -77,4 +77,10 @@ public class GroupDefinition extends Definition {
             return exists;
         return optionalElements.contains(identifier);
     }
+    
+    public boolean hasElement(String identifier) {
+        if (requiredElements.contains(identifier) || optionalElements.contains(identifier)) 
+            return true;
+        return false;
+    }
 }
