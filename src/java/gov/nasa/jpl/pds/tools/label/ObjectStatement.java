@@ -135,5 +135,17 @@ public class ObjectStatement extends Statement {
         else if (statement instanceof PointerStatement)
             pointers.add(statement);
     }
+    
+    public boolean hasAttribute(String identifier) {
+        if (attributes.get(identifier) == null)
+            return false;
+        return true;
+    }
+    
+    public boolean hasObject(String identifier) {
+        if (objects.get(identifier) == null)
+            return false;
+        return true;
+    }
 
 }
