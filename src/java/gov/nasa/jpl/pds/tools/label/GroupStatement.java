@@ -53,4 +53,10 @@ public class GroupStatement extends Statement {
         attributes.put(attribute.getIdentifier(), attribute);
     }
     
+    public boolean hasAttribute(String identifier) {
+        if (attributes.get(identifier) != null)
+            return true;
+        return false;
+    }
+    
 }
