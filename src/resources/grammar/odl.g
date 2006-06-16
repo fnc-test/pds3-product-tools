@@ -9,6 +9,10 @@ options {
     buildAST = true;
 }
 
+dictionary
+    : (label)*
+    ;
+
 // a label is a series of one or more expressions
 //      followed by an END
 label
@@ -65,7 +69,7 @@ assignment
 
 // a value is an identifier or a string literal
 value
-    : (IDENT) (units)* | (QUOTED) (units)* | (SYMBOL) | (list) | (set)
+    : (IDENT) (units)* | (QUOTED) | (SYMBOL) | (list) | (set)
     ;
 
 units
@@ -85,7 +89,7 @@ listelements
     ;
 
 listitem
-    : (IDENT) (units)* | (QUOTED) (units)*
+    : (IDENT) (units)* | (QUOTED) | (SYMBOL)
     ;
 
 
