@@ -1,5 +1,15 @@
-//Copyright (c) 2005, California Institute of Technology.
-//ALL RIGHTS RESERVED. U.S. Government sponsorship acknowledged.
+//Copyright 2006, by the California Institute of 
+//Technology. ALL RIGHTS RESERVED. United States Government 
+//Sponsorship acknowledged. Any commercial use must be negotiated with 
+//the Office of Technology Transfer at the California Institute of 
+//Technology.
+//
+//This software may be subject to U.S. export control laws. By 
+//accepting this software, the user agrees to comply with all 
+//applicable U.S. export laws and regulations. User has the 
+//responsibility to obtain export licenses, or other export authority 
+//as may be required before exporting such information to foreign 
+//countries or providing access to foreign persons.
 //
 // $Id$ 
 //
@@ -21,7 +31,7 @@ public class StatementFactory implements ODLTokenTypes {
     /**
      * 
      * @param ast
-     * @return
+     * @return Returns the statement.
      * @throws UnknownStatementException
      */
     public static Statement createStatement(AST ast) throws UnknownStatementException, UnknownValueException {
@@ -46,7 +56,7 @@ public class StatementFactory implements ODLTokenTypes {
     /**
      * 
      * @param ast
-     * @return
+     * @return Returns the attribute statement.
      * @throws UnknownStatementException
      */
     public static AttributeStatement createAttribute(AST ast) throws UnknownStatementException, UnknownValueException {
@@ -62,7 +72,7 @@ public class StatementFactory implements ODLTokenTypes {
     /**
      * 
      * @param ast
-     * @return
+     * @return Returns the object statement.
      * @throws UnknownStatementException
      */
     public static ObjectStatement createObject(AST ast) throws UnknownStatementException, UnknownValueException {
@@ -82,7 +92,7 @@ public class StatementFactory implements ODLTokenTypes {
     /**
      * 
      * @param ast
-     * @return
+     * @return Returns the group statement.
      * @throws UnknownStatementException
      */
     public static GroupStatement createGroup(AST ast) throws UnknownStatementException, UnknownValueException {
@@ -102,7 +112,7 @@ public class StatementFactory implements ODLTokenTypes {
     /**
      * 
      * @param ast
-     * @return
+     * @return Returns the pointer statement.
      * @throws UnknownStatementException
      */
     public static PointerStatement createPointer(AST ast) throws UnknownStatementException, UnknownValueException {
@@ -114,7 +124,7 @@ public class StatementFactory implements ODLTokenTypes {
     /**
      * 
      * @param ast
-     * @return
+     * @return Returns the comment statement.
      * @throws UnknownStatementException
      */
     public static CommentStatement createComment(AST ast) throws UnknownStatementException {
@@ -128,7 +138,7 @@ public class StatementFactory implements ODLTokenTypes {
     /**
      * 
      * @param ast
-     * @return
+     * @return Returns the value.
      * @throws UnknownValueException
      */
     public static Value createValue(AST ast) throws UnknownValueException {
@@ -153,7 +163,7 @@ public class StatementFactory implements ODLTokenTypes {
     /**
      * 
      * @param ast
-     * @return
+     * @return Returns the text string.
      * @throws UnknownValueException
      */
     public static TextString createTextString(AST ast) throws UnknownValueException {
@@ -165,7 +175,7 @@ public class StatementFactory implements ODLTokenTypes {
     /**
      * 
      * @param ast
-     * @return
+     * @return Returns the sequence.
      * @throws UnknownValueException
      */
     public static Sequence createSequence(AST ast) throws UnknownValueException {
@@ -188,7 +198,7 @@ public class StatementFactory implements ODLTokenTypes {
     /**
      * 
      * @param ast
-     * @return
+     * @return Returns the set.
      * @throws UnknownValueException
      */
     public static Set createSet(AST ast) throws UnknownValueException {
@@ -211,7 +221,7 @@ public class StatementFactory implements ODLTokenTypes {
     /**
      * 
      * @param ast
-     * @return
+     * @return Returns the identifier.
      * @throws UnknownValueException
      */
     public static Value createIdentifier(AST ast) throws UnknownValueException {
@@ -237,7 +247,7 @@ public class StatementFactory implements ODLTokenTypes {
     /**
      * 
      * @param ast
-     * @return
+     * @return Returns the symbol.
      * @throws UnknownValueException
      */
     public static Symbol createSymbol(AST ast) throws UnknownValueException {

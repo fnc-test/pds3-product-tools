@@ -1,5 +1,15 @@
-//Copyright (c) 2005, California Institute of Technology.
-//ALL RIGHTS RESERVED. U.S. Government sponsorship acknowledged.
+//Copyright 2006, by the California Institute of 
+//Technology. ALL RIGHTS RESERVED. United States Government 
+//Sponsorship acknowledged. Any commercial use must be negotiated with 
+//the Office of Technology Transfer at the California Institute of 
+//Technology.
+//
+//This software may be subject to U.S. export control laws. By 
+//accepting this software, the user agrees to comply with all 
+//applicable U.S. export laws and regulations. User has the 
+//responsibility to obtain export licenses, or other export authority 
+//as may be required before exporting such information to foreign 
+//countries or providing access to foreign persons.
 //
 // $Id$ 
 //
@@ -33,7 +43,7 @@ public interface LabelParser {
      * Parses the given file and validates against the dictionary.
      * @param file 
      * @param dictionary
-     * @return
+     * @return {@link Label} representation of the file
      */
     public Label parse(URL file, Dictionary dictionary) throws ParseException, IOException;
     
@@ -42,7 +52,7 @@ public interface LabelParser {
      * @param file
      * @param dictionary
      * @param dataObjectValidation
-     * @return
+     * @return {@link Label} representation of the file
      */
     public Label parse(URL file, Dictionary dictionary, boolean dataObjectValidation) throws ParseException, IOException;
     
@@ -60,7 +70,7 @@ public interface LabelParser {
     
     /**
      * Passes properties to the parser. 
-     * @param props Set of properties.
+     * @param properties Set of properties.
      */
     public void setProperties(Properties properties);
     
