@@ -19,7 +19,7 @@ $Id: project.xml,v 1.11 2006/01/06 22:55:16 pramirez Exp $
     <id>pds-tools</id>
     <name>PDS Tools</name>
     <currentVersion>0.0.0</currentVersion>
-    <package>gov.nasa.pds.tools</package>
+    <package>gov.nasa.jpl.pds.tools</package>
     <shortDescription>
       Next generation of PDS tools.
     </shortDescription>
@@ -75,6 +75,16 @@ $Id: project.xml,v 1.11 2006/01/06 22:55:16 pramirez Exp $
             <url>http://www.ibiblio.org/maven/</url>
         </dependency>
     </dependencies>
-    <build/>
+    <build>
+        <nagEmailAddress>paul.ramirez@jpl.nasa.gov</nagEmailAddress>
+        <sourceDirectory>${basedir}/src/java</sourceDirectory>
+        <unitTestSourceDirectory>${basedir}/src/test</unitTestSourceDirectory>
+        <resources/>
+        <unitTest>
+	      <includes>
+	        <include>**/*Test*.java</include>
+	      </includes>
+        </unitTest>
+    </build>
     <properties/>
 </project>
