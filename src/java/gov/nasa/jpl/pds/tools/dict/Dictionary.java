@@ -228,4 +228,12 @@ public class Dictionary {
         
         return definition;
     }
+    
+    /**
+     * Retrieves the map of definitions
+     * @return the map of definitions.
+     */
+    protected Map getDefinitions() {
+        return definitions;
+    }
 }
