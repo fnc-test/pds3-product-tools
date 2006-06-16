@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright 2006, by the California Institute of 
+Technology. ALL RIGHTS RESERVED. United States Government 
+Sponsorship acknowledged. Any commercial use must be negotiated with 
+the Office of Technology Transfer at the California Institute of 
+Technology.
+
+This software may be subject to U.S. export control laws. By 
+accepting this software, the user agrees to comply with all 
+applicable U.S. export laws and regulations. User has the 
+responsibility to obtain export licenses, or other export authority 
+as may be required before exporting such information to foreign 
+countries or providing access to foreign persons.
+
+$Id:$
+-->
+
+<document>
+    <properties>
+        <title>About PDS Tools</title>
+        <author email="Sean.Hardman@jpl.nasa.gov">Sean Hardman</author>
+    </properties>
+
+    <body>
+        <section name="About PDS Tools">
+            <p>The next generation of Planetary Data System (PDS) Tools will support design/generation, validation and submission of archival products to the PDS. These tools are intended to replace the current generation of tools (e.g., lvtool, kwvtool, tbtool, etc.) used by the Discpline Nodes, Engineering Node and the PDS user community as a whole.
+            </p>
+
+            <p>The current scope of the task is limited to PDS label and product validation, as directed by the PDS Management Council on October 5, 2005 at the Management Council face-to-face meeting. Other aspects of validation (e.g., catalog, volume and data set validation) will be covered in future phases.
+            </p>
+        </section>
+    </body>
+</document>
