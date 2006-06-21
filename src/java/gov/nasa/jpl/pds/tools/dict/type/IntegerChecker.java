@@ -21,15 +21,21 @@ package gov.nasa.jpl.pds.tools.dict.type;
  * @version $Revision$
  * 
  */
-public class IntegerChecker implements NumericTypeChecker {
+public class IntegerChecker extends LengthChecker implements NumericTypeChecker {
 
     /* (non-Javadoc)
      * @see gov.nasa.jpl.pds.tools.label.validate.NumericTypeChecker#checkMinValue(java.lang.String, java.lang.String)
      */
     public void checkMinValue(String value, String min) 
             throws OutOfRangeException, InvalidTypeException {
-        // TODO Auto-generated method stub
-
+        try{
+            int minValue = Integer.parseInt(min);
+            int intValue = Integer.parseInt(value);
+            if (intValue < minValue) 
+                throw new OutOfRangeException(value + " is below the accepted minimum " + min);
+        } catch (NumberFormatException nfe) {
+            throw new InvalidTypeException ("Either the value " + value + " or " + min + " is not the correct type.");
+        }
     }
 
     /* (non-Javadoc)
@@ -37,34 +43,27 @@ public class IntegerChecker implements NumericTypeChecker {
      */
     public void checkMaxValue(String value, String max) 
             throws OutOfRangeException, InvalidTypeException {
-        // TODO Auto-generated method stub
-
+        try{
+            int maxValue = Integer.parseInt(max);
+            int intValue = Integer.parseInt(value);
+            if (intValue > maxValue) 
+                throw new OutOfRangeException(value + " exceeds maximum of " + max);
+        } catch (NumberFormatException nfe) {
+            throw new InvalidTypeException ("Either the value " + value + " or " + max + " is not the correct type.");
+        }
     }
 
     /* (non-Javadoc)
      * @see gov.nasa.jpl.pds.tools.label.validate.TypeChecker#cast(java.lang.String)
      */
     public Object cast(String value) throws InvalidTypeException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /* (non-Javadoc)
-     * @see gov.nasa.jpl.pds.tools.label.validate.TypeChecker#checkMinLength(java.lang.String, int)
-     */
-    public void checkMinLength(String value, int min) 
-            throws InvalidLengthException {
-        // TODO Auto-generated method stub
-
-    }
-
-    /* (non-Javadoc)
-     * @see gov.nasa.jpl.pds.tools.label.validate.TypeChecker#checkMaxLength(java.lang.String, int)
-     */
-    public void checkMaxLength(String value, int max) 
-            throws InvalidLengthException {
-        // TODO Auto-generated method stub
-
+        Integer intValue = null;
+        try {
+            intValue = Integer.valueOf(value);
+        } catch(NumberFormatException nfe) {
+            throw new InvalidTypeException(nfe.getMessage());
+        }
+        return intValue;
     }
 
 }
