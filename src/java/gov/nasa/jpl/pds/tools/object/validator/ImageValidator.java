@@ -21,8 +21,8 @@ import org.apache.log4j.Logger;
 import gov.nasa.jpl.pds.tools.label.ObjectStatement;
 import gov.nasa.jpl.pds.tools.label.parser.InvalidDescriptionException;
 import gov.nasa.jpl.pds.tools.label.parser.InvalidObjectException;
-import gov.nasa.jpl.pds.tools.label.validate.DataObjectValidator;
 import gov.nasa.jpl.pds.tools.object.io.DataObjectInputStream;
+import gov.nasa.jpl.pds.tools.label.validate.DataObjectValidator;
 
 /**
  * @author pramirez
@@ -30,6 +30,7 @@ import gov.nasa.jpl.pds.tools.object.io.DataObjectInputStream;
  * 
  */
 public class ImageValidator implements DataObjectValidator {
+    private static Logger log = Logger.getLogger("gov.nasa.pds.tools.object.validate.ImageValidator");
 
     /* (non-Javadoc)
      * @see gov.nasa.jpl.pds.tools.label.validate.DataObjectValidator#validate(gov.nasa.jpl.pds.tools.object.io.DataObjectInputStream, gov.nasa.jpl.pds.tools.label.ObjectStatement)
@@ -38,22 +39,6 @@ public class ImageValidator implements DataObjectValidator {
             throws InvalidObjectException, InvalidDescriptionException {
         // TODO Auto-generated method stub
 
-    }
-
-    /* (non-Javadoc)
-     * @see gov.nasa.jpl.pds.tools.label.validate.DataObjectValidator#setLogger(org.apache.log4j.Logger)
-     */
-    public void setLogger(Logger log) {
-        // TODO Auto-generated method stub
-
-    }
-
-    /* (non-Javadoc)
-     * @see gov.nasa.jpl.pds.tools.label.validate.DataObjectValidator#getLooger()
-     */
-    public Logger getLooger() {
-        // TODO Auto-generated method stub
-        return null;
     }
 
 }
