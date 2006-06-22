@@ -19,9 +19,9 @@ package gov.nasa.jpl.pds.tools.label.validate;
 import java.util.Iterator;
 
 import org.apache.log4j.Logger;
-import gov.nasa.jpl.pds.tools.dict.Dictionary;
 import gov.nasa.jpl.pds.tools.label.AttributeStatement;
 import gov.nasa.jpl.pds.tools.label.GroupStatement;
+import gov.nasa.jpl.pds.tools.dict.Dictionary;
 import gov.nasa.jpl.pds.tools.dict.GroupDefinition;
 
 /**
@@ -30,6 +30,7 @@ import gov.nasa.jpl.pds.tools.dict.GroupDefinition;
  * 
  */
 public class GroupValidator {
+    private static Logger log = Logger.getLogger("gov.nasa.pds.label.validate.GroupValidator");
     
     public static boolean isValid(Dictionary dictionary, GroupStatement group, Logger log) 
        throws DefinitionNotFoundException {
@@ -69,7 +70,7 @@ public class GroupValidator {
         //Validate all attributes
         for (Iterator i = group.getAttributes().iterator(); i.hasNext();) {
             AttributeStatement attribute = (AttributeStatement) i.next();
-            boolean elementValid = ElementValidator.isValid(dictionary, attribute, log);
+            boolean elementValid = ElementValidator.isValid(dictionary, attribute);
             if (!elementValid)
                 valid = false;
         }
