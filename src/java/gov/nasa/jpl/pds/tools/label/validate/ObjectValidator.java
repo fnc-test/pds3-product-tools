@@ -16,10 +16,10 @@
 
 package gov.nasa.jpl.pds.tools.label.validate;
 
-import gov.nasa.jpl.pds.tools.dict.ObjectDefinition;
-import gov.nasa.jpl.pds.tools.dict.Dictionary;
 import gov.nasa.jpl.pds.tools.label.AttributeStatement;
 import gov.nasa.jpl.pds.tools.label.ObjectStatement;
+import gov.nasa.jpl.pds.tools.dict.Dictionary;
+import gov.nasa.jpl.pds.tools.dict.ObjectDefinition;
 import org.apache.log4j.Logger;
 import java.util.Iterator;
 
@@ -29,8 +29,9 @@ import java.util.Iterator;
  * 
  */
 public class ObjectValidator {
+    private static Logger log = Logger.getLogger("gov.nasa.pds.label.ObjectStatement");
 
-    public static boolean isValid(Dictionary dictionary, ObjectStatement object, Logger log) throws 
+    public static boolean isValid(Dictionary dictionary, ObjectStatement object) throws 
        DefinitionNotFoundException {
         boolean valid = true;
         
@@ -68,7 +69,7 @@ public class ObjectValidator {
         //Validate all attributes
         for (Iterator i = object.getAttributes().iterator(); i.hasNext();) {
             AttributeStatement attribute = (AttributeStatement) i.next();
-            boolean elementValid = ElementValidator.isValid(dictionary, attribute, log);
+            boolean elementValid = ElementValidator.isValid(dictionary, attribute);
             if (!elementValid)
                 valid = false;
         }
@@ -101,7 +102,7 @@ public class ObjectValidator {
         //Validate all nested objects
         for (Iterator i = object.getObjects().iterator(); i.hasNext();) {
             ObjectStatement obj = (ObjectStatement) i.next();
-            boolean objValid = ObjectValidator.isValid(dictionary, obj, log);
+            boolean objValid = ObjectValidator.isValid(dictionary, obj);
             if (!objValid)
                 valid = false;
         }
