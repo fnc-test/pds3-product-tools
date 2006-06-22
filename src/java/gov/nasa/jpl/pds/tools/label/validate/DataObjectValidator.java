@@ -21,8 +21,6 @@ import gov.nasa.jpl.pds.tools.label.parser.InvalidDescriptionException;
 import gov.nasa.jpl.pds.tools.label.parser.InvalidObjectException;
 import gov.nasa.jpl.pds.tools.object.io.DataObjectInputStream;
 
-import org.apache.log4j.Logger;
-
 /**
  * @author pramirez
  * @version $Revision$
@@ -38,15 +36,4 @@ public interface DataObjectValidator {
      */
     public void validate(DataObjectInputStream input, ObjectStatement object) throws InvalidObjectException, InvalidDescriptionException;
     
-    /**
-     * The log that errors will be written to 
-     * @param log
-     */
-    public void setLogger(Logger log);
-    
-    /**
-     * Retrieves the log
-     * @return logger
-     */
-    public Logger getLooger();
 }
