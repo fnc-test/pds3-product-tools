@@ -16,10 +16,9 @@
 
 package gov.nasa.jpl.pds.tools.label.validate;
 
-import gov.nasa.jpl.pds.tools.dict.ElementDefinition;
 import gov.nasa.jpl.pds.tools.label.AttributeStatement;
 import gov.nasa.jpl.pds.tools.dict.Dictionary;
-import org.apache.log4j.Logger;
+import gov.nasa.jpl.pds.tools.dict.ElementDefinition;
 
 /**
  * This class will validate an element value or set of values against 
@@ -30,19 +29,19 @@ import org.apache.log4j.Logger;
  */
 public class ElementValidator {
     
-    public static boolean isValid(ElementDefinition definition, AttributeStatement attribute, Logger log) {
+    public static boolean isValid(ElementDefinition definition, AttributeStatement attribute) {
         return false;
     }
     
-    public static boolean isValid(ElementDefinition definition, String identifier, String value, Logger log) {
+    public static boolean isValid(ElementDefinition definition, String identifier, String value) {
         return false;
     }
     
-    public static boolean isValid(Dictionary dictionary, AttributeStatement attribute, Logger log) {
+    public static boolean isValid(Dictionary dictionary, AttributeStatement attribute) {
         return false;
     }
     
-    public static boolean isValid(Dictionary dictionary, String identifier, String value, Logger log) {
+    public static boolean isValid(Dictionary dictionary, String identifier, String value) {
         return false;
     }
 
