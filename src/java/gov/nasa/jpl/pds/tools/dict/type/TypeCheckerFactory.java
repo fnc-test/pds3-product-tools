@@ -22,14 +22,14 @@ package gov.nasa.jpl.pds.tools.dict.type;
  * 
  */
 public class TypeCheckerFactory implements Types{
-    private TypeCheckerFactory factory = null;
+    private static TypeCheckerFactory factory = null;
     
     private TypeCheckerFactory() {
         //TODO: Consider supporting dynamic types. This could
         //loading a mapping at this point
     }
     
-    public synchronized TypeCheckerFactory newInstance() {
+    public static synchronized TypeCheckerFactory getInstance() {
         if (factory == null)
             factory = new TypeCheckerFactory();
         return factory;
