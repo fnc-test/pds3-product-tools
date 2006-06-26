@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Collection;
 
 /**
  * This class represents a PDS data dictionary. 
@@ -51,12 +52,12 @@ public class Dictionary {
     }
     
     /**
-     * Tests to see whether or not a defintion exists
+     * Tests to see whether or not a definition exists
      * @param identifier of the definition
      * @return flag indicating existence
      */
     public boolean containsDefinition(String identifier) {
-        return ((definitions.get(identifier) == null) ? false : true);
+        return definitions.containsKey(identifier); 
     }
     
     /**
@@ -65,10 +66,9 @@ public class Dictionary {
      * @return flag indicating existence
      */
     public boolean containsObjectDefinition(String identifier) {
-        Definition definition = (Definition) definitions.get(identifier);
-        if (definition == null || !(definition instanceof ObjectDefinition))
-            return false;
-        return true;
+        if (definitions.get(identifier) instanceof ObjectDefinition)
+            return true;
+        return false;
     }
     
     /**
@@ -77,10 +77,9 @@ public class Dictionary {
      * @return flag indicating existence
      */
     public boolean containsGroupDefinition(String identifier) {
-        Definition definition = (Definition) definitions.get(identifier);
-        if (definition == null || !(definition instanceof GroupDefinition))
-            return false;
-        return true;
+        if (definitions.get(identifier) instanceof GroupDefinition)
+            return true;
+        return false;
     }
     
     /**
@@ -89,10 +88,9 @@ public class Dictionary {
      * @return flag indicating existence
      */
     public boolean containsElementDefinition(String identifier) {
-        Definition definition = (Definition) definitions.get(identifier);
-        if (definition == null || !(definition instanceof ElementDefinition))
-            return false;
-        return true;
+        if (definitions.get(identifier) instanceof ElementDefinition)
+            return true;
+        return false;
     }
     
     /**
@@ -187,7 +185,7 @@ public class Dictionary {
      * @param definitions to be added to the dictionary
      * @param overwrite
      */
-    public void addDefinitions(List definitions, boolean overwrite) {
+    public void addDefinitions(Collection definitions, boolean overwrite) {
         for (Iterator i = definitions.iterator(); i.hasNext();) {
             Definition d = (Definition) i.next();
             addDefinition(d, overwrite);
@@ -199,7 +197,7 @@ public class Dictionary {
      * overwritten.
      * @param definitions to be added to the dictionary
      */
-    public void addDefinitions(List definitions) {
+    public void addDefinitions(List definitions) {// Use Collection
         addDefinitions(definitions, true);
     }
     
@@ -214,16 +212,18 @@ public class Dictionary {
     public ObjectDefinition findObjectClassDefinition(String identifier) {
         ObjectDefinition definition = null;
         
-        //Look for maximum length match of object definition identifier with given identifier
-        for (Iterator i = definitions.keySet().iterator(); i.hasNext();) {
-            String definitionIdentifier = (String) i.next();
-            if (identifier.endsWith(definitionIdentifier) &&
-                    definitions.get(definitionIdentifier) instanceof ObjectDefinition) {
-                ObjectDefinition d = (ObjectDefinition) definitions.get(definitionIdentifier);
-                if (definition == null || d.getIdentifier().length() > definition.getIdentifier().length()) {
-                    definition = d;
-                }
-            }
+        String className = identifier;
+        boolean done = false;
+        
+        while (definition == null && !done) {
+            if (containsObjectDefinition(className))
+                definition = (ObjectDefinition) definitions.get(className);
+            else {
+                if (className.indexOf("_") == -1 || className.indexOf("_") == className.length()-1)
+                    done = true;
+                else
+                    className = className.substring(className.indexOf("_") + 1);
+            }      
         }
         
         return definition;
