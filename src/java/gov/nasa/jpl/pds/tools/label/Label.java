@@ -152,6 +152,7 @@ public class Label {
             groups.put(statement.getIdentifier(), statement);
         else if (statement instanceof PointerStatement)
             pointers.put(statement.getIdentifier(), statement);
+        //TODO: else throw some error
     }
 
     /**
@@ -166,7 +167,7 @@ public class Label {
      * Sets the type of label
      * @param labelType of this label
      */
-    public void setType(int labelType) {
+    public void setLabelType(int labelType) {
         this.labelType = labelType;
     }
 }
