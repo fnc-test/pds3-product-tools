@@ -21,50 +21,49 @@ package gov.nasa.jpl.pds.tools.dict.type;
  * @version $Revision$
  * 
  */
-public class DoubleChecker implements NumericTypeChecker {
+public class DoubleChecker extends LengthChecker implements NumericTypeChecker {
 
     /* (non-Javadoc)
      * @see gov.nasa.jpl.pds.tools.label.validate.NumericTypeChecker#checkMinValue(java.lang.String, java.lang.String)
      */
-    public void checkMinValue(String value, String min)
+    public void checkMinValue(String value, String min) 
             throws OutOfRangeException, InvalidTypeException {
-        // TODO Auto-generated method stub
-
+        try{
+            double minValue = Double.parseDouble(min);
+            double doubleValue = Double.parseDouble(value);
+            if (doubleValue < minValue) 
+                throw new OutOfRangeException(value + " is below the accepted minimum " + min);
+        } catch (NumberFormatException nfe) {
+            throw new InvalidTypeException ("Either the value " + value + " or " + min + " is not the correct type.");
+        }
     }
 
     /* (non-Javadoc)
      * @see gov.nasa.jpl.pds.tools.label.validate.NumericTypeChecker#checkMaxValue(java.lang.String, java.lang.String)
      */
-    public void checkMaxValue(String value, String max)
+    public void checkMaxValue(String value, String max) 
             throws OutOfRangeException, InvalidTypeException {
-        // TODO Auto-generated method stub
-
+        try{
+            double maxValue = Double.parseDouble(max);
+            double doubleValue = Double.parseDouble(value);
+            if (doubleValue > maxValue) 
+                throw new OutOfRangeException(value + " exceeds maximum of " + max);
+        } catch (NumberFormatException nfe) {
+            throw new InvalidTypeException ("Either the value " + value + " or " + max + " is not the correct type.");
+        }
     }
 
     /* (non-Javadoc)
      * @see gov.nasa.jpl.pds.tools.label.validate.TypeChecker#cast(java.lang.String)
      */
     public Object cast(String value) throws InvalidTypeException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /* (non-Javadoc)
-     * @see gov.nasa.jpl.pds.tools.label.validate.TypeChecker#checkMinLength(java.lang.String, int)
-     */
-    public void checkMinLength(String value, int min)
-            throws InvalidLengthException {
-        // TODO Auto-generated method stub
-
-    }
-
-    /* (non-Javadoc)
-     * @see gov.nasa.jpl.pds.tools.label.validate.TypeChecker#checkMaxLength(java.lang.String, int)
-     */
-    public void checkMaxLength(String value, int max)
-            throws InvalidLengthException {
-        // TODO Auto-generated method stub
-
+        Double doubleValue = null;
+        try {
+            doubleValue = Double.valueOf(value);
+        } catch(NumberFormatException nfe) {
+            throw new InvalidTypeException(nfe.getMessage());
+        }
+        return doubleValue;
     }
 
 }
