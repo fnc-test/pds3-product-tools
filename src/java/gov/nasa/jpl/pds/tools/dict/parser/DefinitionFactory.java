@@ -7,17 +7,19 @@
 package gov.nasa.jpl.pds.tools.dict.parser;
 
 import gov.nasa.jpl.pds.tools.dict.Definition;
-import gov.nasa.jpl.pds.tools.dict.ObjectDefinition;
+import gov.nasa.jpl.pds.tools.dict.DictionaryTokens;
 import gov.nasa.jpl.pds.tools.dict.ElementDefinition;
 import gov.nasa.jpl.pds.tools.dict.GroupDefinition;
+import gov.nasa.jpl.pds.tools.dict.ObjectDefinition;
+
 import gov.nasa.jpl.pds.tools.label.ObjectStatement;
 import gov.nasa.jpl.pds.tools.label.AttributeStatement;
 import gov.nasa.jpl.pds.tools.label.antlr.ODLTokenTypes;
 import gov.nasa.jpl.pds.tools.label.Set;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
-import gov.nasa.jpl.pds.tools.dict.DictionaryTokens;
 
 /**
  * This class builds definitions from ObjectStatements. The format of the object 
@@ -203,13 +205,13 @@ public class DefinitionFactory implements ODLTokenTypes, DictionaryTokens {
             //Find and set min value
             attribute = object.getAttribute(MINIMUM);
             if (attribute != null)
-                definition.setMinimum(Double.parseDouble(attribute.toString()));
+                definition.setMinimum(Double.valueOf(attribute.toString()));
             //FIXME: Catch double parse exception
             
             //Find and set max value
             attribute = object.getAttribute(MAXIMUM);
             if (attribute != null)
-                definition.setMaximum(Double.parseDouble(attribute.toString()));
+                definition.setMaximum(Double.valueOf(attribute.toString()));
             //FIXME: Catch double parse exception
             
             //Find and set value type
