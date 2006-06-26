@@ -12,7 +12,6 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.BasicConfigurator;
 import antlr.collections.AST;
 import gov.nasa.jpl.pds.tools.label.antlr.ODLTokenTypes;
-import gov.nasa.jpl.pds.tools.dict.Dictionary;
 import gov.nasa.jpl.pds.tools.label.antlr.ODLLexer;
 import gov.nasa.jpl.pds.tools.label.antlr.ODLParser;
 import gov.nasa.jpl.pds.tools.label.parser.ParseException;
@@ -25,7 +24,7 @@ import java.util.Map;
 import java.util.List;
 import java.util.Iterator;
 import gov.nasa.jpl.pds.tools.dict.Definition;
-import gov.nasa.jpl.pds.tools.label.ObjectStatement;
+import gov.nasa.jpl.pds.tools.dict.Dictionary;
 
 
 /**
@@ -34,12 +33,7 @@ import gov.nasa.jpl.pds.tools.label.ObjectStatement;
  * 
  */
 public class DictionaryParser implements ODLTokenTypes {
-    private Logger log;
-    
-    public DictionaryParser() {
-        BasicConfigurator.configure();
-        log = Logger.getLogger(this.getClass().getName());
-    }
+    private static Logger log = Logger.getLogger(new DictionaryParser().getClass().getName());
     
     public Dictionary parse(URL file) throws ParseException, IOException {
         ODLLexer lexer = new ODLLexer(file.openStream());
@@ -88,7 +82,7 @@ public class DictionaryParser implements ODLTokenTypes {
                         }
                     }
                 }
-                System.out.println("AST: " + ast.getText());
+                
                 //dictionary.addDefinition(DefinitionFactory.createDefinition(ast));
                 ast = ast.getNextSibling();
             }
@@ -110,10 +104,6 @@ public class DictionaryParser implements ODLTokenTypes {
         }
 
         return null;
-    }
-    
-    public void setLogger(Logger log) {
-        this.log = log;
     }
     
     public static void main(String [] args) throws Exception {
