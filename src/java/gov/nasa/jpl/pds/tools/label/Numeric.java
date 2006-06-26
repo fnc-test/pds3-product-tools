@@ -77,7 +77,7 @@ public class Numeric extends Scalar {
      * Retrieves the units
      * @return units
      */
-    public String units() {
+    public String getUnits() {
         return units;
     }
     
@@ -93,7 +93,7 @@ public class Numeric extends Scalar {
      * Retrieves the base
      * @return base
      */
-    public int radix() {
+    public int getRadix() {
         return radix;
     }
 
