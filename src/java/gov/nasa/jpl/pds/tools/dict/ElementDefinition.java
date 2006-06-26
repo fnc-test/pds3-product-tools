@@ -16,8 +16,8 @@
 
 package gov.nasa.jpl.pds.tools.dict;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * @author pramirez
@@ -30,9 +30,9 @@ public class ElementDefinition extends Definition {
     private String valueType;
     private int minLength;
     private int maxLength;
-    private List values;
-    private double minimum;
-    private double maximum;
+    private Collection values;
+    private Number minimum;
+    private Number maximum;
     
     public ElementDefinition(String identifier) {
         super(identifier);
@@ -42,8 +42,8 @@ public class ElementDefinition extends Definition {
         minLength = 0;
         maxLength = Integer.MAX_VALUE;
         values = new ArrayList();
-        minimum = Double.MIN_VALUE;
-        maximum = Double.MAX_VALUE;
+        minimum = null;
+        maximum = null;
     }
     
     /**
@@ -63,14 +63,14 @@ public class ElementDefinition extends Definition {
     /**
      * @return Returns the maximum.
      */
-    public double getMaximum() {
+    public Number getMaximum() {
         return maximum;
     }
     
     /**
      * @param maximum The maximum to set.
      */
-    public void setMaximum(double maximum) {
+    public void setMaximum(Number maximum) {
         this.maximum = maximum;
     }
     
@@ -91,14 +91,14 @@ public class ElementDefinition extends Definition {
     /**
      * @return Returns the minimum.
      */
-    public double getMinimum() {
+    public Number getMinimum() {
         return minimum;
     }
     
     /**
      * @param minimum The minimum to set.
      */
-    public void setMinimum(double minimum) {
+    public void setMinimum(Number minimum) {
         this.minimum = minimum;
     }
     
@@ -133,14 +133,14 @@ public class ElementDefinition extends Definition {
     /**
      * @return Returns the values.
      */
-    public List getValues() {
+    public Collection getValues() {
         return values;
     }
     
     /**
      * @param values The values to set.
      */
-    public void setValues(List values) {
+    public void setValues(Collection values) {
         this.values = values;
     }
     
