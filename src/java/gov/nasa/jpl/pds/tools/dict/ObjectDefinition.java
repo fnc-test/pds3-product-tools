@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 /**
- * This class represents an object defintion in the PDS data
+ * This class represents an object definition in the PDS data
  * dictionary. 
  * 
  * @author pramirez
@@ -97,59 +97,64 @@ public class ObjectDefinition extends Definition {
         this.requiredObjects = requiredObjects;
     }
     
-    public boolean hasElement(String identifier) {
-        if (requiredElements.contains(identifier) || optionalElements.contains(identifier))
-            return true;
-        return false;
-    }
-    
-    public boolean hasObject(String identifier) {
-        if (requiredObjects.contains(identifier) || optionalObjects.contains(identifier))
-            return true;
-        return false;
-    }
-    
+  
     /**
      * 
      * @param identifier
-     * @return Returns the required elements.
+     * @return true if element is required otherwise false.
      */
-    public boolean mustHaveElement(String identifier) {
+    public boolean isElementRequired(String identifier) {
         return requiredElements.contains(identifier);
     }
     
     /**
      * 
      * @param identifier
-     * @return Returns the possible elements.
+     * @return true if element can occur otherwise false.
      */
-    public boolean canHaveElement(String identifier) {
-        boolean exists = false;
-        exists = requiredElements.contains(identifier);
+    public boolean isElementPossible(String identifier) {
+        boolean exists = requiredElements.contains(identifier);
         if (exists)
-            return exists;
+            return true;
         return optionalElements.contains(identifier);
     }
     
     /**
      * 
      * @param identifier
-     * @return Returns the required objects.
+     * @return true if element is optional otherwise false.
      */
-    public boolean mustHaveObject(String identifier) {
+    public boolean isElementOptional(String identifier) {
+        return optionalElements.contains(identifier);
+    }
+    
+    /**
+     * 
+     * @param identifier
+     * @return true if the object is required otherwise false.
+     */
+    public boolean isObjectRequired(String identifier) {
         return requiredObjects.contains(identifier);
     }
     
     /**
      * 
      * @param identifier
-     * @return Returns the possible objects.
+     * @return true if the object is optional otherwise false.
      */
-    public boolean canHaveObject(String identifier) {
-        boolean exists = false;
-        exists = requiredObjects.contains(identifier);
+    public boolean isObjectOptional(String identifier) {
+        return optionalObjects.contains(identifier);
+    }
+    
+    /**
+     * 
+     * @param identifier
+     * @return true if the object can occur.
+     */
+    public boolean isObjectPossible(String identifier) {
+        boolean exists = requiredObjects.contains(identifier);
         if (exists)
-            return exists;
+            return true;
         return optionalObjects.contains(identifier);
     }
     
