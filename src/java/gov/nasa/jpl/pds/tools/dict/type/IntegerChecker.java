@@ -29,6 +29,7 @@ public class IntegerChecker extends LengthChecker implements NumericTypeChecker 
     public void checkMinValue(String value, String min) 
             throws OutOfRangeException, InvalidTypeException {
         try{
+            //FIXME: Support based Integers e.g. 2#1010101#
             int minValue = Integer.parseInt(min);
             int intValue = Integer.parseInt(value);
             if (intValue < minValue) 
@@ -44,6 +45,7 @@ public class IntegerChecker extends LengthChecker implements NumericTypeChecker 
     public void checkMaxValue(String value, String max) 
             throws OutOfRangeException, InvalidTypeException {
         try{
+            //FIXME: Support based Integers e.g. 2#1010101#
             int maxValue = Integer.parseInt(max);
             int intValue = Integer.parseInt(value);
             if (intValue > maxValue) 
@@ -59,6 +61,7 @@ public class IntegerChecker extends LengthChecker implements NumericTypeChecker 
     public Object cast(String value) throws InvalidTypeException {
         Integer intValue = null;
         try {
+            //FIXME: Support based Integers e.g. 2#1010101#
             intValue = Integer.valueOf(value);
         } catch(NumberFormatException nfe) {
             throw new InvalidTypeException(nfe.getMessage());
