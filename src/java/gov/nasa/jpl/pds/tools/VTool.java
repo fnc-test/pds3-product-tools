@@ -40,7 +40,7 @@ public class VTool {
 	private File exclude;
 	private File include_path;
 	private boolean follow_ptrs;
-	private File label_file;
+	private File []file_input;
 	private int max_errors;
 	private boolean partial;
 	private boolean recursive;
@@ -64,13 +64,48 @@ public class VTool {
 	}
 	
 	/**
+	 * Show the version and disclaimer notice for VTool 
+	 *
+	 */	
+	private void showVersion() {
+		System.out.println("PDS Validation Tool (VTool) BETA " + version_id);
+		System.out.println("\nDISCLAIMER:\n" + 
+				           "THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE CALIFORNIA\n" + 
+				           "INSTITUTE OF TECHNOLOGY (CALTECH) UNDER A U.S. GOVERNMENT CONTRACT WITH THE\n" +
+				           "NATIONAL AERONAUTICS AND SPACE ADMINISTRATION (NASA). THE SOFTWARE IS\n" + 
+				           "TECHNOLOGY AND SOFTWARE PUBLICLY AVAILABLE UNDER U.S. EXPORT LAWS AND IS\n" + 
+						   "PROVIDED \"AS-IS\" TO THE RECIPIENT WITHOUT WARRANTY OF ANY KIND, INCLUDING\n" + 
+					       "ANY WARRANTIES OF PERFORMANCE OR MERCHANTABILITY OR FITNESS FOR A PARTICULAR\n" + 
+						   "USE OR PURPOSE (AS SET FORTH IN UNITED STATES UCC2312-2313) OR FOR ANY\n" + 
+						   "PURPOSE WHATSOEVER, FOR THE SOFTWARE AND RELATED MATERIALS, HOWEVER USED. IN\n" + 
+						   "NO EVENT SHALL CALTECH, ITS JET PROPULSION LABORATORY, OR NASA BE LIABLE FOR\n" + 
+						   "ANY DAMAGES AND/OR COSTS, INCLUDING, BUT NOT LIMITED TO, INCIDENTAL OR\n" + 
+						   "CONSEQUENTIAL DAMAGES OF ANY KIND, INCLUDING ECONOMIC DAMAGE OR INJURY TO\n" +
+						   "PROPERTY AND LOST PROFITS, REGARDLESS OF WHETHER CALTECH, JPL, OR NASA BE\n" +
+						   "ADVISED, HAVE REASON TO KNOW, OR, IN FACT, SHALL KNOW OF THE POSSIBILITY.\n" +
+						   "RECIPIENT BEARS ALL RISK RELATING TO QUALITY AND PERFORMANCE OF THE SOFTWARE\n" +
+						   "AND ANY RELATED MATERIALS, AND AGREES TO INDEMNIFY CALTECH AND NASA FOR ALL\n" +
+						   "THIRD-PARTY CLAIMS RESULTING FROM THE ACTIONS OF RECIPIENT IN THE USE OF THE\n" +
+						   "SOFTWARE.");
+	}
+	
+	/**
+	 * Display VTool usage and help information
+	 *
+	 */
+	private void showHelp() {
+		HelpFormatter formatter = new HelpFormatter();
+		formatter.printHelp(35, "VTool", null, options, null);
+	}
+	
+	/**
 	 * Builds the set of options that are available for VTool
 	 */
 	private void buildOpts() {
 		
 		options = new Options();
 		
-		options.addOption("F", "no-follow", false, "Do not follow pointers found in a label");
+		options.addOption("F", "no-follow", false, "Do not follow ^STRUCTURE pointers in a label");
 		options.addOption("h", "help", false, "Display usage");
 		options.addOption("OBJ", "no-obj", false, "Do not perform data object validation");
 		options.addOption("p", "partial", false, "Validate as a partial label file");
@@ -103,7 +138,7 @@ public class VTool {
 		/* Option to specify the label(s) to validate */
 		OptionBuilder.withLongOpt("file");
 		OptionBuilder.withDescription("Specify the label file(s) to validate (required option)");
-		OptionBuilder.hasArg();
+		OptionBuilder.hasArgs();
 		OptionBuilder.withArgName("label(s)");
 		OptionBuilder.withType(String.class);
 		options.addOption(OptionBuilder.create("f"));
@@ -188,11 +223,11 @@ public class VTool {
 		int i=0;
 		
 		try {
-		
+			
 			for(i=0; i < cmd.getArgs().length; i++) {
 				throw new UnrecognizedOptionException( "Unrecognized option/argument: " + cmd.getArgs()[i]);
-				}
-			
+			}
+		
 			/* verbose flag must be queried first in order to determine whether to print
 			 * debug statements
 			 */
@@ -227,8 +262,14 @@ public class VTool {
 			}
 		
 			if(cmd.hasOption("f")) {
-				label_file = new File(cmd.getOptionValue("f"));
-				printDebug("Got label file: " + label_file);
+		        //TODO: handle multiple file inputs (wildcarded inputs)
+				
+				file_input = new File[cmd.getOptionValues("f").length];
+			
+				for(i=0; i < cmd.getOptionValues("f").length; ++i) {
+					file_input[i] = new File(cmd.getOptionValues("f")[i]);
+					printDebug("Got label file: " + file_input[i]);
+				}
 			}
 			else
 				throw new MissingOptionException("The -f flag is required");
@@ -283,7 +324,7 @@ public class VTool {
 				dict = new File[cmd.getOptionValues("d").length];
 				printDebug("Retrieved " + cmd.getOptionValues("d").length + " dictionary files");
 			
-				for(i=0; (i < cmd.getOptionValues("d").length) && (verbose == 0); ++i) {
+				for(i=0; i < cmd.getOptionValues("d").length; ++i) {
 					dict[i] = new File(cmd.getOptionValues("d")[i]);
 					printDebug("Got dictionary file: " + dict[i]);
 				}
@@ -331,14 +372,10 @@ public class VTool {
 			uoe.printStackTrace();
 			return;
 		}
-	}
-	/**
-	 * Display VTool usage and help information
-	 *
-	 */
-	private void showHelp() {
-		HelpFormatter formatter = new HelpFormatter();
-		formatter.printHelp(35, "VTool", null, options, null);
+		catch( SecurityException se ) {
+			se.printStackTrace();
+			return;
+		}
 	}
 	
 	/**
@@ -349,32 +386,6 @@ public class VTool {
 	private void printDebug(String s) {
 		if(verbose == 0) 
 			System.out.println("DEBUG: " + s);
-	}
-	
-	/**
-	 * Show the version and disclaimer notice for VTool 
-	 *
-	 */	
-	private void showVersion() {
-		System.out.println("PDS Validation Tool (VTool) BETA " + version_id);
-		System.out.println("\nDISCLAIMER:\n" + 
-				           "THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE CALIFORNIA\n" + 
-				           "INSTITUTE OF TECHNOLOGY (CALTECH) UNDER A U.S. GOVERNMENT CONTRACT WITH THE\n" +
-				           "NATIONAL AERONAUTICS AND SPACE ADMINISTRATION (NASA). THE SOFTWARE IS\n" + 
-				           "TECHNOLOGY AND SOFTWARE PUBLICLY AVAILABLE UNDER U.S. EXPORT LAWS AND IS\n" + 
-						   "PROVIDED \"AS-IS\" TO THE RECIPIENT WITHOUT WARRANTY OF ANY KIND, INCLUDING\n" + 
-					       "ANY WARRANTIES OF PERFORMANCE OR MERCHANTABILITY OR FITNESS FOR A PARTICULAR\n" + 
-						   "USE OR PURPOSE (AS SET FORTH IN UNITED STATES UCC2312-2313) OR FOR ANY\n" + 
-						   "PURPOSE WHATSOEVER, FOR THE SOFTWARE AND RELATED MATERIALS, HOWEVER USED. IN\n" + 
-						   "NO EVENT SHALL CALTECH, ITS JET PROPULSION LABORATORY, OR NASA BE LIABLE FOR\n" + 
-						   "ANY DAMAGES AND/OR COSTS, INCLUDING, BUT NOT LIMITED TO, INCIDENTAL OR\n" + 
-						   "CONSEQUENTIAL DAMAGES OF ANY KIND, INCLUDING ECONOMIC DAMAGE OR INJURY TO\n" +
-						   "PROPERTY AND LOST PROFITS, REGARDLESS OF WHETHER CALTECH, JPL, OR NASA BE\n" +
-						   "ADVISED, HAVE REASON TO KNOW, OR, IN FACT, SHALL KNOW OF THE POSSIBILITY.\n" +
-						   "RECIPIENT BEARS ALL RISK RELATING TO QUALITY AND PERFORMANCE OF THE SOFTWARE\n" +
-						   "AND ANY RELATED MATERIALS, AND AGREES TO INDEMNIFY CALTECH AND NASA FOR ALL\n" +
-						   "THIRD-PARTY CLAIMS RESULTING FROM THE ACTIONS OF RECIPIENT IN THE USE OF THE\n" +
-						   "SOFTWARE.");
 	}
 	
 	
@@ -395,7 +406,6 @@ public class VTool {
 		
 		/* Query the command line */
 		vtool.queryCmdLine();
-
 		
 	}
 	
