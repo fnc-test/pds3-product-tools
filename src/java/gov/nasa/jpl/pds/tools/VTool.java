@@ -6,7 +6,16 @@
 
 package gov.nasa.jpl.pds.tools;
 
+import gov.nasa.jpl.pds.tools.dict.Dictionary;
+import gov.nasa.jpl.pds.tools.dict.parser.DictionaryParser;
+import gov.nasa.jpl.pds.tools.label.parser.LabelParser;
+import gov.nasa.jpl.pds.tools.label.parser.LabelParserFactory;
 import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.MissingOptionException;
@@ -36,11 +45,11 @@ public class VTool {
 	private boolean alias;
 	private File config;
 	private boolean data_obj;
-	private File []dict;
+	private List dictionaries;
 	private File exclude;
 	private File include_path;
 	private boolean follow_ptrs;
-	private File []file_input;
+	private List file_input;
 	private int max_errors;
 	private boolean partial;
 	private boolean recursive;
@@ -48,7 +57,7 @@ public class VTool {
 	private String output_detail;
 	private short verbose;
 	private boolean xml;
-
+	
 
 	/** Default constructor */
 	public VTool(){
@@ -220,7 +229,7 @@ public class VTool {
 	 */
 	private void queryCmdLine() {
 
-		int i=0;
+		int i = 0;
 		
 		try {
 			
@@ -263,13 +272,7 @@ public class VTool {
 		
 			if(cmd.hasOption("f")) {
 		        //TODO: handle multiple file inputs (wildcarded inputs)
-				
-				file_input = new File[cmd.getOptionValues("f").length];
-			
-				for(i=0; i < cmd.getOptionValues("f").length; ++i) {
-					file_input[i] = new File(cmd.getOptionValues("f")[i]);
-					printDebug("Got label file: " + file_input[i]);
-				}
+				file_input = Arrays.asList(cmd.getOptionValues("f"));
 			}
 			else
 				throw new MissingOptionException("The -f flag is required");
@@ -321,13 +324,10 @@ public class VTool {
 			}
 			
 			if(cmd.hasOption("d")) {
-				dict = new File[cmd.getOptionValues("d").length];
+
 				printDebug("Retrieved " + cmd.getOptionValues("d").length + " dictionary files");
-			
-				for(i=0; i < cmd.getOptionValues("d").length; ++i) {
-					dict[i] = new File(cmd.getOptionValues("d")[i]);
-					printDebug("Got dictionary file: " + dict[i]);
-				}
+				dictionaries = Arrays.asList(cmd.getOptionValues("d"));
+				
 				System.out.println("Call method to merge and parse data dictionary file(s)");
 			}
 
@@ -389,9 +389,58 @@ public class VTool {
 	}
 	
 	
+	/**
+	 * Read and parse the dictionary files passed into the VTool command line
+	 * 
+	 * @param dictionary - a List object contain the data dictionary files
+	 * @return A Dictionary object that includes all the dictionary information from
+	 *  all the dictionary files passed in
+	 * @throws MalformedURLException
+	 * @throws IOException
+	 * @throws gov.nasa.jpl.pds.tools.label.parser.ParseException
+	 */
+	
+	public Dictionary readDictionaries(List dictionary) throws MalformedURLException, IOException, gov.nasa.jpl.pds.tools.label.parser.ParseException {
+		
+		DictionaryParser dictionaryParser = new DictionaryParser();
+		Dictionary dict;
+		
+		dict = dictionaryParser.parse( new File(dictionary.get(0).toString()).toURL() );
+		dictionary.remove(0);
+		
+		for( Iterator i = dictionary.iterator(); i.hasNext(); ) {
+			dict.merge( dictionaryParser.parse( new File (i.next().toString()).toURL() ) );
+		}
+		
+		return dict;
+		
+	}
+	
+	/**
+	 * Read and parse the label files passed into the VTool command line
+	 * 
+	 * @param files - A List of label files to be validated
+	 * @param dict - A Dictionary object needed for semantic validation
+	 * @throws MalformedURLException
+	 * @throws gov.nasa.jpl.pds.tools.label.parser.ParseException
+	 * @throws IOException
+	 */
+	
+	public void readLabels(List files, Dictionary dict) throws MalformedURLException, gov.nasa.jpl.pds.tools.label.parser.ParseException, IOException {
+		
+		LabelParserFactory factory = LabelParserFactory.newInstance();
+		LabelParser parser = factory.newLabelParser();
+		
+		
+		for( Iterator i = files.iterator(); i.hasNext(); ) {
+			parser.parse( new File (i.next().toString()).toURL(), dict );
+		}
+	}
+	
 	public static void main(String[] argv) {
 	
 		VTool vtool = new VTool();
+		Dictionary mainDictionary;
 		
 		if(argv.length == 0) {
 			System.out.println("\nType 'VTool -h' for usage");
@@ -407,6 +456,19 @@ public class VTool {
 		/* Query the command line */
 		vtool.queryCmdLine();
 		
+		try {
+			mainDictionary = vtool.readDictionaries(vtool.dictionaries);
+			vtool.readLabels(vtool.file_input, mainDictionary);
+		} 
+		catch (MalformedURLException mue) {
+			mue.printStackTrace();
+		} 
+		catch (IOException ioe) {
+			ioe.printStackTrace();
+		} 
+		catch (gov.nasa.jpl.pds.tools.label.parser.ParseException pe) {
+			pe.printStackTrace();
+		}
 	}
 	
 	
