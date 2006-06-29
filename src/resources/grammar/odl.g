@@ -15,13 +15,19 @@
 //
 
 header {
-    package gov.nasa.jpl.pds.tools.label.antlr;
+    package gov.nasa.pds.tools.label.antlr;
+    import gov.nasa.pds.tools.label.Label;
+    import gov.nasa.pds.tools.label.ObjectStatement;
+    import gov.nasa.pds.tools.label.AttributeStatement;
+    import gov.nasa.pds.tools.label.GroupStatement;
+    import gov.nasa.pds.tools.label.PointerStatement;
+    import gov.nasa.pds.tools.label.CommentStatement;
+    import gov.nasa.pds.tools.label.Statement;
 }
 
 class ODLParser extends Parser;
 options {
     exportVocab = ODL;
-    buildAST = true;
 }
 
 dictionary
@@ -30,56 +36,105 @@ dictionary
 
 // a label is a series of one or more expressions
 //      followed by an END
-label
-    : (expr)* (ending!)
-    ;
-
-ending
-    : END
+label returns [Label label = new Label();}
+    : ( s=statement {if (s != null) {label.addStatement(s);}} )* "END"?
     ;
 
 // an expression is an assignment like identifer = value
 //      or an object block
-expr
-    : (assignment) | (object) | (group) | (attachment) | (comment)
+statement returns [Statement result]
+{Statement s = null;}
+    : s=group_statement
+        {result = s;}
+    | s=nongroup_statement
+        {result = s;}
+    ;
+    
+nongroup_statement returns [Statement result]
+{Statement s= null;}
+    : s=simple_statement
+        {result = s;}
+    | s=object_statemnt
+        {result = s;}
     ;
 
+simple_statement returns [Statement result]
+{Statement s = null;}
+    : /*empty statement*/ (c:COMMENT)? EOL
+        {
+           if (c == null) {result = null;}
+           else {
+              CommentStatement comment = new CommentStatement(c.getLine());
+              c.setComment(c.getText());
+              result = comment;
+           }
+        }
+    | s=assignment_statement (c:COMMENT)? EOL
+        {
+           if (c != null) {
+              CommentStatement comment = new CommentStatement(c.getLine());
+              comment.setComment(c.getText());
+              s.attachComment(comment);
+           }
+           result = s;
+        }
+    | s=pointer_statement (c:COMMENT)? EOL
+        {
+           if (c != null) {
+              CommentStatement comment = new CommentStatement(c.getLine());
+              comment.setComment(c.getText());
+              s.attachComment(comment);
+           }
+           result = s;
+        }
+    ;
+    
 // an object block
-object
-    : "OBJECT"^ ASSIGNMENT_OPERATOR! IDENT^
-      (expr)*
-      "END_OBJECT"!
-      (endobject)*
-    ;
-
-endobject
-    :
-      ASSIGNMENT_OPERATOR! IDENT!
+object_statement returns [ObjectStatement result = null]
+{Statement s = null;}
+    : "OBJECT" EQUALS id:IDENT (c:COMMENT)? EOL
+      {
+         result = new ObjectStatement(id.getLine(), id.getText());
+         if (c != null) {
+            CommentStatement comment = new CommentStatement(c.getLine());
+            comment.setComment(c.getText());
+            result.attachComment(comment);
+         }
+      }
+      (s=nogroup_statement {if (s != null) {result.addStatement(s);}})*
+      "END_OBJECT" (EQUALS id2:IDENT)?
+      (c2:COMMENT)? EOL
+      {
+         if (c2 != null) {
+            CommentStatement comment = new CommentStatement(c2.getLine());
+            comment.setComment(c.getText());
+            result.attachComment(comment);
+         }
+      }
     ;
 
 // a group block
-group
-    : "GROUP"^ ASSIGNMENT_OPERATOR! IDENT^
-      (expr)*
-      "END_GROUP"!
-      (endgroup)*
+group_statement returns [GroupStatement result = null]
+    : "GROUP" EQUALS  id:IDENT (c:COMMENT)? EOL
+      {
+         result = new GroupStatement(id.getLine(), id.getText());
+         if (c != null) {
+            CommentStatement comment = new CommentStatement(c.getLine());
+            comment.setComment(c.getText());
+            result.attachComment(comment);
+         }
+      }
+      (s=simple_statement {if (s != null) {result.addStatement(s)}})*
+      "END_GROUP" (EQUALS id2:IDENT)?
+      (c3:COMMENT)? EOL
     ;
 
-endgroup
-    :
-      ASSIGNMENT_OPERATOR! IDENT!
+pointer_statement
+    : (POINT_OPERATOR) (assignment_statement)
     ;
 
-attachment
-    : (POINT_OPERATOR^) (assignment)
-    ;
-
-comment
-    : (COMMENT^)
-    ;
-
-assignment
-    : (IDENT) (ASSIGNMENT_OPERATOR^) (value)
+assignment_statement
+    : (IDENT) EQUALS (value)
     ;
 
 // a value is an identifier or a string literal
@@ -147,7 +202,7 @@ COMMENT
           }
           :
             {   LA(2)!='/' }? '*'
-//          |   EOL
+            |   EOL
             |   ~('*'|'\n'|'\r')
       )*
       "*/"
@@ -159,7 +214,6 @@ WS
     : (   ' '
       |   '\t'
       |   '\f'
-      |   EOL
       )
       { _ttype = Token.SKIP; }
     ;
@@ -194,7 +248,7 @@ QUOTED
     : '"'!
       (
           EOL
-      |   ~('\n'|'\r'|'"'|'\''|'\\')
+      |   ~('\n'|'\r'|'\''|'\\') 
       |   '\'' (~('\''|'\n'|'\r'))* '\''
       )*
       '"'!
