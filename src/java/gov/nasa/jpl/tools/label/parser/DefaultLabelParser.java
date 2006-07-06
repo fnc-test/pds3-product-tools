@@ -9,8 +9,8 @@ package gov.nasa.pds.tools.label.parser;
 import java.net.URL;
 import java.util.Properties;
 import org.apache.log4j.Logger;
-import gov.nasa.jpl.pds.tools.label.antlr.ODLLexer;
-import gov.nasa.jpl.pds.tools.label.antlr.ODLParser;
+import gov.nasa.pds.tools.label.antlr.ODLLexer;
+import gov.nasa.pds.tools.label.antlr.ODLParser;
 import java.io.IOException;
 import antlr.collections.AST;
 import gov.nasa.pds.tools.dict.Dictionary;
@@ -35,22 +35,17 @@ public class DefaultLabelParser implements LabelParser {
      * @see gov.nasa.jpl.pds.tools.label.parser.LabelParser#parse(java.net.URL)
      */
     public Label parse(URL file) throws ParseException, IOException {
+        Label label = null;
         ODLLexer lexer = new ODLLexer(file.openStream());
         ODLParser parser = new ODLParser(lexer);
         try {
-            parser.label();
-            AST ast = parser.getAST();
-            Label label = new Label();
-            while (ast != null) {
-                label.addStatement(StatementFactory.createStatement(ast));
-                ast = ast.getNextSibling();
-            }
+            label = parser.label();
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
             throw new ParseException(ex.getMessage());
         }
 
-        return null;
+        return label;
     }
 
     /* (non-Javadoc)
@@ -58,7 +53,7 @@ public class DefaultLabelParser implements LabelParser {
      */
     public Label parse(URL file, Dictionary dictionary) throws ParseException, IOException {
         // TODO Auto-generated method stub
-        return null;
+        return parse(file);
     }
 
     /* (non-Javadoc)
@@ -67,7 +62,7 @@ public class DefaultLabelParser implements LabelParser {
     public Label parse(URL file, Dictionary dictionary,
             boolean dataObjectValidation)  throws ParseException, IOException {
         // TODO Auto-generated method stub
-        return null;
+        return parse(file);
     }
 
     /* (non-Javadoc)
