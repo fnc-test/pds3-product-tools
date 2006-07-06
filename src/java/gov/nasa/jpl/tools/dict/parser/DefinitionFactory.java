@@ -7,7 +7,7 @@
 package gov.nasa.pds.tools.dict.parser;
 
 
-import gov.nasa.jpl.pds.tools.label.antlr.ODLTokenTypes;
+import gov.nasa.pds.tools.label.antlr.ODLTokenTypes;
 import gov.nasa.pds.tools.dict.Definition;
 import gov.nasa.pds.tools.dict.DictionaryTokens;
 import gov.nasa.pds.tools.dict.ElementDefinition;
