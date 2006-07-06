@@ -4,12 +4,12 @@
 // $Id$ 
 //
 
-package gov.nasa.jpl.tools;
+package gov.nasa.pds.tools;
 
-import gov.nasa.jpl.tools.dict.Dictionary;
-import gov.nasa.jpl.tools.dict.parser.DictionaryParser;
-import gov.nasa.jpl.tools.label.parser.LabelParser;
-import gov.nasa.jpl.tools.label.parser.LabelParserFactory;
+import gov.nasa.pds.tools.dict.Dictionary;
+import gov.nasa.pds.tools.dict.parser.DictionaryParser;
+import gov.nasa.pds.tools.label.parser.LabelParser;
+import gov.nasa.pds.tools.label.parser.LabelParserFactory;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -397,10 +397,10 @@ public class VTool {
 	 *  all the dictionary files passed in
 	 * @throws MalformedURLException
 	 * @throws IOException
-	 * @throws gov.nasa.jpl.pds.tools.label.parser.ParseException
+	 * @throws gov.nasa.pds.tools.label.parser.ParseException
 	 */
 	
-	public Dictionary readDictionaries(List dictionary) throws MalformedURLException, IOException, gov.nasa.jpl.tools.label.parser.ParseException {
+	public Dictionary readDictionaries(List dictionary) throws MalformedURLException, IOException, gov.nasa.pds.tools.label.parser.ParseException {
 		
 		DictionaryParser dictionaryParser = new DictionaryParser();
 		Dictionary dict;
@@ -422,13 +422,13 @@ public class VTool {
 	 * @param files - A List of label files to be validated
 	 * @param dict - A Dictionary object needed for semantic validation
 	 * @throws MalformedURLException
-	 * @throws gov.nasa.jpl.pds.tools.label.parser.ParseException
+	 * @throws gov.nasa.pds.tools.label.parser.ParseException
 	 * @throws IOException
 	 */
 	
-	public void readLabels(List files, Dictionary dict) throws MalformedURLException, gov.nasa.jpl.tools.label.parser.ParseException, IOException {
+	public void readLabels(List files, Dictionary dict) throws MalformedURLException, gov.nasa.pds.tools.label.parser.ParseException, IOException {
 		
-		LabelParserFactory factory = LabelParserFactory.newInstance();
+		LabelParserFactory factory = LabelParserFactory.getInstance();
 		LabelParser parser = factory.newLabelParser();
 		
 		
@@ -466,7 +466,7 @@ public class VTool {
 		catch (IOException ioe) {
 			ioe.printStackTrace();
 		} 
-		catch (gov.nasa.jpl.tools.label.parser.ParseException pe) {
+		catch (gov.nasa.pds.tools.label.parser.ParseException pe) {
 			pe.printStackTrace();
 		}
 	}
