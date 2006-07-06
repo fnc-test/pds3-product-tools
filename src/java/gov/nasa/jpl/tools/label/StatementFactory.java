@@ -16,7 +16,7 @@
 
 package gov.nasa.pds.tools.label;
 
-import gov.nasa.jpl.pds.tools.label.antlr.ODLTokenTypes;
+import gov.nasa.pds.tools.label.antlr.ODLTokenTypes;
 import antlr.collections.AST;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -37,7 +37,7 @@ public class StatementFactory implements ODLTokenTypes {
     public static Statement createStatement(AST ast) throws UnknownStatementException, UnknownValueException {
         Statement statement = null;
         
-        if (ast.getType() == ASSIGNMENT_OPERATOR)
+        if (ast.getType() == EQUALS)
             statement = createAttribute(ast);
         else if (ast.getType() == POINT_OPERATOR)
             statement = createPointer(ast);
@@ -60,7 +60,7 @@ public class StatementFactory implements ODLTokenTypes {
      * @throws UnknownStatementException
      */
     public static AttributeStatement createAttribute(AST ast) throws UnknownStatementException, UnknownValueException {
-        if (ast.getType() != ASSIGNMENT_OPERATOR)
+        if (ast.getType() != EQUALS)
             throw new UnknownStatementException("Not an attribute statement! Has type = " + ast.getType());
         
         AttributeStatement attribute = new AttributeStatement(ast.getLine(), ast.getFirstChild().getText().trim());
