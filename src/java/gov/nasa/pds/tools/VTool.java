@@ -219,6 +219,7 @@ public class VTool {
 		}
 		catch( ParseException exp ) {
 			System.err.println( "Command line parser failed.\n\nReason: " + exp.getMessage() );
+			System.exit(1);
 		}
 	}
 	
@@ -261,13 +262,13 @@ public class VTool {
 			if(cmd.hasOption("h")) {
 				printDebug("Display usage to terminal");
 				showHelp();
-				return;
+				System.exit(0);
 			}
 		
 			if(cmd.hasOption("V")) {
 				printDebug("Display version number and disclaimer notice");
 				showVersion();
-				return;
+				System.exit(0);
 			}
 		
 			if(cmd.hasOption("f")) {
@@ -288,6 +289,7 @@ public class VTool {
 			}
 			
 			if(cmd.hasOption("I")) {
+				//TODO: Check if the no-follow option is set 
 				include_path = new File(cmd.getOptionValue("I"));
 				printDebug("Got path to pointer files: " + include_path);
 			}
@@ -325,10 +327,8 @@ public class VTool {
 			
 			if(cmd.hasOption("d")) {
 
-				printDebug("Retrieved " + cmd.getOptionValues("d").length + " dictionary files");
+				printDebug("Retrieved " + cmd.getOptionValues("d").length + " dictionary file(s)");
 				dictionaries = Arrays.asList(cmd.getOptionValues("d"));
-				
-				System.out.println("Call method to merge and parse data dictionary file(s)");
 			}
 
 			if(cmd.hasOption("m")) {
@@ -339,7 +339,7 @@ public class VTool {
 				catch( NumberFormatException nfe ) {
 					System.err.println("Problem parsing value set for -m flag");
 					nfe.printStackTrace();
-					return;
+					System.exit(1);
 				}
 				if( max_errors <= 0 ) {
 					throw new IllegalArgumentException( "Max Errors Value must be a positive integer number");
@@ -362,19 +362,19 @@ public class VTool {
 		}
 		catch( IllegalArgumentException iae ) {
 			iae.printStackTrace();
-			return;
+			System.exit(1);
 		}
 		catch( MissingOptionException moe ) {
 			moe.printStackTrace();
-			return;
+			System.exit(1);
 		}
 		catch( UnrecognizedOptionException uoe ) {
 			uoe.printStackTrace();
-			return;
+			System.exit(1);
 		}
 		catch( SecurityException se ) {
 			se.printStackTrace();
-			return;
+			System.exit(1);
 		}
 	}
 	
@@ -402,14 +402,14 @@ public class VTool {
 	
 	public Dictionary readDictionaries(List dictionary) throws MalformedURLException, IOException, gov.nasa.pds.tools.label.parser.ParseException {
 		
-		DictionaryParser dictionaryParser = new DictionaryParser();
 		Dictionary dict;
 		
-		dict = dictionaryParser.parse( new File(dictionary.get(0).toString()).toURL() );
+		printDebug("Parsing Dictionary file: " + new File(dictionary.get(0).toString()).toURL());
+		dict = DictionaryParser.parse( new File(dictionary.get(0).toString()).toURL() );
 		dictionary.remove(0);
 		
 		for( Iterator i = dictionary.iterator(); i.hasNext(); ) {
-			dict.merge( dictionaryParser.parse( new File (i.next().toString()).toURL() ) );
+			dict.merge( DictionaryParser.parse( new File (i.next().toString()).toURL() ) );
 		}
 		
 		return dict;
@@ -462,12 +462,15 @@ public class VTool {
 		} 
 		catch (MalformedURLException mue) {
 			mue.printStackTrace();
+			return;
 		} 
 		catch (IOException ioe) {
 			ioe.printStackTrace();
+			return;
 		} 
 		catch (gov.nasa.pds.tools.label.parser.ParseException pe) {
 			pe.printStackTrace();
+			return;
 		}
 	}
 	
