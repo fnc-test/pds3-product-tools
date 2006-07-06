@@ -42,4 +42,6 @@ public abstract class Statement {
     public String getIdentifier() {
         return identifier;
     }
+
+    public abstract void attachComment(CommentStatement commet);
 }

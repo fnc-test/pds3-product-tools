@@ -26,6 +26,7 @@ public class AttributeStatement extends Statement {
     private Value value;
     private String namespace;
     private String elementIdentifier;
+    private CommentStatement comment;
     
     /**
      * Constructs a new attribute statement with no value
@@ -72,6 +73,8 @@ public class AttributeStatement extends Statement {
             elementIdentifier = identifier.substring(identifier.indexOf(":") + 1);
         
         this.value = value;
+
+        comment = null;
     }
     
     /**
@@ -105,4 +108,9 @@ public class AttributeStatement extends Statement {
     public void setValue(Value value) {
         this.value = value;
     }
+
+    public void attachComment(CommentStatement comment) {
+        this.comment = comment;
+    }
+
 }

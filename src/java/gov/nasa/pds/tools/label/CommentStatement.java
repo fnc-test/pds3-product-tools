@@ -39,4 +39,8 @@ public class CommentStatement extends Statement {
     public String getComment() {
         return comment;
     }
+
+    public void attachComment(CommentStatement comment) {
+        //TODO: throw some error as one should not be able to attach comments to comments
+    }
 }

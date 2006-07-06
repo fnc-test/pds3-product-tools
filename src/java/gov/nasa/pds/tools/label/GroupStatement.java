@@ -18,14 +18,18 @@ import java.util.HashMap;
  */
 public class GroupStatement extends Statement {
     private Map attributes;
+    private List pointers;
+    private List comments;
     
     /**
      * @param lineNumber
      * @param identifier
      */
-    protected GroupStatement(int lineNumber, String identifier) {
+    public GroupStatement(int lineNumber, String identifier) {
         super(lineNumber, identifier);
         attributes = new HashMap();
+        pointers = new ArrayList();
+        comments = new ArrayList();
     }
     
     /**
@@ -45,6 +49,14 @@ public class GroupStatement extends Statement {
         return new ArrayList(attributes.values());
     }
 
+    public void addStatement(Statement statement) {
+        if (statement instanceof AttributeStatement) 
+           attributes.put(statement.getIdentifier(), statement);
+        else if (statement instanceof PointerStatement)
+           pointers.add(statement);
+        // TODO: else throw error
+    }
+
     /**
      * 
      * @param attribute
@@ -58,5 +70,9 @@ public class GroupStatement extends Statement {
             return true;
         return false;
     }
-    
+   
+    public void attachComment(CommentStatement comment) {
+        comments.add(comment);
+    }
+ 
 }

@@ -22,13 +22,14 @@ public class ObjectStatement extends Statement {
     private Map attributes;
     private Map objects;
     private List pointers;
+    private List comments;
 
     /**
      * Constructs a new object statement with no attributes or nested objects
      * @param lineNumber Line number of the statement.
      * @param identifier Identifier for the statement.
      */
-    protected ObjectStatement(int lineNumber, String identifier) {
+    public ObjectStatement(int lineNumber, String identifier) {
         this(lineNumber, identifier, Collections.EMPTY_LIST, Collections.EMPTY_LIST, Collections.EMPTY_LIST);
     }
     
@@ -73,6 +74,7 @@ public class ObjectStatement extends Statement {
             this.objects.put(object.getIdentifier(), object);
         }
         
+        comments = new ArrayList();
     }
     
     /**
@@ -147,6 +149,10 @@ public class ObjectStatement extends Statement {
         if (objects.get(identifier) == null)
             return false;
         return true;
+    }
+
+    public void attachComment(CommentStatement comment) {
+        comments.add(comment);
     }
 
 }

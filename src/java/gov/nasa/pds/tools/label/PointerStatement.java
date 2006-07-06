@@ -13,6 +13,7 @@ package gov.nasa.pds.tools.label;
  */
 public class PointerStatement extends Statement {
     private Value value;
+    private CommentStatement comment;
 
     /**
      * @param lineNumber
@@ -24,7 +25,8 @@ public class PointerStatement extends Statement {
     
     public PointerStatement(int lineNumber, String identifier, Value value) {
         super(lineNumber, identifier);
-        this.value = value;   
+        this.value = value; 
+        comment = null;  
     }
     
     public PointerStatement(String identifier, Value value) {
@@ -33,6 +35,10 @@ public class PointerStatement extends Statement {
     
     public Value getValue() { 
         return value;
+    }
+
+    public void attachComment(CommentStatement comment) {
+        this.comment = comment;
     }
 
 }
