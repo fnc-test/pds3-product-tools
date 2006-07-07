@@ -227,36 +227,29 @@ symbol_value returns [Symbol result = null]
 
 sequence_value returns [Sequence result = null]
 {Sequence s = null;}
-    : {LA(2)!=SEQUENCE_OPENING}? s=sequence_1d 
+    : ((SEQUENCE_OPENING) (EOL)? (SEQUENCE_OPENING)) => s=sequence_2d 
         {result = s;}
-    | s=sequence_2d
+    | s=sequence_1d
         {result = s;}
     ;
     
 sequence_1d returns [Sequence result = null]
 {Scalar s = null; Scalar s2 = null;}
-    : (SEQUENCE_OPENING) s=scalar_value 
-      {
-        result = new Sequence();
-        result.add(s);
-      }
-      ((LIST_SEPARATOR)? s2=scalar_value {result.add(s2);})* (SEQUENCE_CLOSING) 
+    : (SEQUENCE_OPENING) (EOL)? s=scalar_value {result = new Sequence(); result.add(s);}
+      ((LIST_SEPARATOR)? (EOL)? s2=scalar_value {result.add(s2);})* (EOL)? (SEQUENCE_CLOSING) 
     ;
     
 sequence_2d returns [Sequence result = null]
 {Sequence s = null; Sequence s2 = null;}
-    : (SEQUENCE_OPENING) {result = new Sequence();} s=sequence_1d {result.add(s);}
-      ((LIST_SEPARATOR)? s2=sequence_1d {result.add(s2);})* (SEQUENCE_CLOSING)
+    : (SEQUENCE_OPENING) (EOL)? {result = new Sequence();} s=sequence_1d {result.add(s);}
+      ((LIST_SEPARATOR)? (EOL)? s2=sequence_1d {result.add(s2);})* (EOL)? (SEQUENCE_CLOSING)
     ;
 
 set_value returns [Set result = null;]
 {Scalar s = null; Scalar s2 = null;}
-    : (SET_OPENING) s=set_item 
-      {
-        result = new Set();
-        result.add(s);
-      }
-      ((LIST_SEPARATOR)? s2=set_item {result.add(s2);})* (SET_CLOSING) 
+    : ((SET_OPENING) (EOL)? (SET_CLOSING)) => (SET_OPENING) (EOL)? (SET_CLOSING) {result = new Set();}
+    | (SET_OPENING) (EOL)? s=set_item {result = new Set(); result.add(s);}
+      ((LIST_SEPARATOR)? (EOL)? s2=set_item {result.add(s2);})* (EOL)? (SET_CLOSING)
     ;
     
 set_item returns [Scalar result = null;]
@@ -271,7 +264,7 @@ options {
     exportVocab = ODL;
     charVocabulary = '\0'..'\377';
     testLiterals = false;   // don't automatically test for literals
-    k = 2;                  // 6 characters of lookahead
+    k = 4;                  // 3 characters of lookahead
     //caseSensitive = false;
     caseSensitiveLiterals = false;
 }
