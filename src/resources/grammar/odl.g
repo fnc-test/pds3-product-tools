@@ -244,8 +244,9 @@ sequence_1d returns [Sequence result = null]
     ;
     
 sequence_2d returns [Sequence result = null]
-{Sequence s = null;}
-    : (SEQUENCE_OPENING) {result = new Sequence();} (s=sequence_1d {result.add(s);} )+ (SEQUENCE_CLOSING)
+{Sequence s = null; Sequence s2 = null;}
+    : (SEQUENCE_OPENING) {result = new Sequence();} s=sequence_1d {result.add(s);}
+      ((LIST_SEPARATOR)? s2=sequence_1d {result.add(s2);})* (SEQUENCE_CLOSING)
     ;
 
 set_value returns [Set result = null;]
@@ -280,7 +281,7 @@ SET_OPENING : '{' ;
 SET_CLOSING : '}' ;
 SEQUENCE_OPENING : '(' ;
 SEQUENCE_CLOSING : ')' ;
-LIST_SEPERATOR : ',' ;
+LIST_SEPARATOR : ',' ;
 POINT_OPERATOR : '^' ;
 EQUALS : '=' ;
 
