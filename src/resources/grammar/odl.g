@@ -213,7 +213,7 @@ date_time_value returns [DateTime result = null]
         {result = new DateTime(d.getText());}
     | t:TIME
         {result = new DateTime(t.getText());}
-    | dt:DATE_TIME
+    | dt:DATETIME
         {result = new DateTime(dt.getText());}
     ;
   
@@ -227,34 +227,55 @@ symbol_value returns [Symbol result = null]
 
 sequence_value returns [Sequence result = null]
 {Sequence s = null;}
-    : ((SEQUENCE_OPENING) (EOL)? (SEQUENCE_OPENING)) => s=sequence_2d 
+    : ((SEQUENCE_OPENING) nl (SEQUENCE_OPENING)) => s=sequence_2d 
         {result = s;}
     | s=sequence_1d
         {result = s;}
     ;
     
 sequence_1d returns [Sequence result = null]
-{Scalar s = null; Scalar s2 = null;}
-    : (SEQUENCE_OPENING) (EOL)? s=scalar_value {result = new Sequence(); result.add(s);}
-      ((LIST_SEPARATOR)? (EOL)? s2=scalar_value {result.add(s2);})* (EOL)? (SEQUENCE_CLOSING) 
+{Sequence s = null;}
+    : SEQUENCE_OPENING nl s=scalar_list SEQUENCE_CLOSING
+        {result = s;}
     ;
     
+scalar_list returns [Sequence result=new Sequence()]
+{Scalar s = null; Scalar s2 = null;}
+    : /*empty*/
+    | s=scalar_value {result.add(s);} nl
+        ((LIST_SEPARATOR nl)? s2=scalar_value nl {result.add(s2);})*
+    ;
+
 sequence_2d returns [Sequence result = null]
 {Sequence s = null; Sequence s2 = null;}
-    : (SEQUENCE_OPENING) (EOL)? {result = new Sequence();} s=sequence_1d {result.add(s);}
-      ((LIST_SEPARATOR)? (EOL)? s2=sequence_1d {result.add(s2);})* (EOL)? (SEQUENCE_CLOSING)
+    : SEQUENCE_OPENING nl s=sequence_list SEQUENCE_CLOSING
+        {result = s;}
+    ;
+
+sequence_list returns [Sequence result = new Sequence()]
+{Sequence s = null; Sequence s2 = null;}
+    : /*empty*/
+    | s=sequence_1d {result.add(s);} nl
+        ((LIST_SEPARATOR nl)? s2=sequence_1d nl {result.add(s2);})*
     ;
 
 set_value returns [Set result = null;]
-{Scalar s = null; Scalar s2 = null;}
-    : ((SET_OPENING) (EOL)? (SET_CLOSING)) => (SET_OPENING) (EOL)? (SET_CLOSING) {result = new Set();}
-    | (SET_OPENING) (EOL)? s=set_item {result = new Set(); result.add(s);}
-      ((LIST_SEPARATOR)? (EOL)? s2=set_item {result.add(s2);})* (EOL)? (SET_CLOSING)
+{Set s = null;}
+    : SET_OPENING nl s=item_list {result=s;} SET_CLOSING
     ;
     
-set_item returns [Scalar result = null;]
-{Scalar s = null;}
-    : (s=symbol_value {result = s;} | s=numeric_value {result = s;})
+item_list returns [Set result = new Set()]
+{Scalar s = null; Scalar s2 = null;}
+    : /*empty*/
+    | s=scalar_value {result.add(s);} nl
+        ((LIST_SEPARATOR nl)? s2=scalar_value nl {result.add(s2);})*
+    ;
+
+/* An arbitrary number of newlines, used within sets and sequences, which
+ * can span multiple lines.
+ */
+nl
+    : (EOL)*
     ;
 
 // LEXER
@@ -425,4 +446,3 @@ EOL
       )
         { newline(); }
     ;
-    
