@@ -147,14 +147,14 @@ group_statement returns [GroupStatement result = null]
 // a pointer
 pointer_statement returns [PointerStatement result = null]
 {AttributeStatement a = null;}
-    : (POINT_OPERATOR) (a=assignment_statement)
+    : POINT_OPERATOR a=assignment_statement
       {result = new PointerStatement(a.getLineNumber(), a.getIdentifier(), a.getValue());}
     ;
 
 // an attribute assignment
 assignment_statement returns [AttributeStatement result = null]
 {AttributeStatement a = null; Value v = null;}
-    : (id:IDENT) EQUALS nl (v=value)
+    : id:IDENT EQUALS nl v=value
       {result = new AttributeStatement(id.getLine(), id.getText(), v);}
     ;
 
@@ -203,7 +203,7 @@ numeric_value returns [Numeric result = null]
 
 // a text string is quoted with double quotes
 text_string_value returns [TextString result = null]
-    : (q:QUOTED)
+    : q:QUOTED
         {result = new TextString(q.getText());}
     ;
 
@@ -227,7 +227,7 @@ symbol_value returns [Symbol result = null]
 
 sequence_value returns [Sequence result = null]
 {Sequence s = null;}
-    : ((SEQUENCE_OPENING) nl (SEQUENCE_OPENING)) => s=sequence_2d 
+    : (SEQUENCE_OPENING nl SEQUENCE_OPENING) => s=sequence_2d 
         {result = s;}
     | s=sequence_1d
         {result = s;}
