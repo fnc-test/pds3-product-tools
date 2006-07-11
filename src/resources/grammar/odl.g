@@ -433,7 +433,7 @@ TIME_ZONE
 
 // string literals
 QUOTED
-    : '"' (~('"'))* '"'
+    : '"' (EOL | (~('"'|'\r'|'\n')))* '"'
     ;
 
 SYMBOL
