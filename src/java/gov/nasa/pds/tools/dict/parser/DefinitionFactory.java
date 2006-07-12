@@ -168,7 +168,7 @@ public class DefinitionFactory implements ODLTokenTypes, DictionaryTokens {
         ElementDefinition definition = null;
         
         if (object.getIdentifier().equals(ELEMENT_DEFINITION)) {
-            definition = new ElementDefinition(object.getAttribute(NAME).toString());
+            definition = new ElementDefinition(object.getAttribute(NAME).getValue().toString());
             
             //Find and set status
             AttributeStatement attribute = object.getAttribute(STATUS_TYPE);
@@ -178,46 +178,54 @@ public class DefinitionFactory implements ODLTokenTypes, DictionaryTokens {
             //Find and set description
             attribute = object.getAttribute(DESCRIPTION);
             if (attribute != null) 
-                definition.setDescription(attribute.toString());
+                definition.setDescription(attribute.getValue().toString());
             
             //Find and set data type
             attribute = object.getAttribute(DATA_TYPE);
             if (attribute != null)
-                definition.setDataType(attribute.toString());
+                definition.setDataType(attribute.getValue().toString());
             
             //Find and set units
             attribute = object.getAttribute(DictionaryTokens.UNITS);
             if (attribute != null) 
-                definition.setUnits(attribute.toString());
+                definition.setUnits(attribute.getValue().toString());
             
             //Find and set min length
             attribute = object.getAttribute(MIN_LENGTH);
-            if (attribute != null) 
-                definition.setMinLength(Integer.parseInt(attribute.toString()));
-            //FIXME: catch parse exception
+            if (attribute != null) {
+                try {
+                    definition.setMinLength(Integer.parseInt(attribute.getValue().toString()));
+                } catch (NumberFormatException nfe) {}
+            }
             
             //Find and set max length
             attribute = object.getAttribute(MAX_LENGTH);
-            if (attribute != null) 
-                definition.setMaxLength(Integer.parseInt(attribute.toString()));
-            //FIXME: catch parse exception
+            if (attribute != null) {
+                try {
+                    definition.setMaxLength(Integer.parseInt(attribute.getValue().toString()));
+                } catch (NumberFormatException nfe) {}
+            }
             
             //Find and set min value
             attribute = object.getAttribute(MINIMUM);
-            if (attribute != null)
-                definition.setMinimum(Double.valueOf(attribute.toString()));
-            //FIXME: Catch double parse exception
+            if (attribute != null) {
+                try {
+                    definition.setMinimum(Double.valueOf(attribute.getValue().toString()));
+                } catch (NumberFormatException nfe) {}
+            }
             
             //Find and set max value
             attribute = object.getAttribute(MAXIMUM);
-            if (attribute != null)
-                definition.setMaximum(Double.valueOf(attribute.toString()));
-            //FIXME: Catch double parse exception
+            if (attribute != null) {
+                try {
+                    definition.setMaximum(Double.valueOf(attribute.getValue().toString()));
+                } catch (NumberFormatException nfe) {}
+            }
             
             //Find and set value type
             attribute = object.getAttribute(VALUE_TYPE);
             if (attribute != null)
-                definition.setValueType(attribute.toString());
+                definition.setValueType(attribute.getValue().toString());
             
             //Find and set value set
             attribute = object.getAttribute(VALUES);
