@@ -21,9 +21,11 @@ import java.util.Collection;
 public class Dictionary {
     private Map definitions;
     private String information;
+    private Map units;
     
     public Dictionary() {
         definitions = new HashMap();
+        units = new HashMap();
         information = "";
         //TODO: add support for units
     }
@@ -235,5 +237,13 @@ public class Dictionary {
      */
     protected Map getDefinitions() {
         return definitions;
+    }
+    
+    public Map getUnits() {
+        return units;
+    }
+    
+    public void setUnits(Map units) {
+        this.units = units;
     }
 }
