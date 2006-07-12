@@ -6,6 +6,7 @@
 
 package gov.nasa.pds.tools.dict;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -48,6 +49,14 @@ public abstract class Definition {
      */
     public void setAliases(List aliases) {
         this.aliases = aliases;
+    }
+    
+    public void addAliases(List aliases) {
+        for (Iterator i = aliases.iterator(); i.hasNext();) {
+            String alias = (String) i.next();
+            if (!this.aliases.contains(alias) && !identifier.equals(alias))
+                this.aliases.add(alias);
+        }
     }
 
     /**
