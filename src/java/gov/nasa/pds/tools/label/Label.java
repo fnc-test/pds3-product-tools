@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  * This class represents a PDS label.
@@ -19,41 +20,25 @@ import java.util.HashMap;
  */
 public class Label {
     private int labelType;
-    private Map objects;
-    private Map groups;
-    private Map attributes;
-    private Map pointers;
+    private Map statements;
+    private List pointers;
     
     /**
      * Constructs an object representation of a PDS label.
      *
      */
     public Label() {
-        objects = new HashMap();
-        groups = new HashMap();
-        attributes = new HashMap();
-        pointers = new HashMap();
+        statements = new HashMap();
+        pointers = new ArrayList();
     }
 
     /**
-     * Retrieves a statement that with the identifier
+     * Retrieves a statement with the identifier
      * @param identifier Identifies the statement to retrieve
      * @return The named statement or null if not found
      */
     public Statement getStatement(String identifier) {
-        Statement statement = null;
-        //Check all statements if found return
-        statement = (Statement) attributes.get(identifier);
-        if (statement != null)
-            return statement;
-        statement = (Statement) objects.get(identifier);
-        if (statement != null)
-            return statement;
-        statement = (Statement) groups.get(identifier);
-        if (statement != null)
-            return statement;
-        //At this point the either it is a pointer or null
-        return (Statement) pointers.get(identifier);
+        return (Statement) statements.get(identifier);
     }
     
     /**
@@ -62,7 +47,10 @@ public class Label {
      * @return attribute or null
      */
     public AttributeStatement getAttribute(String identifier) {
-        return (AttributeStatement) attributes.get(identifier);
+        Statement statement = (Statement) statements.get(identifier);
+        if (statement instanceof AttributeStatement)
+            return (AttributeStatement) statement;
+        return null;
     }
     
     /**
@@ -71,7 +59,10 @@ public class Label {
      * @return group or null
      */
     public GroupStatement getGroup(String identifier) {
-        return (GroupStatement) groups.get(identifier);
+        Statement statement = (Statement) statements.get(identifier);
+        if (statement instanceof GroupStatement)
+            return (GroupStatement) statement;
+        return null;
     }
   
     /**
@@ -80,16 +71,10 @@ public class Label {
      * @return object or null
      */
     public ObjectStatement getObject(String identifier) {
-        return (ObjectStatement) objects.get(identifier);
-    }
- 
-    /**
-     * Retrieves the pointer with the identifier or null if not found
-     * @param identifier of pointer to find
-     * @return pointer or null
-     */
-    public PointerStatement getPointer(String identifier) {
-        return (PointerStatement) pointers.get(identifier);
+        Statement statement = (Statement) statements.get(identifier);
+        if (statement instanceof ObjectStatement)
+            return (ObjectStatement) statement;
+        return null;
     }
  
     /**
@@ -97,14 +82,7 @@ public class Label {
      * @return list of {@link Statement}
      */
     public List getStatements() { 
-        List statements = new ArrayList();
-        
-        statements.addAll(attributes.values());
-        statements.addAll(objects.values());
-        statements.addAll(pointers.values());
-        statements.addAll(groups.values());
-        
-        return statements;
+        return new ArrayList(statements.values());
     }
  
     /**
@@ -112,7 +90,15 @@ public class Label {
      * @return List of {@link ObjectStatement}
      */
     public List getObjects() {
-        return new ArrayList(objects.values());
+        List objects = new ArrayList(); 
+        
+        for (Iterator i = statements.keySet().iterator(); i.hasNext();) {
+            Statement s = (Statement) i.next();
+            if (s instanceof ObjectStatement)
+                objects.add(s);
+        }
+        
+        return objects;
     }
     
     /**
@@ -120,7 +106,15 @@ public class Label {
      * @return list of {@link GroupStatement}
      */
     public List getGroups() {
-        return new ArrayList(groups.values());
+        List groups = new ArrayList(); 
+        
+        for (Iterator i = statements.keySet().iterator(); i.hasNext();) {
+            Statement s = (Statement) i.next();
+            if (s instanceof GroupStatement)
+                groups.add(s);
+        }
+        
+        return groups;
     }
     
     /**
@@ -128,7 +122,15 @@ public class Label {
      * @return list of {@link AttributeStatement}
      */
     public List getAttributes() {
-        return new ArrayList(attributes.values());
+        List attributes = new ArrayList(); 
+        
+        for (Iterator i = statements.keySet().iterator(); i.hasNext();) {
+            Statement s = (Statement) i.next();
+            if (s instanceof AttributeStatement)
+                attributes.add(s);
+        }
+        
+        return attributes;
     }
     
     /**
@@ -136,7 +138,7 @@ public class Label {
      * @return list of {@link PointerStatement}
      */
     public List getPointers() {
-        return new ArrayList(pointers.values());
+        return pointers;
     }
  
     /**
@@ -144,15 +146,10 @@ public class Label {
      * @param statement to be added to label
      */
     public void addStatement(Statement statement) {
-        if (statement instanceof AttributeStatement)
-            attributes.put(statement.getIdentifier(), statement);
-        else if (statement instanceof ObjectStatement)
-            objects.put(statement.getIdentifier(), statement);
-        else if (statement instanceof GroupStatement)
-            groups.put(statement.getIdentifier(), statement);
-        else if (statement instanceof PointerStatement)
-            pointers.put(statement.getIdentifier(), statement);
-        //TODO: else throw some error
+        if (statement instanceof PointerStatement)
+            pointers.add(statement);
+        else
+            statements.put(statement.getIdentifier(), statement);
     }
 
     /**
