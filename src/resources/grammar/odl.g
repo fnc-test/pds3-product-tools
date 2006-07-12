@@ -285,7 +285,7 @@ options {
     exportVocab = ODL;
     charVocabulary = '\0'..'\377';
     testLiterals = false;   // don't automatically test for literals
-    k = 4;                  // 3 characters of lookahead
+    k = 2;                  // 3 characters of lookahead
     //caseSensitive = false;
     caseSensitiveLiterals = false;
 }
@@ -422,7 +422,7 @@ DATE
 
 protected
 TIME
-    : INTEGER ':' INTEGER (':' INTEGER)? (TIME_ZONE)?
+    : INTEGER ':' INTEGER (':' INTEGER ('.' INTEGER)?)? (TIME_ZONE)?
     ;
 
 protected
