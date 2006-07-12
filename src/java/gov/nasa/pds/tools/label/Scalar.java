@@ -31,4 +31,8 @@ public abstract class Scalar implements Value {
     public String getValue() {
         return value;
     }
+    
+    public String toString() {
+        return value;
+    }
 }
