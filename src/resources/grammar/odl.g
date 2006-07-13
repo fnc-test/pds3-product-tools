@@ -338,8 +338,8 @@ IDENT
 UNITS
     options {testLiterals=true;}
     : '<'!
-      ('a'..'z'|'0'..'9'|SPECIALCHAR)
-      ('a'..'z'|'0'..'9'|SPECIALCHAR)*
+      ('a'..'z'|'A'..'Z'|'0'..'9'|SPECIALCHAR)
+      ('a'..'z'|'A'..'Z'|'0'..'9'|SPECIALCHAR)*
       '>'!
     ;
 
