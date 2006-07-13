@@ -154,8 +154,13 @@ pointer_statement returns [PointerStatement result = null]
 // an attribute assignment
 assignment_statement returns [AttributeStatement result = null]
 {AttributeStatement a = null; Value v = null;}
-    : id:IDENT EQUALS nl v=value
-      {result = new AttributeStatement(id.getLine(), id.getText(), v);}
+    : (eid:ELEMENT_IDENT|id:IDENT) EQUALS nl v=value
+      { 
+        if (eid != null) 
+           result = new AttributeStatement(eid.getLine(), eid.getText(), v);
+        else 
+           result = new AttributeStatement(id.getLine(), id.getText(), v);
+      }
     ;
 
 // a value is a scalar, sequence, or set
@@ -219,7 +224,7 @@ date_time_value returns [DateTime result = null]
   
 // a symbol  
 symbol_value returns [Symbol result = null]
-    : id:IDENT 
+    : id:IDENT
         {result = new Symbol(id.getText());}
     | qs:SYMBOL
         {result = new Symbol(qs.getText());}
@@ -330,9 +335,16 @@ WS
 // an identifier.  Note that testLiterals is set to true!  This means
 // that after we match the rule, we look in the literals table to see
 // if it's a literal or really an identifer
-IDENT
+protected
+IDENTIFIER
     options {testLiterals=true;}
     : LETTER (LETTER|DIGIT|'_')*
+    ;
+
+ELEMENT_IDENT 
+    options {testLiterals=true;}
+    : (IDENTIFIER ':') => IDENTIFIER ':' IDENTIFIER {$setType(ELEMENT_IDENT);}
+    | id:IDENTIFIER {$setType(IDENT);}
     ;
 
 UNITS
