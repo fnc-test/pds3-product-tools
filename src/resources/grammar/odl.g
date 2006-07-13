@@ -337,10 +337,10 @@ IDENT
 
 UNITS
     options {testLiterals=true;}
-    : '<'!
-      ('a'..'z'|'A'..'Z'|'0'..'9'|SPECIALCHAR)
-      ('a'..'z'|'A'..'Z'|'0'..'9'|SPECIALCHAR)*
-      '>'!
+    : '<'
+      ('a'..'z'|'A'..'Z')
+      ('a'..'z'|'A'..'Z'|'0'..'9'|'_'|'/'|'*'|'.'|'-')*
+      '>'
     ;
 
 // any special characters that can pop up in value strings, including
