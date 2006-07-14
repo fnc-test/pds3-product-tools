@@ -47,9 +47,9 @@ public class VTool {
 	private boolean data_obj;
 	private List dictionaries;
 	private File exclude;
-	private File include_path;
 	private boolean follow_ptrs;
 	private List file_input;
+	private File include_path;
 	private int max_errors;
 	private boolean partial;
 	private boolean recursive;
@@ -59,14 +59,22 @@ public class VTool {
 	private boolean xml;
 	
 
-	/** Default constructor */
+	/** 
+	 * Default constructor
+	 */
 	public VTool(){
 		alias = true;
+		config = null;
+		dictionaries = null;
 		data_obj = true;
+		exclude = null;
+		follow_ptrs = true;
+		file_input = null;
+		include_path = null;
 		max_errors = 300;
 		partial = false;
 		recursive = true;
-		follow_ptrs = true;
+		output = null;
 		output_detail = "full";
 		verbose = 2;
 		xml = false;
@@ -225,7 +233,6 @@ public class VTool {
 	
 	/** 
 	 * Queries the command line of VTool 
-	 * @throws MissingOptionException 
 	 *
 	 */
 	private void queryCmdLine() {
@@ -248,13 +255,12 @@ public class VTool {
 					printDebug("Verbosity level has been set to: " + verbose);
 				}
 				catch( NumberFormatException nfe ) {
-					System.err.println("Problems parsing value set for the -v flag");
-					nfe.printStackTrace();
-					return;
+					System.err.println("Problems parsing value set for the 'v' flag: " + cmd.getOptionValue("v"));
+					System.exit(1);
 				}
 				
 				if(verbose < 0 || verbose > 3) {
-					throw new IllegalArgumentException("Invalid value entered for -v flag." + 
+					throw new IllegalArgumentException("Invalid value entered for 'v' flag." + 
 																" Valid values can only be 0, 1, 2, or 3");
 				}
 			}
@@ -276,7 +282,7 @@ public class VTool {
 				file_input = Arrays.asList(cmd.getOptionValues("f"));
 			}
 			else
-				throw new MissingOptionException("The -f flag is required");
+				throw new MissingOptionException("The 'f' flag is required");
 			
 			if(cmd.hasOption("c")) {
 				config = new File(cmd.getOptionValue("c"));
@@ -289,7 +295,9 @@ public class VTool {
 			}
 			
 			if(cmd.hasOption("I")) {
-				//TODO: Check if the no-follow option is set 
+				if(follow_ptrs == false)
+					throw new IllegalArgumentException("Option was selected to not follow pointers. 'I' flag cannot be specified"); 
+				
 				include_path = new File(cmd.getOptionValue("I"));
 				printDebug("Got path to pointer files: " + include_path);
 			}
@@ -326,7 +334,6 @@ public class VTool {
 			}
 			
 			if(cmd.hasOption("d")) {
-
 				printDebug("Retrieved " + cmd.getOptionValues("d").length + " dictionary file(s)");
 				dictionaries = Arrays.asList(cmd.getOptionValues("d"));
 			}
@@ -337,8 +344,7 @@ public class VTool {
 					printDebug("Max error messages has been set to: " + max_errors);
 				}
 				catch( NumberFormatException nfe ) {
-					System.err.println("Problem parsing value set for -m flag");
-					nfe.printStackTrace();
+					System.err.println("Problem parsing value set for 'm' flag: " + cmd.getOptionValue("m"));
 					System.exit(1);
 				}
 				if( max_errors <= 0 ) {
@@ -354,26 +360,26 @@ public class VTool {
 				if( (output_detail.equalsIgnoreCase("sum") == false) &&
 					(output_detail.equalsIgnoreCase("min") == false) &&
 					(output_detail.equalsIgnoreCase("full") == false) ) {
-					throw new IllegalArgumentException("Invalid value entered for -od flag" + 
+					throw new IllegalArgumentException("Invalid value entered for 'od' flag." + 
 														" Value can only be either 'full', 'sum', or 'min");
 				}
 			}
 
 		}
 		catch( IllegalArgumentException iae ) {
-			iae.printStackTrace();
+			System.err.println( iae.getMessage() );
 			System.exit(1);
 		}
 		catch( MissingOptionException moe ) {
-			moe.printStackTrace();
+			System.err.println( moe.getMessage() );
 			System.exit(1);
 		}
 		catch( UnrecognizedOptionException uoe ) {
-			uoe.printStackTrace();
+			System.err.println( uoe.getMessage() );
 			System.exit(1);
 		}
 		catch( SecurityException se ) {
-			se.printStackTrace();
+			System.err.println( se.getMessage() );
 			System.exit(1);
 		}
 	}
@@ -392,26 +398,34 @@ public class VTool {
 	/**
 	 * Read and parse the dictionary files passed into the VTool command line
 	 * 
-	 * @param dictionary - a List object contain the data dictionary files
+	 * @param dictionary - a List object containing the data dictionary files
 	 * @return A Dictionary object that includes all the dictionary information from
-	 *  all the dictionary files passed in
+	 *  all the dictionary files passed in. Returns null if dictionary has a null value.
 	 * @throws MalformedURLException
 	 * @throws IOException
-	 * @throws gov.nasa.pds.tools.label.parser.ParseException
 	 */
 	
-	public Dictionary readDictionaries(List dictionary) throws MalformedURLException, IOException, gov.nasa.pds.tools.label.parser.ParseException {
+	public Dictionary readDictionaries(List dictionary) throws MalformedURLException, IOException {
 		
-		Dictionary dict;
+		Dictionary dict = null;
+		File dd = null;
 		
-		printDebug("Parsing Dictionary file: " + new File(dictionary.get(0).toString()).toURL());
-		dict = DictionaryParser.parse( new File(dictionary.get(0).toString()).toURL() );
-		dictionary.remove(0);
+		Iterator i = dictionary.iterator();
 		
-		for( Iterator i = dictionary.iterator(); i.hasNext(); ) {
-			dict.merge( DictionaryParser.parse( new File (i.next().toString()).toURL() ) );
+		try {
+			printDebug( "Parsing dictionary file: " + dictionary.get(0) );
+			dict = DictionaryParser.parse( new File(i.next().toString()).toURL() );
+
+			while( i.hasNext() ) {
+				dd = new File( i.next().toString() );
+				printDebug("Parsing dictionary file: " + dd);
+				dict.merge( DictionaryParser.parse( dd.toURL() ) );
+			}
 		}
-		
+		catch( gov.nasa.pds.tools.label.parser.ParseException pe) {
+			System.err.println("Error parsing Dictionary");
+			System.exit(1);
+		}
 		return dict;
 		
 	}
@@ -422,25 +436,47 @@ public class VTool {
 	 * @param files - A List of label files to be validated
 	 * @param dict - A Dictionary object needed for semantic validation
 	 * @throws MalformedURLException
-	 * @throws gov.nasa.pds.tools.label.parser.ParseException
 	 * @throws IOException
 	 */
 	
-	public void readLabels(List files, Dictionary dict) throws MalformedURLException, gov.nasa.pds.tools.label.parser.ParseException, IOException {
+	public void readLabels(List files, Dictionary dict) throws MalformedURLException, IOException {
 		
 		LabelParserFactory factory = LabelParserFactory.getInstance();
 		LabelParser parser = factory.newLabelParser();
-		
+		File label;
 		
 		for( Iterator i = files.iterator(); i.hasNext(); ) {
-			parser.parse( new File (i.next().toString()).toURL(), dict );
+			label = new File( i.next().toString() );
+			System.out.println("\nValidating " + label);
+			
+			try {
+				parser.parse( label.toURL(), dict );
+				printResult(true);
+			} 
+			catch( gov.nasa.pds.tools.label.parser.ParseException pe ) {
+				printResult(false);
+				continue;
+			}
 		}
+	}
+	
+	/**
+	 * Print Validation results to the screen
+	 * 
+	 * @param success
+	 */
+	
+	public void printResult(boolean success) {
+		if(success)
+			System.out.println("VALIDATION RESULT: PASS");
+		else
+			System.out.println("VALIDATION RESULT: FAIL");
 	}
 	
 	public static void main(String[] argv) {
 	
 		VTool vtool = new VTool();
-		Dictionary mainDictionary;
+		Dictionary mainDictionary = null;
 		
 		if(argv.length == 0) {
 			System.out.println("\nType 'VTool -h' for usage");
@@ -457,21 +493,22 @@ public class VTool {
 		vtool.queryCmdLine();
 		
 		try {
-			mainDictionary = vtool.readDictionaries(vtool.dictionaries);
+			
+			if(vtool.dictionaries != null) {
+				mainDictionary = vtool.readDictionaries(vtool.dictionaries);
+			}
 			vtool.readLabels(vtool.file_input, mainDictionary);
+			
 		} 
 		catch (MalformedURLException mue) {
-			mue.printStackTrace();
-			return;
+			mue.printStackTrace(System.out);
+			System.exit(1);
 		} 
 		catch (IOException ioe) {
-			ioe.printStackTrace();
-			return;
+			ioe.printStackTrace(System.out);
+			System.exit(1);
 		} 
-		catch (gov.nasa.pds.tools.label.parser.ParseException pe) {
-			pe.printStackTrace();
-			return;
-		}
+
 	}
 	
 	
