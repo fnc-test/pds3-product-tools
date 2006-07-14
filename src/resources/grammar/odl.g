@@ -419,30 +419,63 @@ protected
 LETTER
     : ('a'..'z'|'A'..'Z')
     ;
-    
+  
 // Dates and times
 protected
 DATETIME
-    : (DATE 'T') => DATE 'T' TIME {$setType(DATETIME);}
+    : (YEAR '-' MONTH '-' DAY 'T') => YEAR '-' MONTH '-' DAY 'T' TIME {$setType(DATETIME);}
     | DATE {$setType(DATE);}
     ;
 
 protected
 DATE
-    : INTEGER '-' INTEGER ('-' INTEGER)?
+    : YEAR ('-' MONTH ('-' DAY)?)? {$setType(DATE);}
     ;
-
+    
+protected
+YEAR
+    : DIGIT DIGIT DIGIT DIGIT
+    ;
+ 
+protected
+DOY
+    : DIGIT DIGIT DIGIT
+    ;
+    
+protected
+MONTH
+    : DIGIT DIGIT  
+    ;
+protected 
+DAY
+    : DIGIT DIGIT
+    ;
+    
 protected
 TIME
-    : INTEGER ':' INTEGER (':' INTEGER ('.' INTEGER)?)? (TIME_ZONE)?
+    : HOUR (':' MINUTE (':' SECOND ('.' FRACTION)?)?)?
     ;
 
 protected
-TIME_ZONE
-    : 'Z'
-    | ('+'|'-') INTEGER (':' INTEGER)?
+HOUR
+    : DIGIT DIGIT
     ;
-
+   
+protected
+MINUTE
+    : DIGIT DIGIT
+    ;
+    
+protected
+SECOND
+    : DIGIT DIGIT
+    ;
+    
+protected
+FRACTION
+    : DIGIT (DIGIT (DIGIT)?)?
+    ;
+    
 // string literals
 QUOTED
     : '"' (EOL | (~('"'|'\r'|'\n')))* '"'
