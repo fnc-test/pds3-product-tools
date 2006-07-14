@@ -451,26 +451,11 @@ public class VTool {
 			
 			try {
 				parser.parse( label.toURL(), dict );
-				printResult(true);
 			} 
 			catch( gov.nasa.pds.tools.label.parser.ParseException pe ) {
-				printResult(false);
-				continue;
+				pe.printStackTrace();
 			}
 		}
-	}
-	
-	/**
-	 * Print Validation results to the screen
-	 * 
-	 * @param success
-	 */
-	
-	public void printResult(boolean success) {
-		if(success)
-			System.out.println("VALIDATION RESULT: PASS");
-		else
-			System.out.println("VALIDATION RESULT: FAIL");
 	}
 	
 	public static void main(String[] argv) {
