@@ -453,7 +453,7 @@ DAY
     
 protected
 TIME
-    : HOUR (':' MINUTE (':' SECOND ('.' FRACTION)?)?)?
+    : HOUR (':' MINUTE (':' SECOND ('.' FRACTION ('Z')?)?)?)?
     ;
 
 protected
