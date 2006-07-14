@@ -366,7 +366,7 @@ SPECIALCHAR
 
 NUMBER_OR_DATETIME
     : (DIGITS '#') => BASED_INTEGER {$setType(BASED_INTEGER);}
-    | (DIGITS '-') => DATETIME
+    | (DIGITS '-') => DATETIME {$setType(DATETIME);}
     | (DIGITS ':') => TIME {$setType(TIME);}
     | (SIGN DIGITS '.') => REAL {$setType(REAL);}
     | (DIGITS '.') => REAL {$setType(REAL);}
