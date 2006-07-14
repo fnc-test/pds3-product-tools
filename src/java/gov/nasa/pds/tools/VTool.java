@@ -254,11 +254,10 @@ public class VTool {
 					verbose = Short.parseShort(cmd.getOptionValue("v"));
 					printDebug("Verbosity level has been set to: " + verbose);
 				}
-				catch( NumberFormatException nfe ) {
-					System.err.println("Problems parsing value set for the 'v' flag: " + cmd.getOptionValue("v"));
-					System.exit(1);
+				catch( Exception e) {
+					throw new NumberFormatException("Problems parsing value set for the 'v' flag: " + cmd.getOptionValue("v"));
 				}
-				
+			
 				if(verbose < 0 || verbose > 3) {
 					throw new IllegalArgumentException("Invalid value entered for 'v' flag." + 
 																" Valid values can only be 0, 1, 2, or 3");
@@ -343,10 +342,10 @@ public class VTool {
 					max_errors = Integer.parseInt(cmd.getOptionValue("m"));
 					printDebug("Max error messages has been set to: " + max_errors);
 				}
-				catch( NumberFormatException nfe ) {
-					System.err.println("Problem parsing value set for 'm' flag: " + cmd.getOptionValue("m"));
-					System.exit(1);
+				catch( Exception e ) {
+					throw new NumberFormatException("Problems parsing value set for 'm' flag: " + cmd.getOptionValue("m"));
 				}
+
 				if( max_errors <= 0 ) {
 					throw new IllegalArgumentException( "Max Errors Value must be a positive integer number");
 				}
@@ -361,10 +360,14 @@ public class VTool {
 					(output_detail.equalsIgnoreCase("min") == false) &&
 					(output_detail.equalsIgnoreCase("full") == false) ) {
 					throw new IllegalArgumentException("Invalid value entered for 'od' flag." + 
-														" Value can only be either 'full', 'sum', or 'min");
+														" Value can only be either 'full', 'sum', or 'min'");
 				}
 			}
 
+		}
+		catch( NumberFormatException nfe ) {
+			System.err.println( nfe.getMessage() );
+			System.exit(1);
 		}
 		catch( IllegalArgumentException iae ) {
 			System.err.println( iae.getMessage() );
@@ -376,10 +379,6 @@ public class VTool {
 		}
 		catch( UnrecognizedOptionException uoe ) {
 			System.err.println( uoe.getMessage() );
-			System.exit(1);
-		}
-		catch( SecurityException se ) {
-			System.err.println( se.getMessage() );
 			System.exit(1);
 		}
 	}
@@ -423,7 +422,7 @@ public class VTool {
 			}
 		}
 		catch( gov.nasa.pds.tools.label.parser.ParseException pe) {
-			System.err.println("Error parsing Dictionary");
+			System.out.println("Error parsing Dictionary");
 			System.exit(1);
 		}
 		return dict;
@@ -453,7 +452,7 @@ public class VTool {
 				parser.parse( label.toURL(), dict );
 			} 
 			catch( gov.nasa.pds.tools.label.parser.ParseException pe ) {
-				pe.printStackTrace();
+				continue;
 			}
 		}
 	}
