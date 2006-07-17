@@ -290,7 +290,7 @@ options {
     exportVocab = ODL;
     charVocabulary = '\0'..'\377';
     testLiterals = false;   // don't automatically test for literals
-    k = 2;                  // 3 characters of lookahead
+    k = 2;                  // 2 characters of lookahead
     //caseSensitive = false;
     caseSensitiveLiterals = false;
 }
@@ -364,7 +364,7 @@ MULT_OP
    
 protected 
 EXP_OP
-    : '*' '*'
+    : "**"
     ;
 
 // any special characters that can pop up in value strings, including
@@ -460,6 +460,7 @@ protected
 MONTH
     : DIGIT DIGIT  
     ;
+    
 protected 
 DAY
     : DIGIT DIGIT
