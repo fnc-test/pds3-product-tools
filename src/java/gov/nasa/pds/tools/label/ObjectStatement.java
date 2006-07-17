@@ -30,7 +30,7 @@ public class ObjectStatement extends Statement {
      * @param identifier Identifier for the statement.
      */
     public ObjectStatement(int lineNumber, String identifier) {
-        this(lineNumber, identifier, Collections.EMPTY_LIST, Collections.EMPTY_LIST, Collections.EMPTY_LIST);
+        this(lineNumber, identifier, Collections.EMPTY_LIST, Collections.EMPTY_LIST, new ArrayList());
     }
     
     /**
@@ -38,7 +38,7 @@ public class ObjectStatement extends Statement {
      * @param identifier Identifier of the statement
      */
     public ObjectStatement(String identifier) {
-        this(identifier, Collections.EMPTY_LIST, Collections.EMPTY_LIST, Collections.EMPTY_LIST);
+        this(identifier, Collections.EMPTY_LIST, Collections.EMPTY_LIST, new ArrayList());
     }
     
     /**
