@@ -424,12 +424,14 @@ LETTER
 protected
 DATETIME
     : (YEAR '-' MONTH '-' DAY 'T') => YEAR '-' MONTH '-' DAY 'T' TIME {$setType(DATETIME);}
+    | (YEAR '-' DOY 'T') => YEAR '-' DOY 'T' TIME {$setType(DATETIME);}
     | DATE {$setType(DATE);}
     ;
 
 protected
 DATE
-    : YEAR ('-' MONTH ('-' DAY)?)? {$setType(DATE);}
+    : (YEAR '-' DOY) => YEAR '-' DOY {$setType(DATE);}
+    | YEAR ('-' MONTH ('-' DAY)?)? {$setType(DATE);}
     ;
     
 protected
