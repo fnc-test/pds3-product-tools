@@ -349,10 +349,22 @@ ELEMENT_IDENT
 
 UNITS
     options {testLiterals=true;}
-    : '<'
-      ('a'..'z'|'A'..'Z')
-      ('a'..'z'|'A'..'Z'|'0'..'9'|'_'|'/'|'*'|'.'|'-')*
-      '>'
+    : '<' UNITS_FACTOR (MULT_OP UNITS_FACTOR)* '>'
+    ;
+ 
+protected   
+UNITS_FACTOR
+    : IDENTIFIER (EXP_OP INTEGER)?
+    ;
+   
+protected 
+MULT_OP
+    : ('*'|'/')
+    ;
+   
+protected 
+EXP_OP
+    : '*' '*'
     ;
 
 // any special characters that can pop up in value strings, including
