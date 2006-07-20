@@ -21,32 +21,15 @@ package gov.nasa.pds.tools.dict.type;
  * @version $Revision$
  * 
  */
-public class AlphaNumericChecker implements TypeChecker {
+public class AlphaNumericChecker extends LengthChecker implements TypeChecker {
 
     /* (non-Javadoc)
      * @see gov.nasa.jpl.pds.tools.dict.type.TypeChecker#cast(java.lang.String)
      */
     public Object cast(String value) throws InvalidTypeException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /* (non-Javadoc)
-     * @see gov.nasa.jpl.pds.tools.dict.type.TypeChecker#checkMinLength(java.lang.String, int)
-     */
-    public void checkMinLength(String value, int min)
-            throws InvalidLengthException {
-        // TODO Auto-generated method stub
-
-    }
-
-    /* (non-Javadoc)
-     * @see gov.nasa.jpl.pds.tools.dict.type.TypeChecker#checkMaxLength(java.lang.String, int)
-     */
-    public void checkMaxLength(String value, int max)
-            throws InvalidLengthException {
-        // TODO Auto-generated method stub
-
+        if (!value.matches("[a-zA-Z0-9]*"))
+            throw new InvalidTypeException(value + " contains non alphanumeric characters.");
+        return value;
     }
 
 }
