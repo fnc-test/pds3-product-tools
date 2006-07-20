@@ -21,32 +21,15 @@ package gov.nasa.pds.tools.dict.type;
  * @version $Revision$
  * 
  */
-public class CharacterChecker implements TypeChecker {
+public class CharacterChecker extends LengthChecker implements TypeChecker {
 
     /* (non-Javadoc)
      * @see gov.nasa.jpl.pds.tools.label.validate.TypeChecker#cast(java.lang.String)
      */
     public Object cast(String value) throws InvalidTypeException {
-        // TODO Auto-generated method stub
-        return null;
+        if (!value.matches("[a-zA-Z0-9_\\s!#$%&'\\(\\)\\*+,-\\./:;<=>?@\\[\\]\\^_`\\{|\\}\\~]*"))
+            throw new InvalidTypeException(value + " contains characters that are not allowed.");
+        return value;
     }
-
-    /* (non-Javadoc)
-     * @see gov.nasa.jpl.pds.tools.label.validate.TypeChecker#checkMinLength(java.lang.String, int)
-     */
-    public void checkMinLength(String value, int min)
-            throws InvalidLengthException {
-        // TODO Auto-generated method stub
-
-    }
-
-    /* (non-Javadoc)
-     * @see gov.nasa.jpl.pds.tools.label.validate.TypeChecker#checkMaxLength(java.lang.String, int)
-     */
-    public void checkMaxLength(String value, int max)
-            throws InvalidLengthException {
-        // TODO Auto-generated method stub
-
-    }
-
+    
 }
