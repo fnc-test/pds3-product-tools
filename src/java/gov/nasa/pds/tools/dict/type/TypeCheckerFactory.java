@@ -35,7 +35,7 @@ public class TypeCheckerFactory implements Types{
         return factory;
     }
     
-    public TypeChecker createInstance(String type) throws UnsupportedTypeException {
+    public TypeChecker newInstance(String type) throws UnsupportedTypeException {
         TypeChecker checker = null;
         
         if (type.equals(REAL)) {
