@@ -24,38 +24,6 @@ package gov.nasa.pds.tools.dict.type;
 public class IntegerChecker extends LengthChecker implements NumericTypeChecker {
 
     /* (non-Javadoc)
-     * @see gov.nasa.jpl.pds.tools.label.validate.NumericTypeChecker#checkMinValue(java.lang.String, java.lang.String)
-     */
-    public void checkMinValue(String value, String min) 
-            throws OutOfRangeException, InvalidTypeException {
-        try{
-            //FIXME: Support based Integers e.g. 2#1010101#
-            int minValue = Integer.parseInt(min);
-            int intValue = Integer.parseInt(value);
-            if (intValue < minValue) 
-                throw new OutOfRangeException(value + " is below the accepted minimum " + min);
-        } catch (NumberFormatException nfe) {
-            throw new InvalidTypeException ("Either the value " + value + " or " + min + " is not the correct type.");
-        }
-    }
-
-    /* (non-Javadoc)
-     * @see gov.nasa.jpl.pds.tools.label.validate.NumericTypeChecker#checkMaxValue(java.lang.String, java.lang.String)
-     */
-    public void checkMaxValue(String value, String max) 
-            throws OutOfRangeException, InvalidTypeException {
-        try{
-            //FIXME: Support based Integers e.g. 2#1010101#
-            int maxValue = Integer.parseInt(max);
-            int intValue = Integer.parseInt(value);
-            if (intValue > maxValue) 
-                throw new OutOfRangeException(value + " exceeds maximum of " + max);
-        } catch (NumberFormatException nfe) {
-            throw new InvalidTypeException ("Either the value " + value + " or " + max + " is not the correct type.");
-        }
-    }
-
-    /* (non-Javadoc)
      * @see gov.nasa.jpl.pds.tools.label.validate.TypeChecker#cast(java.lang.String)
      */
     public Object cast(String value) throws InvalidTypeException {
@@ -67,6 +35,22 @@ public class IntegerChecker extends LengthChecker implements NumericTypeChecker 
             throw new InvalidTypeException(nfe.getMessage());
         }
         return intValue;
+    }
+
+    /* (non-Javadoc)
+     * @see gov.nasa.pds.tools.dict.type.NumericTypeChecker#checkMinValue(java.lang.Number, java.lang.Number)
+     */
+    public void checkMinValue(Number value, Number min) throws OutOfRangeException {
+        if (value.intValue() < min.intValue())
+            throw new OutOfRangeException(value.toString() + " is less than the acceptable minimum of " + min.toString());
+    }
+
+    /* (non-Javadoc)
+     * @see gov.nasa.pds.tools.dict.type.NumericTypeChecker#checkMaxValue(java.lang.Number, java.lang.Number)
+     */
+    public void checkMaxValue(Number value, Number max) throws OutOfRangeException {
+        if (value.intValue() > max.intValue())
+            throw new OutOfRangeException(value.toString() + " exceeds acceptable maximum of " + max.toString());
     }
 
 }
