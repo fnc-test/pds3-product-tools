@@ -22,6 +22,6 @@ package gov.nasa.pds.tools.dict.type;
  * 
  */
 public interface NumericTypeChecker extends TypeChecker {
-    public void checkMinValue(String value, String min) throws OutOfRangeException, InvalidTypeException;
-    public void checkMaxValue(String value, String max) throws OutOfRangeException, InvalidTypeException;
+    public void checkMinValue(Number value, Number min) throws OutOfRangeException;
+    public void checkMaxValue(Number value, Number max) throws OutOfRangeException;
 }
