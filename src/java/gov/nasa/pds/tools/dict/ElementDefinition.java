@@ -157,5 +157,23 @@ public class ElementDefinition extends Definition {
     public void setValueType(String valueType) {
         this.valueType = valueType;
     }
+    
+    public boolean hasValidValues() {
+        if (values.size() > 0)
+            return true;
+        return false;
+    }
+    
+    public boolean hasMaximum() {
+        if (maximum != null)
+            return true;
+        return false;
+    }
+    
+    public boolean hasMinimum() {
+        if (minimum != null)
+            return true;
+        return false;
+    }
 
 }
