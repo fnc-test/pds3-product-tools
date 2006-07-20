@@ -18,6 +18,7 @@ package gov.nasa.pds.tools.label.validate;
 
 import gov.nasa.pds.tools.dict.Dictionary;
 import gov.nasa.pds.tools.dict.ObjectDefinition;
+import gov.nasa.pds.tools.dict.type.UnsupportedTypeException;
 import gov.nasa.pds.tools.label.AttributeStatement;
 import gov.nasa.pds.tools.label.ObjectStatement;
 
@@ -30,7 +31,7 @@ import java.util.Iterator;
  * 
  */
 public class ObjectValidator {
-    private static Logger log = Logger.getLogger("gov.nasa.pds.label.ObjectStatement");
+    private static Logger log = Logger.getLogger(new ObjectValidator().getClass().getName());
 
     public static boolean isValid(Dictionary dictionary, ObjectStatement object) throws 
        DefinitionNotFoundException {
@@ -70,7 +71,12 @@ public class ObjectValidator {
         //Validate all attributes
         for (Iterator i = object.getAttributes().iterator(); i.hasNext();) {
             AttributeStatement attribute = (AttributeStatement) i.next();
-            boolean elementValid = ElementValidator.isValid(dictionary, attribute);
+            boolean elementValid = false;
+            try {
+                elementValid = ElementValidator.isValid(dictionary, attribute);
+            } catch (UnsupportedTypeException ut) {
+                log.error(ut.getMessage());
+            }
             if (!elementValid)
                 valid = false;
         }
