@@ -6,7 +6,7 @@
 
 package gov.nasa.pds.tools.label.validate;
 
-import gov.nasa.pds.tools.label.parser.UnsupportedTypeException;
+import gov.nasa.pds.tools.label.parser.UnsupportedDataObjectException;
 
 /**
  * This class will dynamically load data object validators from property settings.
@@ -41,11 +41,11 @@ public class DataObjectValidatorFactory {
      * @return a validator for the given type
      * @throws UnsupportedTypeException if there is no mapping to a validator for the type
      */
-    public DataObjectValidator newInstance(String type) throws UnsupportedTypeException {
+    public DataObjectValidator newInstance(String type) throws UnsupportedDataObjectException {
         String className = System.getProperty("object.validator." + type);
         
         if (className == null) 
-            throw new UnsupportedTypeException("There is no mapping available. Property "
+            throw new UnsupportedDataObjectException("There is no mapping available. Property "
                     + "object.validator." + type + " was not set.");
         
         DataObjectValidator validator = null;
@@ -53,16 +53,16 @@ public class DataObjectValidatorFactory {
         try {
             validator = (DataObjectValidator) Class.forName(className).newInstance();
         } catch (InstantiationException e) {
-            throw new UnsupportedTypeException(e.getMessage());
+            throw new UnsupportedDataObjectException(e.getMessage());
         } catch (IllegalAccessException e) {
-            throw new UnsupportedTypeException(e.getMessage());
+            throw new UnsupportedDataObjectException(e.getMessage());
         } catch (ClassNotFoundException e) {
-            throw new UnsupportedTypeException(e.getMessage());
+            throw new UnsupportedDataObjectException(e.getMessage());
         }
        
         
         if (validator == null)
-            throw new UnsupportedTypeException("Validator could not be loaded for type " + type 
+            throw new UnsupportedDataObjectException("Validator could not be loaded for type " + type 
                     + " with class " + className);
         
         return validator;
