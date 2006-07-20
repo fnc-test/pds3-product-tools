@@ -21,50 +21,30 @@ package gov.nasa.pds.tools.dict.type;
  * @version $Revision$
  * 
  */
-public class NonDecimalChecker implements NumericTypeChecker {
-
-    /* (non-Javadoc)
-     * @see gov.nasa.jpl.pds.tools.dict.type.NumericTypeChecker#checkMinValue(java.lang.String, java.lang.String)
-     */
-    public void checkMinValue(String value, String min)
-            throws OutOfRangeException, InvalidTypeException {
-        // TODO Auto-generated method stub
-
-    }
-
-    /* (non-Javadoc)
-     * @see gov.nasa.jpl.pds.tools.dict.type.NumericTypeChecker#checkMaxValue(java.lang.String, java.lang.String)
-     */
-    public void checkMaxValue(String value, String max)
-            throws OutOfRangeException, InvalidTypeException {
-        // TODO Auto-generated method stub
-
-    }
+public class NonDecimalChecker extends LengthChecker implements NumericTypeChecker {
 
     /* (non-Javadoc)
      * @see gov.nasa.jpl.pds.tools.dict.type.TypeChecker#cast(java.lang.String)
      */
     public Object cast(String value) throws InvalidTypeException {
-        // TODO Auto-generated method stub
-        return null;
+        // FIXME: Handle based integers
+        return value;
     }
 
     /* (non-Javadoc)
-     * @see gov.nasa.jpl.pds.tools.dict.type.TypeChecker#checkMinLength(java.lang.String, int)
+     * @see gov.nasa.pds.tools.dict.type.NumericTypeChecker#checkMinValue(java.lang.Number, java.lang.Number)
      */
-    public void checkMinLength(String value, int min)
-            throws InvalidLengthException {
-        // TODO Auto-generated method stub
-
+    public void checkMinValue(Number value, Number min) throws OutOfRangeException {
+        if (value.intValue() < min.intValue())
+            throw new OutOfRangeException(value.toString() + " is less than the acceptable minimum of " + min.toString());
     }
 
     /* (non-Javadoc)
-     * @see gov.nasa.jpl.pds.tools.dict.type.TypeChecker#checkMaxLength(java.lang.String, int)
+     * @see gov.nasa.pds.tools.dict.type.NumericTypeChecker#checkMaxValue(java.lang.Number, java.lang.Number)
      */
-    public void checkMaxLength(String value, int max)
-            throws InvalidLengthException {
-        // TODO Auto-generated method stub
-
+    public void checkMaxValue(Number value, Number max) throws OutOfRangeException {
+        if (value.intValue() > max.intValue())
+            throw new OutOfRangeException(value.toString() + " exceeds acceptable maximum of " + max.toString());
     }
 
 }
