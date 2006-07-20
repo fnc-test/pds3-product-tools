@@ -112,5 +112,11 @@ public class AttributeStatement extends Statement {
     public void attachComment(CommentStatement comment) {
         this.comment = comment;
     }
+    
+    public boolean hasNamespace() {
+        if ("".equals(namespace))
+            return true;
+        return false;
+    }
 
 }
