@@ -9,13 +9,14 @@ package gov.nasa.pds.tools.label.parser;
 import java.net.URL;
 import java.util.Properties;
 import org.apache.log4j.Logger;
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.ConsoleAppender;
+import org.apache.log4j.PatternLayout;
 import gov.nasa.pds.tools.label.antlr.ODLLexer;
 import gov.nasa.pds.tools.label.antlr.ODLParser;
 import java.io.IOException;
-import antlr.collections.AST;
 import gov.nasa.pds.tools.dict.Dictionary;
 import gov.nasa.pds.tools.label.Label;
-import gov.nasa.pds.tools.label.StatementFactory;
 import gov.nasa.pds.tools.label.parser.ParseException;
 
 /**
@@ -99,6 +100,7 @@ public class DefaultLabelParser implements LabelParser {
      * @throws Exception
      */
     public static void main(String [] args) throws Exception {
+        BasicConfigurator.configure(new ConsoleAppender(new PatternLayout("%-5p %m%n")));
         LabelParserFactory factory = LabelParserFactory.getInstance();
         LabelParser parser = factory.newLabelParser();
         parser.parse(new URL(args[0]));
