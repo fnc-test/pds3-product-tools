@@ -16,6 +16,8 @@
 
 header {
 package gov.nasa.pds.tools.label.antlr;
+
+import org.apache.log4j.Logger;
 import gov.nasa.pds.tools.label.AttributeStatement;
 import gov.nasa.pds.tools.label.CommentStatement;
 import gov.nasa.pds.tools.label.DateTime;
@@ -39,6 +41,26 @@ class ODLParser extends Parser;
 options {
     exportVocab = ODL;
     k = 2;
+}
+
+{
+    private static Logger log = Logger.getLogger("gov.nasa.pds.tools.label.antlr.ODLParser"); 
+    
+    public void reportError(RecognitionException re) {
+        log.error(re.toString());
+    }
+    
+    public void reportError(RecognitionException re, String s) {
+        log.error(re.toString());
+    }
+    
+    public void reportError(String s) {
+        log.error(s);
+    }
+    
+    public void reportWarning(String s) {
+        log.warn(s);
+    }
 }
 
 dictionary returns [List labels = new ArrayList();]
@@ -221,7 +243,7 @@ date_time_value returns [DateTime result = null]
     | dt:DATETIME
         {result = new DateTime(dt.getText());}
     ;
-  
+    
 // a symbol  
 symbol_value returns [Symbol result = null]
     : id:IDENT
@@ -295,6 +317,22 @@ options {
     caseSensitiveLiterals = false;
 }
 
+{
+    private static Logger log = Logger.getLogger("gov.nasa.pds.tools.label.antlr.ODLLexer"); 
+    
+    public void reportError(RecognitionException re) {
+        log.error(re.toString());
+    }
+
+    public void reportError(String s) {
+        log.error(s);
+    }
+    
+    public void reportWarning(String s) {
+        log.warn(s);
+    }
+}
+
 // operators
 SET_OPENING : '{' ;
 SET_CLOSING : '}' ;
@@ -338,7 +376,7 @@ WS
 protected
 IDENTIFIER
     options {testLiterals=true;}
-    : LETTER (LETTER|DIGIT|'_')*
+    : l:LETTER (LETTER|DIGIT|'_')*
     ;
 
 ELEMENT_IDENT 
