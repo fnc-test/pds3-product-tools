@@ -506,7 +506,7 @@ DAY
     
 protected
 TIME
-    : HOUR (':' MINUTE (':' SECOND ('.' FRACTION ('Z')?)?)?)?
+    : HOUR (':' MINUTE (':' SECOND ('.' FRACTION)?)?)? ('Z')?
     ;
 
 protected
