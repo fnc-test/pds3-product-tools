@@ -8,6 +8,7 @@ package gov.nasa.pds.tools;
 
 import gov.nasa.pds.tools.dict.Dictionary;
 import gov.nasa.pds.tools.dict.parser.DictionaryParser;
+import gov.nasa.pds.tools.file.FileListGenerator;
 import gov.nasa.pds.tools.label.parser.LabelParser;
 import gov.nasa.pds.tools.label.parser.LabelParserFactory;
 import java.io.File;
@@ -25,6 +26,9 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.UnrecognizedOptionException;
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.ConsoleAppender;
+import org.apache.log4j.PatternLayout;
 
 
 /**
@@ -44,17 +48,19 @@ public class VTool {
 	
 	private boolean alias;
 	private File config;
-	private boolean data_obj;
+	private boolean dataObj;
 	private List dictionaries;
 	private File exclude;
-	private boolean follow_ptrs;
-	private List file_input;
-	private File include_path;
+	private List fInput;
+	private List files;
+	private boolean followPtrs;
+	private File includePath;
 	private int max_errors;
 	private boolean partial;
+	private List patterns;
 	private boolean recursive;
 	private File output;
-	private String output_detail;
+	private String outDetail;
 	private short verbose;
 	private boolean xml;
 	
@@ -66,16 +72,18 @@ public class VTool {
 		alias = true;
 		config = null;
 		dictionaries = null;
-		data_obj = true;
+		dataObj = true;
 		exclude = null;
-		follow_ptrs = true;
-		file_input = null;
-		include_path = null;
+		followPtrs = true;
+		fInput = null;
+		files = null;
+		includePath = null;
 		max_errors = 300;
 		partial = false;
+		patterns = null;
 		recursive = true;
 		output = null;
-		output_detail = "full";
+		outDetail = "full";
 		verbose = 2;
 		xml = false;
 	}
@@ -126,11 +134,12 @@ public class VTool {
 		options.addOption("h", "help", false, "Display usage");
 		options.addOption("OBJ", "no-obj", false, "Do not perform data object validation");
 		options.addOption("p", "partial", false, "Validate as a partial label file");
-		options.addOption("R", "no-recursive", false, "Don't validate any label files below the level of the input directory. " + 
-				                               "Only applies when validating more than 1 label file");	
+		options.addOption("l", "local", false, "Validate files only in the input directory rather than " + 
+				                               "recursively traversing down the subdirectories.");	
 		options.addOption("u", "unalias", false, "Disable aliasing feature when validating label file(s)");
 		options.addOption("V", "version", false, "Display VTool version");
 		options.addOption("xml", "xml-output", false, "Output the report in XML format");
+		
 		
 		/* These are options that require an argument */
 
@@ -154,11 +163,20 @@ public class VTool {
 		
 		/* Option to specify the label(s) to validate */
 		OptionBuilder.withLongOpt("file");
-		OptionBuilder.withDescription("Specify the label file(s) to validate (required option)");
+		OptionBuilder.withDescription("Specify the label file(s) and/or directories to validate (required option)");
 		OptionBuilder.hasArgs();
 		OptionBuilder.withArgName("label(s)");
 		OptionBuilder.withType(String.class);
 		options.addOption(OptionBuilder.create("f"));
+		
+		/* Option to specify a pattern to match against the input directory to be validated */
+		OptionBuilder.withLongOpt("pattern");
+		OptionBuilder.withDescription("Specify a pattern to match against the input directory to be validated. " +
+				                      "Each Pattern must be surrounded by quotes. (i.e. -p \"*.LBL\" \"*FMT\")");
+		OptionBuilder.hasArgs();
+		OptionBuilder.withArgName("expression(s)");
+		OptionBuilder.withType(String.class);
+		options.addOption(OptionBuilder.create("p"));
 		
 		/* Option to specify a path to the Pointer files */		
 		OptionBuilder.withLongOpt("include");
@@ -277,8 +295,7 @@ public class VTool {
 			}
 		
 			if(cmd.hasOption("f")) {
-		        //TODO: handle multiple file inputs (wildcarded inputs)
-				file_input = Arrays.asList(cmd.getOptionValues("f"));
+				fInput = Arrays.asList(cmd.getOptionValues("f"));
 			}
 			else
 				throw new MissingOptionException("The 'f' flag is required");
@@ -290,15 +307,15 @@ public class VTool {
 			}
 			
 			if(cmd.hasOption("F")) {
-				follow_ptrs = false;
+				followPtrs = false;
 			}
 			
 			if(cmd.hasOption("I")) {
-				if(follow_ptrs == false)
+				if(followPtrs == false)
 					throw new IllegalArgumentException("Option was selected to not follow pointers. 'I' flag cannot be specified"); 
 				
-				include_path = new File(cmd.getOptionValue("I"));
-				printDebug("Got path to pointer files: " + include_path);
+				includePath = new File(cmd.getOptionValue("I"));
+				printDebug("Got path to pointer files: " + includePath);
 			}
 			
 			if(cmd.hasOption("o")) {
@@ -307,13 +324,17 @@ public class VTool {
 			}
 			
 			if(cmd.hasOption("OBJ")) {
-				data_obj = false;
+				dataObj = false;
 				printDebug("Setting data object flag to false");
 			}
 			
-			if(cmd.hasOption("R")) {
+			if(cmd.hasOption("l")) {
 				recursive = false;
 				printDebug("Setting recursive flag to false.");
+			}
+			
+			if(cmd.hasOption("p")) {
+				patterns = Arrays.asList(cmd.getOptionValues("p"));
 			}
 			
 			if(cmd.hasOption("u")) {
@@ -353,12 +374,12 @@ public class VTool {
 		
 			if(cmd.hasOption("od")) {
 				
-				output_detail = cmd.getOptionValue("od");
-				printDebug("Report detail has been set to: " + output_detail);
+				outDetail = cmd.getOptionValue("od");
+				printDebug("Report detail has been set to: " + outDetail);
 				
-				if( (output_detail.equalsIgnoreCase("sum") == false) &&
-					(output_detail.equalsIgnoreCase("min") == false) &&
-					(output_detail.equalsIgnoreCase("full") == false) ) {
+				if( (outDetail.equalsIgnoreCase("sum") == false) &&
+					(outDetail.equalsIgnoreCase("min") == false) &&
+					(outDetail.equalsIgnoreCase("full") == false) ) {
 					throw new IllegalArgumentException("Invalid value entered for 'od' flag." + 
 														" Value can only be either 'full', 'sum', or 'min'");
 				}
@@ -440,6 +461,7 @@ public class VTool {
 	
 	public void readLabels(List files, Dictionary dict) throws MalformedURLException, IOException {
 		
+		BasicConfigurator.configure(new ConsoleAppender(new PatternLayout("%-5p %m%n")));
 		LabelParserFactory factory = LabelParserFactory.getInstance();
 		LabelParser parser = factory.newLabelParser();
 		File label;
@@ -455,6 +477,23 @@ public class VTool {
 				continue;
 			}
 		}
+	}
+	
+	public void createFileList(List input, boolean recurse, List wildcards) {
+		FileListGenerator fileList = new FileListGenerator();
+		File file = null;
+		
+		if(wildcards != null) {
+			file = new File(wildcards.get(0).toString());
+			
+			if( file.isFile() )
+				fileList.setFileFilter(file);
+			else
+				fileList.setFileFilter(wildcards);
+		}
+
+		files = fileList.visitFilesAndDirs(input, recurse);
+
 	}
 	
 	public static void main(String[] argv) {
@@ -481,17 +520,21 @@ public class VTool {
 			if(vtool.dictionaries != null) {
 				mainDictionary = vtool.readDictionaries(vtool.dictionaries);
 			}
-			vtool.readLabels(vtool.file_input, mainDictionary);
+			
+			vtool.createFileList(vtool.fInput, vtool.recursive, vtool.patterns);
+			vtool.readLabels(vtool.files, mainDictionary);
 			
 		} 
 		catch (MalformedURLException mue) {
-			mue.printStackTrace(System.out);
+			System.out.println( mue.getMessage() );
 			System.exit(1);
 		} 
 		catch (IOException ioe) {
-			ioe.printStackTrace(System.out);
+			System.out.println( ioe.getMessage() );
 			System.exit(1);
 		} 
+		
+		System.exit(0);
 
 	}
 	
