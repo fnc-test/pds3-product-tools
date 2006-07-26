@@ -30,7 +30,6 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.PatternLayout;
 
-
 /**
  * @author pramirez
  * @version $Revision$
@@ -69,6 +68,10 @@ public class VTool {
 	 * Default constructor
 	 */
 	public VTool(){
+		
+		options = new Options();
+		parser = new GnuParser();
+		
 		alias = true;
 		config = null;
 		dictionaries = null;
@@ -127,9 +130,6 @@ public class VTool {
 	 * Builds the set of options that are available for VTool
 	 */
 	private void buildOpts() {
-		
-		options = new Options();
-		
 		options.addOption("F", "no-follow", false, "Do not follow ^STRUCTURE pointers in a label");
 		options.addOption("h", "help", false, "Display usage");
 		options.addOption("OBJ", "no-obj", false, "Do not perform data object validation");
@@ -238,8 +238,6 @@ public class VTool {
 	 * @param argv
 	 */
 	private void parseLine(String[] argv) {
-		parser = new GnuParser();
-		
 		try {
 			cmd = parser.parse(options, argv);
 		}
@@ -426,10 +424,8 @@ public class VTool {
 	 */
 	
 	public Dictionary readDictionaries(List dictionary) throws MalformedURLException, IOException {
-		
 		Dictionary dict = null;
 		File dd = null;
-		
 		Iterator i = dictionary.iterator();
 		
 		try {
@@ -446,6 +442,7 @@ public class VTool {
 			System.out.println("Error parsing Dictionary");
 			System.exit(1);
 		}
+
 		return dict;
 		
 	}
@@ -460,7 +457,6 @@ public class VTool {
 	 */
 	
 	public void readLabels(List files, Dictionary dict) throws MalformedURLException, IOException {
-		
 		BasicConfigurator.configure(new ConsoleAppender(new PatternLayout("%-5p %m%n")));
 		LabelParserFactory factory = LabelParserFactory.getInstance();
 		LabelParser parser = factory.newLabelParser();
@@ -479,25 +475,27 @@ public class VTool {
 		}
 	}
 	
+	/**
+	 * Create a list of files based on supplied list of files and/or directories.
+	 * 
+	 * @param input - A list of files and/or directories to be validated
+	 * @param recurse - 'True' if recursing through the supplied directories. 'False'
+	 *    to only look in the supplied directory for files, ignoring subdirectories.
+	 * @param wildcards - A list of wildcards to enable filtering of files through 
+	 *    a supplied directory. 
+	 */
+	
 	public void createFileList(List input, boolean recurse, List wildcards) {
-		FileListGenerator fileList = new FileListGenerator();
-		File file = null;
+		FileListGenerator fileList = new FileListGenerator(input);
 		
 		if(wildcards != null) {
-			file = new File(wildcards.get(0).toString());
-			
-			if( file.isFile() )
-				fileList.setFileFilter(file);
-			else
-				fileList.setFileFilter(wildcards);
+			fileList.setFileFilter(wildcards);
 		}
-
-		files = fileList.visitFilesAndDirs(input, recurse);
+		files = fileList.visitFilesAndDirs(recurse);
 
 	}
 	
 	public static void main(String[] argv) {
-	
 		VTool vtool = new VTool();
 		Dictionary mainDictionary = null;
 		
