@@ -63,18 +63,13 @@ options {
     }
 }
 
-dictionary returns [List labels = new ArrayList();]
-{Label l = null;}
-    : l=label {labels.add(l);}
-        ("END" l=label {labels.add(l);})*
-    ;
-
-// a label is a series of one or more expressions
-//      followed by an END
+// a label is a series of one or more expressions followed by an END
 label returns [Label label = new Label();]
 {Statement s = null;}
-    : ( s=statement {if (s != null) {label.addStatement(s);}} )*
+    : ( s=statement {if (s != null) {label.addStatement(s);}})* ("END")?
     ;
+    
+
 
 // an expression is an assignment like identifer = value
 //      or an object block
@@ -128,7 +123,7 @@ simple_statement returns [Statement result = null]
 // an object block
 object_statement returns [ObjectStatement result = null]
 {Statement s = null;}
-    : "OBJECT" EQUALS nl id:IDENT (c:COMMENT)? EOL
+    : "OBJECT" nl EQUALS nl id:IDENT (c:COMMENT)? EOL
       {
          result = new ObjectStatement(id.getLine(), id.getText());
          if (c != null) {
@@ -152,7 +147,7 @@ object_statement returns [ObjectStatement result = null]
 // a group block
 group_statement returns [GroupStatement result = null]
 {Statement s = null;}
-    : "GROUP" EQUALS nl id:IDENT (c:COMMENT)? EOL
+    : "GROUP" nl EQUALS nl id:IDENT (c:COMMENT)? EOL
       {
          result = new GroupStatement(id.getLine(), id.getText());
          if (c != null) {
@@ -176,7 +171,7 @@ pointer_statement returns [PointerStatement result = null]
 // an attribute assignment
 assignment_statement returns [AttributeStatement result = null]
 {AttributeStatement a = null; Value v = null;}
-    : (eid:ELEMENT_IDENT|id:IDENT) EQUALS nl v=value
+    : (eid:ELEMENT_IDENT|id:IDENT) nl EQUALS nl v=value
       { 
         if (eid != null) 
            result = new AttributeStatement(eid.getLine(), eid.getText(), v);
