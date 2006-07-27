@@ -13,6 +13,10 @@ import gov.nasa.pds.tools.dict.DictionaryTokens;
 import gov.nasa.pds.tools.dict.ElementDefinition;
 import gov.nasa.pds.tools.dict.GroupDefinition;
 import gov.nasa.pds.tools.dict.ObjectDefinition;
+import gov.nasa.pds.tools.dict.type.InvalidTypeException;
+import gov.nasa.pds.tools.dict.type.TypeChecker;
+import gov.nasa.pds.tools.dict.type.TypeCheckerFactory;
+import gov.nasa.pds.tools.dict.type.UnsupportedTypeException;
 import gov.nasa.pds.tools.label.AttributeStatement;
 import gov.nasa.pds.tools.label.ObjectStatement;
 import gov.nasa.pds.tools.label.Set;
@@ -210,16 +214,30 @@ public class DefinitionFactory implements ODLTokenTypes, DictionaryTokens {
             attribute = object.getAttribute(MINIMUM);
             if (attribute != null) {
                 try {
-                    definition.setMinimum(Double.valueOf(attribute.getValue().toString()));
-                } catch (NumberFormatException nfe) {}
+                    TypeChecker checker = TypeCheckerFactory.getInstance().newInstance(definition.getDataType());
+                    definition.setMinimum((Number) checker.cast(attribute.getValue().toString()));
+                } catch (InvalidTypeException e) {
+                    // TODO Auto-generated catch block
+                    //FIXME: throw an InvalidDefinitionException
+                } catch (UnsupportedTypeException e) {
+                    // TODO Auto-generated catch block
+                    //FIXME: throw an InvalidDefinitionException
+                }
             }
             
             //Find and set max value
             attribute = object.getAttribute(MAXIMUM);
             if (attribute != null) {
                 try {
-                    definition.setMaximum(Double.valueOf(attribute.getValue().toString()));
-                } catch (NumberFormatException nfe) {}
+                    TypeChecker checker = TypeCheckerFactory.getInstance().newInstance(definition.getDataType());
+                    definition.setMaximum((Number) checker.cast(attribute.getValue().toString()));
+                } catch (InvalidTypeException e) {
+                    // TODO Auto-generated catch block
+                    //FIXME: throw an InvalidDefinitionException
+                } catch (UnsupportedTypeException e) {
+                    // TODO Auto-generated catch block
+                    //FIXME: throw an InvalidDefinitionException
+                }
             }
             
             //Find and set value type
@@ -235,7 +253,9 @@ public class DefinitionFactory implements ODLTokenTypes, DictionaryTokens {
                 for (Iterator i = s.iterator(); i.hasNext();) {
                     values.add(i.next().toString());
                 }
+                definition.setValues(values);
             }
+            
         }
         
         if (definition == null) 
