@@ -41,7 +41,8 @@ public abstract class Definition {
      * @param alias The alias to add
      */
     public void addAlias(String alias) {
-        aliases.add(alias);
+        if (!aliases.contains(alias) && !identifier.equals(alias))
+            aliases.add(alias);
     }
 
     /**
@@ -53,7 +54,7 @@ public abstract class Definition {
     
     public void addAliases(List aliases) {
         for (Iterator i = aliases.iterator(); i.hasNext();) {
-            String alias = (String) i.next();
+            String alias = i.next().toString();
             if (!this.aliases.contains(alias) && !identifier.equals(alias))
                 this.aliases.add(alias);
         }
