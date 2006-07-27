@@ -16,7 +16,9 @@
 
 package gov.nasa.pds.tools.label.validate;
 
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -34,14 +36,14 @@ import gov.nasa.pds.tools.label.GroupStatement;
 public class GroupValidator {
     private static Logger log = Logger.getLogger(new GroupValidator().getClass().getName());
     
-    public static boolean isValid(Dictionary dictionary, GroupStatement group, Logger log) 
+    public static boolean isValid(Dictionary dictionary, GroupStatement group) 
        throws DefinitionNotFoundException {
         boolean valid = true;
         
         //Lookup group definition, can't do anything without it
         GroupDefinition definition = dictionary.getGroupDefinition(group.getIdentifier());
         if (definition == null)
-            throw new DefinitionNotFoundException("Line (" + group.getLineNumber() + "): " +
+            throw new DefinitionNotFoundException("line " + group.getLineNumber() + ": " +
                     "Could not find group definition for " + group.getIdentifier());
   
         //First check that required elements are captured in object
@@ -49,7 +51,7 @@ public class GroupValidator {
             String required = (String) i.next();
             if (!group.hasAttribute(required)) {
                 valid = false;
-                log.error("Line (" + group.getLineNumber() + "): Group " + group.getIdentifier() + 
+                log.error("line " + group.getLineNumber() + ": Group " + group.getIdentifier() + 
                         " does not contain required element " + required);
             }
         }
@@ -63,7 +65,7 @@ public class GroupValidator {
                 AttributeStatement attribute = (AttributeStatement) i.next();
                 if (!definition.canHaveElement(attribute.getIdentifier())) {
                     valid = false;
-                    log.error("Line (" + group.getLineNumber() + "): Group " + group.getIdentifier() +  
+                    log.error("line " + group.getLineNumber() + ": Group " + group.getIdentifier() +  
                             " contains the element " + attribute.getIdentifier() + 
                             " which is neither required nor optional.");
                 }
@@ -71,13 +73,17 @@ public class GroupValidator {
         }
         
         //Validate all attributes
+        List attributes = group.getAttributes();
+        Collections.sort(attributes);
         for (Iterator i = group.getAttributes().iterator(); i.hasNext();) {
             AttributeStatement attribute = (AttributeStatement) i.next();
             boolean elementValid = false;
             try {
                 elementValid = ElementValidator.isValid(dictionary, attribute);
-            } catch (UnsupportedTypeException ut) {
-                log.error("Line (" + attribute.getLineNumber() + "): " + ut.getMessage());
+            } catch (UnsupportedTypeException ute) {
+                log.error("line " + attribute.getLineNumber() + ": " + ute.getMessage());
+            } catch (DefinitionNotFoundException dnfe) {
+                log.error("line " + attribute.getLineNumber() + ": " + dnfe.getMessage());
             }
             if (!elementValid)
                 valid = false;
