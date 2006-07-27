@@ -13,7 +13,7 @@ package gov.nasa.pds.tools.label;
  * @version $Revision$
  * 
  */
-public abstract class Statement {  
+public abstract class Statement implements Comparable {  
     protected int lineNumber;
     protected String identifier;
     
@@ -44,4 +44,8 @@ public abstract class Statement {
     }
 
     public abstract void attachComment(CommentStatement commet);
+    
+    public int compareTo(Object o) {
+        return this.getLineNumber() - ((Statement) o).getLineNumber();
+    }
 }
