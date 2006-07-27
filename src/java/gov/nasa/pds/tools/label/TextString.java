@@ -17,7 +17,7 @@ public class TextString extends Scalar {
      * @param value
      */
     public TextString(String value) {
-        super(value);
+        super(value.replaceAll("\"", ""));
     }
-
+    
 }
