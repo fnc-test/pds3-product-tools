@@ -23,7 +23,10 @@ import gov.nasa.pds.tools.label.AttributeStatement;
 import gov.nasa.pds.tools.label.ObjectStatement;
 
 import org.apache.log4j.Logger;
+
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * @author pramirez
@@ -69,13 +72,17 @@ public class ObjectValidator {
         }
         
         //Validate all attributes
-        for (Iterator i = object.getAttributes().iterator(); i.hasNext();) {
+        List attributes = object.getAttributes();
+        Collections.sort(attributes);
+        for (Iterator i = attributes.iterator(); i.hasNext();) {
             AttributeStatement attribute = (AttributeStatement) i.next();
             boolean elementValid = false;
             try {
                 elementValid = ElementValidator.isValid(dictionary, attribute);
-            } catch (UnsupportedTypeException ut) {
-                log.error(ut.getMessage());
+            } catch (UnsupportedTypeException ute) {
+                log.error("line " + attribute.getLineNumber() + ": " + ute.getMessage());
+            } catch (DefinitionNotFoundException dnfe) {
+                log.error("line " + attribute.getLineNumber() + ": " + dnfe.getMessage());
             }
             if (!elementValid)
                 valid = false;
