@@ -36,6 +36,6 @@ public class LengthChecker {
      */
     public void checkMaxLength(String value, int max) throws InvalidLengthException {
         if (value.length() > max)
-            throw new InvalidLengthException(value + " exceed the maximum length of " + max);
+            throw new InvalidLengthException(value + " exceeds the maximum length of " + max);
     }
 }
