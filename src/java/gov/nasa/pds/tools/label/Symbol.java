@@ -17,7 +17,7 @@ public class Symbol extends Scalar {
      * @param value
      */
     public Symbol(String value) {
-        super(value);
+        super(value.replaceAll("'",""));
     }
 
 }
