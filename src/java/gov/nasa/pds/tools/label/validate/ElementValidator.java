@@ -51,7 +51,7 @@ public class ElementValidator implements DictionaryTokens {
         if (attribute.hasNamespace()) {
             if (attribute.getNamespace().length() > NAMESPACE_LENGTH) {
                 valid = false;
-                log.error("Line (" + attribute.getLineNumber() + "): Namespace exceeds max length of " + 
+                log.error("line " + attribute.getLineNumber() + ": Namespace exceeds max length of " + 
                     ELEMENT_IDENT_LENGTH + " characters.");
             }
         }
@@ -59,15 +59,15 @@ public class ElementValidator implements DictionaryTokens {
         //Check length of identifier
         if (attribute.getElementIdentifier().length() > ELEMENT_IDENT_LENGTH) {
             valid = false;
-            log.error("Line (" + attribute.getLineNumber() + "): Identifier exceeds max length of " + 
+            log.error("line " + attribute.getLineNumber() + ": Identifier exceeds max length of " + 
                     ELEMENT_IDENT_LENGTH + " characters.");
         }
-        
+
         //Check against valid values if there are any
         if (definition.hasValidValues()) {
             if (!definition.getValues().contains(value.toString())) {
                 valid = false;
-                log.error("Line (" + attribute.getLineNumber() + ") " + value.toString() + 
+                log.error("line " + attribute.getLineNumber() + ": " + value.toString() + 
                           " is not in the list of valid values for " + attribute.getIdentifier());
             }
         }
@@ -80,7 +80,7 @@ public class ElementValidator implements DictionaryTokens {
             castedValue = checker.cast(value.toString());
         } catch (InvalidTypeException ite) {
             valid = false;
-            log.error("Line (" + attribute.getLineNumber() + "): " + ite.getMessage());
+            log.error("line " + attribute.getLineNumber() + ": " + ite.getMessage());
         }
         
         //Check min length
@@ -88,7 +88,7 @@ public class ElementValidator implements DictionaryTokens {
             checker.checkMinLength(value.toString(), definition.getMinLength());
         } catch (InvalidLengthException ile) {
             valid = false;
-            log.error("Line (" + attribute.getLineNumber() + "): " + ile.getMessage());
+            log.error("line " + attribute.getLineNumber() + ": " + ile.getMessage());
         }
         
         //Check max length
@@ -96,7 +96,7 @@ public class ElementValidator implements DictionaryTokens {
             checker.checkMaxLength(value.toString(), definition.getMaxLength());
         } catch (InvalidLengthException ile) {
             valid = false;
-            log.error("Line (" + attribute.getLineNumber() + "): " + ile.getMessage());
+            log.error("line " + attribute.getLineNumber() + ": " + ile.getMessage());
         }
         
         //Check to see if this is a numeric type checker if so then do further checking
@@ -109,19 +109,22 @@ public class ElementValidator implements DictionaryTokens {
                     numericChecker.checkMinValue((Number) castedValue, definition.getMinimum());
                 } catch (OutOfRangeException oor) {
                     valid = false;
-                    log.error("Line (" + attribute.getLineNumber() + "): " + oor.getMessage());
+                    log.error("line " + attribute.getLineNumber() + ": " + oor.getMessage());
                 }
             }
             
             //Check max value
             if (definition.hasMaximum()) {
                 try {
-                    numericChecker.checkMaxValue((Number) castedValue, definition.getMinimum());
+                    numericChecker.checkMaxValue((Number) castedValue, definition.getMaximum());
                 } catch (OutOfRangeException oor) {
                     valid = false;
-                    log.error("Line (" + attribute.getLineNumber() + "): " + oor.getMessage());
+                    log.error("line " + attribute.getLineNumber() + ": " + oor.getMessage());
                 }
             }
+            
+            //Check units if found
+            //FIXME: Support units
         }
         
         return valid;
