@@ -6,32 +6,34 @@
 
 package gov.nasa.pds.tools.dict.parser;
 
-import java.io.IOException;
-import java.net.URL;
-import org.apache.log4j.Logger;
-import org.apache.log4j.BasicConfigurator;
-import antlr.collections.AST;
-import gov.nasa.pds.tools.label.antlr.ODLTokenTypes;
-import gov.nasa.pds.tools.label.antlr.ODLLexer;
-import gov.nasa.pds.tools.label.antlr.ODLParser;
-import java.util.HashMap;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.List;
-import java.util.Iterator;
-
 import gov.nasa.pds.tools.dict.Definition;
 import gov.nasa.pds.tools.dict.Dictionary;
 import gov.nasa.pds.tools.dict.DictionaryTokens;
 import gov.nasa.pds.tools.label.AttributeStatement;
-import gov.nasa.pds.tools.label.Label;
-import gov.nasa.pds.tools.label.Scalar;
-import gov.nasa.pds.tools.label.Statement;
-import gov.nasa.pds.tools.label.Sequence;
 import gov.nasa.pds.tools.label.CommentStatement;
+import gov.nasa.pds.tools.label.Label;
 import gov.nasa.pds.tools.label.ObjectStatement;
-import gov.nasa.pds.tools.label.StatementFactory;
+import gov.nasa.pds.tools.label.Scalar;
+import gov.nasa.pds.tools.label.Sequence;
+import gov.nasa.pds.tools.label.Statement;
+import gov.nasa.pds.tools.label.antlr.ODLLexer;
+import gov.nasa.pds.tools.label.antlr.ODLParser;
+import gov.nasa.pds.tools.label.antlr.ODLTokenTypes;
 import gov.nasa.pds.tools.label.parser.ParseException;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.ConsoleAppender;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PatternLayout;
 
 
 /**
@@ -44,11 +46,17 @@ public class DictionaryParser implements ODLTokenTypes, DictionaryTokens {
     
     public static Dictionary parse(URL file) throws ParseException, IOException {
         Dictionary dictionary = new Dictionary();
-        ODLLexer lexer = new ODLLexer(file.openStream());
+        InputStream input = file.openStream();
+        ODLLexer lexer = new ODLLexer(input);
         ODLParser parser = new ODLParser(lexer);
         try {
+            List labels = new ArrayList();
             //Attempt to parse a dictionary
-            List labels = parser.dictionary();
+            while (input.available() > 0) {
+                Label label = parser.label();
+                if (label != null)
+                    labels.add(label);
+            }
             
             if (labels != null && labels.size() > 0) {
                 //First grab off the comments at the top of the dictionary as
@@ -86,12 +94,13 @@ public class DictionaryParser implements ODLTokenTypes, DictionaryTokens {
                 }
                 
                 dictionary.setUnits(units);
-                
                 //Go through the definitions and set all aliases that were found
                 for (Iterator i = definitions.iterator(); i.hasNext();) {
                     Definition d = (Definition) i.next();
                     if (aliases.containsKey(d.getIdentifier())) {
-                        d.addAliases((List) aliases.get(d.getIdentifier()));
+                        for (Iterator a = ((List) aliases.get(d.getIdentifier())).iterator(); a.hasNext();) {
+                            d.addAlias(a.next().toString());
+                        }
                     }
                 }
                 
@@ -143,6 +152,7 @@ public class DictionaryParser implements ODLTokenTypes, DictionaryTokens {
     }
     
     public static void main(String [] args) throws Exception {
+        BasicConfigurator.configure(new ConsoleAppender(new PatternLayout("%-5p %m%n")));
         DictionaryParser.parse(new URL(args[0]));
     }
 }
