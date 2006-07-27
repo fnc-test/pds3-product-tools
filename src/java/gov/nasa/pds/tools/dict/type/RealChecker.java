@@ -27,8 +27,13 @@ public class RealChecker extends LengthChecker implements NumericTypeChecker {
      * @see gov.nasa.jpl.pds.tools.label.validate.TypeChecker#cast(java.lang.String)
      */
     public Object cast(String value) throws InvalidTypeException {
-        // FIXME: return Real value of string
-        return value;
+        Double doubleValue = null;
+        try {
+            doubleValue = Double.valueOf(value);
+        } catch(NumberFormatException nfe) {
+            throw new InvalidTypeException(nfe.getMessage());
+        }
+        return doubleValue;
     }
 
     /* (non-Javadoc)
