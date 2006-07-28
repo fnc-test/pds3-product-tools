@@ -297,6 +297,7 @@ public class VTool {
 				throw new MissingOptionException("The 'f' flag is required");
 			
 			if(cmd.hasOption("c")) {
+				//TODO: Read and process configuration file
 				config = new File(cmd.getOptionValue("c"));
 				printDebug("Got configuration file: " + config);
 				System.out.println("Call method to set default behaviors based on configuration file contents");
@@ -315,6 +316,7 @@ public class VTool {
 			}
 			
 			if(cmd.hasOption("o")) {
+				//TODO: Setup messages to write to a file
 				output = new File(cmd.getOptionValue("o"));
 				printDebug("Report file name has been set to: " + output);
 			}
@@ -338,7 +340,7 @@ public class VTool {
 				printDebug("Setting alias flag to false");
 			}
 			
-			if(cmd.hasOption("xml")) {
+			if(cmd.hasOption("x")) {
 				xml = true;
 				printDebug("Report will be in XML format");
 			}
@@ -346,7 +348,7 @@ public class VTool {
 			if(cmd.hasOption("X")) {
 				exclude = new File(cmd.getOptionValue("X"));
 				printDebug("Obtained text file to ignore files: " + exclude);
-				System.out.println("Call method to read file and store file patterns to skip");
+				//TODO: Call method to read file and store file patterns to skip
 			}
 			
 			if(cmd.hasOption("d")) {
@@ -429,7 +431,6 @@ public class VTool {
 		try {
 			printDebug( "Parsing dictionary file: " + dictionary.get(0) );
 			dict = DictionaryParser.parse( new File(i.next().toString()).toURL() );
-
 			while( i.hasNext() ) {
 				dd = new File( i.next().toString() );
 				printDebug("Parsing dictionary file: " + dd);
@@ -510,14 +511,11 @@ public class VTool {
 		
 		BasicConfigurator.configure(new ConsoleAppender(new PatternLayout("%-5p %m%n")));
 		try {
-			
 			if(vtool.dictionaries != null) {
 				mainDictionary = vtool.readDictionaries(vtool.dictionaries);
 			}
-			
 			vtool.createFileList(vtool.fInput, vtool.recursive, vtool.patterns);
 			vtool.readLabels(vtool.files, mainDictionary);
-			
 		} 
 		catch (MalformedURLException mue) {
 			System.out.println( mue.getMessage() );
@@ -527,12 +525,6 @@ public class VTool {
 			System.out.println( ioe.getMessage() );
 			System.exit(1);
 		} 
-		
 		System.exit(0);
-
 	}
-	
-	
-
-
 }
