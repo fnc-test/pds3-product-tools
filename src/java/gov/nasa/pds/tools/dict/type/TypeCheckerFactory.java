@@ -58,6 +58,8 @@ public class TypeCheckerFactory implements Types{
             checker = new NonDecimalChecker();
         } else if (type.equals(DATA_SET)) {
             checker = new DataSetChecker();
+        } else if (type.equals(IDENTIFIER)) {
+            checker = new IdentifierChecker();
         }
         
         if (checker == null)
