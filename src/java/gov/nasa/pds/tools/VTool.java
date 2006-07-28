@@ -138,7 +138,7 @@ public class VTool {
 				                               "recursively traversing down the subdirectories.");	
 		options.addOption("u", "unalias", false, "Disable aliasing feature when validating label file(s)");
 		options.addOption("V", "version", false, "Display VTool version");
-		options.addOption("xml", "xml-output", false, "Output the report in XML format");
+		options.addOption("x", "xml-output", false, "Output the report in XML format");
 		
 		
 		/* These are options that require an argument */
@@ -165,7 +165,7 @@ public class VTool {
 		OptionBuilder.withLongOpt("file");
 		OptionBuilder.withDescription("Specify the label file(s) and/or directories to validate (required option)");
 		OptionBuilder.hasArgs();
-		OptionBuilder.withArgName("label(s)");
+		OptionBuilder.withArgName("label(s) and/or dir(s)");
 		OptionBuilder.withType(String.class);
 		options.addOption(OptionBuilder.create("f"));
 		
@@ -253,12 +253,10 @@ public class VTool {
 	 */
 	private void queryCmdLine() {
 
-		int i = 0;
-		
 		try {
 			
-			for(i=0; i < cmd.getArgs().length; i++) {
-				throw new UnrecognizedOptionException( "Unrecognized option/argument: " + cmd.getArgs()[i]);
+			for(Iterator i = cmd.getArgList().iterator(); i.hasNext();) {
+				throw new UnrecognizedOptionException( "Unrecognized option/argument: " + i.next().toString());
 			}
 		
 			/* verbose flag must be queried first in order to determine whether to print
@@ -385,19 +383,19 @@ public class VTool {
 
 		}
 		catch( NumberFormatException nfe ) {
-			System.err.println( nfe.getMessage() );
+			System.out.println( nfe.getMessage() );
 			System.exit(1);
 		}
 		catch( IllegalArgumentException iae ) {
-			System.err.println( iae.getMessage() );
+			System.out.println( iae.getMessage() );
 			System.exit(1);
 		}
 		catch( MissingOptionException moe ) {
-			System.err.println( moe.getMessage() );
+			System.out.println( moe.getMessage() );
 			System.exit(1);
 		}
 		catch( UnrecognizedOptionException uoe ) {
-			System.err.println( uoe.getMessage() );
+			System.out.println( uoe.getMessage() );
 			System.exit(1);
 		}
 	}
@@ -457,7 +455,6 @@ public class VTool {
 	 */
 	
 	public void readLabels(List files, Dictionary dict) throws MalformedURLException, IOException {
-		BasicConfigurator.configure(new ConsoleAppender(new PatternLayout("%-5p %m%n")));
 		LabelParserFactory factory = LabelParserFactory.getInstance();
 		LabelParser parser = factory.newLabelParser();
 		File label;
@@ -506,13 +503,12 @@ public class VTool {
 		
 		/* Define options */
 		vtool.buildOpts();
-
 		/* Parse the command line */
 		vtool.parseLine(argv);
-		
 		/* Query the command line */
 		vtool.queryCmdLine();
 		
+		BasicConfigurator.configure(new ConsoleAppender(new PatternLayout("%-5p %m%n")));
 		try {
 			
 			if(vtool.dictionaries != null) {
