@@ -42,9 +42,9 @@ public interface DictionaryTokens {
     public static final String MINIMUM = "MINIMUM";
     public static final String MAXIMUM = "MAXIMUM";
     public static final String REQUIRED_OBJECTS = "REQUIRED_OBJECT_SET";
-    public static final String REQUIRED_ELEMENTS = "REQUIRED_ELEMENTS";
-    public static final String OPTIONAL_OBJECTS = "OPTIONAL_OBJECTS";
-    public static final String OPTIONAL_ELEMENTS = "OPTIONAL_ELEMENTS";
+    public static final String REQUIRED_ELEMENTS = "REQUIRED_ELEMENT_SET";
+    public static final String OPTIONAL_OBJECTS = "OPTIONAL_OBJECT_SET";
+    public static final String OPTIONAL_ELEMENTS = "OPTIONAL_ELEMENT_SET";
     public static final String OBJECT_ALIASES = "OBJECT_ALIAS_SEQUENCE";
     public static final String ELEMENT_ALIASES = "ELEMENT_ALIAS_SEQUENCE";
     public static final String ALIAS_LIST = "ALIAS_LIST";
