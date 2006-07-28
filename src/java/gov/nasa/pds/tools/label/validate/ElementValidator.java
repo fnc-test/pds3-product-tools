@@ -16,11 +16,16 @@
 
 package gov.nasa.pds.tools.label.validate;
 
+import java.util.Collection;
+import java.util.Iterator;
+
 import org.apache.log4j.Logger;
 
 import gov.nasa.pds.tools.dict.Dictionary;
 import gov.nasa.pds.tools.dict.ElementDefinition;
 import gov.nasa.pds.tools.label.AttributeStatement;
+import gov.nasa.pds.tools.label.Sequence;
+import gov.nasa.pds.tools.label.Set;
 import gov.nasa.pds.tools.label.Value;
 import gov.nasa.pds.tools.dict.type.InvalidLengthException;
 import gov.nasa.pds.tools.dict.type.NumericTypeChecker;
@@ -45,7 +50,6 @@ public class ElementValidator implements DictionaryTokens {
             throws UnsupportedTypeException {
         boolean valid = true;
         Value value = attribute.getValue();
-        Object castedValue = null;
         
         //Check length of namespace
         if (attribute.hasNamespace()) {
@@ -63,68 +67,91 @@ public class ElementValidator implements DictionaryTokens {
                     ELEMENT_IDENT_LENGTH + " characters.");
         }
 
-        //Check against valid values if there are any
-        if (definition.hasValidValues()) {
-            if (!definition.getValues().contains(value.toString())) {
-                valid = false;
-                log.error("line " + attribute.getLineNumber() + ": " + value.toString() + 
-                          " is not in the list of valid values for " + attribute.getIdentifier());
-            }
-        }
-        
         //Load the type checker
         TypeChecker checker = TypeCheckerFactory.getInstance().newInstance(definition.getDataType());
-        
-        //Try to cast to an instance of the type
-        try {
-            castedValue = checker.cast(value.toString());
-        } catch (InvalidTypeException ite) {
+        //Validate the value
+        boolean valueValid = validate(definition, attribute, checker, value);
+        //Don't want to set to true if has already been set to false
+        if (!valueValid)
             valid = false;
-            log.error("line " + attribute.getLineNumber() + ": " + ite.getMessage());
-        }
         
-        //Check min length
-        try {
-            checker.checkMinLength(value.toString(), definition.getMinLength());
-        } catch (InvalidLengthException ile) {
-            valid = false;
-            log.error("line " + attribute.getLineNumber() + ": " + ile.getMessage());
-        }
-        
-        //Check max length
-        try {
-            checker.checkMaxLength(value.toString(), definition.getMaxLength());
-        } catch (InvalidLengthException ile) {
-            valid = false;
-            log.error("line " + attribute.getLineNumber() + ": " + ile.getMessage());
-        }
-        
-        //Check to see if this is a numeric type checker if so then do further checking
-        if (checker instanceof NumericTypeChecker && castedValue instanceof Number && castedValue != null) {
-            NumericTypeChecker numericChecker = (NumericTypeChecker) checker;
-            
-            //Check min value
-            if (definition.hasMinimum()) {
-                try {
-                    numericChecker.checkMinValue((Number) castedValue, definition.getMinimum());
-                } catch (OutOfRangeException oor) {
+        return valid;
+    }
+    
+    private static boolean validate(ElementDefinition definition, AttributeStatement attribute, TypeChecker checker, Value value) 
+            throws UnsupportedTypeException {
+        boolean valid = true;
+        if (value instanceof Set || value instanceof Sequence) {
+            boolean validValues = true;
+            for (Iterator i = ((Collection) value).iterator(); i.hasNext();) {
+                Value v = (Value) i.next();
+                validValues = validate(definition, attribute, checker, v);
+                //Don't want to set to true if has already been set to false
+                if (!validValues)
                     valid = false;
-                    log.error("line " + attribute.getLineNumber() + ": " + oor.getMessage());
+            }
+        } else {
+            //Check against valid values if there are any
+            if (definition.hasValidValues()) {
+                if (!definition.getValues().contains(value.toString())) {
+                    valid = false;
+                    log.error("line " + attribute.getLineNumber() + ": " + value.toString() + 
+                              " is not in the list of valid values for " + attribute.getIdentifier());
                 }
             }
             
-            //Check max value
-            if (definition.hasMaximum()) {
-                try {
-                    numericChecker.checkMaxValue((Number) castedValue, definition.getMaximum());
-                } catch (OutOfRangeException oor) {
-                    valid = false;
-                    log.error("line " + attribute.getLineNumber() + ": " + oor.getMessage());
-                }
+            Object castedValue = null;
+            //Try to cast to an instance of the type
+            try {
+                castedValue = checker.cast(value.toString());
+            } catch (InvalidTypeException ite) {
+                valid = false;
+                log.error("line " + attribute.getLineNumber() + ": " + ite.getMessage());
             }
             
-            //Check units if found
-            //FIXME: Support units
+            //Check min length
+            try {
+                checker.checkMinLength(value.toString(), definition.getMinLength());
+            } catch (InvalidLengthException ile) {
+                valid = false;
+                log.error("line " + attribute.getLineNumber() + ": " + ile.getMessage());
+            }
+            
+            //Check max length
+            try {
+                checker.checkMaxLength(value.toString(), definition.getMaxLength());
+            } catch (InvalidLengthException ile) {
+                valid = false;
+                log.error("line " + attribute.getLineNumber() + ": " + ile.getMessage());
+            }
+            
+            //Check to see if this is a numeric type checker if so then do further checking
+            if (checker instanceof NumericTypeChecker && castedValue instanceof Number && castedValue != null) {
+                NumericTypeChecker numericChecker = (NumericTypeChecker) checker;
+                
+                //Check min value
+                if (definition.hasMinimum()) {
+                    try {
+                        numericChecker.checkMinValue((Number) castedValue, definition.getMinimum());
+                    } catch (OutOfRangeException oor) {
+                        valid = false;
+                        log.error("line " + attribute.getLineNumber() + ": " + oor.getMessage());
+                    }
+                }
+                
+                //Check max value
+                if (definition.hasMaximum()) {
+                    try {
+                        numericChecker.checkMaxValue((Number) castedValue, definition.getMaximum());
+                    } catch (OutOfRangeException oor) {
+                        valid = false;
+                        log.error("line " + attribute.getLineNumber() + ": " + oor.getMessage());
+                    }
+                }
+                
+                //Check units if found
+                //FIXME: Support units
+            }
         }
         
         return valid;
