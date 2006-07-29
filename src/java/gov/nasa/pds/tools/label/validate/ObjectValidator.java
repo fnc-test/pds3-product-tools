@@ -56,26 +56,18 @@ public class ObjectValidator {
             }
         }
         
-        //Check to make sure all attributes are allowed within this definition
-        //If the definition contains the element PSDD then anything is allowed
-        //and this check can be skipped
-        //TODO: put magic string PSDD in an interface as a static final String
-        if (!definition.isElementPossible("PSDD")) {
-            for (Iterator i = object.getAttributes().iterator(); i.hasNext();) {
-                AttributeStatement attribute = (AttributeStatement) i.next();
-                if (!definition.isElementPossible(attribute.getIdentifier())) {
-                    valid = false;
-                    log.error("Object " + object.getIdentifier() +  " contains the element " +
-                            attribute.getIdentifier() + " which is neither required nor optional.");
-                }
-            }
-        }
-        
-        //Validate all attributes
+        //Run through and validate all attributes
         List attributes = object.getAttributes();
         Collections.sort(attributes);
-        for (Iterator i = attributes.iterator(); i.hasNext();) {
+        for (Iterator i = object.getAttributes().iterator(); i.hasNext();) {
             AttributeStatement attribute = (AttributeStatement) i.next();
+            //Check to make sure object is allowed within this definition
+            if (!definition.isElementPossible(attribute.getIdentifier())) {
+                valid = false;
+                log.error("Object " + object.getIdentifier() +  " contains the element " +
+                        attribute.getIdentifier() + " which is neither required nor optional.");
+            }
+            //Validate attribute
             boolean elementValid = false;
             try {
                 elementValid = ElementValidator.isValid(dictionary, attribute);
@@ -98,21 +90,24 @@ public class ObjectValidator {
             }
         }
         
-        //Check to make sure all objects are allowed within this definition
-        for (Iterator i = object.getAttributes().iterator(); i.hasNext();) {
+        //Run through nested objects and check them
+        List objects = object.getObjects();
+        Collections.sort(objects);
+        for (Iterator i = objects.iterator(); i.hasNext();) {
             ObjectStatement obj = (ObjectStatement) i.next();
+            //Check to make sure object is allowed within this definition
             if (!definition.isObjectPossible(obj.getIdentifier())) {
                 valid = false;
                 log.error("Object " + object.getIdentifier() +  " contains the object " +
                         obj.getIdentifier() + " which is neither required nor optional.");
             }
-        }
-
-        
-        //Validate all nested objects
-        for (Iterator i = object.getObjects().iterator(); i.hasNext();) {
-            ObjectStatement obj = (ObjectStatement) i.next();
-            boolean objValid = ObjectValidator.isValid(dictionary, obj);
+            //Validate nested object
+            boolean objValid = false;
+            try {
+                ObjectValidator.isValid(dictionary, obj);
+            } catch (DefinitionNotFoundException dnfe) {
+                log.error("line " + obj.getLineNumber() + ": " + dnfe.getMessage());
+            }
             if (!objValid)
                 valid = false;
         }
