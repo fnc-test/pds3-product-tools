@@ -251,7 +251,9 @@ public class DefinitionFactory implements ODLTokenTypes, DictionaryTokens {
             if (attribute != null) {
                 Set s = (Set) attribute.getValue();
                 for (Iterator i = s.iterator(); i.hasNext();) {
-                    values.add(i.next().toString());
+                    String value = i.next().toString();
+                    if (!"N/A".equals(value))
+                        values.add(value);
                 }
                 definition.setValues(values);
             }
