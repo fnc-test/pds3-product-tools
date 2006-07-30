@@ -60,6 +60,8 @@ public class TypeCheckerFactory implements Types{
             checker = new DataSetChecker();
         } else if (type.equals(IDENTIFIER)) {
             checker = new IdentifierChecker();
+        } else if (type.equals(CONTEXT_DEPENDENT) || type.equals(CONTEXTDEPENDENT)) {
+            checker = new ContextDependentChecker();
         }
         
         if (checker == null)
