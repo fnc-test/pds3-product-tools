@@ -14,6 +14,7 @@ import gov.nasa.pds.tools.dict.ElementDefinition;
 import gov.nasa.pds.tools.dict.GroupDefinition;
 import gov.nasa.pds.tools.dict.ObjectDefinition;
 import gov.nasa.pds.tools.dict.type.InvalidTypeException;
+import gov.nasa.pds.tools.dict.type.NumericTypeChecker;
 import gov.nasa.pds.tools.dict.type.TypeChecker;
 import gov.nasa.pds.tools.dict.type.TypeCheckerFactory;
 import gov.nasa.pds.tools.dict.type.UnsupportedTypeException;
@@ -196,7 +197,7 @@ public class DefinitionFactory implements ODLTokenTypes, DictionaryTokens {
             
             //Find and set min length
             attribute = object.getAttribute(MIN_LENGTH);
-            if (attribute != null) {
+            if (attribute != null && !"NULL".equals(attribute.getValue().toString())) {
                 try {
                     definition.setMinLength(Integer.parseInt(attribute.getValue().toString()));
                 } catch (NumberFormatException nfe) {}
@@ -204,7 +205,7 @@ public class DefinitionFactory implements ODLTokenTypes, DictionaryTokens {
             
             //Find and set max length
             attribute = object.getAttribute(MAX_LENGTH);
-            if (attribute != null) {
+            if (attribute != null && !"NULL".equals(attribute.getValue().toString())) {
                 try {
                     definition.setMaxLength(Integer.parseInt(attribute.getValue().toString()));
                 } catch (NumberFormatException nfe) {}
@@ -212,10 +213,11 @@ public class DefinitionFactory implements ODLTokenTypes, DictionaryTokens {
             
             //Find and set min value
             attribute = object.getAttribute(MINIMUM);
-            if (attribute != null) {
+            if (attribute != null && !"NULL".equals(attribute.getValue().toString())) {
                 try {
                     TypeChecker checker = TypeCheckerFactory.getInstance().newInstance(definition.getDataType());
-                    definition.setMinimum((Number) checker.cast(attribute.getValue().toString()));
+                    if (checker instanceof NumericTypeChecker)
+                        definition.setMinimum((Number) checker.cast(attribute.getValue().toString()));
                 } catch (InvalidTypeException e) {
                     // TODO Auto-generated catch block
                     //FIXME: throw an InvalidDefinitionException
@@ -227,10 +229,11 @@ public class DefinitionFactory implements ODLTokenTypes, DictionaryTokens {
             
             //Find and set max value
             attribute = object.getAttribute(MAXIMUM);
-            if (attribute != null) {
+            if (attribute != null && !"NULL".equals(attribute.getValue().toString())) {
                 try {
                     TypeChecker checker = TypeCheckerFactory.getInstance().newInstance(definition.getDataType());
-                    definition.setMaximum((Number) checker.cast(attribute.getValue().toString()));
+                    if (checker instanceof NumericTypeChecker)
+                        definition.setMaximum((Number) checker.cast(attribute.getValue().toString()));
                 } catch (InvalidTypeException e) {
                     // TODO Auto-generated catch block
                     //FIXME: throw an InvalidDefinitionException
