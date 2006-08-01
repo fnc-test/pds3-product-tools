@@ -157,14 +157,31 @@ public class ElementValidator implements DictionaryTokens {
         return valid;
     }
     
-    public static boolean isValid(Dictionary dictionary, AttributeStatement attribute) 
+    /**
+     * Checks to see whether an {@link AttributeStatement} is correct. Will look up the definition in
+     * the given dictionary. An object context may be supplied as elements can have aliases that are 
+     * appropriate within an object. Set objectContext to null if there if the lookup should be performed
+     * without care to the surrounding object.
+     * @param dictionary where to look up the element
+     * @param objectContext enclosing the element to be looked up
+     * @param attribute statement to be validated
+     * @return flag indicting whether or not the statement was valid against the definition found
+     * @throws DefinitionNotFoundException if definition for element is not found
+     * @throws UnsupportedTypeException if type of element is not supported
+     */
+    public static boolean isValid(Dictionary dictionary, String objectContext, AttributeStatement attribute) 
             throws DefinitionNotFoundException, UnsupportedTypeException {
-        ElementDefinition definition = dictionary.getElementDefiniton(attribute.getIdentifier());
+        ElementDefinition definition = dictionary.getElementDefinition(objectContext, attribute.getIdentifier()); 
         
         if (definition == null)
             throw new DefinitionNotFoundException("Undefined Element: " + attribute.getIdentifier());
    
         return isValid(definition, attribute);
+    }
+    
+    public static boolean isValid(Dictionary dictionary, AttributeStatement attribute) 
+            throws DefinitionNotFoundException, UnsupportedTypeException {
+        return isValid(dictionary, null, attribute);
     }
 
 }
