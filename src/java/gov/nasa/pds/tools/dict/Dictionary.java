@@ -67,7 +67,8 @@ public class Dictionary {
      * @return flag indicating existence
      */
     public boolean containsObjectDefinition(String identifier) {
-        if (definitions.get(identifier) instanceof ObjectDefinition)
+        Definition definition = (Definition) definitions.get(identifier);
+        if (definition != null && definition instanceof ObjectDefinition)
             return true;
         return false;
     }
@@ -78,7 +79,8 @@ public class Dictionary {
      * @return flag indicating existence
      */
     public boolean containsGroupDefinition(String identifier) {
-        if (definitions.get(identifier) instanceof GroupDefinition)
+        Definition definition = (Definition) definitions.get(identifier);
+        if (definition != null && definition instanceof GroupDefinition)
             return true;
         return false;
     }
@@ -89,8 +91,22 @@ public class Dictionary {
      * @return flag indicating existence
      */
     public boolean containsElementDefinition(String identifier) {
-        if (definitions.get(identifier) instanceof ElementDefinition)
+        return containsElementDefinition(null, identifier);
+    }
+    
+    public boolean containsElementDefinition(String objectContext, String identifier) {
+        Definition definition = null;
+        
+        if (objectContext != null) {
+            definition = (Definition) definitions.get(objectContext + "." + identifier);
+            if (definition != null && definition instanceof ElementDefinition)
+                return true;
+        }
+        
+        definition = (Definition) definitions.get(identifier);
+        if (definition != null && definition instanceof ElementDefinition)
             return true;
+        
         return false;
     }
     
@@ -132,10 +148,23 @@ public class Dictionary {
      * @param identifier of the definition
      * @return the element definition
      */
-    public ElementDefinition getElementDefiniton(String identifier) {
-        Definition definition = (Definition) definitions.get(identifier);
+    public ElementDefinition getElementDefinition(String identifier) {
+        return getElementDefinition(null, identifier);
+    }
+    
+    public ElementDefinition getElementDefinition(String objectContext, String identifier) {
+        Definition definition = null;
+        
+        if (objectContext != null) {
+            definition = (Definition) definitions.get(objectContext + "." + identifier);
+            if (definition != null && definition instanceof ElementDefinition)
+                return (ElementDefinition) definition;
+        }
+        
+        definition = (Definition) definitions.get(identifier);
         if (definition != null && definition instanceof ElementDefinition)
             return (ElementDefinition) definition;
+        
         return null;
     }
     
