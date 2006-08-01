@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <!--
 Copyright 2006, by the California Institute of 
 Technology. ALL RIGHTS RESERVED. United States Government 
@@ -13,19 +14,28 @@ responsibility to obtain export licenses, or other export authority
 as may be required before exporting such information to foreign 
 countries or providing access to foreign persons.
 
-$Id:$
+$Id$
 -->
 
 <document>
-    <properties>
-        <title>Release Changes</title>
-        <author email="Sean.Hardman@jpl.nasa.gov">Sean Hardman</author>
-    </properties>
-    <body>
-        <release version="0.1.0" date="2006-06-16" description="Source release for the Code Walk-through.">
-            <action dev="pramirez" type="add">
-              This release supports syntactic and semantic validation of a single PDS label.
-            </action>
-        </release>
-    </body>
+  <properties>
+    <title>Release Changes</title>
+    <author email="Sean.Hardman@jpl.nasa.gov">Sean Hardman</author>
+  </properties>
+  <body>
+    <release version="0.1.0" date="2006-06-16" description="Source release for the Code Walk-through.">
+      <action dev="pramirez" type="add">
+        This release supports syntactic and semantic validation of a single PDS label.
+      </action>
+    </release>
+
+    <release version="0.2.0" date="2006-08-01" description="Binary release for the first phase of alpha testing.">
+      <action dev="pramirez" type="update" due-to="Mark Rose">
+        A major overhaul to how the grammar was implemented using Antlr was performed as a result of comments from the Code Walk-through.
+      </action>
+      <action dev="pramirez" type="add">
+        This release supports validation against the PDS Data Dictionary.
+      </action>
+    </release>
+  </body>
 </document>
