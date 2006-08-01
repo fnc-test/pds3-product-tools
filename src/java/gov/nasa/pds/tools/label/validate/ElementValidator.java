@@ -91,70 +91,78 @@ public class ElementValidator implements DictionaryTokens {
                     valid = false;
             }
         } else {
-            //Check against valid values if there are any
-            if (definition.hasValidValues()) {
-                if (!definition.getValues().contains(value.toString())) {
+            if (!skipValue(value.toString())) {
+                //Check against valid values if there are any
+                if (definition.hasValidValues()) {
+                    if (!definition.getValues().contains(value.toString())) {
+                        valid = false;
+                        log.error("line " + attribute.getLineNumber() + ": " + value.toString() + 
+                                  " is not in the list of valid values for " + attribute.getIdentifier());
+                    }
+                }
+                
+                Object castedValue = null;
+                //Try to cast to an instance of the type
+                try {
+                    castedValue = checker.cast(value.toString());
+                } catch (InvalidTypeException ite) {
                     valid = false;
-                    log.error("line " + attribute.getLineNumber() + ": " + value.toString() + 
-                              " is not in the list of valid values for " + attribute.getIdentifier());
+                    log.error("line " + attribute.getLineNumber() + ": " + ite.getMessage());
                 }
-            }
-            
-            Object castedValue = null;
-            //Try to cast to an instance of the type
-            try {
-                castedValue = checker.cast(value.toString());
-            } catch (InvalidTypeException ite) {
-                valid = false;
-                log.error("line " + attribute.getLineNumber() + ": " + ite.getMessage());
-            }
-            
-            //Check min length
-            try {
-                checker.checkMinLength(value.toString(), definition.getMinLength());
-            } catch (InvalidLengthException ile) {
-                valid = false;
-                log.error("line " + attribute.getLineNumber() + ": " + ile.getMessage());
-            }
-            
-            //Check max length
-            try {
-                checker.checkMaxLength(value.toString(), definition.getMaxLength());
-            } catch (InvalidLengthException ile) {
-                valid = false;
-                log.error("line " + attribute.getLineNumber() + ": " + ile.getMessage());
-            }
-            
-            //Check to see if this is a numeric type checker if so then do further checking
-            if (checker instanceof NumericTypeChecker && castedValue instanceof Number && castedValue != null) {
-                NumericTypeChecker numericChecker = (NumericTypeChecker) checker;
                 
-                //Check min value
-                if (definition.hasMinimum()) {
-                    try {
-                        numericChecker.checkMinValue((Number) castedValue, definition.getMinimum());
-                    } catch (OutOfRangeException oor) {
-                        valid = false;
-                        log.error("line " + attribute.getLineNumber() + ": " + oor.getMessage());
+                //Check min length
+                try {
+                    checker.checkMinLength(value.toString(), definition.getMinLength());
+                } catch (InvalidLengthException ile) {
+                    valid = false;
+                    log.error("line " + attribute.getLineNumber() + ": " + ile.getMessage());
+                }
+                
+                //Check max length
+                try {
+                    checker.checkMaxLength(value.toString(), definition.getMaxLength());
+                } catch (InvalidLengthException ile) {
+                    valid = false;
+                    log.error("line " + attribute.getLineNumber() + ": " + ile.getMessage());
+                }
+                
+                //Check to see if this is a numeric type checker if so then do further checking
+                if (checker instanceof NumericTypeChecker && castedValue instanceof Number && castedValue != null) {
+                    NumericTypeChecker numericChecker = (NumericTypeChecker) checker;
+                    
+                    //Check min value
+                    if (definition.hasMinimum()) {
+                        try {
+                            numericChecker.checkMinValue((Number) castedValue, definition.getMinimum());
+                        } catch (OutOfRangeException oor) {
+                            valid = false;
+                            log.error("line " + attribute.getLineNumber() + ": " + oor.getMessage());
+                        }
                     }
-                }
-                
-                //Check max value
-                if (definition.hasMaximum()) {
-                    try {
-                        numericChecker.checkMaxValue((Number) castedValue, definition.getMaximum());
-                    } catch (OutOfRangeException oor) {
-                        valid = false;
-                        log.error("line " + attribute.getLineNumber() + ": " + oor.getMessage());
+                    
+                    //Check max value
+                    if (definition.hasMaximum()) {
+                        try {
+                            numericChecker.checkMaxValue((Number) castedValue, definition.getMaximum());
+                        } catch (OutOfRangeException oor) {
+                            valid = false;
+                            log.error("line " + attribute.getLineNumber() + ": " + oor.getMessage());
+                        }
                     }
+                    
+                    //Check units if found
+                    //FIXME: Support units
                 }
-                
-                //Check units if found
-                //FIXME: Support units
             }
         }
         
         return valid;
+    }
+    
+    private static boolean skipValue(String value) {
+        if ("N/A".equals(value) || "NULL".equals(value) || "UNK".equals(value))
+            return true;
+        return false;
     }
     
     /**
