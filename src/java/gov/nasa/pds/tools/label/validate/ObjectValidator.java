@@ -70,7 +70,7 @@ public class ObjectValidator {
             //Validate attribute
             boolean elementValid = false;
             try {
-                elementValid = ElementValidator.isValid(dictionary, attribute);
+                elementValid = ElementValidator.isValid(dictionary, object.getIdentifier(), attribute);
             } catch (UnsupportedTypeException ute) {
                 log.error("line " + attribute.getLineNumber() + ": " + ute.getMessage());
             } catch (DefinitionNotFoundException dnfe) {
