@@ -90,13 +90,13 @@ public class DefaultLabelParser implements LabelParser {
                 try {
                     ObjectValidator.isValid(dictionary, (ObjectStatement) statement);
                 } catch (DefinitionNotFoundException dnfe) {
-                    log.error("Line (" + statement.getLineNumber() + "): " + dnfe.getMessage());
+                    log.error("line " + statement.getLineNumber() + ": " + dnfe.getMessage());
                 }
             } else if (statement instanceof GroupStatement) {
                 try {
                     GroupValidator.isValid(dictionary, (GroupStatement) statement);
                 } catch (DefinitionNotFoundException dnfe) {
-                    log.error("Line (" + statement.getLineNumber() + "): " + dnfe.getMessage());
+                    log.error("line " + statement.getLineNumber() + ": " + dnfe.getMessage());
                 }
             }
         }
