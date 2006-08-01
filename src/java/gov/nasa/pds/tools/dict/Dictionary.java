@@ -6,11 +6,10 @@
 
 package gov.nasa.pds.tools.dict;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Collection;
 
 /**
  * This class represents a PDS data dictionary. 
@@ -199,7 +198,7 @@ public class Dictionary {
      * overwritten.
      * @param definitions to be added to the dictionary
      */
-    public void addDefinitions(List definitions) {// Use Collection
+    public void addDefinitions(Collection definitions) {
         addDefinitions(definitions, true);
     }
     
@@ -213,7 +212,6 @@ public class Dictionary {
      */
     public ObjectDefinition findObjectClassDefinition(String identifier) {
         ObjectDefinition definition = null;
-        
         String className = identifier;
         boolean done = false;
         
