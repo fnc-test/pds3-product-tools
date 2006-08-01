@@ -13,7 +13,6 @@ import gov.nasa.pds.tools.label.AttributeStatement;
 import gov.nasa.pds.tools.label.CommentStatement;
 import gov.nasa.pds.tools.label.Label;
 import gov.nasa.pds.tools.label.ObjectStatement;
-import gov.nasa.pds.tools.label.Scalar;
 import gov.nasa.pds.tools.label.Sequence;
 import gov.nasa.pds.tools.label.Statement;
 import gov.nasa.pds.tools.label.antlr.ODLLexer;
@@ -98,9 +97,7 @@ public class DictionaryParser implements ODLTokenTypes, DictionaryTokens {
                 for (Iterator i = definitions.iterator(); i.hasNext();) {
                     Definition d = (Definition) i.next();
                     if (aliases.containsKey(d.getIdentifier())) {
-                        for (Iterator a = ((List) aliases.get(d.getIdentifier())).iterator(); a.hasNext();) {
-                            d.addAlias(a.next().toString());
-                        }
+                        d.addAlias(aliases.get(d.getIdentifier()).toString());
                     }
                 }
                 
@@ -120,25 +117,30 @@ public class DictionaryParser implements ODLTokenTypes, DictionaryTokens {
         Map aliases = new HashMap();
         
         //Process object aliases
+        //They take the form (alias, identifier)
         AttributeStatement objectAliases = object.getAttribute(OBJECT_ALIASES);
         if (objectAliases != null) {
             for (Iterator i = ((Sequence) objectAliases.getValue()).iterator(); i.hasNext();) {
                 Sequence values = (Sequence) i.next();
-                for (Iterator v = values.iterator(); v.hasNext();) {
-                    String value = ((Scalar) v.next()).getValue();
-                    aliases.put(value, values);
+                if (values.size() == 2) {
+                    String alias = values.get(0).toString();
+                    String identifier = values.get(1).toString();
+                    aliases.put(identifier, alias);
                 }
             }
         }
         
         //Process element aliases
+        //They take the form (alias, object, identifier)
         AttributeStatement elementAliases = object.getAttribute(ELEMENT_ALIASES);
         if (elementAliases != null) {
             for (Iterator i = ((Sequence) elementAliases.getValue()).iterator(); i.hasNext();) {
                 Sequence values = (Sequence) i.next();
-                for (Iterator v = values.iterator(); v.hasNext();) {
-                    String value = ((Scalar) v.next()).getValue();
-                    aliases.put(value, values);
+                if (values.size() == 3) {
+                    String alias = values.get(0).toString();
+                    String objectContext = values.get(1).toString();
+                    String identifier = values.get(2).toString();
+                    aliases.put(identifier, objectContext + "." + alias);
                 }
             }
         }
