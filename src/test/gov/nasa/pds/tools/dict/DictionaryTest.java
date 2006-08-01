@@ -59,7 +59,7 @@ public class DictionaryTest extends TestCase {
         
         assertEquals(3, dictionary.getDefinitions().size());  
         assertEquals(element, dictionary.getDefinition("TARGET_NAME"));
-        assertEquals(element, dictionary.getElementDefiniton("TARGET_NAME"));  
+        assertEquals(element, dictionary.getElementDefinition("TARGET_NAME"));  
         assertEquals(group, dictionary.getDefinition("PARAMETERS"));
         assertEquals(group, dictionary.getGroupDefinition("PARAMETERS"));
         assertEquals(object, dictionary.getDefinition("TABLE"));
