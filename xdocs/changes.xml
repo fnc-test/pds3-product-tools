@@ -30,7 +30,7 @@ $Id$
     </release>
 
     <release version="0.2.0" date="2006-08-01" description="Binary release for the first phase of alpha testing.">
-      <action dev="pramirez" type="update" due-to="Mark Rose">
+      <action dev="pramirez" type="update" due-to="Mark Rose" due-to-email="mrose@email.arc.nasa.gov">
         A major overhaul to how the grammar was implemented using Antlr was performed as a result of comments from the Code Walk-through.
       </action>
       <action dev="pramirez" type="add">
