@@ -32,6 +32,7 @@ public class ObjectDefinition extends Definition {
     private List optionalElements;
     private List requiredObjects;
     private List optionalObjects;
+    private static final String PSDD = "PSDD";
     
     public ObjectDefinition(String identifier) {
         super(identifier);
@@ -113,10 +114,11 @@ public class ObjectDefinition extends Definition {
      * @return true if element can occur otherwise false.
      */
     public boolean isElementPossible(String identifier) {
-        boolean exists = requiredElements.contains(identifier);
-        if (exists)
+        if (requiredElements.contains(identifier))
             return true;
-        return optionalElements.contains(identifier);
+        else if (optionalElements.contains(identifier))
+            return true;
+        return optionalElements.contains(PSDD);
     }
     
     /**
@@ -125,7 +127,9 @@ public class ObjectDefinition extends Definition {
      * @return true if element is optional otherwise false.
      */
     public boolean isElementOptional(String identifier) {
-        return optionalElements.contains(identifier);
+        if (optionalElements.contains(identifier))
+            return true;
+        return optionalElements.contains(PSDD);
     }
     
     /**
