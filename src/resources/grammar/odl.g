@@ -35,6 +35,7 @@ import gov.nasa.pds.tools.label.TextString;
 import gov.nasa.pds.tools.label.Value;
 import java.util.List;
 import java.util.ArrayList;
+import java.text.ParseException;
 }
 
 class ODLParser extends Parser;
@@ -232,11 +233,23 @@ text_string_value returns [TextString result = null]
 // a date time formatted to PDS specification 
 date_time_value returns [DateTime result = null]
     : d:DATE
-        {result = new DateTime(d.getText());}
+        {
+           try {
+              result = new DateTime(d.getText());
+           } catch (ParseException pe) {log.error("line " + d.getLine() + ": " + pe.getMessage());}
+        }
     | t:TIME
-        {result = new DateTime(t.getText());}
+        {
+           try {
+              result = new DateTime(t.getText());
+           } catch (ParseException pe) {log.error("line " + t.getLine() + ": " + pe.getMessage());}
+        }
     | dt:DATETIME
-        {result = new DateTime(dt.getText());}
+        {
+           try {
+              result = new DateTime(dt.getText());
+           } catch (ParseException pe) {log.error("line " + dt.getLine() + ": " + pe.getMessage());}
+        }
     ;
     
 // a symbol  
