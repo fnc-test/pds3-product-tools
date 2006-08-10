@@ -14,6 +14,7 @@ import gov.nasa.pds.tools.label.parser.LabelParserFactory;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -26,8 +27,15 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.UnrecognizedOptionException;
+import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.ConfigurationUtils;
+import org.apache.commons.configuration.ConversionException;
+import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.ConsoleAppender;
+import org.apache.log4j.FileAppender;
+import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 
 /**
@@ -39,7 +47,8 @@ import org.apache.log4j.PatternLayout;
  */
 public class VTool {
 	
-	final private String version_id = "0.1.0"; 
+	final private String version_id = "0.2.0"; 
+	private static Logger log = Logger.getLogger(new VTool().getClass());
 	
 	private Options options;
 	private CommandLineParser parser;
@@ -50,7 +59,6 @@ public class VTool {
 	private boolean dataObj;
 	private List dictionaries;
 	private File exclude;
-	private List fInput;
 	private List files;
 	private boolean followPtrs;
 	private File includePath;
@@ -58,27 +66,23 @@ public class VTool {
 	private boolean partial;
 	private List patterns;
 	private boolean recursive;
+	private List targets;
 	private File output;
 	private String outDetail;
 	private short verbose;
 	private boolean xml;
 	
-
 	/** 
 	 * Default constructor
 	 */
 	public VTool(){
-		
-		options = new Options();
-		parser = new GnuParser();
-		
 		alias = true;
 		config = null;
 		dictionaries = null;
 		dataObj = true;
 		exclude = null;
 		followPtrs = true;
-		fInput = null;
+		targets = null;
 		files = null;
 		includePath = null;
 		max_errors = 300;
@@ -89,13 +93,15 @@ public class VTool {
 		outDetail = "full";
 		verbose = 2;
 		xml = false;
+		options = new Options();
+		parser = new GnuParser();
 	}
 	
 	/**
 	 * Show the version and disclaimer notice for VTool 
 	 *
 	 */	
-	private void showVersion() {
+	public void showVersion() {
 		System.out.println("PDS Validation Tool (VTool) BETA " + version_id);
 		System.out.println("\nDISCLAIMER:\n" + 
 				           "THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE CALIFORNIA\n" + 
@@ -123,7 +129,7 @@ public class VTool {
 	 */
 	private void showHelp() {
 		HelpFormatter formatter = new HelpFormatter();
-		formatter.printHelp(35, "VTool", null, options, null);
+		formatter.printHelp(37, "VTool", null, options, null);
 	}
 	
 	/**
@@ -141,70 +147,70 @@ public class VTool {
 		options.addOption("x", "xml-output", false, "Output the report in XML format");
 		
 		
-		/* These are options that require an argument */
+		// These are options that require an argument
 
-		/* Option to specify a configuration file */
+		// Option to specify a configuration file
 		OptionBuilder.withLongOpt("config");
 		OptionBuilder.withDescription("Specify a configuration file to set the default values for VTool");
 		OptionBuilder.hasArg();
-		OptionBuilder.withArgName("filename");
+		OptionBuilder.withArgName("file");
 		OptionBuilder.withType(String.class);
 		options.addOption(OptionBuilder.create("c"));
 		
-		/* Option to specify the PSDD and any local dictionaries */
+		// Option to specify the PSDD and any local dictionaries
 		OptionBuilder.withLongOpt("dict");
 		OptionBuilder.withDescription("Specify the Planetary Science Data Dictionary full file name " +
 				                      "and any local dictionaries to include for validation. Separate each file name with a space.");
 		OptionBuilder.hasArgs();
-		OptionBuilder.withArgName(".full file(s)");
+		OptionBuilder.withArgName(".full files");
 		OptionBuilder.withValueSeparator();
 		OptionBuilder.withType(String.class);
 		options.addOption(OptionBuilder.create("d"));
 		
-		/* Option to specify the label(s) to validate */
-		OptionBuilder.withLongOpt("file");
-		OptionBuilder.withDescription("Specify the label file(s) and/or directories to validate (required option)");
+		// Option to specify the label(s) to validate
+		OptionBuilder.withLongOpt("target");
+		OptionBuilder.withDescription("Specify the label file(s), URL(s) and/or directories to validate (required option)");
 		OptionBuilder.hasArgs();
-		OptionBuilder.withArgName("label(s) and/or dir(s)");
+		OptionBuilder.withArgName("labels,URLs,dirs");
 		OptionBuilder.withType(String.class);
-		options.addOption(OptionBuilder.create("f"));
+		options.addOption(OptionBuilder.create("t"));
 		
-		/* Option to specify a pattern to match against the input directory to be validated */
+		// Option to specify a pattern to match against the input directory to be validated
 		OptionBuilder.withLongOpt("pattern");
 		OptionBuilder.withDescription("Specify a pattern to match against the input directory to be validated. " +
 				                      "Each Pattern must be surrounded by quotes. (i.e. -p \"*.LBL\" \"*FMT\")");
 		OptionBuilder.hasArgs();
-		OptionBuilder.withArgName("expression(s)");
+		OptionBuilder.withArgName("expressions");
 		OptionBuilder.withType(String.class);
 		options.addOption(OptionBuilder.create("p"));
 		
-		/* Option to specify a path to the Pointer files */		
+		// Option to specify a path to the Pointer files		
 		OptionBuilder.withLongOpt("include");
 		OptionBuilder.withDescription("Specify the starting path to search for pointer files. " + 
 															"Default is the current working directory");
 		OptionBuilder.hasArg();
-		OptionBuilder.withArgName("pathRef");
+		OptionBuilder.withArgName("path");
 		OptionBuilder.withType(String.class);
 		options.addOption(OptionBuilder.create("I"));
 
-		/* Option to specify the maximum number of ERROR type messages that will be printed to the report */
+		// Option to specify the maximum number of ERROR type messages that will be printed to the report
 		OptionBuilder.withLongOpt("max-errors");
 		OptionBuilder.withDescription("Specify the maximum number of ERROR type messages that VTool will " +
 									"print to the report file. Default is 300 errors");
 		OptionBuilder.hasArg();
-		OptionBuilder.withArgName("int value");
+		OptionBuilder.withArgName("integer");
 		OptionBuilder.withType(int.class);
 		options.addOption(OptionBuilder.create("m"));
 		
-		/* Option to specify the report file name */
+		// Option to specify the report file name
 		OptionBuilder.withLongOpt("output");
 		OptionBuilder.withDescription("Specify the file name for the report. Default is to print to the terminal");
 		OptionBuilder.hasArg();
-		OptionBuilder.withArgName("filename");
+		OptionBuilder.withArgName("file");
 		OptionBuilder.withType(String.class);
 		options.addOption(OptionBuilder.create("o"));
 
-		/* Option to specify how detail the reporting should be */
+		// Option to specify how detail the reporting should be
 		OptionBuilder.withLongOpt("output-detail");
 		OptionBuilder.withDescription("Specify the level of detail for the reporting. " +
 										"Valid values are 'full' for full details, 'min' for minimal detail " +
@@ -214,7 +220,7 @@ public class VTool {
 		OptionBuilder.withType(String.class);
 		options.addOption(OptionBuilder.create("od"));
 		
-		/* Option to specify the severity level and above*/
+		// Option to specify the severity level and above
 		OptionBuilder.withLongOpt("verbose");
 		OptionBuilder.withDescription("Specify the message severity level and above to include in the reporting: " + 
 				                             "(0=Debug, 1=Info, 2=Warning, 3=Error or Fatal). " + 
@@ -224,11 +230,11 @@ public class VTool {
 		OptionBuilder.withType(short.class);
 		options.addOption(OptionBuilder.create("v"));
 		
-		/* Option to specify a file containing a list of file extensions to ignore */
+		// Option to specify a file containing a list of file extensions to ignore
 		OptionBuilder.withLongOpt("exclude");
 		OptionBuilder.withDescription("Specify a text file containing a list of file patterns or extensions to ignore");
 		OptionBuilder.hasArg();
-		OptionBuilder.withArgName("filename");
+		OptionBuilder.withArgName("file");
 		options.addOption(OptionBuilder.create("X"));
 		
 	}
@@ -255,13 +261,18 @@ public class VTool {
 
 		try {
 			
-			for(Iterator i = cmd.getArgList().iterator(); i.hasNext();) {
+			// Check for unrecognized arguments on the command-line
+			for(Iterator i = cmd.getArgList().iterator(); i.hasNext();)
 				throw new UnrecognizedOptionException( "Unrecognized option/argument: " + i.next().toString());
-			}
 		
-			/* verbose flag must be queried first in order to determine whether to print
-			 * debug statements
-			 */
+			// Check if a configuration file was specified
+			if(cmd.hasOption("c")) {
+				config = new File(cmd.getOptionValue("c"));
+				printDebug("Got configuration file: " + config);
+				readConfigFile(config);
+			}
+			
+			// verbose flag must be queried first in order to determine whether to print debug statements
 			if(cmd.hasOption("v")) {
 				
 				try {
@@ -278,35 +289,34 @@ public class VTool {
 				}
 			}
 			
+			// Check if the help flag was set
 			if(cmd.hasOption("h")) {
 				printDebug("Display usage to terminal");
 				showHelp();
 				System.exit(0);
 			}
 		
+			// Check if the flag to display the version number and disclaimer notice was set
 			if(cmd.hasOption("V")) {
 				printDebug("Display version number and disclaimer notice");
 				showVersion();
 				System.exit(0);
 			}
 		
-			if(cmd.hasOption("f")) {
-				fInput = Arrays.asList(cmd.getOptionValues("f"));
+			// Check if the -f flag was set in either the config file or the command line
+			if(cmd.hasOption("t")) {
+				targets = Arrays.asList(cmd.getOptionValues("t"));
 			}
-			else
-				throw new MissingOptionException("The 'f' flag is required");
+			else if(targets == null)
+				throw new MissingOptionException("The 't' flag is required or must be set in the configuration file");
 			
-			if(cmd.hasOption("c")) {
-				//TODO: Read and process configuration file
-				config = new File(cmd.getOptionValue("c"));
-				printDebug("Got configuration file: " + config);
-				System.out.println("Call method to set default behaviors based on configuration file contents");
-			}
-			
+			// Check for the flag that indicates whether to follow ^STRUCTURE pointers
 			if(cmd.hasOption("F")) {
 				followPtrs = false;
 			}
 			
+			// Check for the include path to indicate the starting path to search for 
+			// non ^STRUCTURE pointers
 			if(cmd.hasOption("I")) {
 				if(followPtrs == false)
 					throw new IllegalArgumentException("Option was selected to not follow pointers. 'I' flag cannot be specified"); 
@@ -315,31 +325,37 @@ public class VTool {
 				printDebug("Got path to pointer files: " + includePath);
 			}
 			
+			// Check for the -o flag to specify a file where the reporting will be written to
 			if(cmd.hasOption("o")) {
-				//TODO: Setup messages to write to a file
 				output = new File(cmd.getOptionValue("o"));
 				printDebug("Report file name has been set to: " + output);
 			}
+			setupLoggers();
 			
+			// Check to see if data object validation is set
 			if(cmd.hasOption("OBJ")) {
 				dataObj = false;
 				printDebug("Setting data object flag to false");
 			}
 			
+			// Check to see if VTool will not recurse down a directory tree
 			if(cmd.hasOption("l")) {
 				recursive = false;
 				printDebug("Setting recursive flag to false.");
 			}
 			
+			// Check to see if patterns were set
 			if(cmd.hasOption("p")) {
 				patterns = Arrays.asList(cmd.getOptionValues("p"));
 			}
 			
+			// Check to see if aliasing is turned off
 			if(cmd.hasOption("u")) {
 				alias = false;
 				printDebug("Setting alias flag to false");
 			}
 			
+			// Check to see if the report will be in xml format
 			if(cmd.hasOption("x")) {
 				xml = true;
 				printDebug("Report will be in XML format");
@@ -351,6 +367,7 @@ public class VTool {
 				//TODO: Call method to read file and store file patterns to skip
 			}
 			
+			// Check to get the dictionary file(s) 
 			if(cmd.hasOption("d")) {
 				printDebug("Retrieved " + cmd.getOptionValues("d").length + " dictionary file(s)");
 				dictionaries = Arrays.asList(cmd.getOptionValues("d"));
@@ -365,11 +382,11 @@ public class VTool {
 					throw new NumberFormatException("Problems parsing value set for 'm' flag: " + cmd.getOptionValue("m"));
 				}
 
-				if( max_errors <= 0 ) {
+				if( max_errors <= 0 )
 					throw new IllegalArgumentException( "Max Errors Value must be a positive integer number");
-				}
 			}
 		
+			// Check to see what type of reporting style the report will have
 			if(cmd.hasOption("od")) {
 				
 				outDetail = cmd.getOptionValue("od");
@@ -384,21 +401,104 @@ public class VTool {
 			}
 
 		}
-		catch( NumberFormatException nfe ) {
-			System.out.println( nfe.getMessage() );
+		catch(NumberFormatException nfe) {
+			System.out.println(nfe.getMessage());
 			System.exit(1);
 		}
-		catch( IllegalArgumentException iae ) {
-			System.out.println( iae.getMessage() );
+		catch(IllegalArgumentException iae) {
+			System.out.println(iae.getMessage());
 			System.exit(1);
 		}
-		catch( MissingOptionException moe ) {
-			System.out.println( moe.getMessage() );
+		catch(MissingOptionException moe) {
+			System.out.println(moe.getMessage());
 			System.exit(1);
 		}
-		catch( UnrecognizedOptionException uoe ) {
-			System.out.println( uoe.getMessage() );
+		catch(UnrecognizedOptionException uoe) {
+			System.out.println(uoe.getMessage());
 			System.exit(1);
+		}
+	}
+	
+	/**
+	 * Reads a configuration file to set the default behaviors for VTool.
+	 * Flags set on the command-line will override flags set in the 
+	 * configuration file
+	 * 
+	 * @param file
+	 */
+	
+	public void readConfigFile(File file) {
+		Configuration config = null;
+		Logger configlog = Logger.getLogger(ConfigurationUtils.class);
+		configlog.addAppender(new ConsoleAppender(new PatternLayout("%m%n")));
+		configlog.setAdditivity(false);
+		try {
+			config = new PropertiesConfiguration(file);
+		}
+		catch (ConfigurationException ce) {
+			System.out.println(ce.getMessage());
+			System.exit(1);
+		}
+		
+		try {
+			if(config.isEmpty())
+				throw new Exception("Configuration file is empty or does not exist: " + file.toString());
+			if(config.containsKey("OUTPUT"))
+				output = new File(config.getString("OUTPUT"));
+			if(config.containsKey("TARGET"))
+				targets = config.getList("TARGET");
+			if(config.containsKey("DICTIONARIES"))
+				dictionaries = config.getList("DICTIONARIES");
+			if(config.containsKey("OUTPUTDETAIL"))
+				outDetail = config.getString("OUTPUTDETAIL");
+			if(config.containsKey("XMLOUTPUT"))
+				xml = config.getBoolean("XMLOUTPUT");
+			if(config.containsKey("VERBOSE"))
+				verbose = config.getShort("VERBOSE");
+			if(config.containsKey("RECURSIVE"))
+				recursive = config.getBoolean("RECURSIVE");
+			if(config.containsKey("FOLLOW"))
+				followPtrs = config.getBoolean("FOLLOW");
+			if(config.containsKey("INCLUDEPATH"))
+				includePath = new File (config.getString("INCLUDEPATH"));
+			if(config.containsKey("DATAOBJECTS"))
+				dataObj = config.getBoolean("DATAOBJECTS");
+			if(config.containsKey("PATTERNS"))
+				patterns = config.getList("PATTERNS");
+		} catch(ConversionException ce) {
+			System.out.println(ce.getMessage());
+			System.exit(1);
+		} catch(Exception ex) {
+			System.out.println(ex.getMessage());
+			System.exit(1);
+		}
+	}
+	
+	/**
+	 * Configures the logger from the log4j class to either print to a file or to the
+	 * Standard Out
+	 *
+	 */
+	
+	private void setupLoggers() {
+
+		if(output != null) {
+			try {
+				if(output.exists())
+					output.delete();
+				log.addAppender(new FileAppender(new PatternLayout("%m%n"), output.toString()));
+				log.setAdditivity(false);
+				BasicConfigurator.configure(new FileAppender(new PatternLayout("%-5p %m%n"), output.toString()));
+			}
+			catch (IOException ioe) {
+				System.out.println( ioe.getMessage() );
+				System.exit(1);
+			}
+		}
+		else {
+			log.addAppender(new ConsoleAppender(new PatternLayout("%m%n")));
+			log.setAdditivity(false);
+			BasicConfigurator.configure(new ConsoleAppender(new PatternLayout("%-5p %m%n")));
 		}
 	}
 	
@@ -412,33 +512,38 @@ public class VTool {
 			System.out.println("DEBUG: " + s);
 	}
 	
-	
 	/**
-	 * Read and parse the dictionary files passed into the VTool command line
+	 * Read and parse the dictionary file(s) passed into the VTool command line
 	 * 
 	 * @param dictionary - a List object containing the data dictionary files
 	 * @return A Dictionary object that includes all the dictionary information from
 	 *  all the dictionary files passed in. Returns null if dictionary has a null value.
-	 * @throws MalformedURLException
-	 * @throws IOException
 	 */
 	
-	public Dictionary readDictionaries(List dictionary) throws MalformedURLException, IOException {
+	public Dictionary readDictionaries(List dictionary) {
 		Dictionary dict = null;
 		File dd = null;
 		Iterator i = dictionary.iterator();
 		
+		printDebug( "Parsing dictionary file: " + dictionary.get(0) );
+		dd = new File( i.next().toString() );
+		
 		try {
-			printDebug( "Parsing dictionary file: " + dictionary.get(0) );
-			dict = DictionaryParser.parse( new File(i.next().toString()).toURL() );
+			dict = DictionaryParser.parse( dd.toURL() );
+
 			while( i.hasNext() ) {
 				dd = new File( i.next().toString() );
 				printDebug("Parsing dictionary file: " + dd);
 				dict.merge( DictionaryParser.parse( dd.toURL() ) );
 			}
-		}
-		catch( gov.nasa.pds.tools.label.parser.ParseException pe) {
-			System.out.println("Error parsing Dictionary");
+		} catch( MalformedURLException uex) {
+			System.out.println("Dictionary file does not exist: " + dd);
+			System.exit(1);
+		} catch( IOException iex) {
+			System.out.println(iex.getMessage());
+			System.exit(1);
+		} catch( gov.nasa.pds.tools.label.parser.ParseException pe) {
+			System.out.println("Problems parsing Dictionary file");
 			System.exit(1);
 		}
 
@@ -447,30 +552,60 @@ public class VTool {
 	}
 	
 	/**
-	 * Read and parse the label files passed into the VTool command line
+	 * Read and parse the label files passed into the VTool command line.
+	 * Performs both syntactic and semantic validation.
 	 * 
 	 * @param files - A List of label files to be validated
-	 * @param dict - A Dictionary object needed for semantic validation
-	 * @throws MalformedURLException
-	 * @throws IOException
+	 * @param dict - A Dictionary object needed for semantic validation. If null,
+	 *               only syntactic validation will be performed.
 	 */
 	
-	public void readLabels(List files, Dictionary dict) throws MalformedURLException, IOException {
+	public void validateLabels(List files, Dictionary dict) {
 		LabelParserFactory factory = LabelParserFactory.getInstance();
 		LabelParser parser = factory.newLabelParser();
-		File label;
-		
+		String target;
+		URL url = null;
+
 		for( Iterator i = files.iterator(); i.hasNext(); ) {
-			label = new File( i.next().toString() );
-			System.out.println("\nValidating " + label);
+			target = new String( i.next().toString());
 			
 			try {
-				parser.parse( label.toURL(), dict );
-			} 
-			catch( gov.nasa.pds.tools.label.parser.ParseException pe ) {
+				if(new File(target).isFile() || new File(target).isDirectory())
+					url = new File(target).toURL();
+				else 
+					url = new URL(target);
+			}
+			catch(MalformedURLException mex) {
+				System.out.println("file/URL does not exist: " + target);
+				System.exit(1);
+			}
+			
+			System.out.println("\nValidating " + target);
+			log.info("\nVALIDATION RESULTS: " + target);
+			
+			try {
+				if(dict == null)
+					parser.parse(url);
+				else
+					parser.parse(url,dict);
+			} catch(IOException iex) {
+				System.out.println(iex.getMessage());
+				System.exit(1);
+			} catch( gov.nasa.pds.tools.label.parser.ParseException pe ) {
 				continue;
 			}
 		}
+	}
+	
+	/**
+	 * Read and parse the label files passed into the VTool command line. 
+	 * Only does syntactic validation. No semantic validation is performed.
+	 * 
+	 * @param files - A List of label files to be validated
+	 */
+	
+	public void validateLabels(List files) {
+		validateLabels(files, null);
 	}
 	
 	/**
@@ -484,13 +619,11 @@ public class VTool {
 	 */
 	
 	public void createFileList(List input, boolean recurse, List wildcards) {
-		FileListGenerator fileList = new FileListGenerator(input);
+		FileListGenerator list = new FileListGenerator(input);
 		
-		if(wildcards != null) {
-			fileList.setFileFilter(wildcards);
-		}
-		files = fileList.visitFilesAndDirs(recurse);
-
+		if(wildcards != null)
+			list.setFileFilter(wildcards);
+		files = list.visitFilesAndDirs(recurse);
 	}
 	
 	public static void main(String[] argv) {
@@ -501,30 +634,21 @@ public class VTool {
 			System.out.println("\nType 'VTool -h' for usage");
 			return;
 		}
-		
-		/* Define options */
+		// Define options
 		vtool.buildOpts();
-		/* Parse the command line */
+		// Parse the command line
 		vtool.parseLine(argv);
-		/* Query the command line */
+		// Query the command line
 		vtool.queryCmdLine();
-		
-		BasicConfigurator.configure(new ConsoleAppender(new PatternLayout("%-5p %m%n")));
-		try {
-			if(vtool.dictionaries != null) {
-				mainDictionary = vtool.readDictionaries(vtool.dictionaries);
-			}
-			vtool.createFileList(vtool.fInput, vtool.recursive, vtool.patterns);
-			vtool.readLabels(vtool.files, mainDictionary);
-		} 
-		catch (MalformedURLException mue) {
-			System.out.println( mue.getMessage() );
-			System.exit(1);
-		} 
-		catch (IOException ioe) {
-			System.out.println( ioe.getMessage() );
-			System.exit(1);
-		} 
+		vtool.createFileList(vtool.targets, vtool.recursive, vtool.patterns);
+
+		if(vtool.dictionaries != null) {
+			mainDictionary = vtool.readDictionaries(vtool.dictionaries);
+			vtool.validateLabels(vtool.files, mainDictionary);
+		}
+		else 
+			vtool.validateLabels(vtool.files);
+ 
 		System.exit(0);
 	}
 }
