@@ -22,7 +22,7 @@ public class DateTimeFormatter {
     private static SimpleDateFormat month = new SimpleDateFormat("-MM");
     private static SimpleDateFormat doy = new SimpleDateFormat("-DDD");
     private static SimpleDateFormat day = new SimpleDateFormat("-dd");
-    private static SimpleDateFormat hour = new SimpleDateFormat("'T'hh");
+    private static SimpleDateFormat hour = new SimpleDateFormat("'T'HH");
     private static SimpleDateFormat minute = new SimpleDateFormat(":mm");
     private static SimpleDateFormat second = new SimpleDateFormat(":ss");
     private static SimpleDateFormat millisecond = new SimpleDateFormat(".SSS");
