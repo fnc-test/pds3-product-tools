@@ -6,33 +6,38 @@
 
 package gov.nasa.pds.tools.label.parser;
 
-import java.net.URL;
-import java.util.Iterator;
-import java.util.Properties;
-import java.util.List;
-import java.util.Collections;
-import org.apache.log4j.Logger;
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.PatternLayout;
-
-import antlr.ANTLRException;
-import gov.nasa.pds.tools.label.antlr.ODLLexer;
-import gov.nasa.pds.tools.label.antlr.ODLParser;
-import java.io.IOException;
 import gov.nasa.pds.tools.dict.Dictionary;
 import gov.nasa.pds.tools.dict.parser.DictionaryParser;
 import gov.nasa.pds.tools.dict.type.UnsupportedTypeException;
 import gov.nasa.pds.tools.label.AttributeStatement;
 import gov.nasa.pds.tools.label.GroupStatement;
 import gov.nasa.pds.tools.label.Label;
+import gov.nasa.pds.tools.label.MalformedSFDULabel;
 import gov.nasa.pds.tools.label.ObjectStatement;
+import gov.nasa.pds.tools.label.SFDULabel;
 import gov.nasa.pds.tools.label.Statement;
-import gov.nasa.pds.tools.label.parser.ParseException;
+import gov.nasa.pds.tools.label.antlr.ODLLexer;
+import gov.nasa.pds.tools.label.antlr.ODLParser;
 import gov.nasa.pds.tools.label.validate.DefinitionNotFoundException;
 import gov.nasa.pds.tools.label.validate.ElementValidator;
 import gov.nasa.pds.tools.label.validate.GroupValidator;
 import gov.nasa.pds.tools.label.validate.ObjectValidator;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Properties;
+
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.ConsoleAppender;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PatternLayout;
+
+import antlr.ANTLRException;
 
 /**
  * Default implementation
@@ -52,7 +57,16 @@ public class DefaultLabelParser implements LabelParser {
      */
     public Label parse(URL file) throws ParseException, IOException {
         Label label = null;
-        ODLLexer lexer = new ODLLexer(file.openStream());
+        InputStream input = file.openStream();
+        
+        //Set a place where the input stream can be reset to.
+        input.mark(40);      
+        List sfdus = consumeSFDUHeader(input);
+        for (Iterator i = sfdus.iterator(); i.hasNext();) {
+            log.info("Found SFDU Label: " + i.next().toString());
+        }
+        
+        ODLLexer lexer = new ODLLexer(input);
         ODLParser parser = new ODLParser(lexer);
         try {
             label = parser.label();
@@ -62,6 +76,34 @@ public class DefaultLabelParser implements LabelParser {
         }
 
         return label;
+    }
+    
+    private List consumeSFDUHeader(InputStream input) throws IOException {
+        List sfdus = new ArrayList();
+        boolean foundHeader = false;
+        
+        byte[] sfduLabel = new byte[20];
+        int count = input.read(sfduLabel);
+        if (count == 20) {
+            try {
+                SFDULabel sfdu = new SFDULabel(sfduLabel);
+                if ("CCSD".equals(sfdu.getControlAuthorityId())) {
+                    foundHeader = true;
+                    sfdus.add(sfdu);
+                    //Read in second SFDU label
+                    input.read(sfduLabel);
+                    sfdus.add(new SFDULabel(sfduLabel));
+                }
+            } catch (MalformedSFDULabel e) {
+                foundHeader = false;
+            }
+            
+        }
+        
+        if (!foundHeader)
+            input.reset();
+        
+        return sfdus;
     }
 
     /* (non-Javadoc)
