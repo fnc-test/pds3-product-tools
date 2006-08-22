@@ -13,7 +13,7 @@ responsibility to obtain export licenses, or other export authority
 as may be required before exporting such information to foreign 
 countries or providing access to foreign persons.
 
-$Id:$
+$Id$
 -->
 
 <project name="pds-tools" href="http://oodt.jpl.nasa.gov/pds-tools/">
@@ -23,8 +23,8 @@ $Id:$
             <item name="OODT" href="../oodt-site/"/>
             <item name="PDS" href="../pds/"/>
         </links>
-        <menu name="Validation Tool">
-            <item name="Overview" href="vtool_overview/"/>
+        <menu name="Software Documentation">
+            <item name="User Guide" href="userguide/index.html"/>
         </menu>
     </body>
 </project>
