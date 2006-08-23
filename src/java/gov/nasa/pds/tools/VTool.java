@@ -27,6 +27,7 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.UnrecognizedOptionException;
+import org.apache.commons.configuration.AbstractConfiguration;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.ConfigurationUtils;
@@ -102,7 +103,7 @@ public class VTool {
 	 *
 	 */	
 	public void showVersion() {
-		System.out.println("PDS Validation Tool (VTool) BETA " + version_id);
+		System.out.println("PDS Validation Tool (VTool) " + version_id);
 		System.out.println("\nDISCLAIMER:\n" + 
 				           "THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE CALIFORNIA\n" + 
 				           "INSTITUTE OF TECHNOLOGY (CALTECH) UNDER A U.S. GOVERNMENT CONTRACT WITH THE\n" +
@@ -139,7 +140,7 @@ public class VTool {
 		options.addOption("F", "no-follow", false, "Do not follow ^STRUCTURE pointers in a label");
 		options.addOption("h", "help", false, "Display usage");
 		options.addOption("OBJ", "no-obj", false, "Do not perform data object validation");
-		options.addOption("p", "partial", false, "Validate as a partial label file");
+//		options.addOption("p", "partial", false, "Validate as a partial label file");
 		options.addOption("l", "local", false, "Validate files only in the input directory rather than " + 
 				                               "recursively traversing down the subdirectories.");	
 		options.addOption("u", "unalias", false, "Disable aliasing feature when validating label file(s)");
@@ -303,7 +304,7 @@ public class VTool {
 				System.exit(0);
 			}
 		
-			// Check if the -f flag was set in either the config file or the command line
+			// Check if the -t flag was set in either the config file or the command line
 			if(cmd.hasOption("t")) {
 				targets = Arrays.asList(cmd.getOptionValues("t"));
 			}
@@ -432,13 +433,15 @@ public class VTool {
 		Logger configlog = Logger.getLogger(ConfigurationUtils.class);
 		configlog.addAppender(new ConsoleAppender(new PatternLayout("%m%n")));
 		configlog.setAdditivity(false);
-		try {
+		AbstractConfiguration.setDelimiter(' ');
+		try {	
 			config = new PropertiesConfiguration(file);
 		}
 		catch (ConfigurationException ce) {
 			System.out.println(ce.getMessage());
 			System.exit(1);
 		}
+		
 		
 		try {
 			if(config.isEmpty())
@@ -463,8 +466,13 @@ public class VTool {
 				includePath = new File (config.getString("INCLUDEPATH"));
 			if(config.containsKey("DATAOBJECTS"))
 				dataObj = config.getBoolean("DATAOBJECTS");
-			if(config.containsKey("PATTERNS"))
+			if(config.containsKey("PATTERNS")) {
 				patterns = config.getList("PATTERNS");
+				for(int i=0; i < patterns.size(); i++) {
+					// Removes quotes surrounding each pattern being specified
+					patterns.set(i, patterns.get(i).toString().replace('"',' ').trim());
+				}
+			}
 		} catch(ConversionException ce) {
 			System.out.println(ce.getMessage());
 			System.exit(1);
