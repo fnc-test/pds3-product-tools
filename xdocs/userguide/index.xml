@@ -92,12 +92,120 @@ $Id: index.xml 1157 2006-06-16 19:50:08Z shardman $
                <tr><td nowrap="nowrap">-p,--pattern &lt;expressions&gt;</td><td>Specify a pattern to match against the 
                                                                 input directory to be validated. Each
                                                                 pattern must be surrounded by quotes 
-                                                                (i.e. -p "*.LBL" "*.FMT")</td></tr>
+                                                                (i.e. -p "*.LBL" "*.FMT"). Pattern
+                                                                matching is case-insensitive in Windows,
+                                                                but case-sensitive for other systems.</td></tr>
                <tr><td>-h,--help</td><td>Display VTool usage</td></tr>
                <tr><td>-V,--version</td><td>Display VTool version</td></tr>
              </table>
 
            </subsection> 
+
+           <subsection name="Examples">
+            <p>The following command demonstrates the validation of a single data product label against
+               the PSDD:</p>
+            
+            <source>[node:~] java gov.nasa.pds.tools.VTool -d pdsdd.full -t TEST.LBL </source>
+
+            <p>By default, the tool will write the validation report to the terminal. The following
+               command demonstrates the same validation as above, but writing the validation report
+               to a file:</p>
+ 
+            <source>[node:~] java gov.nasa.pds.tools.VTool -d pdsdd.full -t TEST.LBL \
+                             -o report.txt </source>
+
+            <p>The following command demonstrates the validation of a single data product label against
+               the PSDD and a local dictionary:</p>
+
+            <source>[node:~] java gov.nasa.pds.tools.VTool -d pdsdd.full localdd.full \
+                             -t TEST.LBL </source>
+
+            <p>The following command demonstrates the validation of multiple data product labels if
+               contained in a directory:</p>
+ 
+            <source>[node:~] java gov.nasa.pds.tools.VTool -d pdsdd.full -t ./TEST_DIR </source>
+
+            <p>The following command demonstrates the validation of multiple targets - a single data
+               product label and multiple data product labels contained in another directory location:</p>
+
+            <source>[node:~] java gov.nasa.pds.tools.VTool -d pdsdd.full \
+                             -t TEST.LBL ./TEST_DIR </source>
+
+            <p>The following command demonstrates the validation of multiple data product labels
+               contained in a directory whose extension ends in either .LBL or .FMT:</p>
+     
+            <source>[node:~] java gov.nasa.pds.tools.VTool -d pdsdd.full \
+                             -t ./TEST_DIR -p "*.LBL" "*.FMT" </source>
+
+            <p>By default, the tool will recursively traverse the directory tree assuming there
+               are sub-directories contained within the specified directory. The following command
+               demonstrates the same validation as above, but without recursion:</p>
+           
+            <source>[node:~] java gov.nasa.pds.tools.VTool -d pdsdd.full \ 
+                             -t ./TEST_DIR -p "*.LBL" "*.FMT" -l </source>
+
+            <p>A configuration file can be passed into the command line to change the default
+               behaviors of the tool and to also provide users a way to perform validation
+               with a single flag (see the section below for details on how to set the
+               configuration file). The following command demonstrates performing validation
+               using a configuration file:</p>
+
+            <source>[node:~] java gov.nasa.pds.tools.VTool -c config.txt </source>
+          </subsection>
+
+          <subsection name="Using A Configuration File">
+           <p>A configuration file is used to set the default behaviors of the tool. It 
+              consists of a text file made up of keyword/value pairs. Lines which begin
+              with the hash character "#" are considered comments and are ignored. Also,
+              any flag specified on the command line takes precedence over any equivalent
+              settings placed in the configuration file.</p>
+            
+           <p>The following table contains valid keywords that can be specified in
+              the configuration file:</p>
+
+           <table>
+              <tr><th>KEYWORD</th><th>ASSOCIATED FLAG</th><th>valid value(s)</th></tr>
+              <tr><td>TARGET</td><td>-t</td><td>Specify labels,directories, and/or URLs</td></tr>
+              <tr><td>DICTIONARIES</td><td>-d</td><td>Specify dictionary files</td></tr>
+              <tr><td>OUTPUT</td><td>-o</td><td>Specify report file (do not specify
+                                                if wanting to write the report to the
+                                                terminal)</td></tr>
+              <tr><td>RECURSIVE</td><td>-l</td><td>Set to 'false' to not perform
+                                                   recursion down a directory, set
+                                                   to 'true' otherwise</td></tr>
+              <tr><td>PATTERNS</td><td>-p</td><td>Specify patterns to search for
+                                                  when validating a directory.</td></tr>
+           </table>
+
+           <p>The following example demonstrates how to set a configuration file:</p>
+
+           <source>
+              TARGET = ./TEST_DIR
+              DICTIONARIES = pdsdd.full
+              OUTPUT = report.txt
+              RECURSIVE = false
+              PATTERNS = "*.LBL"
+           </source>
+
+           <p>This is equivalent to running the tool with the following flags:</p>
+           <source>-t ./TEST_DIR -d pdsdd.full -o report.txt -l -p "*.LBL"</source>          
+
+           <p>The following example demonstrates how to set a configuration file
+              with multiple values for a keyword:</p>
+
+           <source>
+             TARGET = TEST.LBL ./TEST_DIR
+             DICTIONARIES = pdsdd.full localdd.full
+             RECURSIVE = true
+             PATTERNS = "*.LBL" "*.FMT"
+           </source>
+
+           <p>This is equivalent to running the tool with the following flags:</p>
+           <source>-t TEST.LBL ./TEST_DIR -d pdsdd.full localdd.full \
+                   -p "*.LBL" "*.FMT"</source>
+
+          </subsection>    
+
                
         </section>
     </body>
