@@ -25,36 +25,44 @@ $Id: index.xml 1157 2006-06-16 19:50:08Z shardman $
 
     <body>
         <section name="User Guide">
-           <p>This section describes how to use VTool in order to perform automated validation of
-              data products.</p>
+           <p>This section describes how to use VTool in order to perform automated validation
+              of data products.</p>
 
            <subsection name="Overview">
-             <p>The goal of the Validation Tool is to programmatically ascertain if a given data product
-                is PDS compliant (or "valid"). Typically, this means the data product is well formed,
-                complete, syntactically and semantically correct, and that it conforms to all applicable
-                PDS standards. The standards themselves are defined in the
-                <a href="http://pds.nasa.gov/documents/sr/" target="_blank">PDS Standards Reference</a>.
+             <p>The goal of the Validation Tool is to programmatically ascertain if a given
+                data product is PDS compliant (or "valid"). Typically, this means the data
+                product is well formed, complete, syntactically and semantically correct, and
+                that it conforms to all applicable PDS standards. The standards themselves are
+                defined in the <a href="http://pds.nasa.gov/documents/sr/" target="_blank">PDS Standards Reference</a>.
              </p>
            </subsection>
 
            <subsection name="Setup">
              <p>Before VTool can be executed, the environment must first be configured.</p>
              
-             <p>The following commands demonstrate how to set the <i>CLASSPATH</i> environment variable,
-                which appends to its current setting. Choose the appropriate command according to the
-                platform VTool is being executed on:</p>
+             <p>The following commands demonstrate how to set the <i>CLASSPATH</i> environment
+                variable, which appends to its current setting. Choose the appropriate command
+                according to the platform VTool is being executed on:</p>
 
              <p><b>UNIX-Based Command</b></p>
-             <source>[node:~] setenv CLASSPATH ${CLASSPATH}:$HOME/pds-tools-0.2.0/antlr-2.7.6.jar:$HOME/pds-tools-0.2.0/commons-cli-1.0.jar:
-                     $HOME/pds-tools-0.2.0/commons-io-1.2.jar:$HOME/pds-tools-0.2.0/log4j-1.2.13.jar:$HOME/pds-tools-0.2.0/
-                     pds-tools-0.2.0.jar</source>
+             <source>[node:~] setenv CLASSPATH ${CLASSPATH}: \
+                     $HOME/pds-tools-0.2.0/antlr-2.7.6.jar: \
+                     $HOME/pds-tools-0.2.0/commons-cli-1.0.jar: \
+                     $HOME/pds-tools-0.2.0/commons-io-1.2.jar: \
+                     $HOME/pds-tools-0.2.0/log4j-1.2.13.jar: \
+                     $HOME/pds-tools-0.2.0/pds-tools-0.2.0.jar </source>
 
              <p><b>Windows Command</b></p>
-             <source>C:\&gt; set CLASSPATH=%CLASSPATH%;c:\pds-tools-0.2.0\antlr-2.7.6.jar;c:\pds-tools-0.2.0\commons-cli-1.0.jar;
-                     c:\pds-tools-0.2.0\commons-io-1.2.jar;c:\pds-tools-0.2.0\log4j-1.2.13.jar;c:\pds-tools-0.2.0\pds-tools-0.2.0.jar</source>
+             <source>C:\&gt; set CLASSPATH=%CLASSPATH%; \
+                     c:\pds-tools-0.2.0\antlr-2.7.6.jar; \
+                     c:\pds-tools-0.2.0\commons-cli-1.0.jar; \
+                     c:\pds-tools-0.2.0\commons-io-1.2.jar; \
+                     c:\pds-tools-0.2.0\log4j-1.2.13.jar; \
+                     c:\pds-tools-0.2.0\pds-tools-0.2.0.jar</source>
 
-             <p>Check that the jar files found in the pds-tools package  has been correctly added to the end of the
-             <i>CLASSPATH</i> variable. The following commands demonstrate how to verify this:</p>
+             <p>Check that the jar files found in the pds-tools package  has been correctly added
+                to the end of the <i>CLASSPATH</i> variable. The following commands demonstrate
+                how to verify this:</p>
 
              <p><b>UNIX-Based Command</b></p>
              <source>[node:~] echo $CLASSPATH</source>
@@ -69,22 +77,22 @@ $Id: index.xml 1157 2006-06-16 19:50:08Z shardman $
 
              <table>
                <tr><th colspan="2">VTool Command-Line Options</th></tr>
-               <tr><td>-t,--target &lt;labels,URLs,dirs&gt;</td><td>Specify the label file(s), directories,
-                                                                                    and/or URL(s) to validate (required
-                                                                                    option)</td></tr>
-               <tr><td>-d,--dict &lt;.full files&gt;</td><td>Specify the Planetary Science Data Dictionary
-                                                                             full file name and any local dictionaries to
-                                                                             include for validation.</td></tr>
+               <tr><td nowrap="nowrap">-t,--target &lt;labels,URLs,dirs&gt;</td><td>Specify the label file(s), directories,
+                                                                    and/or URL(s) to validate (required
+                                                                    option)</td></tr>
+               <tr><td>-d,--dict &lt;.full files&gt;</td><td>Specify the Planetary Science Data
+                                                             Dictionary full file name and any local
+                                                             dictionaries to include for validation.</td></tr>
                <tr><td>-o,--output &lt;file&gt;</td><td>Specify the file name for the report. Default is
-                                                                        to print to the terminal.</td></tr>
+                                                        to print to the terminal.</td></tr>
                <tr><td>-c,--config &lt;file&gt;</td><td>Specify a configuration file to set the default
-                                                                        values for VTool.</td></tr>
+                                                        values for VTool.</td></tr>
                <tr><td>-l,--local</td><td>Validate files only in the input directory rather than
                                                           recursively traversing down the subdirectories.</td></tr>
-               <tr><td>-p,--pattern &lt;expressions&gt;</td><td>Specify a pattern to match against the 
-                                                                                input directory to be validated. Each
-                                                                                pattern must be surrounded by quotes 
-                                                                                (i.e. -p "*.LBL" "*.FMT")</td></tr>
+               <tr><td nowrap="nowrap">-p,--pattern &lt;expressions&gt;</td><td>Specify a pattern to match against the 
+                                                                input directory to be validated. Each
+                                                                pattern must be surrounded by quotes 
+                                                                (i.e. -p "*.LBL" "*.FMT")</td></tr>
                <tr><td>-h,--help</td><td>Display VTool usage</td></tr>
                <tr><td>-V,--version</td><td>Display VTool version</td></tr>
              </table>
