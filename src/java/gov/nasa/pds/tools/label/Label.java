@@ -93,7 +93,7 @@ public class Label {
         List objects = new ArrayList(); 
         
         for (Iterator i = statements.keySet().iterator(); i.hasNext();) {
-            Statement s = (Statement) i.next();
+            Statement s = (Statement) statements.get(i.next());
             if (s instanceof ObjectStatement)
                 objects.add(s);
         }
@@ -109,7 +109,7 @@ public class Label {
         List groups = new ArrayList(); 
         
         for (Iterator i = statements.keySet().iterator(); i.hasNext();) {
-            Statement s = (Statement) i.next();
+            Statement s = (Statement) statements.get(i.next());
             if (s instanceof GroupStatement)
                 groups.add(s);
         }
@@ -125,7 +125,7 @@ public class Label {
         List attributes = new ArrayList(); 
         
         for (Iterator i = statements.keySet().iterator(); i.hasNext();) {
-            Statement s = (Statement) i.next();
+            Statement s = (Statement) statements.get(i.next());
             if (s instanceof AttributeStatement)
                 attributes.add(s);
         }
