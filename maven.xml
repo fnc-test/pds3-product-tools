@@ -14,13 +14,19 @@ responsibility to obtain export licenses, or other export authority
 as may be required before exporting such information to foreign 
 countries or providing access to foreign persons.
 
-$Id:$
+$Id$
 -->
 
-<project default="jar" xmlns:deploy="deploy">
-  <!-- Include the dependencies in the binary distribution -->
+<project default="jar" xmlns:ant="jelly:ant" xmlns:deploy="deploy">
+  <!--
+    Include the dependencies in the binary distribution
+    and put all jar files in the lib directory.
+  -->
   <postGoal name="dist:prepare-bin-filesystem">
-    <deploy:copy-deps todir="${maven.dist.bin.assembly.dir}"/>
+    <ant:mkdir dir="${maven.dist.bin.assembly.dir}/lib"/>
+    <deploy:copy-deps todir="${maven.dist.bin.assembly.dir}/lib"/>
+    <ant:move todir="${maven.dist.bin.assembly.dir}/lib"
+              file="${maven.dist.bin.assembly.dir}/${maven.final.name}.jar"/>
   </postGoal>
 </project>
 
