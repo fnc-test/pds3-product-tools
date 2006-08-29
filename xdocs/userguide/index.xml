@@ -50,11 +50,11 @@ $HOME/pds-tools-X.X.X/lib/pds-tools-X.X.X.jar
         <p><b>Windows Command</b></p>
           <source>
 C:\&gt; set CLASSPATH=%CLASSPATH%; \
-c:\pds-tools-X.X.X\antlr-X.X.X.jar; \
-c:\pds-tools-X.X.X\commons-cli-X.X.jar; \
-c:\pds-tools-X.X.X\commons-io-X.X.jar; \
-c:\pds-tools-X.X.X\log4j-X.X.X.jar; \
-c:\pds-tools-X.X.X\pds-tools-X.X.X.jar
+c:\pds-tools-X.X.X\lib\antlr-X.X.X.jar; \
+c:\pds-tools-X.X.X\lib\commons-cli-X.X.jar; \
+c:\pds-tools-X.X.X\lib\commons-io-X.X.jar; \
+c:\pds-tools-X.X.X\lib\log4j-X.X.X.jar; \
+c:\pds-tools-X.X.X\lib\pds-tools-X.X.X.jar
           </source>
 
         <p>Check that the jar files found in the pds-tools package  has been correctly added to the end of the <i>CLASSPATH</i> variable. The following commands demonstrate how to verify this:</p>
