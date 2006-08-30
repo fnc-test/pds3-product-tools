@@ -98,7 +98,7 @@ public class DateTimeFormatter {
         }
         
         //Check for minutes
-        if (position.getIndex() < datetime.length()) {
+        if (position.getIndex() < datetime.length() && datetime.charAt(position.getIndex()) != 'Z') {
             date = minute.parse(datetime, position);
             if (date == null)
                 throw new ParseException("Could not create a date from " + datetime, position.getIndex());
@@ -110,7 +110,7 @@ public class DateTimeFormatter {
         }
         
         //Check for seconds
-        if (position.getIndex() < datetime.length()) {
+        if (position.getIndex() < datetime.length() && datetime.charAt(position.getIndex()) != 'Z') {
             date = second.parse(datetime, position);
             if (date == null)
                 throw new ParseException("Could not create a date from " + datetime, position.getIndex());
@@ -121,8 +121,8 @@ public class DateTimeFormatter {
             }
         }
             
-        //Check for seconds
-        if (position.getIndex() < datetime.length()) {
+        //Check for milliseconds
+        if (position.getIndex() < datetime.length() && datetime.charAt(position.getIndex()) != 'Z') {
             date = millisecond.parse(datetime, position);
             if (date == null)
                 throw new ParseException("Could not create a date from " + datetime, position.getIndex());
@@ -132,6 +132,10 @@ public class DateTimeFormatter {
                 calendar.set(Calendar.MILLISECOND, workingCalendar.get(Calendar.MILLISECOND));
             }
         }
+        
+        //Have we parse the full date? If not throw an error
+        if (position.getIndex() < (datetime.length() - 2) || (position.getIndex() == (datetime.length() - 1) && datetime.charAt(position.getIndex()) != 'Z'))
+            throw new ParseException("Could not create a date from " + datetime, position.getIndex());
         
         //Date is not actually calculated in a calendar until you make a call to getTime.
         //Must check that date is fine.
