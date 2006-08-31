@@ -23,8 +23,10 @@ import gov.nasa.pds.tools.label.validate.ElementValidator;
 import gov.nasa.pds.tools.label.validate.GroupValidator;
 import gov.nasa.pds.tools.label.validate.ObjectValidator;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -66,6 +68,26 @@ public class DefaultLabelParser implements LabelParser {
             log.info("Found SFDU Label: " + i.next().toString());
         }
         
+        //Set a new mark to go back to. Read a max of 1024 bytes.
+        input.mark(1024);
+        //Now look for PDS_VERSION_ID to ensure that this is a file we want to validate
+        BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+        String version = reader.readLine().trim();
+        String[] line = version.split("=");  
+        
+        if (line.length != 2)
+            throw new ParseException(file.toString() + " is not a label. Could not find the PDS_VERSION_ID in the first line.");
+        
+        String name = line[0].trim();
+        String value = line[1].trim();
+        
+        if (!"PDS_VERSION_ID".equals(name))
+            throw new ParseException(file.toString() + " is not a label. Could not find the PDS_VERSION_ID in the first line.");
+        
+        log.info("Parsing " + file.toString() + " with PDS_VERSION_ID = " + value);
+        //Reset to parse at the beggining of the file
+        input.reset();
+        
         ODLLexer lexer = new ODLLexer(input);
         ODLParser parser = new ODLParser(lexer);
         try {
@@ -94,6 +116,8 @@ public class DefaultLabelParser implements LabelParser {
                     input.read(sfduLabel);
                     sfdus.add(new SFDULabel(sfduLabel));
                 }
+                //Skip carriage return line feed
+                input.skip(2);
             } catch (MalformedSFDULabel e) {
                 foundHeader = false;
             }
