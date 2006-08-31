@@ -19,77 +19,97 @@ $Id: index.xml 1157 2006-06-16 19:50:08Z shardman $
 
 <document>
   <properties>
-    <title>Validation Tool User Guide</title>
+    <title>User Guide</title>
       <author email="Michael.Cayanan@jpl.nasa.gov">Michael Cayanan</author>
   </properties>
 
   <body>
     <section name="User Guide">
-      <p>This section describes how to use VTool in order to perform automated validation of data products. The command-line examples shown below contain <i>X.X.X</i> which represents the current version of the project.</p>
+      <p>This section describes how to use the Validation Tool (VTool) in order to perform automated validation of data products.</p>
 
       <subsection name="Overview">
-        <p>The goal of the Validation Tool is to programmatically ascertain if a given data product is PDS compliant (or "valid"). Typically, this means the data product is well formed, complete, syntactically and semantically correct, and that it conforms to all applicable PDS standards. The standards themselves are defined in the <a href="http://pds.nasa.gov/documents/sr/" target="_blank">PDS Standards Reference</a>.
+        <p>The goal of VTool is to programmatically ascertain if a given data product is PDS compliant (or "valid"). Typically, this means the data product is well formed, complete, syntactically and semantically correct, and that it conforms to all applicable PDS standards. The standards themselves are defined in the <a href="http://pds.nasa.gov/documents/sr/" target="_blank">PDS Standards Reference</a>.
         </p>
       </subsection>
 
       <subsection name="Setup">
         <p>Before VTool can be executed, the environment must first be configured.</p>
              
-        <p>The following commands demonstrate how to set the <i>CLASSPATH</i> environment variable, which appends to its current setting. Choose the appropriate command according to the platform VTool is being executed on:</p>
+        <p>The following commands demonstrate how to set the <i>CLASSPATH</i> environment variable, which appends to its current setting. The examples contain <i>X.X.X</i>, which represents the current version of the project. Choose the appropriate command according to the platform VTool is being executed on.
+        </p>
 
         <p><b>UNIX-Based Command</b></p>
           <source>
 [node:~] setenv CLASSPATH ${CLASSPATH}: \
-$HOME/pds-tools-X.X.X/lib/antlr-X.X.X.jar: \
-$HOME/pds-tools-X.X.X/lib/commons-cli-X.X.jar: \
-$HOME/pds-tools-X.X.X/lib/commons-io-X.X.jar: \
-$HOME/pds-tools-X.X.X/lib/log4j-X.X.X.jar: \
-$HOME/pds-tools-X.X.X/lib/pds-tools-X.X.X.jar
+$HOME/product-tool-X.X.X/lib/antlr-2.7.6.jar: \
+$HOME/product-tool-X.X.X/lib/commons-cli-1.0.jar: \
+$HOME/product-tool-X.X.X/lib/commons-collections-3.1.jar: \
+$HOME/product-tool-X.X.X/lib/commons-configuration-1.2.jar: \
+$HOME/product-tool-X.X.X/lib/commons-io-3.1.jar: \
+$HOME/product-tool-X.X.X/lib/commons-lang-2.1.jar: \
+$HOME/product-tool-X.X.X/lib/commons-logging-1.0.3.jar: \
+$HOME/product-tool-X.X.X/lib/log4j-1.2.13.jar: \
+$HOME/product-tool-X.X.X/lib/product-tool-X.X.X.jar
           </source>
 
         <p><b>Windows Command</b></p>
           <source>
 C:\&gt; set CLASSPATH=%CLASSPATH%; \
-c:\pds-tools-X.X.X\lib\antlr-X.X.X.jar; \
-c:\pds-tools-X.X.X\lib\commons-cli-X.X.jar; \
-c:\pds-tools-X.X.X\lib\commons-io-X.X.jar; \
-c:\pds-tools-X.X.X\lib\log4j-X.X.X.jar; \
-c:\pds-tools-X.X.X\lib\pds-tools-X.X.X.jar
+c:\product-tool-X.X.X\lib\antlr-2.7.6.jar; \
+c:\product-tool-X.X.X\lib\commons-cli-1.0.jar; \
+c:\product-tool-X.X.X\lib\commons-collections-3.1.jar; \
+c:\product-tool-X.X.X\lib\commons-configuration-1.2.jar; \
+c:\product-tool-X.X.X\lib\commons-io-3.1.jar; \
+c:\product-tool-X.X.X\lib\commons-lang-2.1.jar; \
+c:\product-tool-X.X.X\lib\commons-logging-1.0.3.jar; \
+c:\product-tool-X.X.X\lib\log4j-1.2.13.jar; \
+c:\product-tool-X.X.X\lib\product-tool-X.X.X.jar
           </source>
 
-        <p>Check that the jar files found in the pds-tools package  has been correctly added to the end of the <i>CLASSPATH</i> variable. The following commands demonstrate how to verify this:</p>
+        <p>Check that the jar files found in the product-tool package has been correctly added to the end of the <i>CLASSPATH</i> variable. The following commands demonstrate how to verify this:</p>
 
         <p><b>UNIX-Based Command</b></p>
           <source>[node:~] echo $CLASSPATH</source>
 
         <p><b>Windows Command</b></p>
           <source>C:\&gt; echo %CLASSPATH%</source>
+        
+        <p>An alternative method to setting the <i>CLASSPATH</i> is by setting a Java property on the command-line when running the tool each time. This is done by passing the java "D" flag:
+        </p>
+          <source>
+[node:~] java -Djava.ext.dirs=&lt;path to your jar files&gt;...
+          </source>
+        
+        <p>The following commands demonstrate how to run VTool each time without having to set the <i>CLASSPATH</i> environment variable. The example shown below assumes that all the jar files found in the product-tool package are located in $HOME/product-tool-X.X.X/lib:
+        </p>
+        
+        <p><b>UNIX-Based Command</b></p> 
+          <source>
+[node:~] java -Djava.ext.dirs=$HOME/product-tool-X.X.X/lib \
+gov.nasa.pds.tools.VTool -d pdsdd.full -t TEST.LBL
+          </source>
+          
+        <p><b>Windows Command</b></p>
+          <source>
+C:\&gt; java -Djava.ext.dirs=c:\product-tool-X.X.X\lib \
+gov.nasa.pds.tools.VTool -d pdsdd.full -t TEST.LBL
+          </source>         
       </subsection>
-           
+      
       <subsection name="Command-Line Options">
-
         <p>The following table contains command-line options available to VTool:</p>
 
         <table>
           <tr><th colspan="2">VTool Command-Line Options</th></tr>
-          <tr><td nowrap="nowrap">-t,--target &lt;labels,URLs,dirs&gt;</td><td>Specify the label file(s), directories,
-                                                                               and/or URL(s) to validate (required
-                                                                               option)</td></tr>
-          <tr><td>-d,--dict &lt;.full files&gt;</td><td>Specify the Planetary Science Data
-                                                        Dictionary full file name and any local
-                                                        dictionaries to include for validation.</td></tr>
-          <tr><td>-o,--output &lt;file&gt;</td><td>Specify the file name for the report. Default is
-                                                   to print to the terminal.</td></tr>
-          <tr><td>-c,--config &lt;file&gt;</td><td>Specify a configuration file to set the default
-                                                   values for VTool.</td></tr>
-          <tr><td>-l,--local</td><td>Validate files only in the input directory rather than
-                                     recursively traversing down the subdirectories.</td></tr>
-          <tr><td nowrap="nowrap">-p,--pattern &lt;expressions&gt;</td><td>Specify a pattern to match against the 
-                                                                           input directory to be validated. Each
-                                                                           pattern must be surrounded by quotes 
-                                                                           (i.e. -p "*.LBL" "*.FMT"). Pattern
-                                                                           matching is case-insensitive in Windows,
-                                                                           but case-sensitive for other systems.</td></tr>
+          <tr><td nowrap="nowrap">-t,--target &lt;labels,URLs,dirs&gt;</td><td>Specify the label file(s), directories, and/or URL(s) to validate (required option)</td></tr>
+          <tr><td>-d,--dict &lt;.full files&gt;</td><td>Specify the Planetary Science Data Dictionary full file name and any local dictionaries to include for validation.</td></tr>
+          <tr><td>-o,--output &lt;file&gt;</td><td>Specify the file name for the report. Default is to print to the terminal.</td></tr>
+          <tr><td>-c,--config &lt;file&gt;</td><td>Specify a configuration file to set the default values for VTool.</td></tr>
+          <tr><td>-l,--local</td><td>Validate files only in the input directory rather than recursively traversing down the subdirectories.</td></tr>
+          <tr><td nowrap="nowrap">-p,--pattern &lt;expressions&gt;</td><td>Specify a list of files/file patterns to include when validating an entire directory. Each pattern must be surrounded by quotes (i.e. -p "*.LBL" "*.FMT"). Pattern matching is case-insensitive in Windows, but case-sensitive for other systems.
+          </td></tr>
+          <tr><td nowrap="nowrap">-X,--ignore-files &lt;expressions&gt;</td><td>Specify a list of files/file patterns to ignore when validating an entire directory. Each pattern must be surrounded by quotes (i.e. -p "*.LBL" "*.FMT"). Pattern matching is case-insensitive in Windows, but case-sensitive for other systems.
+          </td></tr>
           <tr><td>-h,--help</td><td>Display VTool usage</td></tr>
           <tr><td>-V,--version</td><td>Display VTool version</td></tr>
         </table>
@@ -132,14 +152,21 @@ localdd.full -t TEST.LBL
         </p>
           <source>
 [node:~] java gov.nasa.pds.tools.VTool -d pdsdd.full \
--t ./TEST_DIR -p "*.LBL" "*.FMT"
+-t ./TEST_DIR -p "*LBL" "*FMT"
           </source>
 
         <p>By default, the tool will recursively traverse the directory tree assuming there are sub-directories contained within the specified directory. The following command demonstrates the same validation as above, but without recursion:
         </p>
           <source>
 [node:~] java gov.nasa.pds.tools.VTool -d pdsdd.full \ 
--t ./TEST_DIR -p "*.LBL" "*.FMT" -l
+-t ./TEST_DIR -p "*LBL" "*FMT" -l
+          </source>
+
+        <p>The following command demonstrates the validation of multiple data product labels contained in a directory except for files ending in a .IMG or .TAB:
+        </p>
+          <source>
+[node:~] java gov.nasa.pds.tools.VTool -d pdsdd.full \
+-t ./TEST_DIR -X "*IMG" "*TAB"
           </source>
 
         <p>A configuration file can be passed into the command-line to change the default behaviors of the tool and to also provide users a way to perform validation with a single flag (see the section below for details on how to set the configuration file). The following command demonstrates performing validation using a configuration file:
@@ -157,21 +184,19 @@ localdd.full -t TEST.LBL
         <table>
           <tr><th>KEYWORD</th><th>ASSOCIATED FLAG</th><th>valid value(s)</th></tr>
           <tr><td>TARGET</td><td>-t</td><td>Specify labels,directories, and/or URLs</td></tr>
-          <tr><td>DICTIONARIES</td><td>-d</td><td>Specify dictionary files</td></tr>
-          <tr><td>OUTPUT</td><td>-o</td><td>Specify report file (do not specify
-                                            if wanting to write the report to the
-                                            terminal)</td></tr>
-          <tr><td>RECURSIVE</td><td>-l</td><td>Set to 'false' to not perform
-                                               recursion down a directory, set
-                                               to 'true' otherwise</td></tr>
-          <tr><td>PATTERNS</td><td>-p</td><td>Specify patterns to search for
-                                              when validating a directory.</td></tr>
+          <tr><td>DICT</td><td>-d</td><td>Specify dictionary files</td></tr>
+          <tr><td>OUTPUT</td><td>-o</td><td>Specify report file (do not specify if wanting to write the report to the terminal)</td></tr>
+          <tr><td>RECURSIVE</td><td>-l</td><td>Set to 'false' to not perform recursion down a directory, set to 'true' otherwise</td></tr>
+          <tr><td>PATTERNS</td><td>-p</td><td>Specify patterns to search for when validating a directory.</td></tr>
+          <tr><td>IGNOREFILES</td><td>-X</td><td>Specify patterns to ignore when validating a directory.</td></tr>
         </table>
 
         <p>The following example demonstrates how to set a configuration file:</p>
           <source>
+# This is a VTool configuration file          
+
 TARGET = ./TEST_DIR
-DICTIONARIES = pdsdd.full
+DICT = pdsdd.full
 OUTPUT = report.txt
 RECURSIVE = false
 PATTERNS = "*.LBL"
@@ -184,8 +209,10 @@ PATTERNS = "*.LBL"
 
         <p>The following example demonstrates how to set a configuration file with multiple values for a keyword:</p>
           <source>
+# This is a VTool configuration file with multiple values
+
 TARGET = TEST.LBL ./TEST_DIR
-DICTIONARIES = pdsdd.full localdd.full
+DICT = pdsdd.full localdd.full
 RECURSIVE = true
 PATTERNS = "*.LBL" "*.FMT"
           </source>
