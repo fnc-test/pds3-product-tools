@@ -37,5 +37,25 @@ $Id$
         This release supports validation against the PDS Data Dictionary.
       </action>
     </release>
+    
+    <release version="0.3.0" description="Binary release for the second phase of alpha testing.">
+      <action dev="mcayanan" type="add">
+        Added the following command-line options:
+          <table>
+            <tr><td>-o</td><td>Write the validation results to a file</td></tr>
+            <tr><td>-p</td><td>Specify files/file patterns to include in validation</td></tr>
+            <tr><td>-X</td><td>Specify files/file patterns to exclude in validation</td></tr>
+            <tr><td>-c</td><td>Specify a configuration file to set default behaviors</td></tr>
+          </table>
+      </action>
+      
+      <action dev="mcayanan" type="update">
+        Changed the "f" (file) flag to a "t" (target) flag.
+      </action> 
+      
+      <action dev="mcayanan" type="add">
+        Added a user guide for VTool.
+      </action>
+    </release> 
   </body>
 </document>
