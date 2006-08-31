@@ -15,7 +15,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
 
+import org.apache.commons.io.filefilter.DirectoryFileFilter;
+import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
+import org.apache.commons.io.filefilter.NotFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.commons.io.FileUtils;
 import gov.nasa.pds.tools.file.filefilter.WildcardOSFilter;
@@ -30,17 +33,20 @@ import gov.nasa.pds.tools.file.filefilter.WildcardOSFilter;
  */
 public class FileListGenerator {
 
-	private IOFileFilter wildCardFilter;
+	private NotFileFilter noFileFilter;
+	private IOFileFilter noDirFilter;
+	private IOFileFilter fileFilter;
 	private List list;
 	
 	/**
 	 * Constructor that takes in a list of files and/or directories
-	 *
-	 * @param list - A list of files and/or directories
+	 * @param list a list of files and/or directories
 	 *
 	 */
 	public FileListGenerator(List list) {
-		wildCardFilter = new WildcardOSFilter ("*");
+		fileFilter = new WildcardOSFilter("*");
+		noFileFilter = null;
+		noDirFilter = null;
 		
 		try {
 			this.list = new ArrayList(list);
@@ -53,19 +59,25 @@ public class FileListGenerator {
 	
 	/**
 	 * Sets the filter to be used when searching for files in a directory
-	 * 
-	 * @param wildcards - pattern(s) to match
+	 * @param wildcards a list of files and/or file patterns to match
 	 */
 	public void setFileFilter(List wildcards) {
-		wildCardFilter = new WildcardOSFilter(wildcards);
+		fileFilter = new WildcardOSFilter(wildcards);
 	}
 	
 	/**
-	 * Sets the filter to be used when searching for files in a directory.
-	 * 
-	 * @param file - A file containing a list of patterns
+	 * Sets the filter to be used when searching for files to ignore in a directory
+	 * @param wildcards a list of files and/or file patterns to ignore
 	 */
-	public void setFileFilter(File file) {
+	public void setNoFileFilter(List wildcards) {
+		noFileFilter = new NotFileFilter(new WildcardOSFilter(wildcards));
+	}
+	
+	/**
+	 * Sets the filter to be used when searching for files to ignore in a directory.
+	 * @param file a file containing a list of files and/or file patterns to ignore
+	 */
+	public void setNoFileFilter(File file) {
 		List filters = new ArrayList();
 		String filter = null;
 		
@@ -84,18 +96,49 @@ public class FileListGenerator {
 			System.out.println( iex.getMessage() );
 			return;
 		}
+		setNoFileFilter(filters);
+	}
+	
+	/**
+	 * Sets the filter to be used when searching for directories to ignore
+	 * @param wildcards a list of directory and/or directory patterns to ignore
+	 */
+	public void setNoDirFilter(List wildcards) {
+		noDirFilter = new NotFileFilter(new WildcardOSFilter(wildcards));
+	}
+	
+	/**
+	 * Sets the filter to be used when searching for directories to ignore
+	 * @param file a file containing a list of directories and/or directory patterns to ignore
+	 */
+	public void setNoDirFilter(File file) {
+		List filters = new ArrayList();
+		String filter = null;
 		
-		setFileFilter(filters);
-		
+		try {
+			BufferedReader reader = new BufferedReader (new FileReader(file));
+			while( (filter = reader.readLine()) != null ) {
+				filters.add(filter);
+			}
+		}
+		catch( FileNotFoundException fex ) {
+			System.out.println( fex.getMessage() );
+			return;
+		}
+		catch( IOException iex ) {
+			System.out.println( iex.getMessage() );
+			return;
+		}
+		setNoDirFilter(filters);
 	}
 	
 	/**
 	 * Generates a list of files based on a supplied list of inputs. Accepted
 	 * inputs are files and directories.
 	 * 
-	 * @param inputs - A list of files and/or directories 
-	 * @param recurse - 'True' to recursively search down subdirectories for files to add onto the list.
-	 *  'False' to just search at the level of the supplied directory.
+	 * @param inputs a list of files and/or directories 
+	 * @param recurse 'true' to recursively search down subdirectories for files to add onto the list.
+	 *  'false' to just search at the level of the supplied directory.
 	 * @return A list of files based on the supplied inputs
 	 */
 	public List visitFilesAndDirs(boolean recurse) {
@@ -104,55 +147,43 @@ public class FileListGenerator {
 		
 		for(Iterator i = list.iterator(); i.hasNext(); ) {
 			file = new File( i.next().toString() );
-			if(file.isDirectory()) {
-				if(recurse)
-					files.addAll( visitAllDirs(file) );
-				else
-					files.addAll( visitDir(file) );
-			}
-			else {
+			if(file.isDirectory())
+				files.addAll( visitDirs(file, recurse) );
+			else 
 				files.add(file);
-			}
 		}
 		return files;
 	}
 	
 	/**
-	 * Gets a list of files only at the level of the supplied directory
+	 * Gets a list of files under a given directory.
 	 * 
-	 * @param dir - The name of the directory
-	 * @return A list of all files that were found underneath the given directory (excluding files
-	 * under subdirectories). In addition, if a filter was set via the setFileFilter method, then
-	 * this list will be comprised of files that matched the supplied filter.
+	 * @param dir the name of the directory
+	 * @param recurse 'true' to recursively traverse down the directory, 'false' otherwise
+	 * @return A list of all files that were found underneath the given directory. If a
+	 * filter was set via the setFileFilter and/or setNoFileFilter methods, then this list
+	 * will be comprised of files that matched.
 	 */
-	public List visitDir(File dir) {
+	public List visitDirs(File dir, boolean recurse) {
 		List children = new ArrayList();
+		IOFileFilter realFileFilter;
 		
 		if( !dir.isDirectory() )
 			throw new IllegalArgumentException("parameter 'dir' is not a directory: " + dir);
 		
-		children.addAll(FileUtils.listFiles(dir, wildCardFilter, null));
+		// If we have specified filters for files to exclude, then we need to add this to the
+		// filters
+		if(noFileFilter != null)
+			realFileFilter = FileFilterUtils.andFileFilter(fileFilter, noFileFilter);
+		else
+			realFileFilter = fileFilter;
+		
+		if(recurse)
+			children.addAll(FileUtils.listFiles(dir, realFileFilter, TrueFileFilter.INSTANCE));
+		else
+			children.addAll(FileUtils.listFiles(dir, realFileFilter, null));
+		
 		return children;
-	}
-		
-	/**
-	 * Recursively gets a list of files under the supplied directory and all of its subdirectories.
-	 * If a filter was set via the setFileFilter method, then the list will be constrained to those
-	 * files that matched the supplied filter.
-	 * 
-	 * @param dir - The name of the directory to visit
-	 * @return A List of all files that were found (including files under subdirectories) under the
-	 * given directory
-	 */
-	public List visitAllDirs(File dir) {
-		List children = new ArrayList();
-		
-		if( !dir.isDirectory() )
-			throw new IllegalArgumentException("parameter 'dir' is not a directory: " + dir);
-		
-		children.addAll(FileUtils.listFiles(dir, wildCardFilter, TrueFileFilter.INSTANCE)) ;
-		return children;
-
 	}
 	
 }
