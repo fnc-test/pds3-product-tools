@@ -49,7 +49,7 @@ import org.apache.log4j.PatternLayout;
 public class VTool {
 	
 	final private String version_id = "0.2.0"; 
-	private static Logger log = Logger.getLogger(new VTool().getClass());
+//	private static Logger log = Logger.getLogger(new VTool().getClass());
 	
 	private Options options;
 	private CommandLineParser parser;
@@ -719,11 +719,7 @@ public class VTool {
 
 		if(output != null) {
 			try {
-				if(output.exists())
-					output.delete();
-				log.addAppender(new FileAppender(new PatternLayout("%m%n"), output.toString()));
-				log.setAdditivity(false);
-				BasicConfigurator.configure(new FileAppender(new PatternLayout("%-5p %m%n"), output.toString()));
+				BasicConfigurator.configure(new FileAppender(new PatternLayout("%-5p %m%n"), output.toString(), false));
 			}
 			catch (IOException ioe) {
 				System.out.println( ioe.getMessage() );
@@ -731,8 +727,6 @@ public class VTool {
 			}
 		}
 		else {
-			log.addAppender(new ConsoleAppender(new PatternLayout("%m%n")));
-			log.setAdditivity(false);
 			BasicConfigurator.configure(new ConsoleAppender(new PatternLayout("%-5p %m%n")));
 		}
 	}
@@ -816,7 +810,6 @@ public class VTool {
 			}
 			
 			System.out.println("\nValidating " + target);
-			log.info("\nVALIDATION RESULTS: " + target);
 			
 			try {
 				if(dict == null)
