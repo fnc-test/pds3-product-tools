@@ -176,7 +176,9 @@ localdd.full -t TEST.LBL
       </subsection>
 
       <subsection name="Using A Configuration File">
-        <p>A configuration file is used to set the default behaviors of the tool. It consists of a text file made up of keyword/value pairs. Lines which begin with the hash character "#" are considered comments and are ignored. Also, any flag specified on the command line takes precedence over any equivalent settings placed in the configuration file.
+        <p>A configuration file is used to set the default behaviors of the tool. It consists of a text file made up of keyword/value pairs. Lines which begin with the hash character "#" are considered comments and are ignored.
+        </p>
+        <p><b>Any flag specified on the command line takes precedence over any equivalent settings placed in the configuration file.</b>
         </p>
             
         <p>The following table contains valid keywords that can be specified in the configuration file:</p>
@@ -221,6 +223,25 @@ PATTERNS = "*.LBL" "*.FMT"
           <source>
 -t TEST.LBL ./TEST_DIR -d pdsdd.full localdd.full \
 -p "*.LBL" "*.FMT"
+          </source>
+        
+        <p>The following example demonstrates how to override a setting in the configuration file.</p>
+        
+        <p>Suppose the configuration file named config.txt is defined as follows:</p>
+          <source>
+# This is another VTool configuration file
+
+TARGET = ./TEST_DIR
+DICT = pdsdd.full
+OUTPUT = report.txt
+RECURSIVE = false
+PATTERNS = "*.LBL"
+          </source>
+          
+        <p>If validating everything in TEST_DIR is desired rather than just files that end in "LBL" as is defined in the configuration file, then the following command demonstrates how to perform this behavior:
+        </p>
+          <source>
+[node:~] java gov.nasa.pds.tools.VTool -c config.txt -p "*"
           </source>
       </subsection>    
     </section>
