@@ -48,8 +48,8 @@ import org.apache.log4j.PatternLayout;
  */
 public class VTool {
 	
-	final private String version_id = "0.2.0"; 
-//	private static Logger log = Logger.getLogger(new VTool().getClass());
+	final private String version_id = "0.3.0"; 
+	private static Logger log = Logger.getLogger(new VTool().getClass());
 	
 	private Options options;
 	private CommandLineParser parser;
@@ -105,7 +105,6 @@ public class VTool {
 	 *
 	 */	
 	public void showVersion() {
-		printDebug("Display version number and disclaimer notice");
 		System.out.println("PDS Validation Tool (VTool) " + version_id);
 		System.out.println("\nDISCLAIMER:\n" + 
 				           "THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE CALIFORNIA\n" + 
@@ -279,13 +278,19 @@ public class VTool {
 			// Check for unrecognized arguments on the command-line
 			for(Iterator i = cmd.getArgList().iterator(); i.hasNext();)
 				throw new UnrecognizedOptionException( "Unrecognized option/argument: " + i.next().toString());
+			
+			// Check if the help flag was set
+			if(cmd.hasOption("h"))
+				showHelp();
+			// Check if the flag to display the version number and disclaimer notice was set
+			if(cmd.hasOption("V")) 
+				showVersion();
 			// Check if a configuration file was specified
 			if(cmd.hasOption("c")) {
 				config = new File(cmd.getOptionValue("c"));
-				printDebug("Got configuration file: " + config);
 				readConfigFile(config);
 			}
-			// verbose flag must be queried first in order to determine whether to print debug statements
+			// verbose flag
 			if(cmd.hasOption("v")) {
 				try {
 					setVerbose(Short.parseShort(cmd.getOptionValue("v")));
@@ -295,13 +300,12 @@ public class VTool {
 				}
 		
 			}
-			// Check if the help flag was set
-			if(cmd.hasOption("h"))
-				showHelp();
-			// Check if the flag to display the version number and disclaimer notice was set
-			if(cmd.hasOption("V")) 
-				showVersion();
-		
+			// Check for the 'o' flag to specify a file where the reporting will be written to
+			// This flag must be queried before we can configure the logging
+			if(cmd.hasOption("o"))
+				setOutput(new File(cmd.getOptionValue("o")));
+			setupLoggers();	
+			
 			// Check if the -t flag was set in either the config file or the command line
 			if(cmd.hasOption("t")) {
 				setTargets(Arrays.asList(cmd.getOptionValues("t")));
@@ -315,13 +319,7 @@ public class VTool {
 			// Check for the include path to indicate the starting path to search for 
 			// non ^STRUCTURE pointers
 			if(cmd.hasOption("I"))
-				setIncludePath(new File(cmd.getOptionValue("I")));
-						
-			// Check for the -o flag to specify a file where the reporting will be written to
-			if(cmd.hasOption("o"))
-				setOutput(new File(cmd.getOptionValue("o")));
-			setupLoggers();
-			
+				setIncludePath(new File(cmd.getOptionValue("I")));			
 			// Check to see if data object validation is set
 			if(cmd.hasOption("OBJ")) 
 				setDataObj(false);
@@ -533,7 +531,6 @@ public class VTool {
 	 * @param o a report file name
 	 */
 	public void setOutput(File o) {
-		printDebug("Set output to: " + output);
 		output = o;
 	}
 	
@@ -618,7 +615,6 @@ public class VTool {
 	 */
 	public void setVerbose(short v) {
 		verbose = v;
-		printDebug("Verbosity level set to: " + verbose);
 		if(verbose < 0 || verbose > 3) {
 			throw new IllegalArgumentException("Invalid value entered for 'v' flag." + 
 														" Valid values can only be 0, 1, 2, or 3");
@@ -668,6 +664,8 @@ public class VTool {
 		try {
 			if(config.isEmpty())
 				throw new Exception("Configuration file is empty or does not exist: " + file.toString());
+			if(config.containsKey("OUTPUT"))
+				setOutput(new File(config.getString("OUTPUT")));
 			if(config.containsKey("DATAOBJECTS"))
 				setDataObj(config.getBoolean("DATAOBJECTS"));
 			if(config.containsKey("DICT"))
@@ -682,8 +680,6 @@ public class VTool {
 			}
 			if(config.containsKey("INCLUDEPATH"))
 				setIncludePath(new File(config.getString("INCLUDEPATH")));
-			if(config.containsKey("OUTPUT"))
-				setOutput(new File(config.getString("OUTPUT")));
 			if(config.containsKey("OUTPUTFORMAT"))
 				setOutputFmt(config.getString("OUTPUTFORMAT"));
 			if(config.containsKey("PATTERNS")) {
@@ -720,6 +716,7 @@ public class VTool {
 		if(output != null) {
 			try {
 				BasicConfigurator.configure(new FileAppender(new PatternLayout("%-5p %m%n"), output.toString(), false));
+				printDebug("Writing validation results to file: " + output);
 			}
 			catch (IOException ioe) {
 				System.out.println( ioe.getMessage() );
@@ -728,6 +725,7 @@ public class VTool {
 		}
 		else {
 			BasicConfigurator.configure(new ConsoleAppender(new PatternLayout("%-5p %m%n")));
+			printDebug("Writing validation results to terminal");
 		}
 	}
 	
@@ -737,8 +735,8 @@ public class VTool {
 	 */
 	
 	private void printDebug(String s) {
-		if(verbose == 0) 
-			System.out.println("DEBUG: " + s);
+		if(verbose == 0)  
+			log.debug(s);
 	}
 	
 	/**
@@ -820,6 +818,7 @@ public class VTool {
 				System.out.println(iex.getMessage());
 				System.exit(1);
 			} catch( gov.nasa.pds.tools.label.parser.ParseException pe ) {
+				log.info(pe.getMessage());
 				continue;
 			}
 		}
