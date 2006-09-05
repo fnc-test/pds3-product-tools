@@ -77,8 +77,8 @@ public class VTool {
 	/** 
 	 * Default constructor
 	 */
-	public VTool(){
-		alias = true;
+	public VTool() {
+		alias = false;
 		config = null;
 		dictionaries = null;
 		dataObj = true;
@@ -98,6 +98,7 @@ public class VTool {
 		xml = false;
 		options = new Options();
 		parser = new GnuParser();
+		
 	}
 	
 	/**
@@ -141,13 +142,13 @@ public class VTool {
 	 * Builds the set of options that are available for VTool
 	 */
 	private void buildOpts() {
+		options.addOption("a", "alias", false, "Enable aliasing feature when validating label file(s)");
 		options.addOption("F", "no-follow", false, "Do not follow ^STRUCTURE pointers in a label");
 		options.addOption("h", "help", false, "Display usage");
 		options.addOption("OBJ", "no-obj", false, "Do not perform data object validation");
 //		options.addOption("p", "partial", false, "Validate as a partial label file");
 		options.addOption("l", "local", false, "Validate files only in the input directory rather than " + 
 				                               "recursively traversing down the subdirectories.");	
-		options.addOption("u", "unalias", false, "Disable aliasing feature when validating label file(s)");
 		options.addOption("V", "version", false, "Display VTool version");
 		options.addOption("x", "xml-output", false, "Output the report in XML format");
 		
@@ -174,7 +175,8 @@ public class VTool {
 		
 		// Option to specify a file containing a list of file extensions to ignore
 		OptionBuilder.withLongOpt("ignore-files");
-		OptionBuilder.withDescription("Specify a text file containing a list of files and/or file patterns to ignore");
+		OptionBuilder.withDescription("Specify a list of files and/or file patterns to ignore from validation. Each pattern " + 
+				                      "must be surrounded by quotes. (i.e. -X \"*TAB\" \"*IMG\")");
 		OptionBuilder.hasArgs();
 		OptionBuilder.withArgName("file");
 		OptionBuilder.withType(String.class);
@@ -302,10 +304,10 @@ public class VTool {
 			}
 			// Check for the 'o' flag to specify a file where the reporting will be written to
 			// This flag must be queried before we can configure the logging
-			if(cmd.hasOption("o"))
+			if(cmd.hasOption("o")) {
 				setOutput(new File(cmd.getOptionValue("o")));
-			setupLoggers();	
-			
+				setFileLogger();	
+			}
 			// Check if the -t flag was set in either the config file or the command line
 			if(cmd.hasOption("t")) {
 				setTargets(Arrays.asList(cmd.getOptionValues("t")));
@@ -313,6 +315,9 @@ public class VTool {
 			else if(targets == null)
 				throw new MissingOptionException("The 't' flag is required or must be set in the configuration file");
 			
+			// Check to see if aliasing is turned on
+			if(cmd.hasOption("a"))
+				setAlias(false);
 			// Check for the flag that indicates whether to follow ^STRUCTURE pointers
 			if(cmd.hasOption("F"))
 				setFollowPtrs(false);
@@ -329,9 +334,6 @@ public class VTool {
 			// Check to see if patterns were set
 			if(cmd.hasOption("p"))
 				setPatterns(Arrays.asList(cmd.getOptionValues("p")));
-			// Check to see if aliasing is turned off
-			if(cmd.hasOption("u"))
-				setAlias(false);
 			// Check to see if the report will be in xml format
 			if(cmd.hasOption("x"))
 				setXml(true);
@@ -659,13 +661,17 @@ public class VTool {
 			System.out.println(ce.getMessage());
 			System.exit(1);
 		}
-		
+
 		
 		try {
 			if(config.isEmpty())
 				throw new Exception("Configuration file is empty or does not exist: " + file.toString());
-			if(config.containsKey("OUTPUT"))
+			if(config.containsKey("VERBOSE"))
+				setVerbose(config.getShort("VERBOSE"));
+			if(config.containsKey("OUTPUT")) {
 				setOutput(new File(config.getString("OUTPUT")));
+				setFileLogger();
+			}
 			if(config.containsKey("DATAOBJECTS"))
 				setDataObj(config.getBoolean("DATAOBJECTS"));
 			if(config.containsKey("DICT"))
@@ -692,8 +698,6 @@ public class VTool {
 				setRecursive(config.getBoolean("RECURSIVE"));
 			if(config.containsKey("TARGET"))
 				setTargets(config.getList("TARGET"));
-			if(config.containsKey("VERBOSE"))
-				setVerbose(config.getShort("VERBOSE"));
 			if(config.containsKey("XMLOUTPUT"))
 				setXml(config.getBoolean("XMLOUTPUT"));
 		} catch(ConversionException ce) {
@@ -706,26 +710,20 @@ public class VTool {
 	}
 	
 	/**
-	 * Configures the logger from the log4j class to either print to a file or to the
-	 * Standard Out
+	 * Configures the logger from the log4j class to print to a file
 	 *
 	 */
 	
-	private void setupLoggers() {
-
+	private void setFileLogger() {
+		BasicConfigurator.resetConfiguration();
 		if(output != null) {
 			try {
 				BasicConfigurator.configure(new FileAppender(new PatternLayout("%-5p %m%n"), output.toString(), false));
-				printDebug("Writing validation results to file: " + output);
 			}
 			catch (IOException ioe) {
 				System.out.println( ioe.getMessage() );
 				System.exit(1);
 			}
-		}
-		else {
-			BasicConfigurator.configure(new ConsoleAppender(new PatternLayout("%-5p %m%n")));
-			printDebug("Writing validation results to terminal");
 		}
 	}
 	
@@ -735,7 +733,7 @@ public class VTool {
 	 */
 	
 	private void printDebug(String s) {
-		if(verbose == 0)  
+		if(verbose == 0) 
 			log.debug(s);
 	}
 	
@@ -818,7 +816,6 @@ public class VTool {
 				System.out.println(iex.getMessage());
 				System.exit(1);
 			} catch( gov.nasa.pds.tools.label.parser.ParseException pe ) {
-				log.info(pe.getMessage());
 				continue;
 			}
 		}
@@ -861,6 +858,8 @@ public class VTool {
 	public static void main(String[] argv) {
 		VTool vtool = new VTool();
 		Dictionary mainDictionary = null;
+
+		BasicConfigurator.configure(new ConsoleAppender(new PatternLayout("%-5p %m%n")));
 		
 		if(argv.length == 0) {
 			System.out.println("\nType 'VTool -h' for usage");
