@@ -41,32 +41,32 @@ $Id: index.xml 1157 2006-06-16 19:50:08Z shardman $
         <p><b>UNIX-Based Command</b></p>
           <source>
 [node:~] setenv CLASSPATH ${CLASSPATH}: \
-$HOME/product-tool-X.X.X/lib/antlr-2.7.6.jar: \
-$HOME/product-tool-X.X.X/lib/commons-cli-1.0.jar: \
-$HOME/product-tool-X.X.X/lib/commons-collections-3.1.jar: \
-$HOME/product-tool-X.X.X/lib/commons-configuration-1.2.jar: \
-$HOME/product-tool-X.X.X/lib/commons-io-3.1.jar: \
-$HOME/product-tool-X.X.X/lib/commons-lang-2.1.jar: \
-$HOME/product-tool-X.X.X/lib/commons-logging-1.0.3.jar: \
-$HOME/product-tool-X.X.X/lib/log4j-1.2.13.jar: \
-$HOME/product-tool-X.X.X/lib/product-tool-X.X.X.jar
+$HOME/product-tools-X.X.X/lib/antlr-2.7.6.jar: \
+$HOME/product-tools-X.X.X/lib/commons-cli-1.0.jar: \
+$HOME/product-tools-X.X.X/lib/commons-collections-3.1.jar: \
+$HOME/product-tools-X.X.X/lib/commons-configuration-1.2.jar: \
+$HOME/product-tools-X.X.X/lib/commons-io-3.1.jar: \
+$HOME/product-tools-X.X.X/lib/commons-lang-2.1.jar: \
+$HOME/product-tools-X.X.X/lib/commons-logging-1.0.3.jar: \
+$HOME/product-tools-X.X.X/lib/log4j-1.2.13.jar: \
+$HOME/product-tools-X.X.X/lib/product-tools-X.X.X.jar
           </source>
 
         <p><b>Windows Command</b></p>
           <source>
 C:\&gt; set CLASSPATH=%CLASSPATH%; \
-c:\product-tool-X.X.X\lib\antlr-2.7.6.jar; \
-c:\product-tool-X.X.X\lib\commons-cli-1.0.jar; \
-c:\product-tool-X.X.X\lib\commons-collections-3.1.jar; \
-c:\product-tool-X.X.X\lib\commons-configuration-1.2.jar; \
-c:\product-tool-X.X.X\lib\commons-io-3.1.jar; \
-c:\product-tool-X.X.X\lib\commons-lang-2.1.jar; \
-c:\product-tool-X.X.X\lib\commons-logging-1.0.3.jar; \
-c:\product-tool-X.X.X\lib\log4j-1.2.13.jar; \
-c:\product-tool-X.X.X\lib\product-tool-X.X.X.jar
+c:\product-tools-X.X.X\lib\antlr-2.7.6.jar; \
+c:\product-tools-X.X.X\lib\commons-cli-1.0.jar; \
+c:\product-tools-X.X.X\lib\commons-collections-3.1.jar; \
+c:\product-tools-X.X.X\lib\commons-configuration-1.2.jar; \
+c:\product-tools-X.X.X\lib\commons-io-3.1.jar; \
+c:\product-tools-X.X.X\lib\commons-lang-2.1.jar; \
+c:\product-tools-X.X.X\lib\commons-logging-1.0.3.jar; \
+c:\product-tools-X.X.X\lib\log4j-1.2.13.jar; \
+c:\product-tools-X.X.X\lib\product-tools-X.X.X.jar
           </source>
 
-        <p>Check that the jar files found in the product-tool package has been correctly added to the end of the <i>CLASSPATH</i> variable. The following commands demonstrate how to verify this:</p>
+        <p>Check that the jar files found in the product-tools package has been correctly added to the end of the <i>CLASSPATH</i> variable. The following commands demonstrate how to verify this:</p>
 
         <p><b>UNIX-Based Command</b></p>
           <source>[node:~] echo $CLASSPATH</source>
@@ -80,18 +80,18 @@ c:\product-tool-X.X.X\lib\product-tool-X.X.X.jar
 [node:~] java -Djava.ext.dirs=&lt;path to your jar files&gt;...
           </source>
         
-        <p>The following commands demonstrate how to run VTool each time without having to set the <i>CLASSPATH</i> environment variable. The example shown below assumes that all the jar files found in the product-tool package are located in $HOME/product-tool-X.X.X/lib:
+        <p>The following commands demonstrate how to run VTool each time without having to set the <i>CLASSPATH</i> environment variable. The example shown below assumes that all the jar files found in the product-tools package are located in $HOME/product-tools-X.X.X/lib:
         </p>
         
         <p><b>UNIX-Based Command</b></p> 
           <source>
-[node:~] java -Djava.ext.dirs=$HOME/product-tool-X.X.X/lib \
+[node:~] java -Djava.ext.dirs=$HOME/product-tools-X.X.X/lib \
 gov.nasa.pds.tools.VTool -d pdsdd.full -t TEST.LBL
           </source>
           
         <p><b>Windows Command</b></p>
           <source>
-C:\&gt; java -Djava.ext.dirs=c:\product-tool-X.X.X\lib \
+C:\&gt; java -Djava.ext.dirs=c:\product-tools-X.X.X\lib \
 gov.nasa.pds.tools.VTool -d pdsdd.full -t TEST.LBL
           </source>         
       </subsection>
