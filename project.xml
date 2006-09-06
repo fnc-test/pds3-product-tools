@@ -19,16 +19,17 @@ $Id$
 
 <project>
     <extend>${defaults.xml}</extend>
-    <id>pds-tools</id>
-    <name>PDS Tools</name>
-    <currentVersion>0.2.0</currentVersion>
+    <id>product-tools</id>
+    <name>Product Tools</name>
+    <currentVersion>0.3.0</currentVersion>
     <package>gov.nasa.pds.tools</package>
     <shortDescription>
-      Next generation of PDS tools.
+      Next generation of PDS product tools.
     </shortDescription>
     <description>
-      The next generation of Planetary Data System (PDS) Tools will support design/generation, validation and submission of archival products to the PDS. These tools are intended to replace the current generation of tools (e.g., lvtool, kwvtool, tbtool, etc.) used by the Discpline Nodes, Engineering Node and the PDS user community as a whole.
+      The next generation of Planetary Data System (PDS) Product Tools will support design/generation, validation and submission of archival products to the PDS. These tools are intended to replace the current generation of tools (e.g., lvtool, kwvtool, tbtool, etc.) used by the Discpline Nodes, Engineering Node and the PDS user community as a whole.
     </description>
+
     <developers>
         <developer>
             <name>Sean Hardman</name>
@@ -58,6 +59,7 @@ $Id$
             </roles>
         </developer>
     </developers>
+
     <dependencies>
         <dependency>
             <groupId>commons-cli</groupId>
@@ -108,8 +110,9 @@ $Id$
             <url>http://www.ibiblio.org/maven/log4j/</url>
         </dependency>
     </dependencies>
+
     <build>
-        <nagEmailAddress>paul.ramirez@jpl.nasa.gov</nagEmailAddress>
+        <nagEmailAddress>Paul.Ramirez@jpl.nasa.gov</nagEmailAddress>
         <sourceDirectory>${basedir}/src/java</sourceDirectory>
         <unitTestSourceDirectory>${basedir}/src/test</unitTestSourceDirectory>
         <resources/>

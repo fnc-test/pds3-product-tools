@@ -16,15 +16,11 @@ countries or providing access to foreign persons.
 $Id$
 -->
 
-<project name="pds-tools" href="http://oodt.jpl.nasa.gov/pds-tools/">
-    <title>PDS Tools</title>
-    <body>
-        <links>
-            <item name="OODT" href="../oodt-site/"/>
-            <item name="PDS" href="../pds/"/>
-        </links>
-        <menu name="Software Documentation">
-            <item name="User Guide" href="userguide/index.html"/>
-        </menu>
-    </body>
+<project name="product-tools" href="http://starcell.jpl.nasa.gov/product-tools/">
+  <title>Product Tools</title>
+  <body>
+    <menu name="Software Documentation">
+      <item name="User Guide" href="userguide/index.html"/>
+    </menu>
+  </body>
 </project>
