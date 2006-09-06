@@ -98,7 +98,6 @@ public class DefaultLabelParser implements LabelParser {
         log.info("Parsing label " + file.toString() + " with PDS_VERSION_ID = " + value);
         
         if (Boolean.valueOf(properties.getProperty("parser.pointers", "true")).booleanValue()) {
-        	 System.out.println(properties.getProperty("parser.pointers"));
         	 URL base = includePath;
              if (base == null)
              	base = new URL(file.toString().substring(0, file.toString().lastIndexOf("/")));
