@@ -202,7 +202,7 @@ public class VTool {
 		// Option to specify a path to the Pointer files		
 		OptionBuilder.withLongOpt("include");
 		OptionBuilder.withDescription("Specify the starting path to search for pointer files. " + 
-															"Default is the current working directory");
+															"Default is the directory of the label being validated");
 		OptionBuilder.hasArg();
 		OptionBuilder.withArgName("path");
 		OptionBuilder.withType(String.class);
@@ -457,10 +457,7 @@ public class VTool {
 	 * @param i a start path
 	 */
 	public void setIncludePath(File i) {
-		if(followPtrs == false)
-			throw new IllegalArgumentException("Option was selected to not follow pointers. 'I' flag cannot be specified"); 
-		else 
-			includePath = i;
+		includePath = i;
 	}
 	
 	/**
@@ -661,45 +658,44 @@ public class VTool {
 			System.out.println(ce.getMessage());
 			System.exit(1);
 		}
-
 		
 		try {
 			if(config.isEmpty())
 				throw new Exception("Configuration file is empty or does not exist: " + file.toString());
-			if(config.containsKey("VERBOSE"))
-				setVerbose(config.getShort("VERBOSE"));
-			if(config.containsKey("OUTPUT")) {
-				setOutput(new File(config.getString("OUTPUT")));
+			if(config.containsKey("vtool.verbose"))
+				setVerbose(config.getShort("vtool.verbose"));
+			if(config.containsKey("vtool.output")) {
+				setOutput(new File(config.getString("vtool.output")));
 				setFileLogger();
 			}
-			if(config.containsKey("DATAOBJECTS"))
-				setDataObj(config.getBoolean("DATAOBJECTS"));
-			if(config.containsKey("DICT"))
-				setDictionaries(config.getList("DICT"));
-			if(config.containsKey("FOLLOW"))
-				setFollowPtrs(config.getBoolean("FOLLOW"));
-			if(config.containsKey("IGNOREFILES")) {
-				setNoFile(config.getList("IGNOREFILES"));
+			if(config.containsKey("vtool.dataobjects"))
+				setDataObj(config.getBoolean("vtool.dataobjects"));
+			if(config.containsKey("vtool.dict"))
+				setDictionaries(config.getList("vtool.dict"));
+			if(config.containsKey("vtool.follow"))
+				setFollowPtrs(config.getBoolean("vtool.follow"));
+			if(config.containsKey("vtool.ignorefiles")) {
+				setNoFile(config.getList("vtool.ignorefiles"));
 				// Removes quotes surrounding each pattern being specified
 				for(int i=0; i < noFile.size(); i++)
 					noFile.set(i, noFile.get(i).toString().replace('"',' ').trim());
 			}
-			if(config.containsKey("INCLUDEPATH"))
-				setIncludePath(new File(config.getString("INCLUDEPATH")));
-			if(config.containsKey("OUTPUTFORMAT"))
-				setOutputFmt(config.getString("OUTPUTFORMAT"));
-			if(config.containsKey("PATTERNS")) {
-				setPatterns(config.getList("PATTERNS"));
+			if(config.containsKey("vtool.includepath"))
+				setIncludePath(new File(config.getString("vtool.includepath")));
+			if(config.containsKey("vtool.outputformat"))
+				setOutputFmt(config.getString("vtool.outputformat"));
+			if(config.containsKey("vtool.patterns")) {
+				setPatterns(config.getList("vtool.patterns"));
 				// Removes quotes surrounding each pattern being specified
 				for(int i=0; i < patterns.size(); i++)
 					patterns.set(i, patterns.get(i).toString().replace('"',' ').trim());
 			}
-			if(config.containsKey("RECURSIVE"))
-				setRecursive(config.getBoolean("RECURSIVE"));
-			if(config.containsKey("TARGET"))
-				setTargets(config.getList("TARGET"));
-			if(config.containsKey("XMLOUTPUT"))
-				setXml(config.getBoolean("XMLOUTPUT"));
+			if(config.containsKey("vtool.recursive"))
+				setRecursive(config.getBoolean("vtool.recursive"));
+			if(config.containsKey("vtool.target"))
+				setTargets(config.getList("vtool.target"));
+			if(config.containsKey("vtool.xmloutput"))
+				setXml(config.getBoolean("vtool.xmloutput"));
 		} catch(ConversionException ce) {
 			System.out.println(ce.getMessage());
 			System.exit(1);
@@ -759,7 +755,7 @@ public class VTool {
 			while( i.hasNext() ) {
 				dd = new File( i.next().toString() );
 				printDebug("Parsing dictionary file: " + dd);
-				dict.merge( DictionaryParser.parse( dd.toURL() ) );
+				dict.merge( DictionaryParser.parse(dd.toURL()), true );
 			}
 		} catch( MalformedURLException uex) {
 			System.out.println("Dictionary file does not exist: " + dd);
@@ -786,11 +782,23 @@ public class VTool {
 	 */
 	
 	public void validateLabels(List files, Dictionary dict) {
-		LabelParserFactory factory = LabelParserFactory.getInstance();
-		LabelParser parser = factory.newLabelParser();
 		String target;
 		URL url = null;
-
+		LabelParserFactory factory = LabelParserFactory.getInstance();
+		LabelParser parser = factory.newLabelParser();
+		
+		if(includePath != null) {
+			try {
+				parser.addIncludePath(includePath.toURL());
+			}
+			catch(MalformedURLException e) {
+				System.out.println(e.getMessage());
+				System.exit(1);
+			}
+		}
+		if(followPtrs == false)
+			parser.getProperties().setProperty("parser.pointers", "false");
+		
 		for( Iterator i = files.iterator(); i.hasNext(); ) {
 			target = new String( i.next().toString());
 			
@@ -858,7 +866,6 @@ public class VTool {
 	public static void main(String[] argv) {
 		VTool vtool = new VTool();
 		Dictionary mainDictionary = null;
-
 		BasicConfigurator.configure(new ConsoleAppender(new PatternLayout("%-5p %m%n")));
 		
 		if(argv.length == 0) {
