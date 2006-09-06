@@ -134,6 +134,11 @@ public class ObjectStatement extends Statement {
             objects.put(statement.getIdentifier(), statement);
         else if (statement instanceof AttributeStatement)
             attributes.put(statement.getIdentifier(), statement);
+        else if (statement instanceof StructurePointer) {
+            pointers.add(statement);
+            for (Iterator i = ((StructurePointer) statement).getStatements().iterator(); i.hasNext();)
+                addStatement((Statement) i.next());
+        }
         else if (statement instanceof PointerStatement)
             pointers.add(statement);
         //TODO throw illegal argument exception

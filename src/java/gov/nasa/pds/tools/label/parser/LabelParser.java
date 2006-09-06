@@ -58,6 +58,36 @@ public interface LabelParser {
     public Label parse(URL file, Dictionary dictionary, boolean dataObjectValidation) throws ParseException, IOException;
     
     /**
+     * Parses the given partial label.
+     * @param file
+     * @return {@link Label} representation of the file
+     * @throws ParseException
+     * @throws IOException
+     */
+    public Label parsePartial(URL file) throws ParseException, IOException;
+    
+    /**
+     * Parses the given partial label and validates against the dictionary.
+     * @param file
+     * @param dictionary
+     * @return {@link Label} representation of the file
+     * @throws ParseException
+     * @throws IOException
+     */
+    public Label parsePartial(URL file, Dictionary dictionary) throws ParseException, IOException;
+    
+    /**
+     * Parses the given partial label, validates against dictionary, and may perform dataObjectValidation
+     * @param file
+     * @param dictionary
+     * @param dataObjectValidation
+     * @return {@link Label} representation of the file
+     * @throws ParseException
+     * @throws IOException
+     */
+    public Label parsePartial(URL file, Dictionary dictionary, boolean dataObjectValidation) throws ParseException, IOException;
+    
+    /**
      * Passes properties to the parser. 
      * @param properties Set of properties.
      */

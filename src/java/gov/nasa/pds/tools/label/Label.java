@@ -145,8 +145,13 @@ public class Label {
      * Associates a statement with this label
      * @param statement to be added to label
      */
-    public void addStatement(Statement statement) {
-        if (statement instanceof PointerStatement)
+    public void addStatement(Statement statement) { 
+        if (statement instanceof StructurePointer) {
+            pointers.add(statement);
+            for (Iterator i = ((StructurePointer) statement).getStatements().iterator(); i.hasNext();)
+                addStatement((Statement) i.next());
+        }
+        else if (statement instanceof PointerStatement)
             pointers.add(statement);
         else
             statements.put(statement.getIdentifier(), statement);

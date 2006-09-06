@@ -6,6 +6,7 @@
 
 package gov.nasa.pds.tools.label;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
@@ -52,6 +53,11 @@ public class GroupStatement extends Statement {
     public void addStatement(Statement statement) {
         if (statement instanceof AttributeStatement) 
            attributes.put(statement.getIdentifier(), statement);
+        else if (statement instanceof StructurePointer) {
+            pointers.add(statement);
+            for (Iterator i = ((StructurePointer) statement).getStatements().iterator(); i.hasNext();)
+                addStatement((Statement) i.next());
+        }
         else if (statement instanceof PointerStatement)
            pointers.add(statement);
         // TODO: else throw error

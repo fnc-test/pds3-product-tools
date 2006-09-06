@@ -52,6 +52,7 @@ public class DefaultLabelParser implements LabelParser {
     private static Logger log = Logger.getLogger(new DefaultLabelParser().getClass());
     
     public DefaultLabelParser() {
+        properties = new Properties();
     }
 
     /* (non-Javadoc)
@@ -59,37 +60,48 @@ public class DefaultLabelParser implements LabelParser {
      */
     public Label parse(URL file) throws ParseException, IOException {
         Label label = null;
-        InputStream input = file.openStream();
+        InputStream checkInput = file.openStream();
         
         //Set a place where the input stream can be reset to.
-        input.mark(40);      
-        List sfdus = consumeSFDUHeader(input);
+        checkInput.mark(40);      
+        List sfdus = consumeSFDUHeader(checkInput);
         for (Iterator i = sfdus.iterator(); i.hasNext();) {
             log.info("Found SFDU Label: " + i.next().toString());
         }
         
-        //Set a new mark to go back to. Read a max of 1024 bytes.
-        input.mark(1024);
         //Now look for PDS_VERSION_ID to ensure that this is a file we want to validate
-        BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(checkInput));
         String version = reader.readLine().trim();
         String[] line = version.split("=");  
         
-        if (line.length != 2)
+        if (line.length != 2) {
+            log.error(file.toString() + " is not a label. Could not find the PDS_VERSION_ID in the first line.");
             throw new ParseException(file.toString() + " is not a label. Could not find the PDS_VERSION_ID in the first line.");
+        }
         
         String name = line[0].trim();
         String value = line[1].trim();
-        
-        if (!"PDS_VERSION_ID".equals(name))
+          
+        if (!"PDS_VERSION_ID".equals(name)) {
+            log.error(file.toString() + " is not a label. Could not find the PDS_VERSION_ID in the first line.");
             throw new ParseException(file.toString() + " is not a label. Could not find the PDS_VERSION_ID in the first line.");
+        }
         
-        log.info("Parsing " + file.toString() + " with PDS_VERSION_ID = " + value);
-        //Reset to parse at the beggining of the file
-        input.reset();
-        
+        checkInput.close();
+        InputStream input = file.openStream();
+        if (sfdus.size() != 0)
+            input.skip(40);
         ODLLexer lexer = new ODLLexer(input);
         ODLParser parser = new ODLParser(lexer);
+        log.info("Parsing label " + file.toString() + " with PDS_VERSION_ID = " + value);
+        
+        if (Boolean.valueOf(properties.getProperty("parser.pointers", "true")).booleanValue()) {
+            URL base = new URL(file.toString().substring(0, file.toString().lastIndexOf("/")));
+            parser.setBaseURL(base);
+        } else {
+            log.info("Pointers disabled. Pointers will not be followed");
+        }
+        
         try {
             label = parser.label();
         } catch (ANTLRException ex) {
@@ -205,6 +217,49 @@ public class DefaultLabelParser implements LabelParser {
     public String getODLVersion() {
         return "2.1";
     }
+
+    /* (non-Javadoc)
+     * @see gov.nasa.pds.tools.label.parser.LabelParser#parsePartial(java.net.URL)
+     */
+    public Label parsePartial(URL file) throws ParseException, IOException {
+        Label label = null;
+        InputStream input = file.openStream();
+        ODLLexer lexer = new ODLLexer(input);
+        ODLParser parser = new ODLParser(lexer);
+        log.info("Parsing partial label " + file.toString());
+        
+        if (Boolean.valueOf(properties.getProperty("parser.pointers", "true")).booleanValue()) {
+            URL base = new URL(file.toString().substring(0, file.toString().lastIndexOf("/")));
+            parser.setBaseURL(base);
+        } else {
+            log.info("Pointers disabled. Pointers will not be followed");
+        }
+        
+        try {
+            label = parser.label();
+        } catch (ANTLRException ex) {
+            log.error(ex.getMessage());
+            throw new ParseException(ex.getMessage());
+        }
+
+        return label;
+    }
+
+    /* (non-Javadoc)
+     * @see gov.nasa.pds.tools.label.parser.LabelParser#parsePartial(java.net.URL, gov.nasa.pds.tools.dict.Dictionary)
+     */
+    public Label parsePartial(URL file, Dictionary dictionary) throws ParseException, IOException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    /* (non-Javadoc)
+     * @see gov.nasa.pds.tools.label.parser.LabelParser#parsePartial(java.net.URL, gov.nasa.pds.tools.dict.Dictionary, boolean)
+     */
+    public Label parsePartial(URL file, Dictionary dictionary, boolean dataObjectValidation) throws ParseException, IOException {
+        // TODO Auto-generated method stub
+        return null;
+    }
     
     /**
      * 
@@ -215,10 +270,11 @@ public class DefaultLabelParser implements LabelParser {
         BasicConfigurator.configure(new ConsoleAppender(new PatternLayout("%-5p %m%n")));
         LabelParserFactory factory = LabelParserFactory.getInstance();
         LabelParser parser = factory.newLabelParser();
+        Label label = null;
         if (args.length == 1)
-            parser.parse(new URL(args[0]));
+            label = parser.parse(new URL(args[0]));
         else
-            parser.parse(new URL(args[0]), DictionaryParser.parse(new URL(args[1])));
+            label = parser.parse(new URL(args[0]), DictionaryParser.parse(new URL(args[1])));
     }
 
 }

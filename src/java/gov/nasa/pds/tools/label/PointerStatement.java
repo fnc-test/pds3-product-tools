@@ -12,7 +12,7 @@ package gov.nasa.pds.tools.label;
  * 
  */
 public class PointerStatement extends Statement {
-    private Value value;
+    protected Value value;
     private CommentStatement comment;
 
     /**
