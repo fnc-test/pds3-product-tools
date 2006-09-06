@@ -26,13 +26,18 @@ import gov.nasa.pds.tools.label.Label;
 import gov.nasa.pds.tools.label.Numeric;
 import gov.nasa.pds.tools.label.ObjectStatement;
 import gov.nasa.pds.tools.label.PointerStatement;
+import gov.nasa.pds.tools.label.PointerStatementFactory;
 import gov.nasa.pds.tools.label.Scalar;
 import gov.nasa.pds.tools.label.Sequence;
 import gov.nasa.pds.tools.label.Set;
 import gov.nasa.pds.tools.label.Statement;
+import gov.nasa.pds.tools.label.StructurePointer;
 import gov.nasa.pds.tools.label.Symbol;
 import gov.nasa.pds.tools.label.TextString;
 import gov.nasa.pds.tools.label.Value;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 import java.util.ArrayList;
 import java.text.ParseException;
@@ -46,6 +51,7 @@ options {
 
 {
     private static Logger log = Logger.getLogger("gov.nasa.pds.tools.label.antlr.ODLParser"); 
+    private static URL base = null;
     
     public void reportError(RecognitionException re) {
         log.error(re.toString());
@@ -61,6 +67,10 @@ options {
     
     public void reportWarning(String s) {
         log.warn(s);
+    }
+    
+    public void setBaseURL(URL base) {
+        this.base = base;
     }
 }
 
@@ -166,7 +176,24 @@ group_statement returns [GroupStatement result = null]
 pointer_statement returns [PointerStatement result = null]
 {AttributeStatement a = null;}
     : POINT_OPERATOR a=assignment_statement
-      {result = new PointerStatement(a.getLineNumber(), a.getIdentifier(), a.getValue());}
+      {
+         try {
+            result = PointerStatementFactory.newInstance(a.getLineNumber(), a.getIdentifier(), a.getValue(), base);
+         } catch (MalformedURLException mue) {
+            result = null;
+            log.error("line " + a.getLineNumber() + ": " + mue.getMessage());
+         }
+         if (result != null && result instanceof StructurePointer && base != null) {
+            StructurePointer sp = (StructurePointer) result;
+            try {
+               sp.loadReferencedStatements();
+            } catch (gov.nasa.pds.tools.label.parser.ParseException pe) {
+               log.error("line " + a.getLineNumber() + ": " + pe.getMessage());
+            } catch (IOException ioe) {
+               log.error("line " + a.getLineNumber() + ": " + ioe.getMessage());
+            } 
+         }
+      }
     ;
 
 // an attribute assignment
