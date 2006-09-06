@@ -110,4 +110,6 @@ public interface LabelParser {
      * @return The ODL version string
      */
     public String getODLVersion();
+    
+    public void addIncludePath(URL includePath);
 }
