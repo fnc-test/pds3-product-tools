@@ -50,9 +50,11 @@ import antlr.ANTLRException;
 public class DefaultLabelParser implements LabelParser {
     private Properties properties;
     private static Logger log = Logger.getLogger(new DefaultLabelParser().getClass());
+    private URL includePath;
     
     public DefaultLabelParser() {
         properties = new Properties();
+        includePath = null;
     }
 
     /* (non-Javadoc)
@@ -229,7 +231,9 @@ public class DefaultLabelParser implements LabelParser {
         log.info("Parsing partial label " + file.toString());
         
         if (Boolean.valueOf(properties.getProperty("parser.pointers", "true")).booleanValue()) {
-            URL base = new URL(file.toString().substring(0, file.toString().lastIndexOf("/")));
+            URL base = includePath;
+            if (base == null)
+            	new URL(file.toString().substring(0, file.toString().lastIndexOf("/")));
             parser.setBaseURL(base);
         } else {
             log.info("Pointers disabled. Pointers will not be followed");
@@ -276,5 +280,9 @@ public class DefaultLabelParser implements LabelParser {
         else
             label = parser.parse(new URL(args[0]), DictionaryParser.parse(new URL(args[1])));
     }
+
+	public void addIncludePath(URL includePath) {
+		this.includePath = includePath;
+	}
 
 }
