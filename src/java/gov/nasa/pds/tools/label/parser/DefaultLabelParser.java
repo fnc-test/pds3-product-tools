@@ -98,8 +98,11 @@ public class DefaultLabelParser implements LabelParser {
         log.info("Parsing label " + file.toString() + " with PDS_VERSION_ID = " + value);
         
         if (Boolean.valueOf(properties.getProperty("parser.pointers", "true")).booleanValue()) {
-            URL base = new URL(file.toString().substring(0, file.toString().lastIndexOf("/")));
-            parser.setBaseURL(base);
+        	 System.out.println(properties.getProperty("parser.pointers"));
+        	 URL base = includePath;
+             if (base == null)
+             	base = new URL(file.toString().substring(0, file.toString().lastIndexOf("/")));
+             parser.setBaseURL(base);
         } else {
             log.info("Pointers disabled. Pointers will not be followed");
         }
@@ -203,7 +206,7 @@ public class DefaultLabelParser implements LabelParser {
      * @see gov.nasa.jpl.pds.tools.label.parser.LabelParser#getProperties()
      */
     public Properties getProperties() {
-        return (Properties) properties.clone();
+        return properties;
     }
 
     /* (non-Javadoc)
@@ -233,7 +236,7 @@ public class DefaultLabelParser implements LabelParser {
         if (Boolean.valueOf(properties.getProperty("parser.pointers", "true")).booleanValue()) {
             URL base = includePath;
             if (base == null)
-            	new URL(file.toString().substring(0, file.toString().lastIndexOf("/")));
+            	base = new URL(file.toString().substring(0, file.toString().lastIndexOf("/")));
             parser.setBaseURL(base);
         } else {
             log.info("Pointers disabled. Pointers will not be followed");
