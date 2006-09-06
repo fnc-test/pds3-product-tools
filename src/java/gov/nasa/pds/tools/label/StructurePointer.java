@@ -31,7 +31,13 @@ public class StructurePointer extends PointerStatement {
     public StructurePointer(int lineNumber, String identifier, Value value, URL base) throws MalformedURLException {
         super(lineNumber, identifier, value);
         statements = new ArrayList();
-        labelURL = new URL(base.toString() + "/" + value.toString());
+        labelURL = null;
+        if (base != null) {
+	        String url = base.toString();
+	        if (!url.endsWith("/"))
+	        	url += "/";
+	        labelURL = new URL(url + value.toString());
+        }
     }
     
     public synchronized void loadReferencedStatements() throws ParseException, IOException {
