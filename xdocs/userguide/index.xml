@@ -104,6 +104,8 @@ gov.nasa.pds.tools.VTool -d pdsdd.full -t TEST.LBL
           <tr><td nowrap="nowrap">-t,--target &lt;labels,URLs,dirs&gt;</td><td>Specify the label file(s), directories, and/or URL(s) to validate (required option)</td></tr>
           <tr><td>-d,--dict &lt;.full files&gt;</td><td>Specify the Planetary Science Data Dictionary full file name and any local dictionaries to include for validation.</td></tr>
           <tr><td>-o,--output &lt;file&gt;</td><td>Specify the file name for the report. Default is to print to the terminal.</td></tr>
+          <tr><td>-I, --include &lt;path&gt;</td><td>Specify a starting path to search for pointer files. Default is the directory of the label being validated.</td></tr>
+          <tr><td>-F, --no-follow</td><td>Do not follow ^STRUCTURE pointers in a label.</td></tr>
           <tr><td>-c,--config &lt;file&gt;</td><td>Specify a configuration file to set the default values for VTool.</td></tr>
           <tr><td>-l,--local</td><td>Validate files only in the input directory rather than recursively traversing down the subdirectories.</td></tr>
           <tr><td nowrap="nowrap">-p,--pattern &lt;expressions&gt;</td><td>Specify a list of files/file patterns to include when validating an entire directory. Each pattern must be surrounded by quotes (i.e. -p "*.LBL" "*.FMT"). Pattern matching is case-insensitive in Windows, but case-sensitive for other systems.
@@ -168,7 +170,21 @@ localdd.full -t TEST.LBL
 [node:~] java gov.nasa.pds.tools.VTool -d pdsdd.full \
 -t ./TEST_DIR -X "*IMG" "*TAB"
           </source>
-
+          
+        <p>By default, if a data product label contains a STRUCTURE pointer, it will assume it is co-located, search for, and validate the pointer file. If it is not found there, then an error message is thrown. The following command demonstrates how to specify a starting path in VTool to search for pointers when validating a data product label that contains a STRUCTURE pointer not located in the same directory as the label:
+        </p>
+          <source>
+[node:~] java gov.nasa.pds.tools.VTool -d pdsdd.full \
+-t TEST.LBL -I $HOME/starting-path
+          </source>
+          
+        <p>The following command demonstrates the validation of a data product label that contains a STRUCTURE pointer, but specifying to the tool to not follow the pointer:
+        </p>
+          <source>
+[node:~] java gov.nasa.pds.tools.VTool -d pdsdd.full \
+-t TEST.LBL -F
+          </source>
+        
         <p>A configuration file can be passed into the command-line to change the default behaviors of the tool and to also provide users a way to perform validation with a single flag (see the section below for details on how to set the configuration file). The following command demonstrates performing validation using a configuration file:
         </p>
           <source>[node:~] java gov.nasa.pds.tools.VTool -c config.txt
@@ -178,45 +194,50 @@ localdd.full -t TEST.LBL
       <subsection name="Using A Configuration File">
         <p>A configuration file is used to set the default behaviors of the tool. It consists of a text file made up of keyword/value pairs. Lines which begin with the hash character "#" are considered comments and are ignored.
         </p>
-        <p><b>Any flag specified on the command line takes precedence over any equivalent settings placed in the configuration file.</b>
+        <p><b>Any flag specified on the command-line takes precedence over any equivalent settings placed in the configuration file.</b>
         </p>
             
         <p>The following table contains valid keywords that can be specified in the configuration file:</p>
 
         <table>
           <tr><th>KEYWORD</th><th>ASSOCIATED FLAG</th><th>valid value(s)</th></tr>
-          <tr><td>TARGET</td><td>-t</td><td>Specify labels,directories, and/or URLs</td></tr>
-          <tr><td>DICT</td><td>-d</td><td>Specify dictionary files</td></tr>
-          <tr><td>OUTPUT</td><td>-o</td><td>Specify report file (do not specify if wanting to write the report to the terminal)</td></tr>
-          <tr><td>RECURSIVE</td><td>-l</td><td>Set to 'false' to not perform recursion down a directory, set to 'true' otherwise</td></tr>
-          <tr><td>PATTERNS</td><td>-p</td><td>Specify patterns to search for when validating a directory.</td></tr>
-          <tr><td>IGNOREFILES</td><td>-X</td><td>Specify patterns to ignore when validating a directory.</td></tr>
+          <tr><td>vtool.target</td><td>-t</td><td>Specify labels,directories, and/or URLs</td></tr>
+          <tr><td>vtool.dict</td><td>-d</td><td>Specify dictionary files</td></tr>
+          <tr><td>vtool.output</td><td>-o</td><td>Specify report file (do not specify if wanting to write the report to the terminal)</td></tr>
+          <tr><td>vtool.includepath</td><td>-I</td><td>Specify a starting path to search for pointer files</td></tr>
+          <tr><td>vtool.follow</td><td>-F</td><td>Set to 'false' to not follow ^STRUCTURE pointers in a label, set to 'true' otherwise</td></tr>
+          <tr><td>vtool.recursive</td><td>-l</td><td>Set to 'false' to not perform recursion down a directory, set to 'true' otherwise</td></tr>
+          <tr><td>vtool.patterns</td><td>-p</td><td>Specify patterns to search for when validating a directory.</td></tr>
+          <tr><td>vtool.ignorefiles</td><td>-X</td><td>Specify patterns to ignore when validating a directory.</td></tr>
         </table>
 
         <p>The following example demonstrates how to set a configuration file:</p>
           <source>
 # This is a VTool configuration file          
 
-TARGET = ./TEST_DIR
-DICT = pdsdd.full
-OUTPUT = report.txt
-RECURSIVE = false
-PATTERNS = "*.LBL"
+vtool.target = ./TEST_DIR
+vtool.dict = pdsdd.full
+vtool.output = report.txt
+vtool.recursive = false
+vtool.follow = false
+vtool.includepath = /home/start-path
+vtool.patterns = "*.LBL"
           </source>
 
         <p>This is equivalent to running the tool with the following flags:</p>
           <source>
--t ./TEST_DIR -d pdsdd.full -o report.txt -l -p "*.LBL"
+-t ./TEST_DIR -d pdsdd.full -o report.txt -l -p "*.LBL" \
+-I /home/start-path -F
           </source>          
 
         <p>The following example demonstrates how to set a configuration file with multiple values for a keyword:</p>
           <source>
 # This is a VTool configuration file with multiple values
 
-TARGET = TEST.LBL ./TEST_DIR
-DICT = pdsdd.full localdd.full
-RECURSIVE = true
-PATTERNS = "*.LBL" "*.FMT"
+vtool.target = TEST.LBL ./TEST_DIR
+vtool.dict = pdsdd.full localdd.full
+vtool.recursive = true
+vtool.patterns = "*.LBL" "*.FMT"
           </source>
 
         <p>This is equivalent to running the tool with the following flags:</p>
@@ -231,11 +252,11 @@ PATTERNS = "*.LBL" "*.FMT"
           <source>
 # This is another VTool configuration file
 
-TARGET = ./TEST_DIR
-DICT = pdsdd.full
-OUTPUT = report.txt
-RECURSIVE = false
-PATTERNS = "*.LBL"
+vtool.target = ./TEST_DIR
+vtool.dict = pdsdd.full
+vtool.output = report.txt
+vtool.recursive = false
+vtool.patterns = "*.LBL"
           </source>
           
         <p>If validating everything in TEST_DIR is desired rather than just files that end in "LBL" as is defined in the configuration file, then the following command demonstrates how to perform this behavior:
@@ -243,7 +264,136 @@ PATTERNS = "*.LBL"
           <source>
 [node:~] java gov.nasa.pds.tools.VTool -c config.txt -p "*"
           </source>
-      </subsection>    
+      </subsection>
+      
+      <subsection name="Multiple Dictionary Support">
+        <p>VTool allows multiple dictionary files to be passed in through the command-line via the "d" flag. When passing in multiple dictionaries, element and object definitions found in the dictionaries are merged together internally. In the case where definitions are found to be identical in each of the dictionary files being passed in, the definition found in the dictionary file specified LAST on the command-line will be retained.
+        </p>
+        
+        <p>The following example demonstrates the VTool behavior when passing in two dictionary files:</p>
+        
+        <p>Suppose a PSDD, pdsdd.full, and a local dictionary, local-dd1.full, is being passed into VTool, where the PSDD contains the following DATA_SET_ID definition:</p>
+          <source>
+OBJECT = ELEMENT_DEFINITION
+  NAME = DATA_SET_ID
+  STATUS_TYPE = APPROVED
+  GENERAL_DATA_TYPE = IDENTIFIER
+  UNIT_ID = NONE
+  STANDARD_VALUE_TYPE = FORMATION
+  MAXIMUM_LENGTH = 40
+  DESCRIPTION = "
+     The data_set_id element is a unique
+     alphanumeric identifier for a data set or a data product.
+     The data_set_id value for a given data set or
+     product is constructed according to flight project
+     naming conventions.  In most cases the data_set_id is an
+     abbreviation of the data_set_name.
+     Example value: MR9/VO1/VO2-M-ISS/VIS-5-CLOUD-V1.0.
+     Note:  In the PDS, the values for both data_set_id and
+     data_set_name are constructed according to standards
+     outlined in the Standards Reference."
+  STANDARD_VALUE_SET = {
+     "A-5-DDR-ASTERMAG-V1.0",
+     "A-5-DDR-ASTEROID-SPIN-VECTORS-V3.0",
+     "A-5-DDR-ASTNAMES-V1.0",
+     "A-5-DDR-POLE-POSITION-REF-V1.0",
+     "A-5-DDR-POLE-POSITION-V1.0",
+     "A-5-DDR-TAXONOMY-V1.0",
+     "ARCB-L-RTLS-3-70CM-V1.0",
+     "ARCB-L-RTLS-4-70CM-V1.0",
+     ....
+     }
+END_OBJECT = ELEMENT_DEFINITION
+END
+          </source>
+          
+        <p>and the local dictionary also contains DATA_SET_ID, but with a different set of standard values:</p>
+          <source>
+OBJECT = ELEMENT_DEFINITION
+  NAME = DATA_SET_ID
+  STATUS_TYPE = APPROVED
+  GENERAL_DATA_TYPE = IDENTIFIER
+  UNIT_ID = NONE
+  STANDARD_VALUE_TYPE = FORMATION
+  MAXIMUM_LENGTH = 40
+  DESCRIPTION = "
+     The data_set_id element is a unique
+     alphanumeric identifier for a data set or a data product.
+     The data_set_id value for a given data set or
+     product is constructed according to flight project
+     naming conventions.  In most cases the data_set_id is an
+     abbreviation of the data_set_name.
+     Example value: MR9/VO1/VO2-M-ISS/VIS-5-CLOUD-V1.0.
+     Note:  In the PDS, the values for both data_set_id and
+     data_set_name are constructed according to standards
+     outlined in the Standards Reference."
+  STANDARD_VALUE_SET = {
+     "VENUS"
+     "EARTH"
+  }
+END_OBJECT = ELEMENT_DEFINITION
+END
+          </source>
+                 
+        <p>If the PSDD is passed in first followed by the local dictionary as follows:</p>
+          <source>
+... -d pdsdd.full local-dd1.full
+          </source>
+        
+        <p>VTool will retain the DATA_SET_ID definition found in the local dictionary.</p>
+        
+        <p>If the local dictionary is passed in first followed by the PSDD as follows:</p>
+          <source>
+... -d local-dd1.full pdsdd.full
+          </source>
+        
+        <p>VTool will retain the DATA_SET_ID definition found in the PSDD.</p>
+        
+        <p>The following example demonstrates the VTool behavior when passing in three dictionaries: </p>
+
+        <p>Suppose the PSDD and the local dictionary, local-dd1.full, file have the DATA_SET_ID definition as stated above. In addition, there is another local dictionary, local-dd2.full, that will be passed into VTool also, which contains the following DATA_SET_ID definition:
+        </p>
+          <source>
+OBJECT = ELEMENT_DEFINITION
+  NAME = DATA_SET_ID
+  STATUS_TYPE = APPROVED
+  GENERAL_DATA_TYPE = IDENTIFIER
+  UNIT_ID = NONE
+  STANDARD_VALUE_TYPE = FORMATION
+  MAXIMUM_LENGTH = 40
+  DESCRIPTION = "
+     The data_set_id element is a unique
+     alphanumeric identifier for a data set or a data product.
+     The data_set_id value for a given data set or
+     product is constructed according to flight project
+     naming conventions.  In most cases the data_set_id is an
+     abbreviation of the data_set_name.
+     Example value: MR9/VO1/VO2-M-ISS/VIS-5-CLOUD-V1.0.
+     Note:  In the PDS, the values for both data_set_id and
+     data_set_name are constructed according to standards
+     outlined in the Standards Reference."
+  STANDARD_VALUE_SET = {
+     "MARS"
+     "JUPITER"
+  }
+END_OBJECT = ELEMENT_DEFINITION
+END
+          </source>
+          
+        <p>If these three dictionaries get passed into VTool as follows:</p>
+          <source>
+... -d pdsdd.full local-dd1.full local-dd2.full ...
+          </source>
+          
+        <p>VTool will retain the DATA_SET_ID definition found in the last dictionary specified. In this case, it is the definition found in local-dd2.full.</p>
+        
+        <p>If these dictionaries get passed into VTool in some other order like the following:</p>
+          <source>
+... -d local-dd2.full local-dd1.full pdsdd.full ...
+          </source>
+          
+        <p>VTool will retain the DATA_SET_ID definition found in pdsdd.full.</p>          
+      </subsection>
     </section>
   </body>
 </document>
