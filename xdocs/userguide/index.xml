@@ -337,14 +337,14 @@ END
                  
         <p>If the PSDD is passed in first followed by the local dictionary as follows:</p>
           <source>
-... -d pdsdd.full local-dd1.full
+... -d pdsdd.full local-dd1.full ...
           </source>
         
         <p>VTool will retain the DATA_SET_ID definition found in the local dictionary.</p>
         
         <p>If the local dictionary is passed in first followed by the PSDD as follows:</p>
           <source>
-... -d local-dd1.full pdsdd.full
+... -d local-dd1.full pdsdd.full ...
           </source>
         
         <p>VTool will retain the DATA_SET_ID definition found in the PSDD.</p>
