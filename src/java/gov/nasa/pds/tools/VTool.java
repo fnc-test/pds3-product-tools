@@ -786,7 +786,7 @@ public class VTool {
 		URL url = null;
 		LabelParserFactory factory = LabelParserFactory.getInstance();
 		LabelParser parser = factory.newLabelParser();
-		
+/*		
 		if(includePath != null) {
 			try {
 				parser.addIncludePath(includePath.toURL());
@@ -796,6 +796,7 @@ public class VTool {
 				System.exit(1);
 			}
 		}
+*/
 		if(followPtrs == false)
 			parser.getProperties().setProperty("parser.pointers", "false");
 		
