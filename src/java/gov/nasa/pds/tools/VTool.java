@@ -786,6 +786,8 @@ public class VTool {
 		URL url = null;
 		LabelParserFactory factory = LabelParserFactory.getInstance();
 		LabelParser parser = factory.newLabelParser();
+		
+		//TODO: pass list of paths to the parser to search for pointers
 /*		
 		if(includePath != null) {
 			try {
