@@ -46,7 +46,12 @@ $Id$
             <tr><td>-p</td><td>Specify files/file patterns to include in validation</td></tr>
             <tr><td>-X</td><td>Specify files/file patterns to exclude in validation</td></tr>
             <tr><td>-c</td><td>Specify a configuration file to set default behaviors</td></tr>
+            <tr><td>-F</td><td>Do not follow STRUCTURE pointers</td></tr>
           </table>
+      </action>
+      
+      <action dev="mcayanan" type="fix">
+        Fixed multiple dictionary support.
       </action>
       
       <action dev="mcayanan" type="update">
