@@ -18,109 +18,139 @@ $Id$
 -->
 
 <project>
-    <extend>${defaults.xml}</extend>
-    <id>product-tools</id>
-    <name>Product Tools</name>
-    <currentVersion>0.3.0</currentVersion>
-    <package>gov.nasa.pds.tools</package>
-    <shortDescription>
-      Next generation of PDS product tools.
-    </shortDescription>
-    <description>
-      The next generation of Planetary Data System (PDS) Product Tools will support design/generation, validation and submission of archival products to the PDS. These tools are intended to replace the current generation of tools (e.g., lvtool, kwvtool, tbtool, etc.) used by the Discpline Nodes, Engineering Node and the PDS user community as a whole.
-    </description>
+  <extend>${defaults.xml}</extend>
+  <id>product-tools</id>
+  <name>Product Tools</name>
+  <currentVersion>0.3.0</currentVersion>
+  <package>gov.nasa.pds.tools</package>
+  <shortDescription>
+    Next generation of PDS product tools.
+  </shortDescription>
+  <description>
+    The next generation of Planetary Data System (PDS) Product Tools will support design/generation, validation and submission of archival products to the PDS. These tools are intended to replace the current generation of tools (e.g., lvtool, kwvtool, tbtool, etc.) used by the Discpline Nodes, Engineering Node and the PDS user community as a whole.
+  </description>
 
-    <developers>
-        <developer>
-            <name>Sean Hardman</name>
-            <id>shardman</id>
-            <email>Sean.Hardman@jpl.nasa.gov</email>
-            <organization>Jet Propulsion Laboratory</organization>
-            <roles>
-                <role>Project Lead</role>
-            </roles>
-        </developer>   
-        <developer>
-            <name>Paul Ramirez</name>
-            <id>pramirez</id>
-            <email>Paul.Ramirez@jpl.nasa.gov</email>
-            <organization>Jet Propulsion Laboratory</organization>
-            <roles>
-                <role>Lead Developer</role>
-            </roles>
-        </developer>
-        <developer>
-            <name>Michael Cayanan</name>
-            <id>mcayanan</id>
-            <email>Michael.Cayanan@jpl.nasa.gov</email>
-            <organization>Jet Propulsion Laboratory</organization>
-            <roles>
-                <role>Developer</role>
-            </roles>
-        </developer>
-    </developers>
+  <developers>
+    <developer>
+      <name>Sean Hardman</name>
+      <id>shardman</id>
+      <email>Sean.Hardman@jpl.nasa.gov</email>
+      <organization>NASA Jet Propulsion Laboratory</organization>
+      <timezone>0</timezone>
+      <roles>
+        <role>Development Lead</role>
+      </roles>
+    </developer>   
+    <developer>
+      <name>Paul Ramirez</name>
+      <id>pramirez</id>
+      <email>Paul.Ramirez@jpl.nasa.gov</email>
+      <organization>NASA Jet Propulsion Laboratory</organization>
+      <timezone>0</timezone>
+      <roles>
+        <role>Designer/Developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Michael Cayanan</name>
+      <id>mcayanan</id>
+      <email>Michael.Cayanan@jpl.nasa.gov</email>
+      <organization>NASA Jet Propulsion Laboratory</organization>
+      <timezone>0</timezone>
+      <roles>
+        <role>Developer</role>
+      </roles>
+    </developer>
+  </developers>
 
-    <dependencies>
-        <dependency>
-            <groupId>commons-cli</groupId>
-            <artifactId>commons-cli</artifactId>
-            <version>1.0</version>
-            <url>http://www.ibiblio.org/maven/commons-cli/</url>
-        </dependency>
-        <dependency>
-            <groupId>commons-collections</groupId>
-            <artifactId>commons-collections</artifactId>
-            <version>3.1</version>
-            <url>http://www.ibiblio.org/maven/commons-collections/</url>
-        </dependency>
-        <dependency>
-            <groupId>commons-configuration</groupId>
-            <artifactId>commons-configuration</artifactId>
-            <version>1.2</version>
-            <url>http://www.ibiblio.org/maven/commons-configuration/</url>
-        </dependency>
-        <dependency>
-        	  <groupId>commons-io</groupId>
-        	  <artifactId>commons-io</artifactId>
-        	  <version>1.2</version>
-        	  <url>http://www.ibiblio.org/maven/commons-io/</url>
-        </dependency>
-        <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-            <version>2.1</version>
-            <url>http://www.ibiblio.org/maven/commons-lang/</url>
-        </dependency>
-        <dependency>
-            <groupId>commons-logging</groupId>
-            <artifactId>commons-logging</artifactId>
-            <version>1.0.3</version>
-            <url>http://www.ibiblio.org/maven/commons-logging/</url>
-        </dependency>
-        <dependency>
-            <groupId>antlr</groupId>
-            <artifactId>antlr</artifactId>
-            <version>2.7.6</version>
-            <url>http://www.ibiblio.org/maven/antlr/</url>
-        </dependency> 
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>1.2.13</version>
-            <url>http://www.ibiblio.org/maven/log4j/</url>
-        </dependency>
-    </dependencies>
+  <contributors>
+    <contributor>
+      <name>Steve Hughes</name>
+      <email>Steve.Hughes@jpl.nasa.gov</email>
+      <organization>NASA Jet Propulsion Laboratory</organization>
+      <roles>
+        <role>System Engineer</role>
+      </roles>
+    </contributor>
+    <contributor>
+      <name>Ron Joyner</name>
+      <email>Ron.Joyner@jpl.nasa.gov</email>
+      <organization>NASA Jet Propulsion Laboratory</organization>
+      <roles>
+        <role>System Engineer</role>
+      </roles>
+    </contributor>
+    <contributor>
+      <name>Mark Rose</name>
+      <email>mrose@email.arc.nasa.gov</email>
+      <organization>NASA Ames Research Center</organization>
+      <roles>
+        <role>Consultant</role>
+      </roles>
+    </contributor>
+  </contributors>
 
-    <build>
-        <nagEmailAddress>Paul.Ramirez@jpl.nasa.gov</nagEmailAddress>
-        <sourceDirectory>${basedir}/src/java</sourceDirectory>
-        <unitTestSourceDirectory>${basedir}/src/test</unitTestSourceDirectory>
-        <resources/>
-        <unitTest>
-	      <includes>
-	        <include>**/*Test*.java</include>
-	      </includes>
-        </unitTest>
-    </build>
-    <properties/>
+  <dependencies>
+    <dependency>
+      <groupId>commons-cli</groupId>
+      <artifactId>commons-cli</artifactId>
+      <version>1.0</version>
+      <url>http://www.ibiblio.org/maven/commons-cli/</url>
+    </dependency>
+    <dependency>
+      <groupId>commons-collections</groupId>
+      <artifactId>commons-collections</artifactId>
+      <version>3.1</version>
+      <url>http://www.ibiblio.org/maven/commons-collections/</url>
+    </dependency>
+    <dependency>
+      <groupId>commons-configuration</groupId>
+      <artifactId>commons-configuration</artifactId>
+      <version>1.2</version>
+      <url>http://www.ibiblio.org/maven/commons-configuration/</url>
+    </dependency>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>1.2</version>
+      <url>http://www.ibiblio.org/maven/commons-io/</url>
+    </dependency>
+    <dependency>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
+      <version>2.1</version>
+      <url>http://www.ibiblio.org/maven/commons-lang/</url>
+    </dependency>
+    <dependency>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging</artifactId>
+      <version>1.0.3</version>
+      <url>http://www.ibiblio.org/maven/commons-logging/</url>
+    </dependency>
+    <dependency>
+      <groupId>antlr</groupId>
+      <artifactId>antlr</artifactId>
+      <version>2.7.6</version>
+      <url>http://www.ibiblio.org/maven/antlr/</url>
+    </dependency> 
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>1.2.13</version>
+      <url>http://www.ibiblio.org/maven/log4j/</url>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <nagEmailAddress>Paul.Ramirez@jpl.nasa.gov</nagEmailAddress>
+    <sourceDirectory>${basedir}/src/java</sourceDirectory>
+    <unitTestSourceDirectory>${basedir}/src/test</unitTestSourceDirectory>
+    <resources/>
+    <unitTest>
+      <includes>
+	     <include>**/*Test*.java</include>
+	   </includes>
+    </unitTest>
+  </build>
+  <properties/>
 </project>
