@@ -19,9 +19,7 @@ import java.util.Collections;
  * 
  */
 public class ObjectStatement extends Statement {
-    private Map attributes;
-    private Map objects;
-    private List pointers;
+    private Map statements;
     private List comments;
 
     /**
@@ -30,7 +28,7 @@ public class ObjectStatement extends Statement {
      * @param identifier Identifier for the statement.
      */
     public ObjectStatement(int lineNumber, String identifier) {
-        this(lineNumber, identifier, Collections.EMPTY_LIST, Collections.EMPTY_LIST, new ArrayList());
+        this(lineNumber, identifier, new HashMap());
     }
     
     /**
@@ -38,42 +36,19 @@ public class ObjectStatement extends Statement {
      * @param identifier Identifier of the statement
      */
     public ObjectStatement(String identifier) {
-        this(identifier, Collections.EMPTY_LIST, Collections.EMPTY_LIST, new ArrayList());
-    }
-    
-    /**
-     * Constructs an ObjectStatement with no line number
-     * @param identifier
-     * @param attributes
-     * @param objects
-     */
-    public ObjectStatement(String identifier, List attributes, List objects, List pointers) {
-        this(-1, identifier, attributes, objects, pointers);
+        this(-1, identifier);
     }
     
     /**
      * Constructs an ObjectStatement
      * @param lineNumber Line number of statement
      * @param identifier Identifier of statement
-     * @param attributes List of {@link AttributeStatement} associated with this statement
+     * @param statements Map of {@link Statement} associated with this object
      * @param objects List of {@link ObjectStatement} associated with this statement
      */
-    public ObjectStatement(int lineNumber, String identifier, List attributes, List objects, List pointers) {
+    public ObjectStatement(int lineNumber, String identifier, Map statements) {
         super(lineNumber, identifier);
-        this.attributes = new HashMap();
-        this.objects = new HashMap();
-        this.pointers = pointers;
-        
-        for (Iterator i = attributes.iterator(); i.hasNext();) {
-            AttributeStatement attribute = (AttributeStatement) i.next();
-            this.attributes.put(attribute.getIdentifier(), attribute);
-        }
-        
-        for (Iterator i = objects.iterator(); i.hasNext();) {
-            ObjectStatement object = (ObjectStatement) i.next();
-            this.objects.put(object.getIdentifier(), object);
-        }
-        
+        this.statements = statements;
         comments = new ArrayList();
     }
     
@@ -82,7 +57,31 @@ public class ObjectStatement extends Statement {
      * @return The list of AttributeStatement
      */
     public List getAttributes() {
-        return new ArrayList(attributes.values());
+        List attributes = new ArrayList(); 
+        for (Iterator i = statements.values().iterator(); i.hasNext();) {
+            for (Iterator s = ((List) i.next()).iterator(); s.hasNext();) {
+                Statement statement = (Statement) s.next();
+                if (statement instanceof AttributeStatement)
+                    attributes.add(statement);
+            }
+        }
+        return attributes;
+    }
+    
+    /**
+     * Retrieves pointers associated with this object
+     * @return list of {@link PointerStatement}
+     */
+    public List getPointers() {
+        List pointers = new ArrayList();
+        for (Iterator i = statements.values().iterator(); i.hasNext();) {
+            for (Iterator s = ((List) i.next()).iterator(); s.hasNext();) {
+                Statement statement = (Statement) s.next();
+                if (statement instanceof PointerStatement)
+                    pointers.add(statement);
+            }
+        }
+        return pointers;
     }
     
     /**
@@ -91,7 +90,15 @@ public class ObjectStatement extends Statement {
      * @return The named AttributeStatement or null if not found
      */
     public AttributeStatement getAttribute(String identifier) {
-        return (AttributeStatement) attributes.get(identifier);
+        AttributeStatement attribute = null;       
+        if (statements.get(identifier) != null) {
+            for (Iterator i = ((List) statements.get(identifier)).iterator(); i.hasNext() && attribute == null;) {
+                Statement statement = (Statement) i.next();
+                if (statement instanceof AttributeStatement)
+                    attribute = (AttributeStatement) statement;
+            }
+        }
+        return attribute;
     }
     
     /**
@@ -99,59 +106,61 @@ public class ObjectStatement extends Statement {
      * @return The list of ObjectStatement
      */
     public List getObjects() {
-        return new ArrayList(objects.values());
+        List objects = new ArrayList(); 
+        for (Iterator i = statements.values().iterator(); i.hasNext();) {
+            for (Iterator s = ((List) i.next()).iterator(); s.hasNext();) {
+                Statement statement = (Statement) s.next();
+                if (statement instanceof ObjectStatement)
+                    objects.add(statement);
+            }
+        }
+        return objects;
     }
     
     /**
      * Retrieves the named object
      * @param identifier
-     * @return The named ObjectStatement or null if not found
+     * @return The {@link List} of named objects
      */
-    public ObjectStatement getObject(String identifier) {
-        return (ObjectStatement) objects.get(identifier);
+    public List getObjects(String identifier) {
+        List objects = new ArrayList();
+        if (statements.get(identifier) != null) {
+            for (Iterator i = ((List) statements.get(identifier)).iterator(); i.hasNext();) {
+                Statement statement = (Statement) i.next();
+                if (statement instanceof ObjectStatement)
+                    objects.add(statement);
+            }
+        }
+        return objects;
     }
     
     /**
-     * Add an attribute to this object. Will overwrite an 
-     * attribute with the same identifier.
-     * @param attribute The AttributeStatment to add
+     * Associates a statement with this object
+     * @param statement to be added to object
      */
-    public void addAttribute(AttributeStatement attribute) {
-        attributes.put(attribute.getIdentifier(), attribute);
-    }
-    
-    /**
-     * Add an child object to this object. Willl overwrite an
-     * object with the same identifier.
-     * @param object The ObjectStatment to add
-     */
-    public void addObject(ObjectStatement object) {
-        objects.put(object.getIdentifier(), object);
-    }
-    
-    public void addStatement(Statement statement) {
-        if (statement instanceof ObjectStatement)
-            objects.put(statement.getIdentifier(), statement);
-        else if (statement instanceof AttributeStatement)
-            attributes.put(statement.getIdentifier(), statement);
-        else if (statement instanceof StructurePointer) {
-            pointers.add(statement);
+    public void addStatement(Statement statement) { 
+        List stmnts = (List) statements.get(statement.getIdentifier());
+        if (stmnts == null) {
+            stmnts = new ArrayList();
+            statements.put(statement.getIdentifier(), stmnts);
+        }
+        if (statement instanceof StructurePointer) {
+            stmnts.add(statement);
             for (Iterator i = ((StructurePointer) statement).getStatements().iterator(); i.hasNext();)
                 addStatement((Statement) i.next());
         }
-        else if (statement instanceof PointerStatement)
-            pointers.add(statement);
-        //TODO throw illegal argument exception
+        else 
+            stmnts.add(statement);
     }
     
     public boolean hasAttribute(String identifier) {
-        if (attributes.get(identifier) == null)
+        if (getAttribute(identifier) == null)
             return false;
         return true;
     }
     
     public boolean hasObject(String identifier) {
-        if (objects.get(identifier) == null)
+        if (getObjects(identifier).size() == 0)
             return false;
         return true;
     }

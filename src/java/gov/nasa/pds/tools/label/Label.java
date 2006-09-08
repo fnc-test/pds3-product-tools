@@ -21,7 +21,6 @@ import java.util.Iterator;
 public class Label {
     private int labelType;
     private Map statements;
-    private List pointers;
     
     /**
      * Constructs an object representation of a PDS label.
@@ -29,7 +28,6 @@ public class Label {
      */
     public Label() {
         statements = new HashMap();
-        pointers = new ArrayList();
     }
 
     /**
@@ -37,8 +35,8 @@ public class Label {
      * @param identifier Identifies the statement to retrieve
      * @return The named statement or null if not found
      */
-    public Statement getStatement(String identifier) {
-        return (Statement) statements.get(identifier);
+    public List getStatement(String identifier) {
+        return (List) statements.get(identifier);
     }
     
     /**
@@ -47,42 +45,66 @@ public class Label {
      * @return attribute or null
      */
     public AttributeStatement getAttribute(String identifier) {
-        Statement statement = (Statement) statements.get(identifier);
-        if (statement instanceof AttributeStatement)
-            return (AttributeStatement) statement;
-        return null;
+        AttributeStatement attribute = null;
+        
+        if (statements.get(identifier) != null) {
+            for (Iterator i = ((List) statements.get(identifier)).iterator(); i.hasNext() && attribute == null;) {
+                Statement statement = (Statement) i.next();
+                if (statement instanceof AttributeStatement)
+                    attribute = (AttributeStatement) statement;
+            }
+        }
+        
+        return attribute;
     }
     
     /**
      * Retrieves the groups with the identifier or null if not found
      * @param identifier of group to find
-     * @return group or null
+     * @return {@link List} of {@link GroupStatement}
      */
-    public GroupStatement getGroup(String identifier) {
-        Statement statement = (Statement) statements.get(identifier);
-        if (statement instanceof GroupStatement)
-            return (GroupStatement) statement;
-        return null;
+    public List getGroups(String identifier) {
+        List groups = new ArrayList();
+        
+        if (statements.get(identifier) != null) {
+            for (Iterator i = ((List) statements.get(identifier)).iterator(); i.hasNext();) {
+                Statement statement = (Statement) i.next();
+                if (statement instanceof GroupStatement)
+                    groups.add(statement);
+            }
+        }
+        
+        return groups;
     }
   
     /**
      * Retrieves the object with the identifier or null if not found
      * @param identifier of object to find
-     * @return object or null
+     * @return {@link List} of {@link ObjectStatement}
      */
-    public ObjectStatement getObject(String identifier) {
-        Statement statement = (Statement) statements.get(identifier);
-        if (statement instanceof ObjectStatement)
-            return (ObjectStatement) statement;
-        return null;
+    public List getObjects(String identifier) {
+        List objects = new ArrayList();
+        
+        if (statements.get(identifier) != null) {
+            for (Iterator i = ((List) statements.get(identifier)).iterator(); i.hasNext();) {
+                Statement statement = (Statement) i.next();
+                if (statement instanceof ObjectStatement)
+                    objects.add(statement);
+            }
+        }
+        
+        return objects;
     }
  
     /**
      * Retrieves the statements associated with this label
-     * @return list of {@link Statement}
+     * @return {@link List} of {@link Statement}
      */
     public List getStatements() { 
-        return new ArrayList(statements.values());
+        List results = new ArrayList();
+        for (Iterator i = statements.values().iterator(); i.hasNext();)
+            results.addAll((List) i.next());
+        return results;
     }
  
     /**
@@ -91,13 +113,13 @@ public class Label {
      */
     public List getObjects() {
         List objects = new ArrayList(); 
-        
         for (Iterator i = statements.values().iterator(); i.hasNext();) {
-            Statement s = (Statement) i.next();
-            if (s instanceof ObjectStatement)
-                objects.add(s);
+            for (Iterator s = ((List) i.next()).iterator(); s.hasNext();) {
+                Statement statement = (Statement) s.next();
+                if (statement instanceof ObjectStatement)
+                    objects.add(statement);
+            }
         }
-        
         return objects;
     }
     
@@ -107,13 +129,13 @@ public class Label {
      */
     public List getGroups() {
         List groups = new ArrayList(); 
-        
         for (Iterator i = statements.values().iterator(); i.hasNext();) {
-            Statement s = (Statement) i.next();
-            if (s instanceof GroupStatement)
-                groups.add(s);
+            for (Iterator s = ((List) i.next()).iterator(); s.hasNext();) {
+                Statement statement = (Statement) s.next();
+                if (statement instanceof GroupStatement)
+                    groups.add(statement);
+            }
         }
-        
         return groups;
     }
     
@@ -123,13 +145,13 @@ public class Label {
      */
     public List getAttributes() {
         List attributes = new ArrayList(); 
-        
         for (Iterator i = statements.values().iterator(); i.hasNext();) {
-            Statement s = (Statement) i.next();
-            if (s instanceof AttributeStatement)
-                attributes.add(s);
+            for (Iterator s = ((List) i.next()).iterator(); s.hasNext();) {
+                Statement statement = (Statement) s.next();
+                if (statement instanceof AttributeStatement)
+                    attributes.add(statement);
+            }
         }
-        
         return attributes;
     }
     
@@ -138,6 +160,14 @@ public class Label {
      * @return list of {@link PointerStatement}
      */
     public List getPointers() {
+        List pointers = new ArrayList();
+        for (Iterator i = statements.values().iterator(); i.hasNext();) {
+            for (Iterator s = ((List) i.next()).iterator(); s.hasNext();) {
+                Statement statement = (Statement) s.next();
+                if (statement instanceof PointerStatement)
+                    pointers.add(statement);
+            }
+        }
         return pointers;
     }
  
@@ -146,15 +176,18 @@ public class Label {
      * @param statement to be added to label
      */
     public void addStatement(Statement statement) { 
+        List stmnts = (List) statements.get(statement.getIdentifier());
+        if (stmnts == null) {
+            stmnts = new ArrayList();
+            statements.put(statement.getIdentifier(), stmnts);
+        }
         if (statement instanceof StructurePointer) {
-            pointers.add(statement);
+            stmnts.add(statement);
             for (Iterator i = ((StructurePointer) statement).getStatements().iterator(); i.hasNext();)
                 addStatement((Statement) i.next());
         }
-        else if (statement instanceof PointerStatement)
-            pointers.add(statement);
-        else
-            statements.put(statement.getIdentifier(), statement);
+        else 
+            stmnts.add(statement);
     }
 
     /**

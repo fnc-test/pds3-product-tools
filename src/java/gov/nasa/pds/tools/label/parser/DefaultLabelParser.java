@@ -277,10 +277,42 @@ public class DefaultLabelParser implements LabelParser {
         LabelParserFactory factory = LabelParserFactory.getInstance();
         LabelParser parser = factory.newLabelParser();
         Label label = null;
-        if (args.length == 1)
-            label = parser.parse(new URL(args[0]));
+        URL labelURL = null;
+        URL dictionaryURL = null;
+        URL includePathURL = null;
+        Boolean pointers = null;
+        
+        if (args.length%2 == 0) {
+            for (int i=0; i<args.length; i+=2) {
+                if (args[i].equals("--label") || args[i].equals("--l"))
+                    labelURL = new URL(args[i+1]);
+                else if (args[i].equals("--dictionary") || args[i].equals("--d"))
+                    dictionaryURL = new URL(args[i+1]);
+                else if (args[i].equals("--include") || args[i].equals("--i"))
+                    includePathURL = new URL(args[i+1]);
+                else if (args[i].equals("--pointers") || args[i].equals("--p"))
+                    pointers = Boolean.valueOf(args[i+1]);
+                else {
+                    System.out.println("Invalid flag " + args[i]);
+                    System.exit(1);
+                }
+            }
+        }
+        
+        if (pointers != null) {
+            parser.getProperties().setProperty("parser.pointers", pointers.toString());
+        }
+        
+        if (includePathURL != null)
+            parser.addIncludePath(includePathURL);
+        
+        if (dictionaryURL == null)
+            label = parser.parse(labelURL);
         else
-            label = parser.parse(new URL(args[0]), DictionaryParser.parse(new URL(args[1])));
+            label = parser.parse(labelURL, DictionaryParser.parse(dictionaryURL));
+        
+        System.out.println("Label:");
+        System.out.println(label.toString());
     }
 
 	public void addIncludePath(URL includePath) {

@@ -18,8 +18,7 @@ import java.util.HashMap;
  * 
  */
 public class GroupStatement extends Statement {
-    private Map attributes;
-    private List pointers;
+    private Map statements;
     private List comments;
     
     /**
@@ -28,8 +27,7 @@ public class GroupStatement extends Statement {
      */
     public GroupStatement(int lineNumber, String identifier) {
         super(lineNumber, identifier);
-        attributes = new HashMap();
-        pointers = new ArrayList();
+        statements = new HashMap();
         comments = new ArrayList();
     }
     
@@ -39,7 +37,15 @@ public class GroupStatement extends Statement {
      * @return The named AttributeStatement or null if not found.
      */
     public AttributeStatement getAttribute(String identifier) {
-        return (AttributeStatement) attributes.get(identifier);
+        AttributeStatement attribute = null;       
+        if (statements.get(identifier) != null) {
+            for (Iterator i = ((List) statements.get(identifier)).iterator(); i.hasNext() && attribute == null;) {
+                Statement statement = (Statement) i.next();
+                if (statement instanceof AttributeStatement)
+                    attribute = (AttributeStatement) statement;
+            }
+        }
+        return attribute;
     }
     
     /**
@@ -47,34 +53,37 @@ public class GroupStatement extends Statement {
      * @return The list of AttributeStatment.
      */
     public List getAttributes() {
-        return new ArrayList(attributes.values());
+        List attributes = new ArrayList(); 
+        for (Iterator i = statements.values().iterator(); i.hasNext();) {
+            for (Iterator s = ((List) i.next()).iterator(); s.hasNext();) {
+                Statement statement = (Statement) s.next();
+                if (statement instanceof AttributeStatement)
+                    attributes.add(statement);
+            }
+        }
+        return attributes;
     }
 
     public void addStatement(Statement statement) {
-        if (statement instanceof AttributeStatement) 
-           attributes.put(statement.getIdentifier(), statement);
-        else if (statement instanceof StructurePointer) {
-            pointers.add(statement);
+        List stmnts = (List) statements.get(statement.getIdentifier());
+        if (stmnts == null) {
+            stmnts = new ArrayList();
+            statements.put(statement.getIdentifier(), stmnts);
+        }
+        if (statement instanceof StructurePointer) {
+            stmnts.add(statement);
             for (Iterator i = ((StructurePointer) statement).getStatements().iterator(); i.hasNext();)
                 addStatement((Statement) i.next());
         }
-        else if (statement instanceof PointerStatement)
-           pointers.add(statement);
-        // TODO: else throw error
+        else if (statement instanceof PointerStatement || statement instanceof AttributeStatement)
+            stmnts.add(statement);
+        //else TODO Throw error
     }
 
-    /**
-     * 
-     * @param attribute
-     */
-    public void addAttribute(AttributeStatement attribute) {
-        attributes.put(attribute.getIdentifier(), attribute);
-    }
-    
     public boolean hasAttribute(String identifier) {
-        if (attributes.get(identifier) != null)
-            return true;
-        return false;
+        if (getAttribute(identifier) == null)
+            return false;
+        return true;
     }
    
     public void attachComment(CommentStatement comment) {
