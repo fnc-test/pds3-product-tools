@@ -45,7 +45,7 @@ $HOME/product-tools-X.X.X/lib/antlr-2.7.6.jar: \
 $HOME/product-tools-X.X.X/lib/commons-cli-1.0.jar: \
 $HOME/product-tools-X.X.X/lib/commons-collections-3.1.jar: \
 $HOME/product-tools-X.X.X/lib/commons-configuration-1.2.jar: \
-$HOME/product-tools-X.X.X/lib/commons-io-3.1.jar: \
+$HOME/product-tools-X.X.X/lib/commons-io-1.2.jar: \
 $HOME/product-tools-X.X.X/lib/commons-lang-2.1.jar: \
 $HOME/product-tools-X.X.X/lib/commons-logging-1.0.3.jar: \
 $HOME/product-tools-X.X.X/lib/log4j-1.2.13.jar: \
@@ -59,7 +59,7 @@ c:\product-tools-X.X.X\lib\antlr-2.7.6.jar; \
 c:\product-tools-X.X.X\lib\commons-cli-1.0.jar; \
 c:\product-tools-X.X.X\lib\commons-collections-3.1.jar; \
 c:\product-tools-X.X.X\lib\commons-configuration-1.2.jar; \
-c:\product-tools-X.X.X\lib\commons-io-3.1.jar; \
+c:\product-tools-X.X.X\lib\commons-io-1.2.jar; \
 c:\product-tools-X.X.X\lib\commons-lang-2.1.jar; \
 c:\product-tools-X.X.X\lib\commons-logging-1.0.3.jar; \
 c:\product-tools-X.X.X\lib\log4j-1.2.13.jar; \
