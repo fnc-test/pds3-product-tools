@@ -77,7 +77,7 @@ public class DefaultLabelParser implements LabelParser {
         String[] line = version.split("=");  
         
         if (line.length != 2) {
-            log.error(file.toString() + " is not a label. Could not find the PDS_VERSION_ID in the first line.");
+            log.warn(file.toString() + " is not a label. Could not find the PDS_VERSION_ID in the first line.");
             throw new ParseException(file.toString() + " is not a label. Could not find the PDS_VERSION_ID in the first line.");
         }
         
@@ -85,7 +85,7 @@ public class DefaultLabelParser implements LabelParser {
         String value = line[1].trim();
           
         if (!"PDS_VERSION_ID".equals(name)) {
-            log.error(file.toString() + " is not a label. Could not find the PDS_VERSION_ID in the first line.");
+            log.warn(file.toString() + " is not a label. Could not find the PDS_VERSION_ID in the first line.");
             throw new ParseException(file.toString() + " is not a label. Could not find the PDS_VERSION_ID in the first line.");
         }
         
@@ -103,7 +103,7 @@ public class DefaultLabelParser implements LabelParser {
              	base = new URL(file.toString().substring(0, file.toString().lastIndexOf("/")));
              parser.setBaseURL(base);
         } else {
-            log.info("Pointers disabled. Pointers will not be followed");
+            log.info("Pointers disabled. Pointers will not be followed.");
         }
         
         try {
@@ -112,6 +112,8 @@ public class DefaultLabelParser implements LabelParser {
             log.error(ex.getMessage());
             throw new ParseException(ex.getMessage());
         }
+        
+        log.info("Finished parsing label " + file.toString());
 
         return label;
     }
@@ -155,6 +157,7 @@ public class DefaultLabelParser implements LabelParser {
         //First parse the file and get back the label object
         label = parse(file);
         
+        log.info("Starting semantic validation on " + file.toString());
         //Check all the statements
         List statements = label.getStatements();
         Collections.sort(statements);
@@ -182,6 +185,8 @@ public class DefaultLabelParser implements LabelParser {
                 }
             }
         }
+        
+        log.info("Finished semantic validation on " + file.toString());
         
         return label;
     }
@@ -230,7 +235,7 @@ public class DefaultLabelParser implements LabelParser {
         InputStream input = file.openStream();
         ODLLexer lexer = new ODLLexer(input);
         ODLParser parser = new ODLParser(lexer);
-        log.info("Parsing partial label " + file.toString());
+        log.info("Parsing label fragment " + file.toString());
         
         if (Boolean.valueOf(properties.getProperty("parser.pointers", "true")).booleanValue()) {
             URL base = includePath;
@@ -248,6 +253,8 @@ public class DefaultLabelParser implements LabelParser {
             throw new ParseException(ex.getMessage());
         }
 
+        log.info("Finished parsing label fragment " + file.toString());
+        
         return label;
     }
 
