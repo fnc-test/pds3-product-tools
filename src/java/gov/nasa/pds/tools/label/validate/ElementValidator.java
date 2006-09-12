@@ -81,7 +81,9 @@ public class ElementValidator implements DictionaryTokens {
     private static boolean validate(ElementDefinition definition, AttributeStatement attribute, TypeChecker checker, Value value) 
             throws UnsupportedTypeException {
         boolean valid = true;
-        if (value instanceof Set || value instanceof Sequence) {
+        if (value == null) {
+            log.warn("line " + attribute.getLineNumber() + ": Found no value for " + attribute.getIdentifier());
+        } else if (value instanceof Set || value instanceof Sequence) {
             boolean validValues = true;
             for (Iterator i = ((Collection) value).iterator(); i.hasNext();) {
                 Value v = (Value) i.next();
