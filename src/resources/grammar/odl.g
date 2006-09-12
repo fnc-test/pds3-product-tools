@@ -143,7 +143,7 @@ object_statement returns [ObjectStatement result = null]
             result.attachComment(comment);
          }
       }
-      (s=nongroup_statement {if (s != null) {result.addStatement(s);}})*
+      (s=statement {if (s != null) {result.addStatement(s);}})*
       "END_OBJECT" (EQUALS id2:IDENT)?
       (c2:COMMENT)? EOL
       {
