@@ -44,7 +44,6 @@ public class ObjectStatement extends Statement {
      * @param lineNumber Line number of statement
      * @param identifier Identifier of statement
      * @param statements Map of {@link Statement} associated with this object
-     * @param objects List of {@link ObjectStatement} associated with this statement
      */
     public ObjectStatement(int lineNumber, String identifier, Map statements) {
         super(lineNumber, identifier);
