@@ -48,6 +48,8 @@ public class DictionaryParser implements ODLTokenTypes, DictionaryTokens {
         InputStream input = file.openStream();
         ODLLexer lexer = new ODLLexer(input);
         ODLParser parser = new ODLParser(lexer);
+        
+        log.info("Parsing dictionary " + file.toString());
         try {
             List labels = new ArrayList();
             //Attempt to parse a dictionary
@@ -109,6 +111,8 @@ public class DictionaryParser implements ODLTokenTypes, DictionaryTokens {
             log.error(ex.getMessage());
             throw new ParseException(ex.getMessage());
         }
+        
+        log.info("Finshed parsing dictionary " + file.toString());
 
         return dictionary;
     }
