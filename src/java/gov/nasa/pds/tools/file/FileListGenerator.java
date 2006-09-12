@@ -136,7 +136,6 @@ public class FileListGenerator {
 	 * Generates a list of files based on a supplied list of inputs. Accepted
 	 * inputs are files and directories.
 	 * 
-	 * @param inputs a list of files and/or directories 
 	 * @param recurse 'true' to recursively search down subdirectories for files to add onto the list.
 	 *  'false' to just search at the level of the supplied directory.
 	 * @return A list of files based on the supplied inputs

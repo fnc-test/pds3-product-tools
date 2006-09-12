@@ -35,7 +35,7 @@ public class WildcardOSFilter extends AbstractFileFilter {
 	/**
 	 * Constructor for a single wildcard
 	 * 
-	 * @param wildcard
+	 * @param wc
 	 * @throws IllegalArgumentException if the pattern is null
 	 */
 	public WildcardOSFilter(String wc) {
@@ -50,7 +50,7 @@ public class WildcardOSFilter extends AbstractFileFilter {
 	/**
 	 * Constructor for a list of wildcards
 	 * 
-	 * @param wildcards
+	 * @param wc
 	 * @throws IllegalArgumentException if the pattern list is null
 	 */
 	public WildcardOSFilter(List wc) {
