@@ -38,7 +38,11 @@ $Id$
       </action>
     </release>
     
-    <release version="0.3.0" description="Binary release for the second phase of alpha testing.">
+    <release version="0.3.0" date="2006-09-12" description="Binary release for the second phase of alpha testing.">
+      <action dev="mcayanan" type="add">
+        Added a user guide for VTool.
+      </action>
+      
       <action dev="mcayanan" type="add">
         Added the following command-line options:
           <table>
@@ -50,36 +54,37 @@ $Id$
           </table>
       </action>
       
-      <action dev="mcayanan" type="fix">
-        Fixed multiple dictionary support.
+      <action dev="pramirez" type="add">
+        Pointers are now followed. This feature can be turned on and off. This will allow arbitrary length nesting of pointers. Object and group statements should not begin and end in different files. Their contents may be in separate files but the open and close should be contained within the same file. This will allow the label to be valid even when semantic validation is done.
+      </action>
+      
+      <action dev="pramirez" type="add">
+        Added support for PDS_VERSION_ID. Now files that don't have this in the first line will be skipped and logged as a warning if passed to the parser.
+      </action>
+      
+      <action dev="pramirez" type="add">
+        Added support for SFDUs. Now the SFDUs will be logged and then skipped. This has not added validation of SFDUs.
       </action>
       
       <action dev="mcayanan" type="update">
         Changed the "f" (file) flag to a "t" (target) flag.
       </action> 
       
-      <action dev="mcayanan" type="add">
-        Added a user guide for VTool.
-      </action>
-      
-      <action dev="pramirez" type="add">
-        Pointer are now followed. This feature can be turned on and off. This will allow arbitrary length nesting of pointers.
-        Object and group statements should not begin and end in different files. Their contents may be in separate files but the 
-        open and close should be contained within the same file. This will allow the label to be valid even when semantic validation
-        is done.
-      </action>
-      
       <action dev="pramirez" type="update">
         Dates are now checked to ensure that they are not only properly formed but are actual valid dates. One can now get a Date
         object through the API for convenience.
       </action>
       
-      <action dev="pramirez" type="fix">
-        Properly handle the 'Z' at the end of the date when attempting to create an actual Date object.
-      </action>
-      
       <action dev="pramirez" type="update">
         More logging information about file being parsed and dictionaries being used.
+      </action>
+      
+      <action dev="mcayanan" type="fix">
+        Fixed multiple dictionary support.
+      </action>
+      
+      <action dev="pramirez" type="fix">
+        Properly handle the 'Z' at the end of the date when attempting to create an actual Date object.
       </action>
       
       <action dev="pramirez" type="fix">
@@ -87,26 +92,15 @@ $Id$
       </action>
       
       <action dev="pramirez" type="fix">
-        Allow for objects and groups with the same name to appear at the same level within a label or fragment. This required changes to
-        method signatures on the Label class.
+        Allow for objects and groups with the same name to appear at the same level within a label or fragment. This required changes to method signatures on the Label class.
       </action>
       
       <action dev="pramirez" type="fix">
         Fixed convenience methods on Label class. This would have only caused a problem if people called the tool directly.
       </action>
       
-      <action dev="pramirez" type="add">
-        Added support for PDS_VERSION_ID. Now files that don't have this in the first line will be skipped and logged as a warning if passed
-        to the parser.
-      </action>
-      
-      <action dev="pramirez" type="add">
-        Added support for SFDUs. Now the SFDUs will be logged and then skipped. This has not added validation of SFDUs.
-      </action>
-      
       <action dev="pramirez" type="fix">
-        PSDD will now be adhered to properly as an optional element. This essentially allows any element definition to appear within an object or 
-        group statement without generating an error.
+        PSDD will now be adhered to properly as an optional element. This essentially allows any element definition to appear within an object or group statement without generating an error.
       </action>
     </release> 
   </body>
