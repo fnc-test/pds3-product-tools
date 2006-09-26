@@ -20,16 +20,32 @@ $Id: index.xml 1157 2006-06-16 19:50:08Z shardman $
 <document>
   <properties>
     <title>User Guide</title>
-      <author email="Michael.Cayanan@jpl.nasa.gov">Michael Cayanan</author>
+    <author email="Michael.Cayanan@jpl.nasa.gov">Michael Cayanan</author>
   </properties>
 
   <body>
     <section name="User Guide">
-      <p>This section describes how to use the Validation Tool (VTool) in order to perform automated validation of data products.</p>
+      <p>This document describes how to use the Validation Tool (VTool) in order to perform automated validation of data products. The following sections can be found in this document:
+      </p>
+
+      <ul>
+        <li><a href="#Overview">Overview</a></li>
+        <li><a href="#Setup">Setup</a></li>
+        <li><a href="#Command-Line Options">Command-Line Options</a></li>
+        <li><a href="#Examples">Examples</a></li>
+        <li><a href="#Using a Configuration File">Using a Configuration File</a></li>
+        <li><a href="#Multiple Dictionary Support">Multiple Dictionary Support</a></li>
+        <li><a href="#Common Errors">Common Errors</a></li>
+      </ul>
+
+      <p>Note: The command-line examples in this document have been broken into multiple lines for readability. The commands should be reassembled into a single line prior to execution.
+      </p>
 
       <subsection name="Overview">
         <p>The goal of VTool is to programmatically ascertain if a given data product is PDS compliant (or "valid"). Typically, this means the data product is well formed, complete, syntactically and semantically correct, and that it conforms to all applicable PDS standards. The standards themselves are defined in the <a href="http://pds.nasa.gov/documents/sr/" target="_blank">PDS Standards Reference</a>.
         </p>
+
+
       </subsection>
 
       <subsection name="Setup">
@@ -39,61 +55,62 @@ $Id: index.xml 1157 2006-06-16 19:50:08Z shardman $
         </p>
 
         <p><b>UNIX-Based Command</b></p>
-          <source>
-[node:~] setenv CLASSPATH ${CLASSPATH}: \
-$HOME/product-tools-X.X.X/lib/antlr-2.7.6.jar: \
-$HOME/product-tools-X.X.X/lib/commons-cli-1.0.jar: \
-$HOME/product-tools-X.X.X/lib/commons-collections-3.1.jar: \
-$HOME/product-tools-X.X.X/lib/commons-configuration-1.2.jar: \
-$HOME/product-tools-X.X.X/lib/commons-io-1.2.jar: \
-$HOME/product-tools-X.X.X/lib/commons-lang-2.1.jar: \
-$HOME/product-tools-X.X.X/lib/commons-logging-1.0.3.jar: \
-$HOME/product-tools-X.X.X/lib/log4j-1.2.13.jar: \
+        <source>
+[node:~] setenv CLASSPATH ${CLASSPATH}:\
+$HOME/product-tools-X.X.X/lib/antlr-2.7.6.jar:\
+$HOME/product-tools-X.X.X/lib/commons-cli-1.0.jar:\
+$HOME/product-tools-X.X.X/lib/commons-collections-3.1.jar:\
+$HOME/product-tools-X.X.X/lib/commons-configuration-1.2.jar:\
+$HOME/product-tools-X.X.X/lib/commons-io-1.2.jar:\
+$HOME/product-tools-X.X.X/lib/commons-lang-2.1.jar:\
+$HOME/product-tools-X.X.X/lib/commons-logging-1.0.3.jar:\
+$HOME/product-tools-X.X.X/lib/log4j-1.2.13.jar:\
 $HOME/product-tools-X.X.X/lib/product-tools-X.X.X.jar
-          </source>
+        </source>
 
         <p><b>Windows Command</b></p>
-          <source>
-C:\&gt; set CLASSPATH=%CLASSPATH%; \
-c:\product-tools-X.X.X\lib\antlr-2.7.6.jar; \
-c:\product-tools-X.X.X\lib\commons-cli-1.0.jar; \
-c:\product-tools-X.X.X\lib\commons-collections-3.1.jar; \
-c:\product-tools-X.X.X\lib\commons-configuration-1.2.jar; \
-c:\product-tools-X.X.X\lib\commons-io-1.2.jar; \
-c:\product-tools-X.X.X\lib\commons-lang-2.1.jar; \
-c:\product-tools-X.X.X\lib\commons-logging-1.0.3.jar; \
-c:\product-tools-X.X.X\lib\log4j-1.2.13.jar; \
+        <source>
+C:\&gt; set CLASSPATH=%CLASSPATH%;\
+c:\product-tools-X.X.X\lib\antlr-2.7.6.jar;\
+c:\product-tools-X.X.X\lib\commons-cli-1.0.jar;\
+c:\product-tools-X.X.X\lib\commons-collections-3.1.jar;\
+c:\product-tools-X.X.X\lib\commons-configuration-1.2.jar;\
+c:\product-tools-X.X.X\lib\commons-io-1.2.jar;\
+c:\product-tools-X.X.X\lib\commons-lang-2.1.jar;\
+c:\product-tools-X.X.X\lib\commons-logging-1.0.3.jar;\
+c:\product-tools-X.X.X\lib\log4j-1.2.13.jar;\
 c:\product-tools-X.X.X\lib\product-tools-X.X.X.jar
-          </source>
+        </source>
 
-        <p>Check that the jar files found in the product-tools package has been correctly added to the end of the <i>CLASSPATH</i> variable. The following commands demonstrate how to verify this:</p>
+        <p>Please note that value for the <i>CLASSPATH</i> variable may not contain space characters. Check that the jar files found in the <i>product-tools</i> package have been correctly added to the end of the <i>CLASSPATH</i> variable. The following commands demonstrate how to verify this:
+        </p>
 
         <p><b>UNIX-Based Command</b></p>
-          <source>[node:~] echo $CLASSPATH</source>
+        <source>[node:~] echo $CLASSPATH</source>
 
         <p><b>Windows Command</b></p>
-          <source>C:\&gt; echo %CLASSPATH%</source>
+        <source>C:\&gt; echo %CLASSPATH%</source>
         
-        <p>An alternative method to setting the <i>CLASSPATH</i> is by setting a Java property on the command-line when running the tool each time. This is done by passing the java "D" flag:
+        <p>An alternative method to setting the <i>CLASSPATH</i> variable is to set the <i>java.ext.dirs</i> Java property on the command-line when running the tool each time. This is done by passing the property via the Java "-D" flag as demonstrated in the following example:
         </p>
-          <source>
+        <source>
 [node:~] java -Djava.ext.dirs=&lt;path to your jar files&gt;...
-          </source>
+        </source>
         
-        <p>The following commands demonstrate how to run VTool each time without having to set the <i>CLASSPATH</i> environment variable. The example shown below assumes that all the jar files found in the product-tools package are located in $HOME/product-tools-X.X.X/lib:
+        <p>The following commands demonstrate how to run VTool each time without having to set the <i>CLASSPATH</i> environment variable. The example shown below assumes that all the jar files found in the <i>product-tools</i> package are located in $HOME/product-tools-X.X.X/lib:
         </p>
         
         <p><b>UNIX-Based Command</b></p> 
-          <source>
+        <source>
 [node:~] java -Djava.ext.dirs=$HOME/product-tools-X.X.X/lib \
 gov.nasa.pds.tools.VTool -d pdsdd.full -t TEST.LBL
-          </source>
+        </source>
           
         <p><b>Windows Command</b></p>
-          <source>
+        <source>
 C:\&gt; java -Djava.ext.dirs=c:\product-tools-X.X.X\lib \
 gov.nasa.pds.tools.VTool -d pdsdd.full -t TEST.LBL
-          </source>         
+        </source>         
       </subsection>
       
       <subsection name="Command-Line Options">
@@ -119,80 +136,84 @@ gov.nasa.pds.tools.VTool -d pdsdd.full -t TEST.LBL
       </subsection> 
 
       <subsection name="Examples">
-        <p>The following command demonstrates the validation of a single data product label against the PSDD:</p>
-          <source>
+        <p>The following command demonstrates the validation of a single data product label against the PSDD:
+        </p>
+        <source>
 [node:~] java gov.nasa.pds.tools.VTool -d pdsdd.full \
 -t TEST.LBL
-          </source>
+        </source>
 
         <p>By default, the tool will write the validation report to the terminal. The following command demonstrates the same validation as above, but writing the validation report to a file:
         </p>
-          <source>
+        <source>
 [node:~] java gov.nasa.pds.tools.VTool -d pdsdd.full \
 -t TEST.LBL -o report.txt
-          </source>
+        </source>
 
-        <p>The following command demonstrates the validation of a single data product label against the PSDD and a local dictionary:</p>
-          <source>
+        <p>The following command demonstrates the validation of a single data product label against the PSDD and a local dictionary:
+        </p>
+        <source>
 [node:~] java gov.nasa.pds.tools.VTool -d pdsdd.full \
 localdd.full -t TEST.LBL 
-          </source>
+        </source>
 
-        <p>The following command demonstrates the validation of multiple data product labels if contained in a directory:</p>
-          <source>
+        <p>The following command demonstrates the validation of multiple data product labels if contained in a directory:
+        </p>
+        <source>
 [node:~] java gov.nasa.pds.tools.VTool -d pdsdd.full \
 -t ./TEST_DIR
-          </source>
+        </source>
 
         <p>The following command demonstrates the validation of multiple targets - a single data product label and multiple data product labels contained in another directory location:
         </p>
-          <source>
+        <source>
 [node:~] java gov.nasa.pds.tools.VTool -d pdsdd.full \
 -t TEST.LBL ./TEST_DIR
-          </source>
+        </source>
 
         <p>The following command demonstrates the validation of multiple data product labels contained in a directory whose extension ends in either .LBL or .FMT:
         </p>
-          <source>
+        <source>
 [node:~] java gov.nasa.pds.tools.VTool -d pdsdd.full \
 -t ./TEST_DIR -p "*LBL" "*FMT"
-          </source>
+        </source>
 
         <p>By default, the tool will recursively traverse the directory tree assuming there are sub-directories contained within the specified directory. The following command demonstrates the same validation as above, but without recursion:
         </p>
-          <source>
+        <source>
 [node:~] java gov.nasa.pds.tools.VTool -d pdsdd.full \ 
 -t ./TEST_DIR -p "*LBL" "*FMT" -l
-          </source>
+        </source>
 
         <p>The following command demonstrates the validation of multiple data product labels contained in a directory except for files ending in a .IMG or .TAB:
         </p>
-          <source>
+        <source>
 [node:~] java gov.nasa.pds.tools.VTool -d pdsdd.full \
 -t ./TEST_DIR -X "*IMG" "*TAB"
-          </source>
+        </source>
 <!--          
         <p>By default, if a data product label contains a STRUCTURE pointer, it will assume it is co-located, search for, and validate the pointer file. If it is not found there, then an error message is thrown. The following command demonstrates how to specify a starting path in VTool to search for pointers when validating a data product label that contains a STRUCTURE pointer not located in the same directory as the label:
         </p>
-          <source>
+        <source>
 [node:~] java gov.nasa.pds.tools.VTool -d pdsdd.full \
 -t TEST.LBL -I $HOME/starting-path
-          </source>
+        </source>
 -->          
         <p>The following command demonstrates the validation of a data product label that contains a STRUCTURE pointer, but specifying to the tool to not follow the pointer:
         </p>
-          <source>
+        <source>
 [node:~] java gov.nasa.pds.tools.VTool -d pdsdd.full \
 -t TEST.LBL -F
-          </source>
+        </source>
         
         <p>A configuration file can be passed into the command-line to change the default behaviors of the tool and to also provide users a way to perform validation with a single flag (see the section below for details on how to set the configuration file). The following command demonstrates performing validation using a configuration file:
         </p>
-          <source>[node:~] java gov.nasa.pds.tools.VTool -c config.txt
-          </source>
+        <source>
+[node:~] java gov.nasa.pds.tools.VTool -c config.txt
+        </source>
       </subsection>
 
-      <subsection name="Using A Configuration File">
+      <subsection name="Using a Configuration File">
         <p>A configuration file is used to set the default behaviors of the tool. It consists of a text file made up of keyword/value pairs. Lines which begin with the hash character "#" are considered comments and are ignored.
         </p>
         <p><b>Any flag specified on the command-line takes precedence over any equivalent settings placed in the configuration file.</b>
@@ -214,7 +235,7 @@ localdd.full -t TEST.LBL
         </table>
 
         <p>The following example demonstrates how to set a configuration file:</p>
-          <source>
+        <source>
 # This is a VTool configuration file          
 
 vtool.target = ./TEST_DIR
@@ -226,35 +247,36 @@ vtool.follow = false
 vtool.includepath = /home/start-path
 -->
 vtool.patterns = "*.LBL"
-          </source>
+        </source>
 
         <p>This is equivalent to running the tool with the following flags:</p>
-          <source>
+        <source>
 -t ./TEST_DIR -d pdsdd.full -o report.txt -l -p "*.LBL"  <!-- \
 -I /home/start-path -F
 -->
-          </source>          
+        </source>          
 
-        <p>The following example demonstrates how to set a configuration file with multiple values for a keyword:</p>
-          <source>
+        <p>The following example demonstrates how to set a configuration file with multiple values for a keyword:
+        </p>
+        <source>
 # This is a VTool configuration file with multiple values
 
 vtool.target = TEST.LBL ./TEST_DIR
 vtool.dict = pdsdd.full localdd.full
 vtool.recursive = true
 vtool.patterns = "*.LBL" "*.FMT"
-          </source>
+        </source>
 
         <p>This is equivalent to running the tool with the following flags:</p>
-          <source>
+        <source>
 -t TEST.LBL ./TEST_DIR -d pdsdd.full localdd.full \
 -p "*.LBL" "*.FMT"
-          </source>
+        </source>
         
         <p>The following example demonstrates how to override a setting in the configuration file.</p>
         
         <p>Suppose the configuration file named config.txt is defined as follows:</p>
-          <source>
+        <source>
 # This is another VTool configuration file
 
 vtool.target = ./TEST_DIR
@@ -262,13 +284,13 @@ vtool.dict = pdsdd.full
 vtool.output = report.txt
 vtool.recursive = false
 vtool.patterns = "*.LBL"
-          </source>
+        </source>
           
         <p>If validating everything in TEST_DIR is desired rather than just files that end in "LBL" as is defined in the configuration file, then the following command demonstrates how to perform this behavior:
         </p>
-          <source>
+        <source>
 [node:~] java gov.nasa.pds.tools.VTool -c config.txt -p "*"
-          </source>
+        </source>
       </subsection>
       
       <subsection name="Multiple Dictionary Support">
@@ -278,7 +300,7 @@ vtool.patterns = "*.LBL"
         <p>The following example demonstrates the VTool behavior when passing in two dictionary files:</p>
         
         <p>Suppose a PSDD, pdsdd.full, and a local dictionary, local-dd1.full, is being passed into VTool, where the PSDD contains the following DATA_SET_ID definition:</p>
-          <source>
+        <source>
 OBJECT = ELEMENT_DEFINITION
   NAME = DATA_SET_ID
   STATUS_TYPE = APPROVED
@@ -310,10 +332,10 @@ OBJECT = ELEMENT_DEFINITION
      }
 END_OBJECT = ELEMENT_DEFINITION
 END
-          </source>
+        </source>
           
         <p>and the local dictionary also contains DATA_SET_ID, but with a different set of standard values:</p>
-          <source>
+        <source>
 OBJECT = ELEMENT_DEFINITION
   NAME = DATA_SET_ID
   STATUS_TYPE = APPROVED
@@ -338,19 +360,19 @@ OBJECT = ELEMENT_DEFINITION
   }
 END_OBJECT = ELEMENT_DEFINITION
 END
-          </source>
+        </source>
                  
         <p>If the PSDD is passed in first followed by the local dictionary as follows:</p>
-          <source>
+        <source>
 ... -d pdsdd.full local-dd1.full ...
-          </source>
+        </source>
         
         <p>VTool will retain the DATA_SET_ID definition found in the local dictionary.</p>
         
         <p>If the local dictionary is passed in first followed by the PSDD as follows:</p>
-          <source>
+        <source>
 ... -d local-dd1.full pdsdd.full ...
-          </source>
+        </source>
         
         <p>VTool will retain the DATA_SET_ID definition found in the PSDD.</p>
         
@@ -358,7 +380,7 @@ END
 
         <p>Suppose the PSDD and the local dictionary, local-dd1.full, file have the DATA_SET_ID definition as stated above. In addition, there is another local dictionary, local-dd2.full, that will be passed into VTool also, which contains the following DATA_SET_ID definition:
         </p>
-          <source>
+        <source>
 OBJECT = ELEMENT_DEFINITION
   NAME = DATA_SET_ID
   STATUS_TYPE = APPROVED
@@ -383,21 +405,36 @@ OBJECT = ELEMENT_DEFINITION
   }
 END_OBJECT = ELEMENT_DEFINITION
 END
-          </source>
+        </source>
           
         <p>If these three dictionaries get passed into VTool as follows:</p>
-          <source>
+        <source>
 ... -d pdsdd.full local-dd1.full local-dd2.full ...
-          </source>
+        </source>
           
-        <p>VTool will retain the DATA_SET_ID definition found in the last dictionary specified. In this case, it is the definition found in local-dd2.full.</p>
+        <p>VTool will retain the DATA_SET_ID definition found in the last dictionary specified. In this case, it is the definition found in local-dd2.full.
+        </p>
         
         <p>If these dictionaries get passed into VTool in some other order like the following:</p>
-          <source>
+        <source>
 ... -d local-dd2.full local-dd1.full pdsdd.full ...
-          </source>
+        </source>
           
         <p>VTool will retain the DATA_SET_ID definition found in pdsdd.full.</p>          
+      </subsection>
+
+      <subsection name="Common Errors">
+        <p>At this point in development there is a single common error that several users have encountered. The error is a follows:
+        </p>
+
+        <source>
+[node:~] java gov.nasa.pds.tools.VTool ...
+Exception in thread "main" java.lang.NoClassDefFoundError:
+gov/nasa/pds/tools/VTool
+        </source>
+
+        <p>The actual class name may vary but the above error is the result of the <i>CLASSPATH</i> environment variable not being set correctly. Verify that the variable contains all of the specified jar files and that there are no space characters in the value. See the <a href="#Setup">Setup</a> section for details.
+        </p>
       </subsection>
     </section>
   </body>
