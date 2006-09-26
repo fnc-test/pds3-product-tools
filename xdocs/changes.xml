@@ -23,18 +23,9 @@ $Id$
     <author email="Sean.Hardman@jpl.nasa.gov">Sean Hardman</author>
   </properties>
   <body>
-    <release version="0.1.0" date="2006-06-16" description="Source release for the Code Walk-through.">
-      <action dev="pramirez" type="add">
-        This release supports syntactic and semantic validation of a single PDS label.
-      </action>
-    </release>
-
-    <release version="0.2.0" date="2006-08-01" description="Binary release for the first phase of alpha testing.">
-      <action dev="pramirez" type="update" due-to="Mark Rose" due-to-email="mrose@email.arc.nasa.gov">
-        A major overhaul to how the grammar was implemented using Antlr was performed as a result of comments from the Code Walk-through.
-      </action>
-      <action dev="pramirez" type="add">
-        This release supports validation against the PDS Data Dictionary.
+    <release version="???" date="in SVN" description="Release in progress.">
+      <action dev="shardman" type="update">
+        Added a <i>Common Errors</i> section to the User Guide as well as clarifying some aspects of setting the <i>CLASSPATH</i> environment variable in the <i>Setup</i> section.
       </action>
     </release>
     
@@ -102,6 +93,21 @@ $Id$
       <action dev="pramirez" type="fix">
         PSDD will now be adhered to properly as an optional element. This essentially allows any element definition to appear within an object or group statement without generating an error.
       </action>
-    </release> 
+    </release>
+
+    <release version="0.2.0" date="2006-08-01" description="Binary release for the first phase of alpha testing.">
+      <action dev="pramirez" type="update" due-to="Mark Rose" due-to-email="mrose@email.arc.nasa.gov">
+        A major overhaul to how the grammar was implemented using Antlr was performed as a result of comments from the Code Walk-through.
+      </action>
+      <action dev="pramirez" type="add">
+        This release supports validation against the PDS Data Dictionary.
+      </action>
+    </release>
+
+    <release version="0.1.0" date="2006-06-16" description="Source release for the Code Walk-through.">
+      <action dev="pramirez" type="add">
+        This release supports syntactic and semantic validation of a single PDS label.
+      </action>
+    </release>
   </body>
 </document>
