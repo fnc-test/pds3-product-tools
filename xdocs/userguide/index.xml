@@ -214,8 +214,13 @@ localdd.full -t TEST.LBL
       </subsection>
 
       <subsection name="Using a Configuration File">
-        <p>A configuration file is used to set the default behaviors of the tool. It consists of a text file made up of keyword/value pairs. Lines which begin with the hash character "#" are considered comments and are ignored.
+        <p>A configuration file is used to set the default behaviors of the tool. It consists of a text file made up of keyword/value pairs. The configuration file follows the syntax of the stream parsed by the Java Properties.load(java.io.InputStream) method. </p>
+        <p>Blank lines and lines which begin with the hash character "#" are ignored.</p>
+        <p>Values may be separated on different lines if a backslash is placed at the end of the line that continues below.</p>
+        <p>Escape sequences for special characters like a line feed, a tabulation or a unicode character, are allowed in the values and are specified in the same notation as those used in Java strings (e.g. \n, \t, \r).
         </p>
+        <p><b>Since backslashes (\) have special meanings in a configuration file, keyword values that contain this character will not be interpreted properly by VTool even if it is surrounded by quotes. A common example would be a Windows path name (e.g. c:\VTT_EN_1-1\target). Use the forward slash character instead (c:/VTT_EN_1-1/target) or escape the backslash character (c:\\VTT_EN_1-1\\target).
+        </b></p>
         <p><b>Any flag specified on the command-line takes precedence over any equivalent settings placed in the configuration file.</b>
         </p>
             
@@ -271,6 +276,21 @@ vtool.patterns = "*.LBL" "*.FMT"
         <source>
 -t TEST.LBL ./TEST_DIR -d pdsdd.full localdd.full \
 -p "*.LBL" "*.FMT"
+        </source>
+
+        <p>The following example demonstrates how to set a configuration file with multiple values that span across multiple lines:
+        </p>
+        <source>
+# This is a VTool configuration file with multiple values
+# that span across multiple lines
+
+vtool.target = TEST.LBL \
+               ./TEST_DIR
+vtool.dict = pdsdd.full \
+             localdd.full
+vtool.recursive = true
+vtool.patterns = "*.LBL" \
+                 "*.FMT"
         </source>
         
         <p>The following example demonstrates how to override a setting in the configuration file.</p>
