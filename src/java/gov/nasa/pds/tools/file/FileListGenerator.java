@@ -6,20 +6,16 @@
 
 package gov.nasa.pds.tools.file;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.FileFilter;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
 
-import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.NotFileFilter;
-import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.commons.io.FileUtils;
 import gov.nasa.pds.tools.file.filefilter.WildcardOSFilter;
 
@@ -39,8 +35,8 @@ public class FileListGenerator {
 	private List list;
 	
 	/**
-	 * Constructor that takes in a list of files and/or directories
-	 * @param list a list of files and/or directories
+	 * Constructor that takes in a list of supplied targets (files, URLs, directories)
+	 * @param list a list of files, URLs, and directories
 	 *
 	 */
 	public FileListGenerator(List list) {
@@ -74,80 +70,29 @@ public class FileListGenerator {
 	}
 	
 	/**
-	 * Sets the filter to be used when searching for files to ignore in a directory.
-	 * @param file a file containing a list of files and/or file patterns to ignore
-	 */
-	public void setNoFileFilter(File file) {
-		List filters = new ArrayList();
-		String filter = null;
-		
-		try {
-			BufferedReader reader = new BufferedReader (new FileReader(file));
-		
-			while( (filter = reader.readLine()) != null ) {
-				filters.add(filter);
-			}
-		}
-		catch( FileNotFoundException fex ) {
-			System.out.println( fex.getMessage() );
-			return;
-		}
-		catch( IOException iex ) {
-			System.out.println( iex.getMessage() );
-			return;
-		}
-		setNoFileFilter(filters);
-	}
-	
-	/**
 	 * Sets the filter to be used when searching for directories to ignore
-	 * @param wildcards a list of directory and/or directory patterns to ignore
+	 * @param patterns a list of directory/directory patterns to ignore
 	 */
-	public void setNoDirFilter(List wildcards) {
-		noDirFilter = new NotFileFilter(new WildcardOSFilter(wildcards));
+	public void setNoDirFilter(List patterns) {
+		noDirFilter = new NotFileFilter(new WildcardOSFilter(patterns));
 	}
 	
 	/**
-	 * Sets the filter to be used when searching for directories to ignore
-	 * @param file a file containing a list of directories and/or directory patterns to ignore
-	 */
-	public void setNoDirFilter(File file) {
-		List filters = new ArrayList();
-		String filter = null;
-		
-		try {
-			BufferedReader reader = new BufferedReader (new FileReader(file));
-			while( (filter = reader.readLine()) != null ) {
-				filters.add(filter);
-			}
-		}
-		catch( FileNotFoundException fex ) {
-			System.out.println( fex.getMessage() );
-			return;
-		}
-		catch( IOException iex ) {
-			System.out.println( iex.getMessage() );
-			return;
-		}
-		setNoDirFilter(filters);
-	}
-	
-	/**
-	 * Generates a list of files based on a supplied list of inputs. Accepted
-	 * inputs are files and directories.
+	 * Generates a list of files based on a supplied list of targets. Accepted
+	 * inputs are files, URLs and directories.
 	 * 
 	 * @param recurse 'true' to recursively search down subdirectories for files to add onto the list.
 	 *  'false' to just search at the level of the supplied directory.
-	 * @return A list of files based on the supplied inputs
+	 * @return A list of files based on the supplied list of targets
 	 */
-	public List visitFilesAndDirs(boolean recurse) {
+	public List visitTargets(boolean recurse) {
 		List files = new ArrayList();
 		File file = null;
 		
 		for(Iterator i = list.iterator(); i.hasNext(); ) {
 			file = new File( i.next().toString() );
 			if(file.isDirectory())
-				files.addAll( visitDirs(file, recurse) );
+				files.addAll( visitDir(file, recurse) );
 			else 
 				files.add(file);
 		}
@@ -155,17 +100,18 @@ public class FileListGenerator {
 	}
 	
 	/**
-	 * Gets a list of files under a given directory.
+	 * Gets a list of files under a given directory. If file and/or directory filters are wish to be
+	 * used, then they must be set prior to calling this method.
 	 * 
 	 * @param dir the name of the directory
 	 * @param recurse 'true' to recursively traverse down the directory, 'false' otherwise
-	 * @return A list of all files that were found underneath the given directory. If a
-	 * filter was set via the setFileFilter and/or setNoFileFilter methods, then this list
-	 * will be comprised of files that matched.
+	 * @return A list of all files that were found underneath the supplied directory.
 	 */
-	public List visitDirs(File dir, boolean recurse) {
+	public List visitDir(File dir, boolean recurse) {
 		List children = new ArrayList();
+		List subdirs = new ArrayList();
 		IOFileFilter realFileFilter;
+		FileFilter realDirFilter;
 		
 		if( !dir.isDirectory() )
 			throw new IllegalArgumentException("parameter 'dir' is not a directory: " + dir);
@@ -176,11 +122,22 @@ public class FileListGenerator {
 			realFileFilter = FileFilterUtils.andFileFilter(fileFilter, noFileFilter);
 		else
 			realFileFilter = fileFilter;
-		
-		if(recurse)
-			children.addAll(FileUtils.listFiles(dir, realFileFilter, TrueFileFilter.INSTANCE));
+		if(noDirFilter != null)
+			realDirFilter = FileFilterUtils.andFileFilter(noDirFilter, FileFilterUtils.directoryFileFilter());
 		else
-			children.addAll(FileUtils.listFiles(dir, realFileFilter, null));
+			realDirFilter = FileFilterUtils.directoryFileFilter();
+		
+		//Find files only first
+		children.addAll(FileUtils.listFiles(dir, realFileFilter, null));
+		
+		//Visit sub-directories if the recurse flag is set
+		if(recurse) {
+			//Grab all sub-directories first
+			subdirs.addAll(Arrays.asList(dir.listFiles(realDirFilter)));
+			//Visit each sub-directory
+			for(Iterator i = subdirs.iterator(); i.hasNext();)
+				children.addAll( visitDir( new File(i.next().toString()), recurse) );
+		}
 		
 		return children;
 	}

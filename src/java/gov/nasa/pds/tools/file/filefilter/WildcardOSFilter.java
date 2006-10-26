@@ -36,11 +36,11 @@ public class WildcardOSFilter extends AbstractFileFilter {
 	 * Constructor for a single wildcard
 	 * 
 	 * @param wc
-	 * @throws IllegalArgumentException if the pattern is null
+	 * @throws NullPointerException if the pattern is null
 	 */
 	public WildcardOSFilter(String wc) {
 		if(wc == null) {
-			throw new IllegalArgumentException();
+			throw new NullPointerException();
 		}
 		
 		this.wildcards = new ArrayList();
@@ -51,11 +51,11 @@ public class WildcardOSFilter extends AbstractFileFilter {
 	 * Constructor for a list of wildcards
 	 * 
 	 * @param wc
-	 * @throws IllegalArgumentException if the pattern list is null
+	 * @throws NullPointerException if the pattern list is null
 	 */
 	public WildcardOSFilter(List wc) {
 		if(wc == null) {
-			throw new IllegalArgumentException();
+			throw new NullPointerException();
 		}
 		
 		this.wildcards = new ArrayList();
@@ -66,29 +66,16 @@ public class WildcardOSFilter extends AbstractFileFilter {
 	 * Checks to see if the filename matches one of the wildcards. Matching is 
 	 * case-insensitive for Windows and case-sensitive for Unix.
 	 * 
-	 * @param dir  the file directory
-	 * @param name the filename
-	 * @return true if the filename matches one of the wildcards
-	 */
-	public boolean accept(File dir, String name) {
-		if(dir != null) {
-			return false;
-		}
-		return accept( new File(dir, name) );
-	}
-	
-	/**
-	 * Checks to see if the filename matches one of the wildcards. Matching is 
-	 * case-insensitive for Windows and case-sensitive for Unix.
-	 * 
 	 * @param file the file to check
 	 * @return true if the filename matches one of the wildcards
+	 * @throws NullPointerException if the file is null
 	 */
 	
 	public boolean accept(File file) {
-		if(file.isDirectory()) {
-			return false;
-		}
+		
+		if(file == null)
+			throw new NullPointerException("No file specified");
+		
 		for(Iterator i = wildcards.iterator(); i.hasNext(); ) {
 			if(FilenameUtils.wildcardMatchOnSystem(file.getName(), i.next().toString())) {
 				return true;
