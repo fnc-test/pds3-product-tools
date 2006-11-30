@@ -21,6 +21,7 @@ $Id: index.xml 1157 2006-06-16 19:50:08Z shardman $
   <properties>
     <title>User Guide</title>
     <author email="Michael.Cayanan@jpl.nasa.gov">Michael Cayanan</author>
+    <author email="Sean.Hardman@jpl.nasa.gov">Sean Hardman</author>
   </properties>
 
   <body>
