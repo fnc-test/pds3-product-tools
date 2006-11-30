@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <!--
 Copyright 2006, by the California Institute of 
 Technology. ALL RIGHTS RESERVED. United States Government 
@@ -16,11 +17,15 @@ countries or providing access to foreign persons.
 $Id$
 -->
 
-<project name="product-tools" href="http://starcell.jpl.nasa.gov/product-tools/">
-  <title>Product Tools</title>
+<project>
   <body>
+    <links>
+      <item name="CM" href="http://pdscm.jpl.nasa.gov/"/>
+      <item name="Product Tools" href="http://pdscm.jpl.nasa.gov/product-tools/"/>
+    </links>
     <menu name="Software Documentation">
       <item name="User Guide" href="userguide/index.html"/>
+      <item name="Developer Guide" href="developer/index.html"/>
     </menu>
   </body>
 </project>
