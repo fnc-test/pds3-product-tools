@@ -24,7 +24,7 @@ $Id$
       <item name="Product Tools" href="http://pdscm.jpl.nasa.gov/product-tools/"/>
     </links>
     <menu name="Software Documentation">
-      <item name="User Guide" href="userguide/index.html"/>
+      <item name="User Guide" href="user/index.html"/>
       <item name="Developer Guide" href="developer/index.html"/>
     </menu>
   </body>
