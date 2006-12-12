@@ -38,8 +38,10 @@ import gov.nasa.pds.tools.label.Value;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.TreeSet;
 import java.text.ParseException;
 }
 
@@ -47,6 +49,12 @@ class ODLParser extends Parser;
 options {
     exportVocab = ODL;
     k = 2;
+}
+
+tokens {
+    // We need to use this in a predicate, so we need to give it a name instead
+    // of just using it literally later.
+    END = "END";
 }
 
 {
@@ -72,12 +80,51 @@ options {
     public void setBaseURL(URL base) {
         this.base = base;
     }
+    
+    /**
+     * Return a string containing the names of a set of tokens.
+     *
+     * @param set a set of token types
+     * @return a string containing the names of the tokens separated by spaces
+     */
+    public String getTokenNames(BitSet set) {
+        int[] tokenTypes = set.toArray();
+        TreeSet tokenNames = new TreeSet();
+       
+        // First put all the names into a set, so we don't get duplicates. 
+        for (int i=0; i<tokenTypes.length; ++i) {
+            String name = getTokenName(tokenTypes[i]);
+            
+            // Replace any double quotes with single quotes, so that the error messages
+            // consistently use single quotes.
+            tokenNames.add(name.replace('"', '\''));
+        }
+        
+        // Now concatenate the names together, separated by spaces.
+        StringBuffer result = new StringBuffer();
+        for (Iterator it=tokenNames.iterator(); it.hasNext(); ) {
+            String name = (String) it.next();
+            if (result.length() > 0) {
+                result.append(' ');
+            }
+            result.append(name);
+        }
+        
+        return result.toString();
+    }
 }
 
 // a label is a series of one or more expressions followed by an END
 label returns [Label label = new Label();]
 {Statement s = null;}
-    : ( s=statement {if (s != null) {label.addStatement(s);}})* ("END")?
+    : (
+        s=statement {if (s != null) {label.addStatement(s);}}
+      | 
+        (~ END) => t:.
+          {reportError("line " + t.getLine() + ":" + t.getColumn() + ": "
+                       + "expecting one of: " + getTokenNames($FIRST(statement)));}
+        (~ EOL)* EOL
+      )* (END)?
     ;
     
 
@@ -86,20 +133,14 @@ label returns [Label label = new Label();]
 //      or an object block
 statement returns [Statement result = null]
 {Statement s = null;}
-    : s=group_statement
-        {result = s;}
-    | s=nongroup_statement
-        {result = s;}
-    ;
-    
-nongroup_statement returns [Statement result = null]
-{Statement s= null;}
     : s=simple_statement
+        {result = s;}
+    | s=group_statement
         {result = s;}
     | s=object_statement
         {result = s;}
     ;
-
+    
 simple_statement returns [Statement result = null]
 {Statement s = null;}
     : /*empty statement*/ (c:COMMENT)? EOL
@@ -134,7 +175,7 @@ simple_statement returns [Statement result = null]
 // an object block
 object_statement returns [ObjectStatement result = null]
 {Statement s = null;}
-    : "OBJECT" nl EQUALS nl id:IDENT (c:COMMENT)? EOL
+    : "OBJECT" nl EQUALS nl id:IDENTIFIER (c:COMMENT)? EOL
       {
          result = new ObjectStatement(id.getLine(), id.getText());
          if (c != null) {
@@ -144,7 +185,7 @@ object_statement returns [ObjectStatement result = null]
          }
       }
       (s=statement {if (s != null) {result.addStatement(s);}})*
-      "END_OBJECT" (EQUALS id2:IDENT)?
+      "END_OBJECT" (EQUALS id2:IDENTIFIER)?
       (c2:COMMENT)? EOL
       {
          if (c2 != null) {
@@ -158,7 +199,7 @@ object_statement returns [ObjectStatement result = null]
 // a group block
 group_statement returns [GroupStatement result = null]
 {Statement s = null;}
-    : "GROUP" nl EQUALS nl id:IDENT (c:COMMENT)? EOL
+    : "GROUP" nl EQUALS nl id:IDENTIFIER (c:COMMENT)? EOL
       {
          result = new GroupStatement(id.getLine(), id.getText());
          if (c != null) {
@@ -168,7 +209,7 @@ group_statement returns [GroupStatement result = null]
          }
       }
       (s=simple_statement {if (s != null) {result.addStatement(s);}})*
-      "END_GROUP" (EQUALS id2:IDENT)?
+      "END_GROUP" (EQUALS id2:IDENTIFIER)?
       (c3:COMMENT)? EOL
     ;
 
@@ -199,7 +240,7 @@ pointer_statement returns [PointerStatement result = null]
 // an attribute assignment
 assignment_statement returns [AttributeStatement result = null]
 {AttributeStatement a = null; Value v = null;}
-    : (eid:ELEMENT_IDENT|id:IDENT) nl EQUALS nl v=value
+    : (eid:ELEMENT_IDENT|id:IDENTIFIER) nl EQUALS nl v=value
       { 
         if (eid != null) 
            result = new AttributeStatement(eid.getLine(), eid.getText(), v);
@@ -281,7 +322,7 @@ date_time_value returns [DateTime result = null]
     
 // a symbol  
 symbol_value returns [Symbol result = null]
-    : id:IDENT
+    : id:IDENTIFIER
         {result = new Symbol(id.getText());}
     | qs:SYMBOL
         {result = new Symbol(qs.getText());}
@@ -350,6 +391,7 @@ options {
     k = 2;                  // 2 characters of lookahead
     //caseSensitive = false;
     caseSensitiveLiterals = false;
+    filter = IGNORE;
 }
 
 {
@@ -369,19 +411,40 @@ options {
 }
 
 // operators
-SET_OPENING : '{' ;
-SET_CLOSING : '}' ;
-SEQUENCE_OPENING : '(' ;
-SEQUENCE_CLOSING : ')' ;
-LIST_SEPARATOR : ',' ;
-POINT_OPERATOR : '^' ;
-EQUALS : '=' ;
+SET_OPENING
+options {paraphrase = "'{'";}
+    : '{' ;
+    
+SET_CLOSING
+options {paraphrase = "'}'";}
+    : '}' ;
+    
+SEQUENCE_OPENING
+options {paraphrase = "'('";}
+    : '(' ;
+    
+SEQUENCE_CLOSING
+options {paraphrase = "')'";}
+    : ')' ;
+    
+LIST_SEPARATOR
+options {paraphrase = "','";}
+    : ',' ;
+    
+POINT_OPERATOR
+options {paraphrase = "'^'";}
+    : '^' ;
+    
+EQUALS
+options {paraphrase = "'='";}
+    : '=' ;
 
 // Integer
 
 
 // Multiple-line comments
 COMMENT
+options {paraphrase = "comment";}
     : "/*"
       (
           options {
@@ -410,18 +473,19 @@ WS
 // if it's a literal or really an identifer
 protected
 IDENTIFIER
-    options {testLiterals=true;}
+    options {testLiterals=true; paraphrase="identifier";}
     : l:LETTER (LETTER|DIGIT|'_')*
     ;
 
 ELEMENT_IDENT 
-    options {testLiterals=true;}
+    options {testLiterals=true; paraphrase="identifier";}
     : (IDENTIFIER ':') => IDENTIFIER ':' IDENTIFIER {$setType(ELEMENT_IDENT);}
-    | id:IDENTIFIER {$setType(IDENT);}
+    | id:IDENTIFIER
+        {$setType(IDENTIFIER);}
     ;
 
 UNITS
-    options {testLiterals=true;}
+    options {testLiterals=true; paraphrase="units";}
     : '<' UNITS_FACTOR (MULT_OP UNITS_FACTOR)* '>'
     ;
  
@@ -479,12 +543,14 @@ DIGITS
 // based integer
 protected
 BASED_INTEGER
+options {paraphrase = "integer";}
     : DIGITS '#' ('+'|'-')? (EXTENDED_DIGIT)+ '#'
     ;
     
 // real numbers
 protected
 REAL
+options {paraphrase = "real";}
     : (SIGN)? (DIGITS)? '.' (DIGITS)? (('E'|'e') INTEGER)?
     ;
 
@@ -508,6 +574,7 @@ LETTER
 // Dates and times
 protected
 DATETIME
+options {paraphrase = "date-time";}
     : (YEAR '-' MONTH '-' DAY 'T') => YEAR '-' MONTH '-' DAY 'T' TIME {$setType(DATETIME);}
     | (YEAR '-' DOY 'T') => YEAR '-' DOY 'T' TIME {$setType(DATETIME);}
     | DATE {$setType(DATE);}
@@ -574,8 +641,18 @@ SYMBOL
     ;
 
 EOL
+options {paraphrase = "end-of-line";}
     : ('\r' (options {greedy=true;}: '\n')?  // DOS, old Macintosh
       |   '\n'                                 // Unix, Mac OS X
       )
         { newline(); }
     ;
+
+protected
+IGNORE
+	: c:.
+		{int column = (getColumn() > 2) ? getColumn()-2 : 1;
+		 reportError("line " + getLine() + ":" + column + ": "
+					+ "ignoring unexpected character: '" + $getText + "'");}
+	;
+
