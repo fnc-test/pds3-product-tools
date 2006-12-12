@@ -193,7 +193,7 @@ public class VTool {
 		// Option to specify a pattern to match against the input directory to be validated
 		OptionBuilder.withLongOpt("regexp");
 		OptionBuilder.withDescription("Specify files or file patterns to look for when validating a directory. " +
-				                      "Each Pattern must be surrounded by quotes. (i.e. -p \"*.LBL\" \"*FMT\")");
+				                      "Each Pattern must be surrounded by quotes. (i.e. -e \"*.LBL\" \"*FMT\")");
 		OptionBuilder.hasArgs();
 		OptionBuilder.withArgName("patterns");
 		OptionBuilder.withType(String.class);
