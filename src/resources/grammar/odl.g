@@ -52,9 +52,11 @@ options {
 }
 
 tokens {
-    // We need to use this in a predicate, so we need to give it a name instead
-    // of just using it literally later.
+    // We need to use these in predicates, so we need to give them names instead
+    // of just using them literally later.
     END = "END";
+    END_GROUP = "END_GROUP";
+    END_OBJECT = "END_OBJECT";
 }
 
 {
@@ -122,7 +124,7 @@ label returns [Label label = new Label();]
       | 
         (~ END) => t:.
           {reportError("line " + t.getLine() + ":" + t.getColumn() + ": "
-                       + "expecting one of: " + getTokenNames($FIRST(statement)));}
+                       + "illegal start of statement: '" + t.getText() + "'");}
         (~ EOL)* EOL
       )* (END)?
     ;
@@ -184,8 +186,15 @@ object_statement returns [ObjectStatement result = null]
             result.attachComment(comment);
          }
       }
-      (s=statement {if (s != null) {result.addStatement(s);}})*
-      "END_OBJECT" (EQUALS id2:IDENTIFIER)?
+      (
+        s=statement {if (s != null) {result.addStatement(s);}}
+      |
+        (~ END_OBJECT) => t:.
+          {reportError("line " + t.getLine() + ":" + t.getColumn() + ": "
+                       + "illegal start of statement: '" + t.getText() + "'");}
+        (~ EOL)* EOL
+      )*
+      END_OBJECT (EQUALS id2:IDENTIFIER)?
       (c2:COMMENT)? EOL
       {
          if (c2 != null) {
@@ -208,8 +217,15 @@ group_statement returns [GroupStatement result = null]
             result.attachComment(comment);
          }
       }
-      (s=simple_statement {if (s != null) {result.addStatement(s);}})*
-      "END_GROUP" (EQUALS id2:IDENTIFIER)?
+      (
+        s=simple_statement {if (s != null) {result.addStatement(s);}}
+      | 
+        (~ END_GROUP) => t:.
+          {reportError("line " + t.getLine() + ":" + t.getColumn() + ": "
+                       + "illegal start of statement: '" + t.getText() + "'");}
+        (~ EOL)* EOL
+      )*
+      END_GROUP (EQUALS id2:IDENTIFIER)?
       (c3:COMMENT)? EOL
     ;
 
@@ -651,8 +667,14 @@ options {paraphrase = "end-of-line";}
 protected
 IGNORE
 	: c:.
-		{int column = (getColumn() > 2) ? getColumn()-2 : 1;
-		 reportError("line " + getLine() + ":" + column + ": "
-					+ "ignoring unexpected character: '" + $getText + "'");}
+		{
+			int column = (getColumn() > 2) ? getColumn()-2 : 1;
+			reportError("line " + getLine() + ":" + column + ": "
+					    + "unexpected character: '" + $getText + "' "
+					    + "(value might need quotes)");
+			// Skip to the end of the current line.
+			while (LA(1)!='\n' && LA(1)!=EOF_CHAR) {
+			    match(LA(1));
+			}
+		}
 	;
-
