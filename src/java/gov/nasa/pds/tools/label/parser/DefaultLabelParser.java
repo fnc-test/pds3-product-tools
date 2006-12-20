@@ -280,6 +280,7 @@ public class DefaultLabelParser implements LabelParser {
      * @throws Exception
      */
     public static void main(String [] args) throws Exception {
+        BasicConfigurator.resetConfiguration();
         BasicConfigurator.configure(new ConsoleAppender(new PatternLayout("%-5p %m%n")));
         LabelParserFactory factory = LabelParserFactory.getInstance();
         LabelParser parser = factory.newLabelParser();
