@@ -62,17 +62,28 @@ public class DefaultLabelParser implements LabelParser {
      */
     public Label parse(URL file) throws ParseException, IOException {
         Label label = null;
-        InputStream checkInput = file.openStream();
         
-        //Set a place where the input stream can be reset to.
-        checkInput.mark(40);      
-        List sfdus = consumeSFDUHeader(checkInput);
+        //Not all streams can support marking so stream will be open multiple times to look for header
+        //First time to process the SFDUs
+        InputStream sfduCheck = file.openStream();
+        
+        List sfdus = consumeSFDUHeader(sfduCheck);
         for (Iterator i = sfdus.iterator(); i.hasNext();) {
             log.info("Found SFDU Label: " + i.next().toString());
         }
         
+        //On the next input stream we will need to skip 20 bytes for every SFDULabel
+        int skip = sfdus.size()*20;
+        //Also add 2 for carriage return line feed if there is a header
+        if (skip != 0)
+            skip += 2;
+        
+        sfduCheck.close();
+        
+        InputStream pdsCheck = file.openStream();
         //Now look for PDS_VERSION_ID to ensure that this is a file we want to validate
-        BufferedReader reader = new BufferedReader(new InputStreamReader(checkInput));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(pdsCheck));
+        reader.skip(skip);
         String version = reader.readLine().trim();
         String[] line = version.split("=");  
         
@@ -89,10 +100,9 @@ public class DefaultLabelParser implements LabelParser {
             throw new ParseException(file.toString() + " is not a label. Could not find the PDS_VERSION_ID in the first line.");
         }
         
-        checkInput.close();
+        pdsCheck.close();
         InputStream input = file.openStream();
-        if (sfdus.size() != 0)
-            input.skip(40);
+        input.skip(skip);
         ODLLexer lexer = new ODLLexer(input);
         ODLParser parser = new ODLParser(lexer);
         log.info("Parsing label " + file.toString() + " with PDS_VERSION_ID = " + value);
@@ -120,7 +130,6 @@ public class DefaultLabelParser implements LabelParser {
     
     private List consumeSFDUHeader(InputStream input) throws IOException {
         List sfdus = new ArrayList();
-        boolean foundHeader = false;
         
         byte[] sfduLabel = new byte[20];
         int count = input.read(sfduLabel);
@@ -128,22 +137,16 @@ public class DefaultLabelParser implements LabelParser {
             try {
                 SFDULabel sfdu = new SFDULabel(sfduLabel);
                 if ("CCSD".equals(sfdu.getControlAuthorityId())) {
-                    foundHeader = true;
                     sfdus.add(sfdu);
                     //Read in second SFDU label
                     input.read(sfduLabel);
                     sfdus.add(new SFDULabel(sfduLabel));
                 }
-                //Skip carriage return line feed
-                input.skip(2);
             } catch (MalformedSFDULabel e) {
-                foundHeader = false;
+                //For now we can ignore this error as there is likely not a header.
             }
             
         }
-        
-        if (!foundHeader)
-            input.reset();
         
         return sfdus;
     }
