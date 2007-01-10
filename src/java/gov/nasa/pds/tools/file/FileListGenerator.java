@@ -8,6 +8,8 @@ package gov.nasa.pds.tools.file;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -87,14 +89,20 @@ public class FileListGenerator {
 	 */
 	public List visitTargets(boolean recurse) {
 		List files = new ArrayList();
-		File file = null;
+		Object target = null;
 		
 		for(Iterator i = list.iterator(); i.hasNext(); ) {
-			file = new File( i.next().toString() );
-			if(file.isDirectory())
-				files.addAll( visitDir(file, recurse) );
-			else 
-				files.add(file);
+			target = i.next();
+			
+			try {
+				files.add(new URL(target.toString()));
+			}
+			catch(MalformedURLException e) {
+				if(new File(target.toString()).isDirectory())
+					files.addAll( visitDir(new File(target.toString()), recurse) );
+				else 
+					files.add(target);
+			}
 		}
 		return files;
 	}
