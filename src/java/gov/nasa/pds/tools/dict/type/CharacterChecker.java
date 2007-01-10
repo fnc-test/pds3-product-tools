@@ -27,7 +27,7 @@ public class CharacterChecker extends LengthChecker implements TypeChecker {
      * @see gov.nasa.jpl.pds.tools.label.validate.TypeChecker#cast(java.lang.String)
      */
     public Object cast(String value) throws InvalidTypeException {
-        if (!value.matches("[a-zA-Z0-9_\\s!#$%&'\\(\\)\\*+,-\\./:;<=>?@\\[\\]\\^_`\\{|\\}\\~]*"))
+        if (!value.matches("[a-zA-Z0-9_\\s!#$%&'\\(\\)\\*+,-\\./:;<=>?@\\[\\]\\^_`\\{|\\}\\~\\\\]*"))
             throw new InvalidTypeException(value + " contains characters that are not allowed.");
         return value;
     }
