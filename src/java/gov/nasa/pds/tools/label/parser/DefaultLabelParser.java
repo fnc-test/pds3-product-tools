@@ -21,6 +21,7 @@ import gov.nasa.pds.tools.label.antlr.ODLParser;
 import gov.nasa.pds.tools.label.validate.DefinitionNotFoundException;
 import gov.nasa.pds.tools.label.validate.ElementValidator;
 import gov.nasa.pds.tools.label.validate.GroupValidator;
+import gov.nasa.pds.tools.label.validate.LabelValidator;
 import gov.nasa.pds.tools.label.validate.ObjectValidator;
 
 import java.io.BufferedReader;
@@ -50,11 +51,13 @@ import antlr.ANTLRException;
 public class DefaultLabelParser implements LabelParser {
     private Properties properties;
     private static Logger log = Logger.getLogger(new DefaultLabelParser().getClass());
-    private URL includePath;
+    private List includePaths;
+    private List validators;
     
     public DefaultLabelParser() {
         properties = new Properties();
-        includePath = null;
+        includePaths = new ArrayList();
+        validators = new ArrayList();
     }
 
     /* (non-Javadoc)
@@ -108,10 +111,9 @@ public class DefaultLabelParser implements LabelParser {
         log.info("Parsing label " + file.toString() + " with PDS_VERSION_ID = " + value);
         
         if (Boolean.valueOf(properties.getProperty("parser.pointers", "true")).booleanValue()) {
-        	 URL base = includePath;
-             if (base == null)
-             	base = new URL(file.toString().substring(0, file.toString().lastIndexOf("/")));
-             parser.setBaseURL(base);
+            URL base = new URL(file.toString().substring(0, file.toString().lastIndexOf("/")));
+            includePaths.add(0, base);
+            parser.setIncludePaths(includePaths);
         } else {
             log.info("Pointers disabled. Pointers will not be followed.");
         }
@@ -124,6 +126,11 @@ public class DefaultLabelParser implements LabelParser {
         }
         
         log.info("Finished parsing label " + file.toString());
+        
+        for (Iterator i = validators.iterator(); i.hasNext();) {
+            LabelValidator validator = (LabelValidator) i.next();
+            validator.isValid(label);
+        }
 
         return label;
     }
@@ -241,10 +248,9 @@ public class DefaultLabelParser implements LabelParser {
         log.info("Parsing label fragment " + file.toString());
         
         if (Boolean.valueOf(properties.getProperty("parser.pointers", "true")).booleanValue()) {
-            URL base = includePath;
-            if (base == null)
-            	base = new URL(file.toString().substring(0, file.toString().lastIndexOf("/")));
-            parser.setBaseURL(base);
+            URL base = new URL(file.toString().substring(0, file.toString().lastIndexOf("/")));
+            includePaths.add(0, base);
+            parser.setIncludePaths(includePaths);
         } else {
             log.info("Pointers disabled. Pointers will not be followed");
         }
@@ -327,7 +333,14 @@ public class DefaultLabelParser implements LabelParser {
     }
 
 	public void addIncludePath(URL includePath) {
-		this.includePath = includePath;
+		includePaths.add(includePath);
 	}
+
+    /* (non-Javadoc)
+     * @see gov.nasa.pds.tools.label.parser.LabelParser#addValidator(gov.nasa.pds.tools.label.validate.LabelValidator)
+     */
+    public void addValidator(LabelValidator validator) {
+        validators.add(validator);
+    }
 
 }
