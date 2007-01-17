@@ -20,6 +20,7 @@ import java.net.URL;
 
 import gov.nasa.pds.tools.dict.Dictionary;
 import gov.nasa.pds.tools.label.Label;
+import gov.nasa.pds.tools.label.validate.LabelValidator;
 
 import java.util.Properties;
 import java.io.IOException;
@@ -111,5 +112,15 @@ public interface LabelParser {
      */
     public String getODLVersion();
     
+    /**
+     * Adds an URL where references will be searched for when found in a label.
+     * @param includePath points to a directory that will be searched.
+     */
     public void addIncludePath(URL includePath);
+    
+    /**
+     * Adds a {@link LabelValidator} that will perform some extravalidation.
+     * @param validator which will be run as a step in the validation pipeline
+     */
+    public void addValidator(LabelValidator validator);
 }
