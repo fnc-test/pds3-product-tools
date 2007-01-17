@@ -21,6 +21,7 @@ import org.apache.log4j.Logger;
 import gov.nasa.pds.tools.label.AttributeStatement;
 import gov.nasa.pds.tools.label.CommentStatement;
 import gov.nasa.pds.tools.label.DateTime;
+import gov.nasa.pds.tools.label.ExternalPointer;
 import gov.nasa.pds.tools.label.GroupStatement;
 import gov.nasa.pds.tools.label.Label;
 import gov.nasa.pds.tools.label.Numeric;
@@ -61,7 +62,7 @@ tokens {
 
 {
     private static Logger log = Logger.getLogger("gov.nasa.pds.tools.label.antlr.ODLParser"); 
-    private static URL base = null;
+    private static List includePaths = new ArrayList();
     
     public void reportError(RecognitionException re) {
         log.error(re.toString());
@@ -79,8 +80,8 @@ tokens {
         log.warn(s);
     }
     
-    public void setBaseURL(URL base) {
-        this.base = base;
+    public void setIncludePaths(List includePaths) {
+        this.includePaths = includePaths;
     }
     
     /**
@@ -235,20 +236,27 @@ pointer_statement returns [PointerStatement result = null]
     : POINT_OPERATOR a=assignment_statement
       {
          try {
-            result = PointerStatementFactory.newInstance(a.getLineNumber(), a.getIdentifier(), a.getValue(), base);
+            result = PointerStatementFactory.newInstance(a.getLineNumber(), a.getIdentifier(), a.getValue());
          } catch (MalformedURLException mue) {
             result = null;
             log.error("line " + a.getLineNumber() + ": " + mue.getMessage());
          }
-         if (result != null && result instanceof StructurePointer && base != null) {
+         if (result != null && result instanceof StructurePointer) {
             StructurePointer sp = (StructurePointer) result;
             try {
-               sp.loadReferencedStatements();
+               sp.loadReferencedStatements(includePaths);
             } catch (gov.nasa.pds.tools.label.parser.ParseException pe) {
                log.error("line " + a.getLineNumber() + ": " + pe.getMessage());
             } catch (IOException ioe) {
                log.error("line " + a.getLineNumber() + ": " + ioe.getMessage());
             } 
+         } else if (result != null && result instanceof ExternalPointer) {
+            ExternalPointer ep = (ExternalPointer) result;
+            try {
+               ep.resolveURL(includePaths);
+            } catch (IOException ioe) {
+               log.error("line " + a.getLineNumber() + ": " + ioe.getMessage());
+            }
          }
       }
     ;
