@@ -63,6 +63,7 @@ tokens {
 {
     private static Logger log = Logger.getLogger("gov.nasa.pds.tools.label.antlr.ODLParser"); 
     private static List includePaths = new ArrayList();
+    private boolean followPointers = true;
     
     public void reportError(RecognitionException re) {
         log.error(re.toString());
@@ -82,6 +83,10 @@ tokens {
     
     public void setIncludePaths(List includePaths) {
         this.includePaths = includePaths;
+    }
+    
+    public void setFollowPointers(boolean followPointers) {
+        this.followPointers = followPointers;
     }
     
     /**
@@ -241,7 +246,7 @@ pointer_statement returns [PointerStatement result = null]
             result = null;
             log.error("line " + a.getLineNumber() + ": " + mue.getMessage());
          }
-         if (result != null && result instanceof StructurePointer) {
+         if (followPointers && result != null && result instanceof StructurePointer) {
             StructurePointer sp = (StructurePointer) result;
             try {
                sp.loadReferencedStatements(includePaths);
@@ -250,7 +255,7 @@ pointer_statement returns [PointerStatement result = null]
             } catch (IOException ioe) {
                log.error("line " + a.getLineNumber() + ": " + ioe.getMessage());
             } 
-         } else if (result != null && result instanceof ExternalPointer) {
+         } else if (followPointers && result != null && result instanceof ExternalPointer) {
             ExternalPointer ep = (ExternalPointer) result;
             try {
                ep.resolveURL(includePaths);
