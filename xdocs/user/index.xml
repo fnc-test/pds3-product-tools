@@ -122,8 +122,7 @@ gov.nasa.pds.tools.VTool -d pdsdd.full -t TEST.LBL
           <tr><td nowrap="nowrap">-t,--target &lt;labels,URLs,dirs&gt;</td><td>Specify the label file(s), directories, and/or URL(s) to validate (required option)</td></tr>
           <tr><td>-d,--dict &lt;.full files&gt;</td><td>Specify the Planetary Science Data Dictionary full file name and any local dictionaries to include for validation.</td></tr>
           <tr><td>-o,--output &lt;file&gt;</td><td>Specify the file name for the report. Default is to print to the terminal.</td></tr>
-<!--      <tr><td>-I, include &lt;path&gt;</td><td>Specify a starting path to search for pointer files. Default is the directory of the label being validated.</td></tr>
--->
+          <tr><td>-I, include &lt;paths&gt;</td><td>Specify path(s) to search for files referenced by pointers in a label. Default is to always look in the directory of the label, then search the specified directories.</td></tr>
           <tr><td>-F, --no-follow</td><td>Do not follow ^STRUCTURE pointers in a label.</td></tr>
           <tr><td>-c,--config &lt;file&gt;</td><td>Specify a configuration file to set the default values for VTool.</td></tr>
           <tr><td>-l,--local</td><td>Validate files only in the input directory rather than recursively traversing down the subdirectories.</td></tr>
@@ -192,15 +191,31 @@ localdd.full -t TEST.LBL
 [node:~] java gov.nasa.pds.tools.VTool -d pdsdd.full \
 -t ./TEST_DIR -X "*IMG" "*TAB"
         </source>
-<!--          
-        <p>By default, if a data product label contains a STRUCTURE pointer, it will assume it is co-located, search for, and validate the pointer file. If it is not found there, then an error message is thrown. The following command demonstrates how to specify a starting path in VTool to search for pointers when validating a data product label that contains a STRUCTURE pointer not located in the same directory as the label:
+          
+        <p>If a data product label contains a pointer statement that references a file, it will always assume it is co-located with the label. If it cannot be found there, then VTool will look for that referenced file in the path specified by the include directories option.
+        </p>
+        
+        <p>The following command demonstrates the validation of a data product label that contains a pointer statement to a file located in a directory called DIR.
         </p>
         <source>
 [node:~] java gov.nasa.pds.tools.VTool -d pdsdd.full \
--t TEST.LBL -I $HOME/starting-path
+-t TEST.LBL -I $HOME/DIR
         </source>
--->          
-        <p>The following command demonstrates the validation of a data product label that contains a STRUCTURE pointer, but specifying to the tool to not follow the pointer:
+        
+        <p>If the data product label contains pointer statements that reference files located in two different locations, then multiple paths can be specified.
+        </p>
+        
+        <p>The following command demonstrates the validation of a data product label that contains pointer statements that reference files located in two different locations, DIR1 and DIR2.
+        </p>
+        <source>
+[node:~] java gov.nasa.pds.tools.VTool -d pdsdd.full \
+-t TEST.LBL -I $HOME/DIR1 $HOME/DIR2
+        </source>
+        
+        <p>If a data product label points to a label fragment, VTool has the capability of validating this label without having to validate the associated label fragment with the no follow pointers option. This would be used in cases where the label fragment is not complete or in cases where the user wishes to simply check that the overall label structure is PDS compliant.
+        </p>
+        
+        <p>The following command demonstrates the validation of a data product label that contains a label fragment, but specifying to the tool to not follow the pointer:
         </p>
         <source>
 [node:~] java gov.nasa.pds.tools.VTool -d pdsdd.full \
@@ -232,8 +247,7 @@ localdd.full -t TEST.LBL
           <tr><td>vtool.target</td><td>-t</td><td>Specify labels,directories, and/or URLs</td></tr>
           <tr><td>vtool.dict</td><td>-d</td><td>Specify dictionary files</td></tr>
           <tr><td>vtool.output</td><td>-o</td><td>Specify report file (do not specify if wanting to write the report to the terminal)</td></tr>
-<!--      <tr><td>vtool.includepath</td><td>-I</td><td>Specify a starting path to search for pointer files</td></tr>
--->
+          <tr><td>vtool.includepaths</td><td>-I</td><td>Specify paths to search for files refererenced by pointers in a label</td></tr>
           <tr><td>vtool.follow</td><td>-F</td><td>Set to 'false' to not follow ^STRUCTURE pointers in a label, set to 'true' otherwise</td></tr>
           <tr><td>vtool.recursive</td><td>-l</td><td>Set to 'false' to not perform recursion down a directory, set to 'true' otherwise</td></tr>
           <tr><td>vtool.patterns</td><td>-p</td><td>Specify patterns to search for when validating a directory.</td></tr>
@@ -248,18 +262,14 @@ vtool.target = ./TEST_DIR
 vtool.dict = pdsdd.full
 vtool.output = report.txt
 vtool.recursive = false
-vtool.follow = false
-<!--
-vtool.includepath = /home/start-path
--->
+vtool.includepaths = /home/path
 vtool.patterns = "*.LBL"
         </source>
 
         <p>This is equivalent to running the tool with the following flags:</p>
         <source>
--t ./TEST_DIR -d pdsdd.full -o report.txt -l -p "*.LBL"  <!-- \
--I /home/start-path -F
--->
+-t ./TEST_DIR -d pdsdd.full -o report.txt -l -p "*.LBL" \
+-I /home/path
         </source>          
 
         <p>The following example demonstrates how to set a configuration file with multiple values for a keyword:
@@ -270,13 +280,14 @@ vtool.patterns = "*.LBL"
 vtool.target = TEST.LBL ./TEST_DIR
 vtool.dict = pdsdd.full localdd.full
 vtool.recursive = true
+vtool.includepaths = /home/path1 /home/path2
 vtool.patterns = "*.LBL" "*.FMT"
         </source>
 
         <p>This is equivalent to running the tool with the following flags:</p>
         <source>
 -t TEST.LBL ./TEST_DIR -d pdsdd.full localdd.full \
--p "*.LBL" "*.FMT"
+-p "*.LBL" "*.FMT" -I /home/path1 /home/path2
         </source>
 
         <p>The following example demonstrates how to set a configuration file with multiple values that span across multiple lines:
