@@ -50,7 +50,7 @@ import antlr.ANTLRException;
  */
 public class DefaultLabelParser implements LabelParser {
     private Properties properties;
-    private static Logger log = Logger.getLogger(new DefaultLabelParser().getClass());
+    private static Logger log = Logger.getLogger(DefaultLabelParser.class.getName());
     private List includePaths;
     private List validators;
     
@@ -108,6 +108,7 @@ public class DefaultLabelParser implements LabelParser {
         input.skip(skip);
         ODLLexer lexer = new ODLLexer(input);
         ODLParser parser = new ODLParser(lexer);
+        parser.setFollowPointers(Boolean.valueOf(properties.getProperty("parser.pointers", "true")).booleanValue());
         log.info("Parsing label " + file.toString() + " with PDS_VERSION_ID = " + value);
         
         if (Boolean.valueOf(properties.getProperty("parser.pointers", "true")).booleanValue()) {
