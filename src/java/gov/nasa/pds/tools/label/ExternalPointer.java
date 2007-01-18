@@ -38,7 +38,7 @@ public class ExternalPointer extends PointerStatement {
      */
     public URL resolveURL(List includePaths) throws IOException {
         URL resolvedURL = null;
-        String filename = null;
+        String filename = "";
         
         //The name of the file will be the first element in the sequence or the value if not 
         //contained in a sequence
@@ -64,7 +64,7 @@ public class ExternalPointer extends PointerStatement {
         }
         
         if (resolvedURL == null)
-            throw new IOException("Could not find referenced pointer " + value);
+            throw new IOException("Could not find referenced pointer " + filename);
         
         return resolvedURL;
     }
