@@ -57,7 +57,7 @@ public class VTool {
 	private CommandLine cmd;
 	
 	//TODO: Flags to be implemented: partial (-f,--force), data object(-O,--no-obj),
-	//progress(-p,--show-progress), alias(-a,--alias), include (-i,--include), max errors (-m,--max-errors),
+	//progress(-p,--show-progress), alias(-a,--alias), include (-i,--include),
 	//xml output(-x,--xml), reporting style (-s,--output-style) 
 	private boolean alias;
 	private File config;
@@ -67,8 +67,8 @@ public class VTool {
 	private List noDirs;
 	private List files;
 	private boolean followPtrs;
-	private List includePath;
-	private int maxErrors;
+	private List includePaths;
+	private boolean progress;
 	private List regexp;
 	private boolean recursive;
 	private List targets;
@@ -90,8 +90,8 @@ public class VTool {
 		followPtrs = true;
 		targets = null;
 		files = null;
-		includePath = null;
-		maxErrors = 300;
+		includePaths = null;
+		progress = false;
 		regexp = null;
 		recursive = true;
 		output = null;
@@ -148,7 +148,8 @@ public class VTool {
 		options.addOption("O", "no-obj", false, "Do not perform data object validation");
 //		options.addOption("f", "force", false, "Force VTool to validate a label fragment");
 		options.addOption("l", "local", false, "Validate files only in the input directory rather than " + 
-				                               "recursively traversing down the subdirectories.");	
+				                               "recursively traversing down the subdirectories.");
+		options.addOption("p", "progress", false, "Enable progress reporting");
 		options.addOption("V", "version", false, "Display VTool version");
 		options.addOption("x", "xml", false, "Output the report in XML format");
 		
@@ -165,7 +166,7 @@ public class VTool {
 		
 		// Option to specify the PSDD and any local dictionaries
 		OptionBuilder.withLongOpt("dict");
-		OptionBuilder.withDescription("Specify the Planetary Science Data Dictionary full file name " +
+		OptionBuilder.withDescription("Specify the Planetary Science Data Dictionary full file name/URL " +
 				                      "and any local dictionaries to include for validation. Separate each file name with a space.");
 		OptionBuilder.hasArgs();
 		OptionBuilder.withArgName(".full files");
@@ -201,10 +202,10 @@ public class VTool {
 		
 		// Option to specify a path to the Pointer files		
 		OptionBuilder.withLongOpt("include");
-		OptionBuilder.withDescription("Specify the starting path(s) to search for pointer files. " + 
-															"Default is the directory of the label being validated");
-		OptionBuilder.hasArg();
-		OptionBuilder.withArgName("path");
+		OptionBuilder.withDescription("Specify the path(s) to search for files referenced by pointers in a label. Separate each with a space. " + 
+															"Default is to always look at the same directory as the label");
+		OptionBuilder.hasArgs();
+		OptionBuilder.withArgName("paths");
 		OptionBuilder.withType(String.class);
 		options.addOption(OptionBuilder.create("I"));
 
@@ -216,15 +217,6 @@ public class VTool {
 		OptionBuilder.withArgName("patterns");
 		OptionBuilder.withType(String.class);
 		options.addOption(OptionBuilder.create("D"));
-		
-		// Option to specify the maximum number of ERROR type messages that will be printed to the report
-		OptionBuilder.withLongOpt("max-errors");
-		OptionBuilder.withDescription("Specify the maximum number of ERROR type messages that VTool will " +
-									"print to the report file. Default is 300 errors");
-		OptionBuilder.hasArg();
-		OptionBuilder.withArgName("integer");
-		OptionBuilder.withType(int.class);
-		options.addOption(OptionBuilder.create("m"));
 		
 		// Option to specify the report file name
 		OptionBuilder.withLongOpt("output");
@@ -318,17 +310,19 @@ public class VTool {
 			
 			// Check to see if aliasing is turned on
 			if(cmd.hasOption("a"))
-				setAlias(false);
+				setAlias(true);
 			// Check for the flag that indicates whether to follow ^STRUCTURE pointers
 			if(cmd.hasOption("F"))
 				setFollowPtrs(false);
-			// Check for the include path to indicate the starting path to search for 
-			// non ^STRUCTURE pointers
+			// Check for the include paths to indicate the paths to search for 
+			// when following pointers
 			if(cmd.hasOption("I"))
-				setIncludePath(Arrays.asList(cmd.getOptionValues("I")));			
+				setIncludePaths(Arrays.asList(cmd.getOptionValues("I")));			
 			// Check to see if data object validation is set
 			if(cmd.hasOption("O")) 
 				setDataObj(false);
+			if(cmd.hasOption("p"))
+				setProgress(true);
 			// Check to see if VTool will not recurse down a directory tree
 			if(cmd.hasOption("l"))
 				setRecursive(false);
@@ -347,17 +341,6 @@ public class VTool {
 			// Check to get the dictionary file(s) 
 			if(cmd.hasOption("d"))
 				setDictionaries(Arrays.asList(cmd.getOptionValues("d")));
-			if(cmd.hasOption("m")) {
-				try {
-					setMaxErrors(Integer.parseInt(cmd.getOptionValue("m")));
-				}
-				catch( NumberFormatException nfe ) {
-					throw new Exception("Problems parsing value set for 'm' flag: " + cmd.getOptionValue("m"));
-				}
-				catch( IllegalArgumentException ae) {
-					throw new Exception(ae.getMessage());
-				}
-			}
 			// Check to see what type of reporting style the report will have
 			if(cmd.hasOption("s"))				
 				setOutputFmt(cmd.getOptionValue("s"));
@@ -444,8 +427,8 @@ public class VTool {
 	 * Get the starting path to search for the non-STRUCTURE pointers
 	 * @return a start path
 	 */
-	public List getIncludePath() {
-		return includePath;
+	public List getIncludePaths() {
+		return includePaths;
 	}
 	
 	/**
@@ -453,27 +436,8 @@ public class VTool {
 	 * the current working directory
 	 * @param i a start path
 	 */
-	public void setIncludePath(List i) {
-		includePath = i;
-	}
-	
-	/**
-	 * Get the maximum errors allowed to be reported in the validation
-	 * @return an integer value
-	 */
-	public int getMaxErrors() {
-		return maxErrors;
-	}
-	
-	/**
-	 * Set the maximum errors allowed to be reported in VTool before quitting
-	 * @param m an integer value
-	 */
-	public void setMaxErrors(int m) {
-		if( m <= 0 )
-			throw new IllegalArgumentException( "Max Errors Value must be a positive integer number");
-		
-		maxErrors = m;
+	public void setIncludePaths(List i) {
+		includePaths = i;
 	}
 	
 	/**
@@ -548,6 +512,23 @@ public class VTool {
 													" Value can only be either 'full', 'sum', or 'min'");
 		}
 		outputFmt = f;
+	}
+	
+	/**
+	 * Get the progress reporting flag
+	 * @return
+	 */
+	
+	public boolean getProgress() {
+		return progress;
+	}
+	
+	/**
+	 * Set the progress reporting flag
+	 * @param p
+	 */
+	public void setProgress(boolean p) {
+		progress = p;
 	}
 	
 	/**
@@ -683,8 +664,8 @@ public class VTool {
 				for(int i=0; i < noDirs.size(); i++)
 					noDirs.set(i, noDirs.get(i).toString().replace('"',' ').trim());
 			}
-			if(config.containsKey("vtool.includepath"))
-				setIncludePath(config.getList("vtool.includepath"));
+			if(config.containsKey("vtool.includepaths"))
+				setIncludePaths(config.getList("vtool.includepaths"));
 			if(config.containsKey("vtool.outputstyle"))
 				setOutputFmt(config.getString("vtool.outputstyle"));
 			if(config.containsKey("vtool.patterns")) {
@@ -723,8 +704,7 @@ public class VTool {
 		log.debug("Alias flag set to: " + alias);
 		log.debug("Data object flag set to: " + dataObj);
 		log.debug("Follow pointers flag set to: " + followPtrs);
-		log.debug("Included path(s):" + includePath);
-		log.debug("Max error messages set to: " + maxErrors);
+		log.debug("Included path(s):" + includePaths);
 		log.debug("Ouptut format set to: " + outputFmt);
 		log.debug("Recursive flag set to: " + recursive);
 		log.debug("Xml flag set to: " + xml);
@@ -751,6 +731,23 @@ public class VTool {
 	}
 	
 	/**
+	 * Determines whether a string is a URL
+	 * 
+	 * @param s
+	 * @return
+	 */
+	private boolean isURL(String s) {
+		
+		try {
+			URL url = new URL(s);
+		}
+		catch(MalformedURLException e) {
+			return false;
+		}
+		return true;
+	}
+	
+	/**
 	 * Read and parse the dictionary file(s) passed into the VTool command line
 	 * 
 	 * @param dictionary a List object containing the data dictionary files
@@ -760,17 +757,23 @@ public class VTool {
 	
 	public Dictionary readDictionaries(List dictionary) {
 		Dictionary dict = null;
-		File dd = null;
+		String dd = null;
 		Iterator i = dictionary.iterator();
 		
-		dd = new File( i.next().toString() );
+		dd = new String( i.next().toString() );
 		
 		try {
-			dict = DictionaryParser.parse( dd.toURL() );
+			if(isURL(dd))
+				dict = DictionaryParser.parse(new URL(dd));
+			else
+				dict = DictionaryParser.parse(new File(dd).toURL());
 
 			while( i.hasNext() ) {
-				dd = new File( i.next().toString() );
-				dict.merge( DictionaryParser.parse(dd.toURL()), true );
+				dd = new String(i.next().toString());
+				if(isURL(dd))
+					dict.merge( DictionaryParser.parse(new URL(dd)), true );
+				else
+					dict.merge( DictionaryParser.parse(new File(dd).toURL()), true );
 			}
 		} catch( MalformedURLException uex) {
 			System.out.println("Dictionary file does not exist: " + dd);
@@ -788,6 +791,33 @@ public class VTool {
 	}
 	
 	/**
+	 * Sets up the include paths and flag to follow pointers in
+	 * the parser
+	 * @param parser
+	 */
+	private void setParserProps(LabelParser parser) {
+		if(includePaths != null) {
+			for( Iterator i = includePaths.iterator(); i.hasNext(); ) {
+				String path = new String(i.next().toString());
+				
+				try {
+					if(isURL(path))
+						parser.addIncludePath(new URL(path));
+					else
+						parser.addIncludePath(new File(path).toURL());
+				} catch (MalformedURLException f) {
+					System.out.println("Cannot add file to include path: " + path);
+					System.exit(1);
+				}
+				
+			}
+		}
+
+		if(followPtrs == false)
+			parser.getProperties().setProperty("parser.pointers", "false");
+	}
+	
+	/**
 	 * Read and parse the label files passed into the VTool command line.
 	 * Performs both syntactic and semantic validation.
 	 * 
@@ -802,36 +832,23 @@ public class VTool {
 		LabelParserFactory factory = LabelParserFactory.getInstance();
 		LabelParser parser = factory.newLabelParser();
 		
-		//TODO: pass list of paths to the parser to search for pointers
-/*		
-		if(includePath != null) {
-			try {
-				parser.addIncludePath(includePath.toURL());
-			}
-			catch(MalformedURLException e) {
-				System.out.println(e.getMessage());
-				System.exit(1);
-			}
-		}
-*/
-		if(followPtrs == false)
-			parser.getProperties().setProperty("parser.pointers", "false");
+		setParserProps(parser);
 		
 		for( Iterator i = files.iterator(); i.hasNext(); ) {
 			target = new String( i.next().toString());
 			
 			try {
-				if(new File(target).isFile() || new File(target).isDirectory())
-					url = new File(target).toURL();
-				else 
+				if(isURL(target))
 					url = new URL(target);
+				else
+					url = new File(target).toURL();
 			}
 			catch(MalformedURLException mex) {
 				System.out.println("file/URL does not exist: " + target);
 				System.exit(1);
 			}
 			
-			System.out.println("\nValidating " + target);
+			System.out.println("\nValidating " + url);
 			
 			try {
 				if(dict == null)
