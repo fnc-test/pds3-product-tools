@@ -98,8 +98,14 @@ public class ElementValidator implements DictionaryTokens {
                 if (definition.hasValidValues()) {
                     if (!definition.getValues().contains(value.toString())) {
                         valid = false;
-                        log.error("line " + attribute.getLineNumber() + ": " + value.toString() + 
-                                  " is not in the list of valid values for " + attribute.getIdentifier());
+                        //Only produce a warning if the standard value list is anything other than static
+                        if (!VALUE_TYPE_STATIC.equals(definition.getValueType())) {
+                           log.warn("line " + attribute.getLineNumber() + ": " + value.toString() + 
+                                    " is not in the suggested list of valid values for " + attribute.getIdentifier());
+                        } else {
+                           log.error("line " + attribute.getLineNumber() + ": " + value.toString() + 
+                                     " is not in the list of valid values for " + attribute.getIdentifier());
+                        }
                     }
                 }
                 
