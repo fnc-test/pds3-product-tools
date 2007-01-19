@@ -29,8 +29,11 @@ public class IntegerChecker extends LengthChecker implements NumericTypeChecker 
     public Object cast(String value) throws InvalidTypeException {
         Integer intValue = null;
         try {
-            //FIXME: Support based Integers e.g. 2#1010101#
-            intValue = Integer.valueOf(value);
+            String testValue = value.trim();
+            //Java's casting to an integer does not like positive signs in front.
+            if (testValue.startsWith("+"))
+                testValue = testValue.substring(1);
+            intValue = Integer.valueOf(testValue);
         } catch(NumberFormatException nfe) {
             throw new InvalidTypeException(nfe.getMessage());
         }
