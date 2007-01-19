@@ -41,10 +41,9 @@ public class GroupValidator {
         boolean valid = true;
         
         //Lookup group definition, can't do anything without it
-        GroupDefinition definition = dictionary.getGroupDefinition(group.getIdentifier());
+        GroupDefinition definition = dictionary.findGroupClassDefinition(group.getIdentifier());
         if (definition == null)
-            throw new DefinitionNotFoundException("line " + group.getLineNumber() + ": " +
-                    "Could not find group definition for " + group.getIdentifier());
+            throw new DefinitionNotFoundException("Could not find group definition for " + group.getIdentifier());
   
         //First check that required elements are captured in object
         for (Iterator i = definition.getRequiredElements().iterator(); i.hasNext();) {
