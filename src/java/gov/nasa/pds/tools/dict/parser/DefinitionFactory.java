@@ -41,10 +41,10 @@ public class DefinitionFactory implements ODLTokenTypes, DictionaryTokens {
         if (object.getIdentifier().endsWith(DEFINITION)) {
             if (object.getIdentifier().equals(GENERIC_OBJECT) || 
                     object.getIdentifier().equals(SPECIFIC_OBJECT)) {
-                definition = createObjectDefinition(object);
-            } else if (object.getIdentifier().equals(GENERIC_GROUP) || 
-                    object.getIdentifier().equals(SPECIFIC_GROUP)) {
-                definition = createGroupDefinition(object);
+                if (!OBJECT_TYPE_GENERIC_GROUP.equals(object.getAttribute(OBJECT_TYPE).getValue().toString()))
+                    definition = createObjectDefinition(object);
+                else
+                    definition = createGroupDefinition(object);
             } else if (object.getIdentifier().equals(ELEMENT_DEFINITION)) {
                 definition = createElementDefinition(object);
             } 
@@ -60,7 +60,8 @@ public class DefinitionFactory implements ODLTokenTypes, DictionaryTokens {
         ObjectDefinition definition = null;
         
         if (object.getIdentifier().equals(GENERIC_OBJECT) || 
-                object.getIdentifier().equals(SPECIFIC_OBJECT)) {
+                object.getIdentifier().equals(SPECIFIC_OBJECT) &&
+                !OBJECT_TYPE_GENERIC_GROUP.equals(object.getAttribute(OBJECT_TYPE).getValue().toString())) {
             definition = new ObjectDefinition(object.getAttribute(NAME).getValue().toString());
            
             //Find and set the description
@@ -127,8 +128,9 @@ public class DefinitionFactory implements ODLTokenTypes, DictionaryTokens {
     public static GroupDefinition createGroupDefinition(ObjectStatement object) throws UnknownDefinitionException {
         GroupDefinition definition = null;
         
-        if (object.getIdentifier().equals(GENERIC_GROUP) || 
-                object.getIdentifier().equals(SPECIFIC_GROUP)) {
+        if (object.getIdentifier().equals(GENERIC_OBJECT) || 
+                object.getIdentifier().equals(SPECIFIC_OBJECT) &&
+                OBJECT_TYPE_GENERIC_GROUP.equals(object.getAttribute(OBJECT_TYPE).getValue().toString())) {
             definition = new GroupDefinition(object.getAttribute(NAME).getValue().toString());
             
             //Find and set the description
