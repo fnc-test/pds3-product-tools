@@ -51,6 +51,8 @@ public interface DictionaryTokens {
     public static final String UNIT_LIST = "UNIT_LIST";
     public static final String VALUE_TYPE_SUGGESTED = "SUGGESTED";
     public static final String VALUE_TYPE_STATIC = "STATIC";
+    public static final String OBJECT_TYPE_GENERIC_GROUP = "GENERIC_GROUP";
+    public static final String OBJECT_TYPE = "OBJECT_TYPE";
     public static final int ELEMENT_IDENT_LENGTH = 30;
     public static final int NAMESPACE_LENGTH = 30;
 }
