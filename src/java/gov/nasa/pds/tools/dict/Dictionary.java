@@ -259,6 +259,33 @@ public class Dictionary {
     }
     
     /**
+     * Retrieves the class definition for a group with the given identifier. 
+     * This method will search the dictionary for a GroupDefinition whose 
+     * identifier is the greatest length and matches the end of the given identifier
+     * @param identifier to lookup up class of
+     * @return {@link GroupDefinition} of class that will constrain object with 
+     * given identifier. Returns null if not found.
+     */
+    public GroupDefinition findGroupClassDefinition(String identifier) {
+        GroupDefinition definition = null;
+        String className = identifier;
+        boolean done = false;
+        
+        while (definition == null && !done) {
+            if (containsGroupDefinition(className))
+                definition = (GroupDefinition) definitions.get(className);
+            else {
+                if (className.indexOf("_") == -1 || className.indexOf("_") == className.length()-1)
+                    done = true;
+                else
+                    className = className.substring(className.indexOf("_") + 1);
+            }      
+        }
+        
+        return definition;
+    }
+    
+    /**
      * Retrieves the map of definitions
      * @return the map of definitions.
      */
