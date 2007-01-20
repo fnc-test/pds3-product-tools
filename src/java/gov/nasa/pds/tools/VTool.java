@@ -15,9 +15,13 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+
+import javax.swing.text.BadLocationException;
+
 import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.MissingOptionException;
@@ -33,6 +37,7 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.ConfigurationUtils;
 import org.apache.commons.configuration.ConversionException;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.httpclient.HttpException;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.FileAppender;
@@ -65,7 +70,6 @@ public class VTool {
 	private List dictionaries;
 	private List noFiles;
 	private List noDirs;
-	private List files;
 	private boolean followPtrs;
 	private List includePaths;
 	private boolean progress;
@@ -89,7 +93,6 @@ public class VTool {
 		noDirs = null;
 		followPtrs = true;
 		targets = null;
-		files = null;
 		includePaths = null;
 		progress = false;
 		regexp = null;
@@ -347,15 +350,15 @@ public class VTool {
 
 		}
 		catch(MissingOptionException moe) {
-			System.out.println(moe.getMessage());
+			System.err.println(moe.getMessage());
 			System.exit(1);
 		}
 		catch(UnrecognizedOptionException uoe) {
-			System.out.println(uoe.getMessage());
+			System.err.println(uoe.getMessage());
 			System.exit(1);
 		}
 		catch(Exception e) {
-			System.out.println(e.getMessage());
+			System.err.println(e.getMessage());
 			System.exit(1);
 		}
 	}
@@ -635,7 +638,7 @@ public class VTool {
 			config = new PropertiesConfiguration(file);
 		}
 		catch (ConfigurationException ce) {
-			System.out.println(ce.getMessage());
+			System.err.println(ce.getMessage());
 			System.exit(1);
 		}
 		
@@ -681,7 +684,7 @@ public class VTool {
 			if(config.containsKey("vtool.xmloutput"))
 				setXml(config.getBoolean("vtool.xmloutput"));
 		} catch(ConversionException ce) {
-			System.out.println(ce.getMessage());
+			System.err.println(ce.getMessage());
 			System.exit(1);
 		} catch(Exception ex) {
 			ex.printStackTrace();
@@ -776,13 +779,13 @@ public class VTool {
 					dict.merge( DictionaryParser.parse(new File(dd).toURL()), true );
 			}
 		} catch( MalformedURLException uex) {
-			System.out.println("Dictionary file does not exist: " + dd);
+			System.err.println("Dictionary file does not exist: " + dd);
 			System.exit(1);
 		} catch( IOException iex) {
-			System.out.println(iex.getMessage());
+			System.err.println(iex.getMessage());
 			System.exit(1);
 		} catch( gov.nasa.pds.tools.label.parser.ParseException pe) {
-			System.out.println("Problems parsing Dictionary file");
+			System.err.println("Problems parsing Dictionary file");
 			System.exit(1);
 		}
 
@@ -806,7 +809,7 @@ public class VTool {
 					else
 						parser.addIncludePath(new File(path).toURL());
 				} catch (MalformedURLException f) {
-					System.out.println("Cannot add file to include path: " + path);
+					System.err.println("Cannot add file to include path: " + path);
 					System.exit(1);
 				}
 				
@@ -818,88 +821,109 @@ public class VTool {
 	}
 	
 	/**
-	 * Read and parse the label files passed into the VTool command line.
-	 * Performs both syntactic and semantic validation.
+	 * Validate labels found within the specified targets. If the target
+	 * is a directory, this method will validate all labels found within
+	 * the directory and its sub-directories. If recursion is turned OFF,
+	 * then sub-directories will not be looked into.
+	 * 
+	 * @param targets a list of files, directories, and/or URLs
+	 * @param dict the dictionary file
+	 */
+	
+	public void validateLabels(List targets, Dictionary dict) {
+		for(Iterator i1 = targets.iterator(); i1.hasNext();) {
+			List fileList = new ArrayList();
+			List dirList = new ArrayList();
+			processTarget(i1.next().toString(), recursive, fileList, dirList);
+			
+			for(Iterator i2 = fileList.iterator(); i2.hasNext();) {
+				String target = i2.next().toString();
+				
+				try {
+					if(isURL(target))
+						validateLabel(new URL(target), dict);
+					else
+						validateLabel(new File(target).toURL(), dict);
+				}catch(MalformedURLException uEx) {
+					System.err.println(uEx.getMessage());
+					System.exit(1);
+				}
+			}
+			if(!dirList.isEmpty())
+				validateLabels(dirList, dict);
+		}
+		
+	}
+	
+	/**
+	 * Process the specified target. A file list and directory list object are passed
+	 * into the method in order to retrieve the list of files and sub-directories found
+	 * as a result of visiting the target.
+	 * 
+	 * @param target The file or URL to process
+	 * @param files A list of files found after processing the target
+	 * @param dirs A list of sub directories found after processing the target 
+	 */
+	private void processTarget(String target, boolean getSubDirs, List files, List dirs) {
+		
+		FileListGenerator fileGen = new FileListGenerator();
+		fileGen.setFilters(regexp, noFiles, noDirs);
+		
+		try {
+			fileGen.visitTarget(target, getSubDirs);
+		} catch (HttpException hEx) {
+			System.err.println(hEx.getMessage());
+			System.exit(1);
+		} catch (MalformedURLException uEx) {
+			System.err.println(uEx.getMessage());
+			System.exit(1);
+		} catch (IOException iEx) {
+			System.err.println(iEx.getMessage());
+			System.exit(1);
+		} catch (BadLocationException bEx) {
+			System.err.println(bEx.getMessage());
+			System.exit(1);
+		}
+		
+		if( !fileGen.getFiles().isEmpty() )
+			files.addAll(fileGen.getFiles());
+		else if( !fileGen.getFileURLs().isEmpty() )
+			files.addAll(fileGen.getFileURLs());
+		
+		if( !fileGen.getSubDirs().isEmpty() )
+			dirs.addAll(fileGen.getSubDirs());
+		else if( !fileGen.getSubDirURLs().isEmpty() )
+			dirs.addAll(fileGen.getSubDirURLs());
+
+	}
+	
+	/**
+	 * Validate a label file. Can perform both syntactic and semantic validation.
 	 * 
 	 * @param files a list of label files to be validated
 	 * @param dict a Dictionary object needed for semantic validation. If null,
 	 *             only syntactic validation will be performed.
 	 */
 	
-	public void validateLabels(List files, Dictionary dict) {
-		String target;
-		URL url = null;
+	public void validateLabel(URL file, Dictionary dict) {
+		
 		LabelParserFactory factory = LabelParserFactory.getInstance();
 		LabelParser parser = factory.newLabelParser();
-		
 		setParserProps(parser);
 		
-		for( Iterator i = files.iterator(); i.hasNext(); ) {
-			target = new String( i.next().toString());
-			
-			try {
-				if(isURL(target))
-					url = new URL(target);
-				else
-					url = new File(target).toURL();
-			}
-			catch(MalformedURLException mex) {
-				System.out.println("file/URL does not exist: " + target);
-				System.exit(1);
-			}
-			
-			System.out.println("\nValidating " + url);
-			
-			try {
-				if(dict == null)
-					parser.parse(url);
-				else
-					parser.parse(url,dict);
-			} catch(IOException iex) {
-				System.out.println(iex.getMessage());
-				System.exit(1);
-			} catch( gov.nasa.pds.tools.label.parser.ParseException pe ) {
-				continue;
-			}
-		}
-	}
-	
-	/**
-	 * Read and parse the label files passed into the VTool command line. 
-	 * Only does syntactic validation. No semantic validation is performed.
-	 * 
-	 * @param files a list of label files to be validated
-	 */
-	
-	public void validateLabels(List files) {
-		validateLabels(files, null);
-	}
-	
-	/**
-	 * Create a list of files based on supplied list of targets
-	 * 
-	 * @param input a list of files and/or directories to be validated
-	 * @param recurse 'True' if recursing through the supplied directories. 'False'
-	 *    to only look in the supplied directory for files, ignoring subdirectories.
-	 * @param exp a list of files/file patterns to search for when going through a  
-	 *    a directory. Set to 'null' to search for all files.
-	 * @param noF list containing files and/or file patterns to ignore. Set to 'null'
-	 *    if no files are to be ignored.
-	 * @parm noD list containing directories and/or directory patterns to ignore. Set to 'null'
-	 *    if no directories are to be ignored.
-	 */
-	
-	public void createFileList(List input, boolean recurse, List exp, List noF, List noD) {
-		FileListGenerator list = new FileListGenerator(input);
+		System.out.println("\nValidating: " + file);
 		
-		// Set the appropriate filters
-		if(exp != null)
-			list.setFileFilter(exp);
-		if(noF != null)
-			list.setNoFileFilter(noF);
-		if(noD != null)
-			list.setNoDirFilter(noD);
-		files = list.visitTargets(recurse);
+		try {
+			if(dict == null)
+				parser.parse(file);
+			else
+				parser.parse(file, dict);
+		} catch (gov.nasa.pds.tools.label.parser.ParseException pEx) {
+			return;
+		}catch (IOException iEx) {
+			System.err.println(iEx.getMessage());
+			System.exit(1);			
+		}
 	}
 	
 	public static void main(String[] argv) {
@@ -922,14 +946,12 @@ public class VTool {
 		// Print debug messages if severity level is set to '0'
 		vtool.printDebug();	
 		
-		vtool.createFileList(vtool.targets, vtool.recursive, vtool.regexp, vtool.noFiles, vtool.noDirs);
-
 		if(vtool.dictionaries != null) {
 			mainDictionary = vtool.readDictionaries(vtool.dictionaries);
-			vtool.validateLabels(vtool.files, mainDictionary);
+			vtool.validateLabels(vtool.targets, mainDictionary);
 		}
 		else 
-			vtool.validateLabels(vtool.files);
+			vtool.validateLabels(vtool.targets, null);
  
 		System.exit(0);
 	}
