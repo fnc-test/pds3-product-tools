@@ -139,6 +139,18 @@ $Id$
       <version>1.2.13</version>
       <url>http://www.ibiblio.org/maven/log4j/</url>
     </dependency>
+    <dependency>
+      <groupId>commons-httpclient</groupId>
+      <artifactId>commons-httpclient</artifactId>
+      <version>3.0.1</version>
+      <url>http://www.ibiblio.org/maven/commons-httpclient/</url>
+    </dependency>  
+    <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+      <version>1.3</version>
+      <url>http://www.ibiblio.org/maven/commons-codec/</url>
+    </dependency>        
   </dependencies>
 
   <build>
