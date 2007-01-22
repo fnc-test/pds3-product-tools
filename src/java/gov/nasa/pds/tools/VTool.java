@@ -831,14 +831,12 @@ public class VTool {
 	 */
 	
 	public void validateLabels(List targets, Dictionary dict) {
+		FileListGenerator fileGen = new FileListGenerator();
+		
 		for(Iterator i1 = targets.iterator(); i1.hasNext();) {
-			List fileList = new ArrayList();
-			List dirList = new ArrayList();
-			processTarget(i1.next().toString(), recursive, fileList, dirList);
-			
-			for(Iterator i2 = fileList.iterator(); i2.hasNext();) {
-				String target = i2.next().toString();
-				
+			processTarget(i1.next().toString(), fileGen, recursive);
+			for(Iterator i2 = fileGen.getFiles().iterator(); i2.hasNext();) {
+				String target = i2.next().toString();				
 				try {
 					validateLabel(new URL(target), dict);
 				}catch(MalformedURLException uEx) {
@@ -846,8 +844,8 @@ public class VTool {
 					System.exit(1);
 				}
 			}
-			if(!dirList.isEmpty())
-				validateLabels(dirList, dict);
+			if(!fileGen.getSubDirs().isEmpty())
+				validateLabels(fileGen.getSubDirs(), dict);
 		}
 		
 	}
@@ -858,12 +856,11 @@ public class VTool {
 	 * as a result of visiting the target.
 	 * 
 	 * @param target The file or URL to process
-	 * @param files A list of files found after processing the target
-	 * @param dirs A list of sub directories found after processing the target 
+	 * @param fileGen A FileListGenerator object that will contain the list of files found
+	 * @param getSubDirs 'True' to look for sub-directories, 'false' otherwise.
 	 */
-	private void processTarget(String target, boolean getSubDirs, List files, List dirs) {
+	private void processTarget(String target, FileListGenerator fileGen, boolean getSubDirs) {
 		
-		FileListGenerator fileGen = new FileListGenerator();
 		fileGen.setFilters(regexp, noFiles, noDirs);
 		
 		try {
@@ -881,12 +878,6 @@ public class VTool {
 			System.err.println(bEx.getMessage());
 			System.exit(1);
 		}
-		
-		if( !fileGen.getFiles().isEmpty() )
-			files.addAll(fileGen.getFiles());
-		
-		if( !fileGen.getSubDirs().isEmpty() )
-			dirs.addAll(fileGen.getSubDirs());
 	}
 	
 	/**

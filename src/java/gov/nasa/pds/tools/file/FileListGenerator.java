@@ -10,7 +10,6 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -157,28 +156,46 @@ public class FileListGenerator {
 	 * @param getSubDirs 'true' to recursively search down subdirectories for files to add onto the list.
 	 *  'false' to just search at the level of the supplied directory.
 	 * @return A list of files based on the supplied list of targets
-	 * @throws URISyntaxException 
 	 * @throws BadLocationException 
 	 * @throws IOException 
-	 * @throws MalformedURLException 
 	 * @throws HttpException 
 	 */
-	public void visitTarget(String target, boolean getSubDirs) throws HttpException, MalformedURLException, IOException, BadLocationException {
-	
+	public void visitTarget(String target, boolean getSubDirs) throws HttpException, IOException, BadLocationException {
+		File file = null;
 		try {
 			URL url = new URL(target.toString());
-			
+			if((file = FileUtils.toFile(url)) != null) {
+				visitFileTarget(file, getSubDirs);
+				return;
+			}
 			if(!isLinkFile(target.toString()))
 				crawl(new URL(target.toString()), getSubDirs);
 			else
 				files.add(url);
 		}
-		catch(MalformedURLException e) {
-			if(new File(target.toString()).isDirectory())
-				visitDir(new File(target.toString()), getSubDirs);
-			else
-				files.add(new File(target).toURI().toURL());
-		}			
+		catch(MalformedURLException uEx) {
+			visitFileTarget(new File(target), getSubDirs);
+		}
+	}
+	
+	/**
+	 * Visits the file being supplied. If a file is being passed in, then it will be
+	 * converted to URL. If a directory is being passed in, then it will look for
+	 * files and sub-directories (if it is turned ON). In either case, the getFiles
+	 * and getSubDirs methods can be called to retrieve the list of files and sub-directories
+	 * found. The lists will be a set of URLs. 
+	 * 
+	 * @param file A file or a directory. If it is a directory, then the visitDir method
+	 *      will be called and the list of files can be retrieved via the getFiles and
+	 *      getSubDirs methods.
+	 * @param getSubDirs Tells the method whether to look for sub-directories
+	 * @throws IOException
+	 */
+	private void visitFileTarget(File file, boolean getSubDirs) throws IOException {
+		if(file.isDirectory())
+			visitDir(file, getSubDirs);
+		else
+			files.add(file.toURI().toURL());
 	}
 	
 	/**
