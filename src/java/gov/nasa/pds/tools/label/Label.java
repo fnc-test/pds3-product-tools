@@ -18,8 +18,8 @@ import java.util.Iterator;
  * @version $Revision$
  * 
  */
-public class Label {
-    private int labelType;
+public class Label implements LabelType {
+    private volatile int labelType;
     private Map statements;
     
     /**
@@ -28,6 +28,7 @@ public class Label {
      */
     public Label() {
         statements = new HashMap();
+        labelType = UNDEFINED;
     }
 
     /**
@@ -175,7 +176,8 @@ public class Label {
      * Associates a statement with this label
      * @param statement to be added to label
      */
-    public void addStatement(Statement statement) { 
+    public synchronized void addStatement(Statement statement) { 
+        labelType = UNDEFINED;
         List stmnts = (List) statements.get(statement.getIdentifier());
         if (stmnts == null) {
             stmnts = new ArrayList();
@@ -194,7 +196,22 @@ public class Label {
      * Returns the type of label, see {@link LabelType} for the types of label.
      * @return type of label
      */
-    public int getLabelType() {
+    public synchronized int getLabelType() {
+        //Check to see if flag has been set if not figure it out and set it
+        if (labelType == UNDEFINED) {
+            List pointers = getPointers();
+            for (Iterator i = pointers.iterator(); i.hasNext() && labelType == UNDEFINED;) {
+                PointerStatement pointer = (PointerStatement) i.next();
+                if (pointer.getPointerType() == PointerType.DATA_LOCATION && pointer.getValue() instanceof Numeric)
+                    labelType = LabelType.ATTACHED;
+                else
+                    labelType = LabelType.DETACHED;
+            }
+            //If label type is still undefined we need to check if its a combined detached label
+            if (labelType == UNDEFINED && getObjects("FILE").size() != 0)
+                labelType = LabelType.COMBINED_DETACHED;
+        }
+        
         return labelType;
     }
     
