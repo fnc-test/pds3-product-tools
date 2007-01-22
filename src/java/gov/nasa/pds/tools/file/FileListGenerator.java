@@ -39,8 +39,7 @@ import gov.nasa.pds.tools.file.filefilter.WildcardOSFilter;
 
 /**
  * Class that can generate a list of files from a supplied directory and optionally, a specified
- * filter. Class allows recursive searching of files down a given directory or a local search
- * (grabbing only files located in a directory).
+ * filter. The resulting list is a set of URLs.
  * 
  * @author mcayanan
  * @version $Revision $
@@ -54,8 +53,6 @@ public class FileListGenerator {
 	private FileFilter effDirFilter;
 	private List files;
 	private List subDirs;
-	private List fileURLs;
-	private List subDirURLs;
 	private final int fileExt = 3;
 	
 	/**
@@ -69,9 +66,6 @@ public class FileListGenerator {
 		noDirFilter = null;
 		files = new ArrayList();
 		subDirs = new ArrayList();
-		fileURLs = new ArrayList();
-		subDirURLs = new ArrayList();
-
 	}
 	
 	/**
@@ -140,23 +134,7 @@ public class FileListGenerator {
 	}
 	
 	/**
-	 * Gets the list of file URLs
-	 * @return
-	 */
-	public List getFileURLs() {
-		return fileURLs;
-	}
-	
-	/**
-	 * Gets the list of sub directory URLs
-	 * @return
-	 */
-	public List getSubDirURLs() {
-		return subDirURLs;
-	}
-
-	/**
-	 * Gets the list of files
+	 * Gets the list of files. These will be a set of URLs.
 	 * @return
 	 */
 	public List getFiles() {
@@ -164,7 +142,7 @@ public class FileListGenerator {
 	}
 	
 	/**
-	 * Gets the list of sub-directories
+	 * Gets the list of sub-directories. These will be a set of URLs.
 	 * @return
 	 */
 	public List getSubDirs() {
@@ -172,7 +150,9 @@ public class FileListGenerator {
 	}
 	
 	/**
-	 * Allows one to pass in a file or URL. 
+	 * Allows one to pass in a file or URL. If it is a file being passed in, then it will be 
+	 * converted into a URL. Directories will be visited if the target is a directory. The
+	 * resulting list will then need to be retrieved from the getFiles and getSubDirs methods.
 	 * 
 	 * @param getSubDirs 'true' to recursively search down subdirectories for files to add onto the list.
 	 *  'false' to just search at the level of the supplied directory.
@@ -191,63 +171,70 @@ public class FileListGenerator {
 			if(!isLinkFile(target.toString()))
 				crawl(new URL(target.toString()), getSubDirs);
 			else
-				fileURLs.add(url);
+				files.add(url);
 		}
 		catch(MalformedURLException e) {
 			if(new File(target.toString()).isDirectory())
 				visitDir(new File(target.toString()), getSubDirs);
 			else
-				files.add(new File(target));
+				files.add(new File(target).toURI().toURL());
 		}			
 	}
 	
 	/**
 	 * Gets a list of files under a given directory. The files and directories can be retrieved
-	 * by calling the getFiles and getSubDirs methods, respectively.
+	 * by calling the getFiles and getSubDirs methods, respectively. The resulting list will be
+	 * in URLs.
 	 * 
 	 * Filters must be set via setFileFilters prior to calling this method in order to filter out
 	 * un-wanted files and directories.
 	 * 
 	 * @param dir the name of the directory
 	 * @param getSubDirs 'true' to get a list of sub-directories
-	 * @return A list of all files that were found underneath the supplied directory.
+	 * @return true if files were found and were successfully converted to URLs. Otherwise, an IOException will be thrown.
+	 * @throws IOException 
 	 */
-	public void visitDir(File dir, boolean getSubDirs) {
+	public boolean visitDir(File dir, boolean getSubDirs) throws IOException {
 		
 		if( !dir.isDirectory() )
 			throw new IllegalArgumentException("parameter 'dir' is not a directory: " + dir);
 		
-		//Find files only first
-		files.addAll(FileUtils.listFiles(dir, effFileFilter, null));
+		//Find files only first. Convert resulting list into URLs
+		List list = new ArrayList(FileUtils.listFiles(dir, effFileFilter, null));
+		files.addAll( Arrays.asList(FileUtils.toURLs(FileUtils.convertFileCollectionToFileArray(list))) );
 		
 		//Visit sub-directories if the recurse flag is set
 		if(getSubDirs)
-			subDirs.addAll(Arrays.asList(dir.listFiles(effDirFilter)));
+			subDirs.addAll(Arrays.asList(FileUtils.toURLs(dir.listFiles(effDirFilter))) );
+		
+		return true;
 	}
 		
 	/**
 	 * Crawls a directory URL, looking for files and subdirectories. The file and directory URLS
-	 * can be retrieved by calling the getFileURLs and getSubDirURLs methods, respectively.
+	 * can be retrieved by calling the getFiles and getSubDirs methods, respectively.
 	 * 
 	 * Filters must be set via the setFileFilters method prior to crawling in order to filter out
 	 * un-wanted files and directories.
 	 * 
 	 * @param url The URL to crawl
 	 * @param getSubDirURLs Set to 'true' to retrieve sub-directory URLs, 'false' otherwise
-	 * @return
+	 * @return true if crawling operation was successful. Otherwise an exception will be thrown.
 	 * @throws HttpException
 	 * @throws IOException
 	 * @throws BadLocationException
 	 */
-	public void crawl(URL url, boolean getSubDirURLs) throws HttpException, IOException, BadLocationException {
+	public boolean crawl(URL url, boolean getSubDirURLs) throws HttpException, IOException, BadLocationException {
 		Set links = new LinkedHashSet();
 		
 		links.addAll(getHyperLinks(url));
-		fileURLs.addAll(getFileURLNames(url, links));
+		files.addAll(getFileURLNames(url, links));
 		
 		if(getSubDirURLs) {
-			subDirURLs.addAll(getSubDirURLNames(url, links));
+			subDirs.addAll(getSubDirURLNames(url, links));
 		}
+		
+		return true;
 	}
 	
 	/**

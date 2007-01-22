@@ -840,10 +840,7 @@ public class VTool {
 				String target = i2.next().toString();
 				
 				try {
-					if(isURL(target))
-						validateLabel(new URL(target), dict);
-					else
-						validateLabel(new File(target).toURL(), dict);
+					validateLabel(new URL(target), dict);
 				}catch(MalformedURLException uEx) {
 					System.err.println(uEx.getMessage());
 					System.exit(1);
@@ -887,14 +884,9 @@ public class VTool {
 		
 		if( !fileGen.getFiles().isEmpty() )
 			files.addAll(fileGen.getFiles());
-		else if( !fileGen.getFileURLs().isEmpty() )
-			files.addAll(fileGen.getFileURLs());
 		
 		if( !fileGen.getSubDirs().isEmpty() )
 			dirs.addAll(fileGen.getSubDirs());
-		else if( !fileGen.getSubDirURLs().isEmpty() )
-			dirs.addAll(fileGen.getSubDirURLs());
-
 	}
 	
 	/**
