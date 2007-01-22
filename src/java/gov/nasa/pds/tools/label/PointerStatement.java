@@ -13,9 +13,10 @@ package gov.nasa.pds.tools.label;
  * @version $Revision$
  * 
  */
-public class PointerStatement extends Statement {
+public class PointerStatement extends Statement implements PointerType {
     protected Value value;
     private CommentStatement comment;
+    private int pointerType;
 
     /**
      * Constructs essentially a null pointer
@@ -24,6 +25,17 @@ public class PointerStatement extends Statement {
      */
     protected PointerStatement(int lineNumber, String identifier) {
         this(lineNumber, identifier, null);
+        pointerType = UNDEFINED;
+        for (int i = 0; i < INCLUDE_NAMES.length && pointerType == UNDEFINED; i++) {
+            if (identifier.endsWith(INCLUDE_NAMES[i]))
+                pointerType = INCLUDE;
+        }
+        for (int i = 0; i < DESCRIPTION_NAMES.length && pointerType == UNDEFINED; i++) {
+            if (identifier.endsWith(DESCRIPTION_NAMES[i]))
+                pointerType = DESCRIPTION;
+        }
+        if (pointerType == UNDEFINED)
+            pointerType = DATA_LOCATION;
     }
     
     /**
@@ -69,6 +81,14 @@ public class PointerStatement extends Statement {
      */
     public CommentStatement getComment() {
         return comment;
+    }
+    
+    /**
+     * Indicates the type of pointer that this pointer statement represents. See {@link PointerType}
+     * @return type of pointer
+     */
+    public int getPointerType() {
+        return pointerType;
     }
 
 }
