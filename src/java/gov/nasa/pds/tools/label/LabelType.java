@@ -11,8 +11,9 @@ package gov.nasa.pds.tools.label;
  * @version $Revision$
  * 
  */
-public final class LabelType {
+public interface LabelType {
     public final static int ATTACHED = 0;
-    public final static int DETTACHED = 1;
+    public final static int DETACHED = 1;
     public final static int COMBINED_DETACHED = 2;
+    public final static int UNDEFINED = -1;
 }
