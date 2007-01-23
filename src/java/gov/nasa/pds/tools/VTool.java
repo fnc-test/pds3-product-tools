@@ -8,6 +8,7 @@ package gov.nasa.pds.tools;
 
 import gov.nasa.pds.tools.dict.Dictionary;
 import gov.nasa.pds.tools.dict.parser.DictionaryParser;
+import gov.nasa.pds.tools.file.FileList;
 import gov.nasa.pds.tools.file.FileListGenerator;
 import gov.nasa.pds.tools.label.parser.LabelParser;
 import gov.nasa.pds.tools.label.parser.LabelParserFactory;
@@ -15,7 +16,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -46,7 +46,7 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 
 /**
- * @author pramirez
+ * @author mcayanan
  * @version $Revision$
  * 
  * Class to replace LVTool functionality
@@ -62,8 +62,9 @@ public class VTool {
 	private CommandLine cmd;
 	
 	//TODO: Flags to be implemented: partial (-f,--force), data object(-O,--no-obj),
-	//progress(-p,--show-progress), alias(-a,--alias), include (-i,--include),
-	//xml output(-x,--xml), reporting style (-s,--output-style) 
+	//progress(-p,--show-progress), alias(-a,--alias), xml output(-x,--xml), 
+	//reporting style (-s,--output-style) 
+	
 	private boolean alias;
 	private File config;
 	private boolean dataObj;
@@ -80,6 +81,8 @@ public class VTool {
 	private String outputFmt;
 	private short verbose;
 	private boolean xml;
+	
+	private String currDir;
 	
 	/** 
 	 * Default constructor
@@ -100,6 +103,7 @@ public class VTool {
 		output = null;
 		outputFmt = "full";
 		xml = false;
+		currDir = null;
 		options = new Options();
 		parser = new GnuParser();
 	}
@@ -626,7 +630,6 @@ public class VTool {
 	 * 
 	 * @param file a file containing keyword/value statements
 	 */
-	
 	public void readConfigFile(File file) {
 		Configuration config = null;
 		Logger configlog = Logger.getLogger(ConfigurationUtils.class);
@@ -717,7 +720,6 @@ public class VTool {
 	 * Configures the logger from the log4j class
 	 *
 	 */
-	
 	private void setupLogger() {
 
 		if(output != null) {
@@ -757,7 +759,6 @@ public class VTool {
 	 * @return a Dictionary object that includes all the dictionary information from
 	 *  all the dictionary files passed in. Returns null if dictionary has a null value.
 	 */
-	
 	public Dictionary readDictionaries(List dictionary) {
 		Dictionary dict = null;
 		String dd = null;
@@ -828,14 +829,12 @@ public class VTool {
 	 * 
 	 * @param targets a list of files, directories, and/or URLs
 	 * @param dict the dictionary file
-	 */
-	
+	 */	
 	public void validateLabels(List targets, Dictionary dict) {
-		FileListGenerator fileGen = new FileListGenerator();
-		
 		for(Iterator i1 = targets.iterator(); i1.hasNext();) {
-			processTarget(i1.next().toString(), fileGen, recursive);
-			for(Iterator i2 = fileGen.getFiles().iterator(); i2.hasNext();) {
+			FileList fileList = new FileList();
+			fileList = processTarget(i1.next().toString(), recursive);
+			for(Iterator i2 = fileList.getFiles().iterator(); i2.hasNext();) {
 				String target = i2.next().toString();				
 				try {
 					validateLabel(new URL(target), dict);
@@ -844,8 +843,8 @@ public class VTool {
 					System.exit(1);
 				}
 			}
-			if(!fileGen.getSubDirs().isEmpty())
-				validateLabels(fileGen.getSubDirs(), dict);
+			if(!fileList.getDirs().isEmpty())
+				validateLabels(fileList.getDirs(), dict);
 		}
 		
 	}
@@ -859,12 +858,13 @@ public class VTool {
 	 * @param fileGen A FileListGenerator object that will contain the list of files found
 	 * @param getSubDirs 'True' to look for sub-directories, 'false' otherwise.
 	 */
-	private void processTarget(String target, FileListGenerator fileGen, boolean getSubDirs) {
-		
+	private FileList processTarget(String target, boolean getSubDirs) {		
+		FileListGenerator fileGen = new FileListGenerator();
+		FileList list = new FileList();
 		fileGen.setFilters(regexp, noFiles, noDirs);
 		
 		try {
-			fileGen.visitTarget(target, getSubDirs);
+			list = fileGen.visitTarget(target, getSubDirs);
 		} catch (HttpException hEx) {
 			System.err.println(hEx.getMessage());
 			System.exit(1);
@@ -878,6 +878,7 @@ public class VTool {
 			System.err.println(bEx.getMessage());
 			System.exit(1);
 		}
+		return list;
 	}
 	
 	/**
@@ -888,12 +889,13 @@ public class VTool {
 	 *             only syntactic validation will be performed.
 	 */
 	
-	public void validateLabel(URL file, Dictionary dict) {
-		
+	public void validateLabel(URL file, Dictionary dict) {		
 		LabelParserFactory factory = LabelParserFactory.getInstance();
 		LabelParser parser = factory.newLabelParser();
 		setParserProps(parser);
 		
+///		if(progress)
+//			showProgress(file);
 		System.out.println("\nValidating: " + file);
 		
 		try {
@@ -906,6 +908,31 @@ public class VTool {
 		}catch (IOException iEx) {
 			System.err.println(iEx.getMessage());
 			System.exit(1);			
+		}
+	}
+	
+	/**
+	 * When progress reporting is enabled, this method will print out the current directory
+	 * being validated.
+	 * 
+	 * @param file
+	 */
+	public void showProgress(URL file) {
+		URL dir = null;
+		try {
+			dir = new URL(file.toString().substring(0, file.toString().lastIndexOf("/")));
+		} catch(MalformedURLException uEx) {
+			System.err.println(uEx.getMessage());
+			System.exit(1);
+		}
+		
+		if(dir.toString().equals(currDir)) {
+			System.err.print("*");
+		}
+		else {
+			currDir = new String(dir.toString());
+			System.err.println("\nValidating file(s) in: " + currDir);
+			System.err.print("*");
 		}
 	}
 	

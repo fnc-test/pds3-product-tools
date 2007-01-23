@@ -50,8 +50,6 @@ public class FileListGenerator {
 	private IOFileFilter fileFilter;
 	private IOFileFilter effFileFilter;
 	private FileFilter effDirFilter;
-	private List files;
-	private List subDirs;
 	private final int fileExt = 3;
 	
 	/**
@@ -63,8 +61,6 @@ public class FileListGenerator {
 		fileFilter = new WildcardOSFilter("*");
 		noFileFilter = null;
 		noDirFilter = null;
-		files = new ArrayList();
-		subDirs = new ArrayList();
 	}
 	
 	/**
@@ -133,22 +129,6 @@ public class FileListGenerator {
 	}
 	
 	/**
-	 * Gets the list of files. These will be a set of URLs.
-	 * @return
-	 */
-	public List getFiles() {
-		return files;
-	}
-	
-	/**
-	 * Gets the list of sub-directories. These will be a set of URLs.
-	 * @return
-	 */
-	public List getSubDirs() {
-		return subDirs;
-	}
-	
-	/**
 	 * Allows one to pass in a file or URL. If it is a file being passed in, then it will be 
 	 * converted into a URL. Directories will be visited if the target is a directory. The
 	 * resulting list will then need to be retrieved from the getFiles and getSubDirs methods.
@@ -160,22 +140,24 @@ public class FileListGenerator {
 	 * @throws IOException 
 	 * @throws HttpException 
 	 */
-	public void visitTarget(String target, boolean getSubDirs) throws HttpException, IOException, BadLocationException {
+	public FileList visitTarget(String target, boolean getSubDirs) throws HttpException, IOException, BadLocationException {
 		File file = null;
+		FileList fileList = new FileList();
+		
 		try {
 			URL url = new URL(target.toString());
 			if((file = FileUtils.toFile(url)) != null) {
-				visitFileTarget(file, getSubDirs);
-				return;
+				return (visitFileTarget(file, getSubDirs));			
 			}
 			if(!isLinkFile(target.toString()))
-				crawl(new URL(target.toString()), getSubDirs);
+				fileList = crawl(new URL(target.toString()), getSubDirs);
 			else
-				files.add(url);
+				fileList.addToFileList(url);
 		}
 		catch(MalformedURLException uEx) {
-			visitFileTarget(new File(target), getSubDirs);
+			return (visitFileTarget(new File(target), getSubDirs));
 		}
+		return fileList;
 	}
 	
 	/**
@@ -191,11 +173,14 @@ public class FileListGenerator {
 	 * @param getSubDirs Tells the method whether to look for sub-directories
 	 * @throws IOException
 	 */
-	private void visitFileTarget(File file, boolean getSubDirs) throws IOException {
+	private FileList visitFileTarget(File file, boolean getSubDirs) throws IOException {
+		FileList fileList = new FileList();		
 		if(file.isDirectory())
-			visitDir(file, getSubDirs);
+			fileList = visitDir(file, getSubDirs);
 		else
-			files.add(file.toURI().toURL());
+			fileList.addToFileList(file.toURI().toURL());
+		
+		return fileList;
 	}
 	
 	/**
@@ -211,20 +196,21 @@ public class FileListGenerator {
 	 * @return true if files were found and were successfully converted to URLs. Otherwise, an IOException will be thrown.
 	 * @throws IOException 
 	 */
-	public boolean visitDir(File dir, boolean getSubDirs) throws IOException {
+	public FileList visitDir(File dir, boolean getSubDirs) throws IOException {
+		FileList fileList = new FileList();
 		
 		if( !dir.isDirectory() )
 			throw new IllegalArgumentException("parameter 'dir' is not a directory: " + dir);
 		
 		//Find files only first. Convert resulting list into URLs
 		List list = new ArrayList(FileUtils.listFiles(dir, effFileFilter, null));
-		files.addAll( Arrays.asList(FileUtils.toURLs(FileUtils.convertFileCollectionToFileArray(list))) );
+		fileList.addToFileList( Arrays.asList(FileUtils.toURLs(FileUtils.convertFileCollectionToFileArray(list))) );
 		
 		//Visit sub-directories if the recurse flag is set
 		if(getSubDirs)
-			subDirs.addAll(Arrays.asList(FileUtils.toURLs(dir.listFiles(effDirFilter))) );
+			fileList.addToDirList(Arrays.asList(FileUtils.toURLs(dir.listFiles(effDirFilter))) );
 		
-		return true;
+		return fileList;
 	}
 		
 	/**
@@ -236,29 +222,30 @@ public class FileListGenerator {
 	 * 
 	 * @param url The URL to crawl
 	 * @param getSubDirURLs Set to 'true' to retrieve sub-directory URLs, 'false' otherwise
-	 * @return true if crawling operation was successful. Otherwise an exception will be thrown.
+	 * @return A FileList object containing the files and sub-directories that were found.
 	 * @throws HttpException
 	 * @throws IOException
 	 * @throws BadLocationException
 	 */
-	public boolean crawl(URL url, boolean getSubDirURLs) throws HttpException, IOException, BadLocationException {
+	public FileList crawl(URL url, boolean getSubDirURLs) throws HttpException, IOException, BadLocationException {
 		Set links = new LinkedHashSet();
+		FileList fileList = new FileList();
 		
 		links.addAll(getHyperLinks(url));
-		files.addAll(getFileURLNames(url, links));
+		fileList.addToFileList(getFileURLNames(url, links));
 		
 		if(getSubDirURLs) {
-			subDirs.addAll(getSubDirURLNames(url, links));
+			fileList.addToDirList(getSubDirURLNames(url, links));
 		}
 		
-		return true;
+		return fileList;
 	}
 	
 	/**
-	 * Gets hyperlinks to files and directories found in an HTML document of a URL. No duplicate links will be returned.
+	 * Gets hyperlinks to found in an HTML document of a URL. No duplicate links will be returned.
 	 * 
 	 * @param url
-	 * @return A Set of hyperlinks that point to files and directories
+	 * @return A Set of hyperlinks
 	 * 
 	 * @throws IOException
 	 * @throws HttpException 
