@@ -517,7 +517,7 @@ ELEMENT_IDENT
 
 UNITS
     options {testLiterals=true; paraphrase="units";}
-    : '<' (~('"'|'\r'|'\n'))* '>'
+    : '<' UNITS_FACTOR (MULT_OP UNITS_FACTOR)* '>'
     ;
  
 protected   
