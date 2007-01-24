@@ -21,12 +21,13 @@ import gov.nasa.pds.tools.dict.ObjectDefinition;
 import gov.nasa.pds.tools.dict.type.UnsupportedTypeException;
 import gov.nasa.pds.tools.label.AttributeStatement;
 import gov.nasa.pds.tools.label.ObjectStatement;
-
-import org.apache.log4j.Logger;
+import gov.nasa.pds.tools.logging.ToolsLogRecord;
 
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author pramirez
@@ -34,9 +35,14 @@ import java.util.List;
  * 
  */
 public class ObjectValidator {
-    private static Logger log = Logger.getLogger(new ObjectValidator().getClass().getName());
+    private static Logger log = Logger.getLogger(ObjectValidator.class.getName());
 
     public static boolean isValid(Dictionary dictionary, ObjectStatement object) throws 
+       DefinitionNotFoundException {
+        return isValid(dictionary, object, null);
+    }
+    
+    public static boolean isValid(Dictionary dictionary, ObjectStatement object, String filename) throws 
        DefinitionNotFoundException {
         boolean valid = true;
         
@@ -51,8 +57,8 @@ public class ObjectValidator {
             String required = (String) i.next();
             if (!object.hasAttribute(required)) {
                 valid = false;
-                log.error("Object " + object.getIdentifier() + 
-                        " does not contain required element " + required);
+                log.log(new ToolsLogRecord(Level.SEVERE, "Object " + object.getIdentifier() + 
+                        " does not contain required element " + required, filename));
             }
         }
         
@@ -64,17 +70,17 @@ public class ObjectValidator {
             //Check to make sure object is allowed within this definition
             if (!definition.isElementPossible(attribute.getIdentifier())) {
                 valid = false;
-                log.error("Object " + object.getIdentifier() +  " contains the element " +
-                        attribute.getIdentifier() + " which is neither required nor optional.");
+                log.log(new ToolsLogRecord(Level.SEVERE, "Object " + object.getIdentifier() +  " contains the element " +
+                        attribute.getIdentifier() + " which is neither required nor optional.", filename));
             }
             //Validate attribute
             boolean elementValid = false;
             try {
                 elementValid = ElementValidator.isValid(dictionary, object.getIdentifier(), attribute);
             } catch (UnsupportedTypeException ute) {
-                log.error("line " + attribute.getLineNumber() + ": " + ute.getMessage());
+                log.log(new ToolsLogRecord(Level.SEVERE, ute.getMessage(), filename, attribute.getLineNumber()));
             } catch (DefinitionNotFoundException dnfe) {
-                log.error("line " + attribute.getLineNumber() + ": " + dnfe.getMessage());
+                log.log(new ToolsLogRecord(Level.SEVERE, dnfe.getMessage(), filename, attribute.getLineNumber()));
             }
             if (!elementValid)
                 valid = false;
@@ -85,8 +91,8 @@ public class ObjectValidator {
             String required = (String) i.next();
             if (!object.hasObject(required)) {
                 valid = false;
-                log.error("Object " + object.getIdentifier() + 
-                        " does not contain required object " + required);
+                log.log(new ToolsLogRecord(Level.SEVERE, "Object " + object.getIdentifier() + 
+                        " does not contain required object " + required, filename));
             }
         }
         
@@ -98,15 +104,15 @@ public class ObjectValidator {
             //Check to make sure object is allowed within this definition
             if (!definition.isObjectPossible(obj.getIdentifier())) {
                 valid = false;
-                log.error("Object " + object.getIdentifier() +  " contains the object " +
-                        obj.getIdentifier() + " which is neither required nor optional.");
+                log.log(new ToolsLogRecord(Level.SEVERE, "Object " + object.getIdentifier() +  " contains the object " +
+                        obj.getIdentifier() + " which is neither required nor optional.", filename));
             }
             //Validate nested object
             boolean objValid = false;
             try {
                 ObjectValidator.isValid(dictionary, obj);
             } catch (DefinitionNotFoundException dnfe) {
-                log.error("line " + obj.getLineNumber() + ": " + dnfe.getMessage());
+                log.log(new ToolsLogRecord(Level.SEVERE, dnfe.getMessage(), filename, obj.getLineNumber()));
             }
             if (!objValid)
                 valid = false;
