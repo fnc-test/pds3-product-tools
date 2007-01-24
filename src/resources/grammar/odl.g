@@ -520,7 +520,7 @@ ELEMENT_IDENT
 
 UNITS
     options {testLiterals=true; paraphrase="units";}
-    : '<' UNITS_FACTOR (MULT_OP UNITS_FACTOR)* '>'
+    : '<' (WS)? LETTER (LETTER | DIGIT | SPECIALCHAR | '(' | ')' | '/' | WS)* '>'
     ;
  
 protected   
