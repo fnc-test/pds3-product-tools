@@ -21,6 +21,7 @@ import java.util.Iterator;
 public class Label implements LabelType {
     private volatile int labelType;
     private Map statements;
+    private String filename;
     
     /**
      * Constructs an object representation of a PDS label.
@@ -29,6 +30,7 @@ public class Label implements LabelType {
     public Label() {
         statements = new HashMap();
         labelType = UNDEFINED;
+        filename = null;
     }
 
     /**
@@ -221,5 +223,13 @@ public class Label implements LabelType {
      */
     public void setLabelType(int labelType) {
         this.labelType = labelType;
+    }
+    
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
+    
+    public String getFilename() {
+        return filename;
     }
 }
