@@ -18,8 +18,8 @@ package gov.nasa.pds.tools.label.validate;
 
 import java.util.Collection;
 import java.util.Iterator;
-
-import org.apache.log4j.Logger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import gov.nasa.pds.tools.dict.Dictionary;
 import gov.nasa.pds.tools.dict.ElementDefinition;
@@ -27,6 +27,7 @@ import gov.nasa.pds.tools.label.AttributeStatement;
 import gov.nasa.pds.tools.label.Sequence;
 import gov.nasa.pds.tools.label.Set;
 import gov.nasa.pds.tools.label.Value;
+import gov.nasa.pds.tools.logging.ToolsLogRecord;
 import gov.nasa.pds.tools.dict.type.InvalidLengthException;
 import gov.nasa.pds.tools.dict.type.NumericTypeChecker;
 import gov.nasa.pds.tools.dict.type.OutOfRangeException;
@@ -44,7 +45,7 @@ import gov.nasa.pds.tools.dict.DictionaryTokens;
  * 
  */
 public class ElementValidator implements DictionaryTokens {
-    private static Logger log = Logger.getLogger(new ElementValidator().getClass().getName());
+    private static Logger log = Logger.getLogger(ElementValidator.class.getName());
     
     public static boolean isValid(ElementDefinition definition, AttributeStatement attribute) 
             throws UnsupportedTypeException {
@@ -55,16 +56,16 @@ public class ElementValidator implements DictionaryTokens {
         if (attribute.hasNamespace()) {
             if (attribute.getNamespace().length() > NAMESPACE_LENGTH) {
                 valid = false;
-                log.error("line " + attribute.getLineNumber() + ": Namespace exceeds max length of " + 
-                    ELEMENT_IDENT_LENGTH + " characters.");
+                log.log(new ToolsLogRecord(Level.SEVERE, "Namespace exceeds max length of " + 
+                    ELEMENT_IDENT_LENGTH + " characters.", "FILE",  attribute.getLineNumber()));
             }
         }
         
         //Check length of identifier
         if (attribute.getElementIdentifier().length() > ELEMENT_IDENT_LENGTH) {
             valid = false;
-            log.error("line " + attribute.getLineNumber() + ": Identifier exceeds max length of " + 
-                    ELEMENT_IDENT_LENGTH + " characters.");
+            log.log(new ToolsLogRecord(Level.SEVERE, "Identifier exceeds max length of " + 
+                    ELEMENT_IDENT_LENGTH + " characters.", "FILE", attribute.getLineNumber()));
         }
 
         //Load the type checker
@@ -82,7 +83,8 @@ public class ElementValidator implements DictionaryTokens {
             throws UnsupportedTypeException {
         boolean valid = true;
         if (value == null) {
-            log.warn("line " + attribute.getLineNumber() + ": Found no value for " + attribute.getIdentifier());
+            log.log(new ToolsLogRecord(Level.WARNING, "Found no value for " + attribute.getIdentifier(), 
+                    "FILE", attribute.getLineNumber()));
         } else if (value instanceof Set || value instanceof Sequence) {
             boolean validValues = true;
             for (Iterator i = ((Collection) value).iterator(); i.hasNext();) {
@@ -100,11 +102,13 @@ public class ElementValidator implements DictionaryTokens {
                         valid = false;
                         //Only produce a warning if the standard value list is anything other than static
                         if (!VALUE_TYPE_STATIC.equals(definition.getValueType())) {
-                           log.warn("line " + attribute.getLineNumber() + ": " + value.toString() + 
-                                    " is not in the suggested list of valid values for " + attribute.getIdentifier());
+                           log.log(new ToolsLogRecord(Level.WARNING, value.toString() + 
+                                    " is not in the suggested list of valid values for " + attribute.getIdentifier(), 
+                                    "FILE", attribute.getLineNumber()));
                         } else {
-                           log.error("line " + attribute.getLineNumber() + ": " + value.toString() + 
-                                     " is not in the list of valid values for " + attribute.getIdentifier());
+                           log.log(new ToolsLogRecord(Level.SEVERE, value.toString() + 
+                                     " is not in the list of valid values for " + attribute.getIdentifier(),
+                                     "FILE", attribute.getLineNumber()));
                         }
                     }
                 }
@@ -115,7 +119,7 @@ public class ElementValidator implements DictionaryTokens {
                     castedValue = checker.cast(value.toString());
                 } catch (InvalidTypeException ite) {
                     valid = false;
-                    log.error("line " + attribute.getLineNumber() + ": " + ite.getMessage());
+                    log.log(new ToolsLogRecord(Level.SEVERE, ite.getMessage(), "FILE", attribute.getLineNumber()));
                 }
                 
                 //Check min length
@@ -123,7 +127,7 @@ public class ElementValidator implements DictionaryTokens {
                     checker.checkMinLength(value.toString(), definition.getMinLength());
                 } catch (InvalidLengthException ile) {
                     valid = false;
-                    log.error("line " + attribute.getLineNumber() + ": " + ile.getMessage());
+                    log.log(new ToolsLogRecord(Level.SEVERE, ile.getMessage(), "FILE", attribute.getLineNumber()));
                 }
                 
                 //Check max length
@@ -131,7 +135,7 @@ public class ElementValidator implements DictionaryTokens {
                     checker.checkMaxLength(value.toString(), definition.getMaxLength());
                 } catch (InvalidLengthException ile) {
                     valid = false;
-                    log.error("line " + attribute.getLineNumber() + ": " + ile.getMessage());
+                    log.log(new ToolsLogRecord(Level.SEVERE, ile.getMessage(), "FILE", attribute.getLineNumber()));
                 }
                 
                 //Check to see if this is a numeric type checker if so then do further checking
@@ -144,7 +148,7 @@ public class ElementValidator implements DictionaryTokens {
                             numericChecker.checkMinValue((Number) castedValue, definition.getMinimum());
                         } catch (OutOfRangeException oor) {
                             valid = false;
-                            log.error("line " + attribute.getLineNumber() + ": " + oor.getMessage());
+                            log.log(new ToolsLogRecord(Level.SEVERE, oor.getMessage(), "FILE", attribute.getLineNumber()));
                         }
                     }
                     
@@ -154,7 +158,7 @@ public class ElementValidator implements DictionaryTokens {
                             numericChecker.checkMaxValue((Number) castedValue, definition.getMaximum());
                         } catch (OutOfRangeException oor) {
                             valid = false;
-                            log.error("line " + attribute.getLineNumber() + ": " + oor.getMessage());
+                            log.log(new ToolsLogRecord(Level.SEVERE, oor.getMessage(), "FILE", attribute.getLineNumber()));
                         }
                     }
                     
