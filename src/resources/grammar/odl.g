@@ -17,7 +17,6 @@
 header {
 package gov.nasa.pds.tools.label.antlr;
 
-import org.apache.log4j.Logger;
 import gov.nasa.pds.tools.label.AttributeStatement;
 import gov.nasa.pds.tools.label.CommentStatement;
 import gov.nasa.pds.tools.label.DateTime;
@@ -36,6 +35,7 @@ import gov.nasa.pds.tools.label.StructurePointer;
 import gov.nasa.pds.tools.label.Symbol;
 import gov.nasa.pds.tools.label.TextString;
 import gov.nasa.pds.tools.label.Value;
+import gov.nasa.pds.tools.logging.ToolsLogRecord;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -43,6 +43,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TreeSet;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import java.text.ParseException;
 }
 
@@ -61,24 +63,24 @@ tokens {
 }
 
 {
-    private static Logger log = Logger.getLogger("gov.nasa.pds.tools.label.antlr.ODLParser"); 
+    private static Logger log = Logger.getLogger(ODLParser.class.getName()); 
     private static List includePaths = new ArrayList();
     private boolean followPointers = true;
     
     public void reportError(RecognitionException re) {
-        log.error(re.toString());
+        log.log(new ToolsLogRecord(Level.SEVERE, re.toString(), re.getFilename(), re.getLine()));
     }
     
     public void reportError(RecognitionException re, String s) {
-        log.error(re.toString());
+        log.log(new ToolsLogRecord(Level.SEVERE, re.toString(), re.getFilename(), re.getLine()));
     }
     
-    public void reportError(String s) {
-        log.error(s);
+    public void reportError(String message, String filename, int line) {
+        log.log(new ToolsLogRecord(Level.SEVERE, message, filename, line));
     }
     
-    public void reportWarning(String s) {
-        log.warn(s);
+    public void reportWarning(String message, String filename, int line) {
+        log.log(new ToolsLogRecord(Level.WARNING, message, filename, line));
     }
     
     public void setIncludePaths(List includePaths) {
@@ -129,8 +131,7 @@ label returns [Label label = new Label();]
         s=statement {if (s != null) {label.addStatement(s);}}
       | 
         (~ END) => t:.
-          {reportError("line " + t.getLine() + ":" + t.getColumn() + ": "
-                       + "illegal start of statement: '" + t.getText() + "'");}
+          {reportError("Illegal start of statement: '" + t.getText() + "'", "FILE", t.getLine());}
         (~ EOL)* EOL
       )* (END)?
     ;
@@ -196,8 +197,7 @@ object_statement returns [ObjectStatement result = null]
         s=statement {if (s != null) {result.addStatement(s);}}
       |
         (~ END_OBJECT) => t:.
-          {reportError("line " + t.getLine() + ":" + t.getColumn() + ": "
-                       + "illegal start of statement: '" + t.getText() + "'");}
+          {reportError("Illegal start of statement: '" + t.getText() + "'", "FILE", t.getLine());}
         (~ EOL)* EOL
       )*
       END_OBJECT (EQUALS id2:IDENTIFIER)?
@@ -227,8 +227,7 @@ group_statement returns [GroupStatement result = null]
         s=simple_statement {if (s != null) {result.addStatement(s);}}
       | 
         (~ END_GROUP) => t:.
-          {reportError("line " + t.getLine() + ":" + t.getColumn() + ": "
-                       + "illegal start of statement: '" + t.getText() + "'");}
+          {reportError("Illegal start of statement: '" + t.getText() + "'", "FILE", t.getLine());}
         (~ EOL)* EOL
       )*
       END_GROUP (EQUALS id2:IDENTIFIER)?
@@ -245,23 +244,23 @@ pointer_statement returns [PointerStatement result = null]
                result = PointerStatementFactory.newInstance(a.getLineNumber(), a.getIdentifier(), a.getValue());
             } catch (MalformedURLException mue) {
                result = null;
-               log.error("line " + a.getLineNumber() + ": " + mue.getMessage());
+               log.log(new ToolsLogRecord(Level.SEVERE, mue.getMessage(), "FILE", a.getLineNumber()));
             }
             if (followPointers && result != null && result instanceof StructurePointer) {
                StructurePointer sp = (StructurePointer) result;
                try {
                   sp.loadReferencedStatements(includePaths);
                } catch (gov.nasa.pds.tools.label.parser.ParseException pe) {
-                  log.error("line " + a.getLineNumber() + ": " + pe.getMessage());
+                  log.log(new ToolsLogRecord(Level.SEVERE, pe.getMessage(), "FILE", a.getLineNumber()));
                } catch (IOException ioe) {
-                  log.error("line " + a.getLineNumber() + ": " + ioe.getMessage());
+                  log.log(new ToolsLogRecord(Level.SEVERE, ioe.getMessage(), "FILE", a.getLineNumber()));
                } 
             } else if (followPointers && result != null && result instanceof ExternalPointer) {
                ExternalPointer ep = (ExternalPointer) result;
                try {
                   ep.resolveURL(includePaths);
                } catch (IOException ioe) {
-                  log.error("line " + a.getLineNumber() + ": " + ioe.getMessage());
+                  log.log(new ToolsLogRecord(Level.SEVERE, ioe.getMessage(), "FILE", a.getLineNumber()));
                }
             }
          }
@@ -335,19 +334,19 @@ date_time_value returns [DateTime result = null]
         {
            try {
               result = new DateTime(d.getText());
-           } catch (ParseException pe) {log.error("line " + d.getLine() + ": " + pe.getMessage());}
+           } catch (ParseException pe) {log.log(new ToolsLogRecord(Level.SEVERE, pe.getMessage(), "FILE", d.getLine()));}
         }
     | t:TIME
         {
            try {
               result = new DateTime(t.getText());
-           } catch (ParseException pe) {log.error("line " + t.getLine() + ": " + pe.getMessage());}
+           } catch (ParseException pe) {log.log(new ToolsLogRecord(Level.SEVERE, pe.getMessage(), "FILE", t.getLine()));}
         }
     | dt:DATETIME
         {
            try {
               result = new DateTime(dt.getText());
-           } catch (ParseException pe) {log.error("line " + dt.getLine() + ": " + pe.getMessage());}
+           } catch (ParseException pe) {log.log(new ToolsLogRecord(Level.SEVERE, pe.getMessage(), "FILE", dt.getLine()));}
         }
     ;
     
@@ -426,18 +425,22 @@ options {
 }
 
 {
-    private static Logger log = Logger.getLogger("gov.nasa.pds.tools.label.antlr.ODLLexer"); 
+    private static Logger log = Logger.getLogger(ODLLexer.class.getName());
     
     public void reportError(RecognitionException re) {
-        log.error(re.toString());
-    }
-
-    public void reportError(String s) {
-        log.error(s);
+        log.log(new ToolsLogRecord(Level.SEVERE, re.toString(), re.getFilename(), re.getLine()));
     }
     
-    public void reportWarning(String s) {
-        log.warn(s);
+    public void reportError(RecognitionException re, String s) {
+        log.log(new ToolsLogRecord(Level.SEVERE, re.toString(), re.getFilename(), re.getLine()));
+    }
+    
+    public void reportError(String message, String filename, int line) {
+        log.log(new ToolsLogRecord(Level.SEVERE, message, filename, line));
+    }
+    
+    public void reportWarning(String message, String filename, int line) {
+        log.log(new ToolsLogRecord(Level.WARNING, message, filename, line));
     }
 }
 
@@ -684,9 +687,8 @@ IGNORE
 	: c:.
 		{
 			int column = (getColumn() > 2) ? getColumn()-2 : 1;
-			reportError("line " + getLine() + ":" + column + ": "
-					    + "unexpected character: '" + $getText + "' "
-					    + "(value might need quotes)");
+			reportError("Unexpected character: '" + $getText + "' "
+					    + "(value might need quotes)", "FILE", getLine());
 			// Skip to the end of the current line.
 			while (LA(1)!='\n' && LA(1)!=EOF_CHAR) {
 			    match(LA(1));
