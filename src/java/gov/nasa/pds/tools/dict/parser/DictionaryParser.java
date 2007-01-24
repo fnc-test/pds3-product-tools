@@ -19,6 +19,7 @@ import gov.nasa.pds.tools.label.antlr.ODLLexer;
 import gov.nasa.pds.tools.label.antlr.ODLParser;
 import gov.nasa.pds.tools.label.antlr.ODLTokenTypes;
 import gov.nasa.pds.tools.label.parser.ParseException;
+import gov.nasa.pds.tools.logging.ToolsLogRecord;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,11 +29,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -41,7 +39,7 @@ import org.apache.log4j.PatternLayout;
  * 
  */
 public class DictionaryParser implements ODLTokenTypes, DictionaryTokens {
-    private static Logger log = Logger.getLogger(new DictionaryParser().getClass().getName());
+    private static Logger log = Logger.getLogger(DictionaryParser.class.getName());
     
     public static Dictionary parse(URL file) throws ParseException, IOException {
         Dictionary dictionary = new Dictionary();
@@ -49,7 +47,7 @@ public class DictionaryParser implements ODLTokenTypes, DictionaryTokens {
         ODLLexer lexer = new ODLLexer(input);
         ODLParser parser = new ODLParser(lexer);
         
-        log.info("Parsing dictionary " + file.toString());
+        log.log(new ToolsLogRecord(Level.INFO, "Parsing dictionary.", file.toString()));
         try {
             List labels = new ArrayList();
             //Attempt to parse a dictionary
@@ -108,11 +106,11 @@ public class DictionaryParser implements ODLTokenTypes, DictionaryTokens {
             }
             //TODO: Update to catch thrown exception not all exceptions
         } catch (Exception ex) {
-            log.error(ex.getMessage());
+            log.log(new ToolsLogRecord(Level.SEVERE, ex.getMessage()));
             throw new ParseException(ex.getMessage());
         }
         
-        log.info("Finshed parsing dictionary " + file.toString());
+        log.log(new ToolsLogRecord(Level.INFO, "Finshed parsing dictionary.", file.toString()));
 
         return dictionary;
     }
@@ -158,7 +156,6 @@ public class DictionaryParser implements ODLTokenTypes, DictionaryTokens {
     }
     
     public static void main(String [] args) throws Exception {
-        BasicConfigurator.configure(new ConsoleAppender(new PatternLayout("%-5p %m%n")));
         DictionaryParser.parse(new URL(args[0]));
     }
 }
