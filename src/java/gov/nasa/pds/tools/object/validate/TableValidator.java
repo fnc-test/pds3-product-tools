@@ -6,7 +6,8 @@
 
 package gov.nasa.pds.tools.object.validate;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+
 import gov.nasa.pds.tools.label.ObjectStatement;
 import gov.nasa.pds.tools.label.parser.InvalidDescriptionException;
 import gov.nasa.pds.tools.label.parser.InvalidObjectException;
@@ -19,7 +20,7 @@ import gov.nasa.pds.tools.object.io.DataObjectInputStream;
  * 
  */
 public class TableValidator implements DataObjectValidator {
-    private static Logger log = Logger.getLogger("gov.nasa.pds.tools.object.validate.TableValidator");
+    private static Logger log = Logger.getLogger(TableValidator.class.getName());
 
     /* (non-Javadoc)
      * @see gov.nasa.jpl.pds.tools.label.parser.DataObjectValidator#validate(byte[], gov.nasa.jpl.pds.tools.label.ObjectStatement)
