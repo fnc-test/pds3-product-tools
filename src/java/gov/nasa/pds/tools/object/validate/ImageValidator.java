@@ -16,7 +16,7 @@
 
 package gov.nasa.pds.tools.object.validate;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 import gov.nasa.pds.tools.label.ObjectStatement;
 import gov.nasa.pds.tools.label.parser.InvalidDescriptionException;
@@ -30,7 +30,7 @@ import gov.nasa.pds.tools.object.io.DataObjectInputStream;
  * 
  */
 public class ImageValidator implements DataObjectValidator {
-    private static Logger log = Logger.getLogger("gov.nasa.pds.tools.object.validate.ImageValidator");
+    private static Logger log = Logger.getLogger(ImageValidator.class.getName());
 
     /* (non-Javadoc)
      * @see gov.nasa.jpl.pds.tools.label.validate.DataObjectValidator#validate(gov.nasa.jpl.pds.tools.object.io.DataObjectInputStream, gov.nasa.jpl.pds.tools.label.ObjectStatement)
