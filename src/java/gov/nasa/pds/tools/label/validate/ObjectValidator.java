@@ -17,6 +17,7 @@
 package gov.nasa.pds.tools.label.validate;
 
 import gov.nasa.pds.tools.dict.Dictionary;
+import gov.nasa.pds.tools.dict.ElementDefinition;
 import gov.nasa.pds.tools.dict.ObjectDefinition;
 import gov.nasa.pds.tools.dict.type.UnsupportedTypeException;
 import gov.nasa.pds.tools.label.AttributeStatement;
@@ -55,10 +56,25 @@ public class ObjectValidator {
         //First check that required elements are captured in object
         for (Iterator i = definition.getRequiredElements().iterator(); i.hasNext();) {
             String required = (String) i.next();
+            //First check to see if attribute is found by its identifier
             if (!object.hasAttribute(required)) {
-                valid = false;
-                log.log(new ToolsLogRecord(Level.SEVERE, "Object " + object.getIdentifier() + 
-                        " does not contain required element " + required, filename));
+                boolean foundAlias = false;
+                //Next check to see if the attribute is present as an alias
+                //Lookup definition for required element
+                ElementDefinition elementDefinition = dictionary.getElementDefinition(required);
+                //Now loop through aliases to see if the element appears
+                for (Iterator a = elementDefinition.getAliases().iterator(); a.hasNext() && !foundAlias;) {
+                    //All element aliases take the form <object_identifier>.<element_identifier>
+                    String [] identifier = a.next().toString().split("\\.");
+                    if (identifier[0].equals(definition.getIdentifier()) && object.hasAttribute(identifier[1]))
+                        foundAlias = true;
+                }
+                //Didn't find anything time to log
+                if (!foundAlias) {
+                    valid = false;
+                    log.log(new ToolsLogRecord(Level.SEVERE, "Object " + object.getIdentifier() + 
+                            " does not contain required element " + required, filename));
+                }
             }
         }
         
@@ -67,16 +83,21 @@ public class ObjectValidator {
         Collections.sort(attributes);
         for (Iterator i = object.getAttributes().iterator(); i.hasNext();) {
             AttributeStatement attribute = (AttributeStatement) i.next();
-            //Check to make sure object is allowed within this definition
+            //Check to make sure element is allowed within this definition
             if (!definition.isElementPossible(attribute.getIdentifier())) {
-                valid = false;
-                log.log(new ToolsLogRecord(Level.SEVERE, "Object " + object.getIdentifier() +  " contains the element " +
-                        attribute.getIdentifier() + " which is neither required nor optional.", filename));
+                //Next check to see if the attribute is allowed as an alias
+                //Lookup definition for element by its alias
+                ElementDefinition elementDefinition = dictionary.getElementDefinition(attribute.getIdentifier());
+                if (elementDefinition == null || !definition.isElementPossible(elementDefinition.getIdentifier())) {
+                    valid = false;
+                    log.log(new ToolsLogRecord(Level.SEVERE, "Object " + object.getIdentifier() +  " contains the element " +
+                            attribute.getIdentifier() + " which is neither required nor optional.", filename));
+                }
             }
             //Validate attribute
             boolean elementValid = false;
             try {
-                elementValid = ElementValidator.isValid(dictionary, object.getIdentifier(), attribute);
+                elementValid = ElementValidator.isValid(dictionary, definition.getIdentifier(), attribute);
             } catch (UnsupportedTypeException ute) {
                 log.log(new ToolsLogRecord(Level.SEVERE, ute.getMessage(), filename, attribute.getLineNumber()));
             } catch (DefinitionNotFoundException dnfe) {
@@ -89,10 +110,24 @@ public class ObjectValidator {
         //Check to make sure that all required objects are present
         for (Iterator i = definition.getRequiredObjects().iterator(); i.hasNext();) {
             String required = (String) i.next();
+            //First see if object is present
             if (!object.hasObject(required)) {
-                valid = false;
-                log.log(new ToolsLogRecord(Level.SEVERE, "Object " + object.getIdentifier() + 
-                        " does not contain required object " + required, filename));
+                boolean foundAlias = false;
+                //Next check to see if the object is present as an alias
+                //Lookup definition for required object
+                ObjectDefinition objectDefinition = dictionary.getObjectDefinition(required);
+                //Now loop through aliases to see if the object appears
+                for (Iterator a = objectDefinition.getAliases().iterator(); a.hasNext() && !foundAlias;) {
+                    String alias = a.next().toString();
+                    if (object.hasObject(alias))
+                        foundAlias = true;
+                }
+                //Didn't find anything time to log
+                if (!foundAlias) {
+                    valid = false;
+                    log.log(new ToolsLogRecord(Level.SEVERE, "Object " + object.getIdentifier() + 
+                            " does not contain required object " + required, filename));
+                }
             }
         }
         
@@ -103,14 +138,19 @@ public class ObjectValidator {
             ObjectStatement obj = (ObjectStatement) i.next();
             //Check to make sure object is allowed within this definition
             if (!definition.isObjectPossible(obj.getIdentifier())) {
-                valid = false;
-                log.log(new ToolsLogRecord(Level.SEVERE, "Object " + object.getIdentifier() +  " contains the object " +
-                        obj.getIdentifier() + " which is neither required nor optional.", filename));
+                //Next check to see if the object is allowed as an alias
+                //Lookup definition object by its alias
+                ObjectDefinition objectDefinition = dictionary.getObjectDefinition(obj.getIdentifier());
+                if (objectDefinition == null || !definition.isObjectPossible(objectDefinition.getIdentifier())) {
+                    valid = false;
+                    log.log(new ToolsLogRecord(Level.SEVERE, "Object " + object.getIdentifier() +  " contains the element " +
+                            obj.getIdentifier() + " which is neither required nor optional.", filename));
+                }
             }
             //Validate nested object
             boolean objValid = false;
             try {
-                ObjectValidator.isValid(dictionary, obj);
+                ObjectValidator.isValid(dictionary, obj, filename);
             } catch (DefinitionNotFoundException dnfe) {
                 log.log(new ToolsLogRecord(Level.SEVERE, dnfe.getMessage(), filename, obj.getLineNumber()));
             }
