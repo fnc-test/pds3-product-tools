@@ -42,6 +42,10 @@ public class DictionaryParser implements ODLTokenTypes, DictionaryTokens {
     private static Logger log = Logger.getLogger(DictionaryParser.class.getName());
     
     public static Dictionary parse(URL file) throws ParseException, IOException {
+        return parse(file, false);
+    }
+    
+    public static Dictionary parse(URL file, boolean aliasing) throws ParseException, IOException {
         Dictionary dictionary = new Dictionary();
         InputStream input = file.openStream();
         ODLLexer lexer = new ODLLexer(input);
@@ -82,9 +86,10 @@ public class DictionaryParser implements ODLTokenTypes, DictionaryTokens {
                     for (Iterator s = ((Label) i.next()).getStatements().iterator(); s.hasNext();) {
                         Statement statement = (Statement) s.next();
                         if (statement instanceof ObjectStatement) {
-                            if (ALIAS_LIST.equals(statement.getIdentifier())) 
-                                aliases = generateAliases((ObjectStatement) statement);
-                            else if (UNIT_LIST.equals(statement.getIdentifier()))
+                            if (ALIAS_LIST.equals(statement.getIdentifier())) {
+                                if (aliasing)
+                                    aliases = generateAliases((ObjectStatement) statement);
+                            } else if (UNIT_LIST.equals(statement.getIdentifier()))
                                 units = generateUnits((ObjectStatement) statement);
                             else
                                 definitions.add(DefinitionFactory.createDefinition((ObjectStatement) statement));
@@ -93,11 +98,13 @@ public class DictionaryParser implements ODLTokenTypes, DictionaryTokens {
                 }
                 
                 dictionary.setUnits(units);
-                //Go through the definitions and set all aliases that were found
-                for (Iterator i = definitions.iterator(); i.hasNext();) {
-                    Definition d = (Definition) i.next();
-                    if (aliases.containsKey(d.getIdentifier())) {
-                        d.addAlias(aliases.get(d.getIdentifier()).toString());
+                if (aliasing) {
+                    //Go through the definitions and set all aliases that were found
+                    for (Iterator i = definitions.iterator(); i.hasNext();) {
+                        Definition d = (Definition) i.next();
+                        if (aliases.containsKey(d.getIdentifier())) {
+                            d.addAlias(aliases.get(d.getIdentifier()).toString());
+                        }
                     }
                 }
                 
