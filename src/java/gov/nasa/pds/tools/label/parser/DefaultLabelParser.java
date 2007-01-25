@@ -309,6 +309,7 @@ public class DefaultLabelParser implements LabelParser {
         URL dictionaryURL = null;
         URL includePathURL = null;
         Boolean pointers = null; 
+        Boolean aliasing = null;
         
         if (args.length%2 == 0) {
             for (int i=0; i<args.length; i+=2) {
@@ -320,6 +321,8 @@ public class DefaultLabelParser implements LabelParser {
                     includePathURL = new URL(args[i+1]);
                 else if (args[i].equals("--pointers") || args[i].equals("--p"))
                     pointers = Boolean.valueOf(args[i+1]);
+                else if (args[i].equals("--aliasing") || args[i].equals("--a"))
+                    aliasing = Boolean.valueOf(args[i+1]);
                 else {
                     System.out.println("Invalid flag " + args[i]);
                     System.exit(1);
@@ -337,7 +340,7 @@ public class DefaultLabelParser implements LabelParser {
         if (dictionaryURL == null)
             label = parser.parse(labelURL);
         else
-            label = parser.parse(labelURL, DictionaryParser.parse(dictionaryURL));
+            label = parser.parse(labelURL, DictionaryParser.parse(dictionaryURL, aliasing.booleanValue()));
         
         System.out.println("Label:");
         System.out.println(label.toString());
