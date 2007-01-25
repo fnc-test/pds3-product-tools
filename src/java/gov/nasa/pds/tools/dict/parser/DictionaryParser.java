@@ -78,7 +78,7 @@ public class DictionaryParser implements ODLTokenTypes, DictionaryTokens {
                 //Now process the objects in the rest of the file.
                 //These objects can be an alias list, units list, or
                 //definition (element, object, or group)
-                List definitions = new ArrayList();
+                Map definitions = new HashMap();
                 Map aliases = new HashMap();
                 Map units = new HashMap();
                 
@@ -91,25 +91,26 @@ public class DictionaryParser implements ODLTokenTypes, DictionaryTokens {
                                     aliases = generateAliases((ObjectStatement) statement);
                             } else if (UNIT_LIST.equals(statement.getIdentifier()))
                                 units = generateUnits((ObjectStatement) statement);
-                            else
-                                definitions.add(DefinitionFactory.createDefinition((ObjectStatement) statement));
+                            else {
+                                Definition definition = DefinitionFactory.createDefinition((ObjectStatement) statement);
+                                definitions.put(definition.getIdentifier(), definition);
+                            }
                         }
                     }
                 }
                 
                 dictionary.setUnits(units);
                 if (aliasing) {
-                    //Go through the definitions and set all aliases that were found
-                    for (Iterator i = definitions.iterator(); i.hasNext();) {
-                        Definition d = (Definition) i.next();
-                        if (aliases.containsKey(d.getIdentifier())) {
-                            d.addAlias(aliases.get(d.getIdentifier()).toString());
-                        }
+                    //Go through the aliases and add to appropriate deifnitions
+                    for (Iterator i = aliases.keySet().iterator(); i.hasNext();) {
+                        String alias = i.next().toString();
+                        Definition d = (Definition) definitions.get(aliases.get(alias));
+                        d.addAlias(alias);
                     }
                 }
                 
                 //Add all definitions to the dictionary
-                dictionary.addDefinitions(definitions);
+                dictionary.addDefinitions(definitions.values());
             }
             //TODO: Update to catch thrown exception not all exceptions
         } catch (Exception ex) {
@@ -134,7 +135,7 @@ public class DictionaryParser implements ODLTokenTypes, DictionaryTokens {
                 if (values.size() == 2) {
                     String alias = values.get(0).toString();
                     String identifier = values.get(1).toString();
-                    aliases.put(identifier, alias);
+                    aliases.put(alias, identifier);
                 }
             }
         }
@@ -149,7 +150,7 @@ public class DictionaryParser implements ODLTokenTypes, DictionaryTokens {
                     String alias = values.get(0).toString();
                     String objectContext = values.get(1).toString();
                     String identifier = values.get(2).toString();
-                    aliases.put(identifier, objectContext + "." + alias);
+                    aliases.put(objectContext + "." + alias, identifier);
                 }
             }
         }
