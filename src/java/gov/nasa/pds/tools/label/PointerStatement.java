@@ -23,19 +23,8 @@ public class PointerStatement extends Statement implements PointerType {
      * @param lineNumber at which the statement occurs
      * @param identifier of the statement
      */
-    protected PointerStatement(int lineNumber, String identifier) {
-        this(lineNumber, identifier, null);
-        pointerType = UNDEFINED;
-        for (int i = 0; i < INCLUDE_NAMES.length && pointerType == UNDEFINED; i++) {
-            if (identifier.endsWith(INCLUDE_NAMES[i]))
-                pointerType = INCLUDE;
-        }
-        for (int i = 0; i < DESCRIPTION_NAMES.length && pointerType == UNDEFINED; i++) {
-            if (identifier.endsWith(DESCRIPTION_NAMES[i]))
-                pointerType = DESCRIPTION;
-        }
-        if (pointerType == UNDEFINED)
-            pointerType = DATA_LOCATION;
+    protected PointerStatement(int pointerType, int lineNumber, String identifier) {
+        this(pointerType, lineNumber, identifier, null);
     }
     
     /**
@@ -44,9 +33,10 @@ public class PointerStatement extends Statement implements PointerType {
      * @param identifier of the statement
      * @param value of the assignment
      */
-    public PointerStatement(int lineNumber, String identifier, Value value) {
+    protected PointerStatement(int pointerType, int lineNumber, String identifier, Value value) {
         super(lineNumber, identifier);
         this.value = value; 
+        this.pointerType = pointerType;
         comment = null;  
     }
     
@@ -55,8 +45,8 @@ public class PointerStatement extends Statement implements PointerType {
      * @param identifier of the statement
      * @param value of the assignment
      */
-    public PointerStatement(String identifier, Value value) {
-        this(-1, identifier, value);
+    protected PointerStatement(String identifier, Value value) {
+        this(UNDEFINED, -1, identifier, value);
     }
     
     /**
