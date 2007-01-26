@@ -1,4 +1,4 @@
-package gov.nasa.pds.tools;
+package gov.nasa.pds.tools.config;
 
 /**
  * Contains the valid keys for a VTool configuration file

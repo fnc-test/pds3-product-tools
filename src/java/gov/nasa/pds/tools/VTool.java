@@ -6,6 +6,7 @@
 
 package gov.nasa.pds.tools;
 
+import gov.nasa.pds.tools.config.VToolConfigKeys;
 import gov.nasa.pds.tools.dict.Dictionary;
 import gov.nasa.pds.tools.dict.parser.DictionaryParser;
 import gov.nasa.pds.tools.file.FileList;
