@@ -99,16 +99,48 @@ public class ElementValidator implements DictionaryTokens {
                 //Check against valid values if there are any
                 if (definition.hasValidValues()) {
                     if (!definition.getValues().contains(value.toString())) {
-                        valid = false;
-                        //Only produce a warning if the standard value list is anything other than static
-                        if (!VALUE_TYPE_STATIC.equals(definition.getValueType())) {
-                           log.log(new ToolsLogRecord(Level.WARNING, value.toString() + 
-                                    " is not in the suggested list of valid values for " + attribute.getIdentifier(), 
-                                    "FILE", attribute.getLineNumber()));
+                        String filteredValue = value.toString();
+                        boolean foundValue = false;
+                        boolean manipulated = false;
+                        //Perform whitespace stripping
+                        //First replace all hyphen line.separator with ""
+                        filteredValue = filteredValue.replaceAll("-" + System.getProperty("line.separator"), "");
+                        //Next replace all line.separator with " "
+                        filteredValue = filteredValue.replaceAll(System.getProperty("line.separator"), " ");
+                        if (definition.getValues().contains(filteredValue)) {
+                            foundValue = true;
                         } else {
-                           log.log(new ToolsLogRecord(Level.SEVERE, value.toString() + 
-                                     " is not in the list of valid values for " + attribute.getIdentifier(),
-                                     "FILE", attribute.getLineNumber()));
+                            //Continue with whitespace striping
+                            //Replace all '_' with ' '
+                            filteredValue = filteredValue.replaceAll("_", " ");
+                            //Replace multiple spaces with a single space
+                            filteredValue = filteredValue.replaceAll("\\s+", " ");
+                            //Uppercase everything
+                            filteredValue = filteredValue.toUpperCase();
+                            //Trim whitespace
+                            filteredValue = filteredValue.trim();
+                            manipulated = true;
+                            if (definition.getValues().contains(filteredValue))
+                                foundValue = true;
+                        }
+                       
+                        if (!foundValue) {
+                            //Could not find valid value.
+                            valid = false;
+                            //Only produce a warning if the standard value list is anything other than static
+                            if (!VALUE_TYPE_STATIC.equals(definition.getValueType())) {
+                               log.log(new ToolsLogRecord(Level.WARNING, value.toString() + 
+                                        " is not in the suggested list of valid values for " + attribute.getIdentifier(), 
+                                        "FILE", attribute.getLineNumber()));
+                            } else {
+                               log.log(new ToolsLogRecord(Level.SEVERE, value.toString() + 
+                                         " is not in the list of valid values for " + attribute.getIdentifier(),
+                                         "FILE", attribute.getLineNumber()));
+                            }
+                        } else if (manipulated) {
+                            //Value had to be manipulated to make a match
+                            log.log(new ToolsLogRecord(Level.WARNING, "Manipulated value for " + attribute.getIdentifier() +
+                                       " to find valid value.", "FILE", attribute.getLineNumber()));
                         }
                     }
                 }
