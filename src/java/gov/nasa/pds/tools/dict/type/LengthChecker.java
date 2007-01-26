@@ -16,6 +16,8 @@
 
 package gov.nasa.pds.tools.dict.type;
 
+import gov.nasa.pds.tools.util.Utility;
+
 /**
  * @author pramirez
  * @version $Revision$
@@ -28,14 +30,15 @@ public class LengthChecker {
      */
     public void checkMinLength(String value, int min) throws InvalidLengthException {
         if (value.length() < min)
-            throw new InvalidLengthException(value + " is less than the acceptable minimum length of " + min);
+            throw new InvalidLengthException(Utility.trimString(value, 40) + " is less than the acceptable minimum length of " + min);
     }
     
     /* (non-Javadoc)
      * @see gov.nasa.jpl.pds.tools.label.validate.TypeChecker#checkMaxLength(java.lang.String, int)
      */
     public void checkMaxLength(String value, int max) throws InvalidLengthException {
-        if (value.length() > max)
-            throw new InvalidLengthException(value + " exceeds the maximum length of " + max);
+        if (value.length() > max && Utility.stripWhitespace(value).length() > max) {
+            throw new InvalidLengthException(Utility.trimString(value, 40) + " exceeds the maximum length of " + max);
+        }
     }
 }
