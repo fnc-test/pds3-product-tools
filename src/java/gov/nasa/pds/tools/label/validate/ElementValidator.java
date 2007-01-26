@@ -28,6 +28,7 @@ import gov.nasa.pds.tools.label.Sequence;
 import gov.nasa.pds.tools.label.Set;
 import gov.nasa.pds.tools.label.Value;
 import gov.nasa.pds.tools.logging.ToolsLogRecord;
+import gov.nasa.pds.tools.util.Utility;
 import gov.nasa.pds.tools.dict.type.InvalidLengthException;
 import gov.nasa.pds.tools.dict.type.NumericTypeChecker;
 import gov.nasa.pds.tools.dict.type.OutOfRangeException;
@@ -99,26 +100,17 @@ public class ElementValidator implements DictionaryTokens {
                 //Check against valid values if there are any
                 if (definition.hasValidValues()) {
                     if (!definition.getValues().contains(value.toString())) {
-                        String filteredValue = value.toString();
                         boolean foundValue = false;
                         boolean manipulated = false;
+                        
                         //Perform whitespace stripping
-                        //First replace all hyphen line.separator with ""
-                        filteredValue = filteredValue.replaceAll("-" + System.getProperty("line.separator"), "");
-                        //Next replace all line.separator with " "
-                        filteredValue = filteredValue.replaceAll(System.getProperty("line.separator"), " ");
+                        String filteredValue = Utility.stripNewLines(value.toString());
+                        
                         if (definition.getValues().contains(filteredValue)) {
                             foundValue = true;
                         } else {
                             //Continue with whitespace striping
-                            //Replace all '_' with ' '
-                            filteredValue = filteredValue.replaceAll("_", " ");
-                            //Replace multiple spaces with a single space
-                            filteredValue = filteredValue.replaceAll("\\s+", " ");
-                            //Uppercase everything
-                            filteredValue = filteredValue.toUpperCase();
-                            //Trim whitespace
-                            filteredValue = filteredValue.trim();
+                            filteredValue = Utility.filterString(filteredValue);
                             manipulated = true;
                             if (definition.getValues().contains(filteredValue))
                                 foundValue = true;
@@ -139,7 +131,7 @@ public class ElementValidator implements DictionaryTokens {
                             }
                         } else if (manipulated) {
                             //Value had to be manipulated to make a match
-                            log.log(new ToolsLogRecord(Level.WARNING, "Manipulated value for " + attribute.getIdentifier() +
+                            log.log(new ToolsLogRecord(Level.INFO, "Manipulated value for " + attribute.getIdentifier() +
                                        " to find valid value.", "FILE", attribute.getLineNumber()));
                         }
                     }
