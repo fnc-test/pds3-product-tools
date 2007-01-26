@@ -31,7 +31,7 @@ import gov.nasa.pds.tools.label.Scalar;
 import gov.nasa.pds.tools.label.Sequence;
 import gov.nasa.pds.tools.label.Set;
 import gov.nasa.pds.tools.label.Statement;
-import gov.nasa.pds.tools.label.StructurePointer;
+import gov.nasa.pds.tools.label.IncludePointer;
 import gov.nasa.pds.tools.label.Symbol;
 import gov.nasa.pds.tools.label.TextString;
 import gov.nasa.pds.tools.label.Value;
@@ -246,10 +246,10 @@ pointer_statement returns [PointerStatement result = null]
                result = null;
                log.log(new ToolsLogRecord(Level.SEVERE, mue.getMessage(), "FILE", a.getLineNumber()));
             }
-            if (followPointers && result != null && result instanceof StructurePointer) {
-               StructurePointer sp = (StructurePointer) result;
+            if (followPointers && result != null && result instanceof IncludePointer) {
+               IncludePointer ip = (IncludePointer) result;
                try {
-                  sp.loadReferencedStatements(includePaths);
+                  ip.loadReferencedStatements(includePaths);
                } catch (gov.nasa.pds.tools.label.parser.ParseException pe) {
                   log.log(new ToolsLogRecord(Level.SEVERE, pe.getMessage(), "FILE", a.getLineNumber()));
                } catch (IOException ioe) {
