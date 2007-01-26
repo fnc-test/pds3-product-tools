@@ -143,9 +143,9 @@ public class ObjectStatement extends Statement {
             stmnts = new ArrayList();
             statements.put(statement.getIdentifier(), stmnts);
         }
-        if (statement instanceof StructurePointer) {
+        if (statement instanceof IncludePointer) {
             stmnts.add(statement);
-            for (Iterator i = ((StructurePointer) statement).getStatements().iterator(); i.hasNext();)
+            for (Iterator i = ((IncludePointer) statement).getStatements().iterator(); i.hasNext();)
                 addStatement((Statement) i.next());
         }
         else 

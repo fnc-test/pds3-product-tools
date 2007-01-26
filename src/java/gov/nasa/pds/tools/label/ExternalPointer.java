@@ -25,8 +25,8 @@ public class ExternalPointer extends PointerStatement {
      * @param identifier of statement
      * @param value of the assignment
      */
-    public ExternalPointer(int lineNumber, String identifier, Value value) {
-        super(lineNumber, identifier, value);
+    public ExternalPointer(int pointerType, int lineNumber, String identifier, Value value) {
+        super(pointerType, lineNumber, identifier, value);
     }
     
     /**
