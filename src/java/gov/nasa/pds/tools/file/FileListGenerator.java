@@ -131,11 +131,11 @@ public class FileListGenerator {
 	/**
 	 * Allows one to pass in a file or URL. If it is a file being passed in, then it will be 
 	 * converted into a URL. Directories will be visited if the target is a directory. The
-	 * resulting list will then need to be retrieved from the getFiles and getSubDirs methods.
+	 * resulting list is stored in a FileList object.
 	 * 
-	 * @param getSubDirs 'true' to recursively search down subdirectories for files to add onto the list.
-	 *  'false' to just search at the level of the supplied directory.
-	 * @return A list of files based on the supplied list of targets
+	 * @param getSubDirs 'true' to look for sub-directories, 'false' to just search for files when
+	 *                   given a directory as input
+	 * @return A FileList object that contains the files and sub-directories
 	 * @throws BadLocationException 
 	 * @throws IOException 
 	 * @throws HttpException 
@@ -163,14 +163,14 @@ public class FileListGenerator {
 	/**
 	 * Visits the file being supplied. If a file is being passed in, then it will be
 	 * converted to URL. If a directory is being passed in, then it will look for
-	 * files and sub-directories (if it is turned ON). In either case, the getFiles
-	 * and getSubDirs methods can be called to retrieve the list of files and sub-directories
-	 * found. The lists will be a set of URLs. 
+	 * files and sub-directories (if it is turned ON). In either case, a FileList
+	 * object is returned, where the files and sub-directories will be URLs. 
 	 * 
 	 * @param file A file or a directory. If it is a directory, then the visitDir method
 	 *      will be called and the list of files can be retrieved via the getFiles and
 	 *      getSubDirs methods.
 	 * @param getSubDirs Tells the method whether to look for sub-directories
+	 * @return a FileList object
 	 * @throws IOException
 	 */
 	private FileList visitFileTarget(File file, boolean getSubDirs) throws IOException {
@@ -184,16 +184,15 @@ public class FileListGenerator {
 	}
 	
 	/**
-	 * Gets a list of files under a given directory. The files and directories can be retrieved
-	 * by calling the getFiles and getSubDirs methods, respectively. The resulting list will be
+	 * Gets a list of files under a given directory. The resulting list will be
 	 * in URLs.
 	 * 
-	 * Filters must be set via setFileFilters prior to calling this method in order to filter out
-	 * un-wanted files and directories.
+	 * Filters must be set via setFileFilters prior to calling this method in order to look
+	 * for specific files and filter out un-wanted files and sub-drirectories.
 	 * 
 	 * @param dir the name of the directory
 	 * @param getSubDirs 'true' to get a list of sub-directories
-	 * @return true if files were found and were successfully converted to URLs. Otherwise, an IOException will be thrown.
+	 * @return A FileList object containing the files and sub-directories found
 	 * @throws IOException 
 	 */
 	public FileList visitDir(File dir, boolean getSubDirs) throws IOException {
@@ -214,11 +213,11 @@ public class FileListGenerator {
 	}
 		
 	/**
-	 * Crawls a directory URL, looking for files and subdirectories. The file and directory URLS
-	 * can be retrieved by calling the getFiles and getSubDirs methods, respectively.
+	 * Crawls a directory URL, looking for files and sub-directories. Files found in a URL
+	 * are assumed to end with a ".xxx".
 	 * 
-	 * Filters must be set via the setFileFilters method prior to crawling in order to filter out
-	 * un-wanted files and directories.
+	 * Filters must be set via the setFileFilters method prior to crawling in order to look for
+	 * files and filter out un-wanted files and directories.
 	 * 
 	 * @param url The URL to crawl
 	 * @param getSubDirURLs Set to 'true' to retrieve sub-directory URLs, 'false' otherwise
@@ -251,7 +250,7 @@ public class FileListGenerator {
 	 * @throws HttpException 
 	 * @throws BadLocationException 
 	 */
-	private Set getHyperLinks(URL url) throws HttpException, IOException, BadLocationException {
+	public Set getHyperLinks(URL url) throws HttpException, IOException, BadLocationException {
 		HttpClient client = new HttpClient();
 		GetMethod httpGet = new GetMethod(url.toString());
 		HTMLDocument doc = null;

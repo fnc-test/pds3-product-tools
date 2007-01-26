@@ -34,16 +34,18 @@ import org.apache.commons.cli.UnrecognizedOptionException;
 import org.apache.commons.configuration.AbstractConfiguration;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.ConfigurationUtils;
 import org.apache.commons.configuration.ConversionException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.httpclient.HttpException;
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.FileAppender;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
+
+import java.util.logging.ConsoleHandler;
+import java.util.logging.FileHandler;
+import java.util.logging.Handler;
+import java.util.logging.Logger;
+import java.util.logging.Level;
+
+import gov.nasa.pds.tools.logging.ToolsLogRecord;
+import gov.nasa.pds.tools.logging.ToolsLogFormatter;
 
 /**
  * @author mcayanan
@@ -52,21 +54,21 @@ import org.apache.log4j.PatternLayout;
  * Class to replace LVTool functionality
  * 
  */
-public class VTool {
+public class VTool implements VToolConfigKeys {
 	
 	final private String version_id = "0.3.0"; 
-	private static Logger log = Logger.getLogger(new VTool().getClass());
+	private static Logger log = Logger.getLogger(VTool.class.getName());
 	
 	private Options options;
 	private CommandLineParser parser;
 	private CommandLine cmd;
 	
 	//TODO: Flags to be implemented: partial (-f,--force), data object(-O,--no-obj),
-	//progress(-p,--show-progress), alias(-a,--alias), xml output(-x,--xml), 
+	//progress(-p,--show-progress), alias(-a,--alias),  
 	//reporting style (-s,--output-style) 
 	
 	private boolean alias;
-	private File config;
+	private URL config;
 	private boolean dataObj;
 	private List dictionaries;
 	private List noFiles;
@@ -77,10 +79,10 @@ public class VTool {
 	private List regexp;
 	private boolean recursive;
 	private List targets;
-	private File output;
+	private File logFile;
 	private String outputFmt;
 	private short verbose;
-	private boolean xml;
+	private String severity;
 	
 	private String currDir;
 	
@@ -100,9 +102,8 @@ public class VTool {
 		progress = false;
 		regexp = null;
 		recursive = true;
-		output = null;
 		outputFmt = "full";
-		xml = false;
+		logFile = null;
 		currDir = null;
 		options = new Options();
 		parser = new GnuParser();
@@ -139,26 +140,25 @@ public class VTool {
 	 * Display VTool usage and help information
 	 *
 	 */
-	private void showHelp() {
+	public void showHelp() {
 		HelpFormatter formatter = new HelpFormatter();
 		formatter.printHelp(37, "VTool", null, options, null);
 		System.exit(0);
 	}
 	
 	/**
-	 * Builds the set of options that are available for VTool
+	 * Builds the set of configurable parameters for VTool
 	 */
-	private void buildOpts() {
+	public void buildOpts() {
 		options.addOption("a", "alias", false, "Enable aliasing");
-		options.addOption("F", "no-follow", false, "Do not follow ^STRUCTURE pointers in a label");
+		options.addOption("F", "no-follow", false, "Do not look for files referenced by pointer statements in a label");
 		options.addOption("h", "help", false, "Display usage");
 		options.addOption("O", "no-obj", false, "Do not perform data object validation");
-//		options.addOption("f", "force", false, "Force VTool to validate a label fragment");
+		options.addOption("f", "force", false, "Force VTool to validate a label fragment");
 		options.addOption("l", "local", false, "Validate files only in the input directory rather than " + 
 				                               "recursively traversing down the subdirectories.");
 		options.addOption("p", "progress", false, "Enable progress reporting");
 		options.addOption("V", "version", false, "Display VTool version");
-		options.addOption("x", "xml", false, "Output the report in XML format");
 		
 		
 		// These are options that require an argument
@@ -182,8 +182,8 @@ public class VTool {
 		options.addOption(OptionBuilder.create("d"));
 		
 		// Option to specify a file containing a list of file extensions to ignore
-		OptionBuilder.withLongOpt("ignore-files");
-		OptionBuilder.withDescription("Specify a list of files and/or file patterns to ignore from validation. Each pattern " + 
+		OptionBuilder.withLongOpt("ignore-file");
+		OptionBuilder.withDescription("Specify file patterns to ignore from validation. Each pattern " + 
 				                      "must be surrounded by quotes. (i.e. -X \"*TAB\" \"*IMG\")");
 		OptionBuilder.hasArgs();
 		OptionBuilder.withArgName("patterns");
@@ -200,7 +200,7 @@ public class VTool {
 		
 		// Option to specify a pattern to match against the input directory to be validated
 		OptionBuilder.withLongOpt("regexp");
-		OptionBuilder.withDescription("Specify files or file patterns to look for when validating a directory. " +
+		OptionBuilder.withDescription("Specify file patterns to look for when validating a directory. " +
 				                      "Each Pattern must be surrounded by quotes. (i.e. -e \"*.LBL\" \"*FMT\")");
 		OptionBuilder.hasArgs();
 		OptionBuilder.withArgName("patterns");
@@ -209,32 +209,32 @@ public class VTool {
 		
 		// Option to specify a path to the Pointer files		
 		OptionBuilder.withLongOpt("include");
-		OptionBuilder.withDescription("Specify the path(s) to search for files referenced by pointers in a label. Separate each with a space. " + 
-															"Default is to always look at the same directory as the label");
+		OptionBuilder.withDescription("Specify the paths to look for files referenced by pointers in a label. Separate each with a space. " + 
+                                       "Default is to always look at the same directory as the label");
 		OptionBuilder.hasArgs();
 		OptionBuilder.withArgName("paths");
 		OptionBuilder.withType(String.class);
 		options.addOption(OptionBuilder.create("I"));
 
 		//Option to specify a file containing a list of directories to ignore
-		OptionBuilder.withLongOpt("ignore-dirs");
-		OptionBuilder.withDescription("Specify a list of directories and/or directory patterns to ignore. " + 
-				                      "Each listing must be surrounded by quotes. (i.e. -D \"EXTRAS\" \"LABEL\")");
+		OptionBuilder.withLongOpt("ignore-dir");
+		OptionBuilder.withDescription("Specify directory patterns to ignore. Each listing must be surrounded by quotes. " +
+				                       "(i.e. -D \"EXTRAS\" \"LABEL\")");
 		OptionBuilder.hasArgs();
 		OptionBuilder.withArgName("patterns");
 		OptionBuilder.withType(String.class);
 		options.addOption(OptionBuilder.create("D"));
 		
 		// Option to specify the report file name
-		OptionBuilder.withLongOpt("output");
+		OptionBuilder.withLongOpt("log-file");
 		OptionBuilder.withDescription("Specify the file name for the report. Default is to print to the terminal");
 		OptionBuilder.hasArg();
 		OptionBuilder.withArgName("file");
 		OptionBuilder.withType(String.class);
-		options.addOption(OptionBuilder.create("o"));
+		options.addOption(OptionBuilder.create("L"));
 
 		// Option to specify how detail the reporting should be
-		OptionBuilder.withLongOpt("output-style");
+		OptionBuilder.withLongOpt("report-style");
 		OptionBuilder.withDescription("Specify the level of detail for the reporting. " +
 										"Valid values are 'full' for full details, 'min' for minimal detail " +
 										"and 'sum' for a summary. Default is set to 'full'");
@@ -245,7 +245,7 @@ public class VTool {
 		
 		// Option to specify the severity level and above
 		OptionBuilder.withLongOpt("verbose");
-		OptionBuilder.withDescription("Specify the message severity level and above to include in the reporting: " + 
+		OptionBuilder.withDescription("Specify the severity level and above to include in the reporting: " + 
 				                             "(0=Debug, 1=Info, 2=Warning, 3=Error or Fatal). " + 
 				                             "Default is Info and above (level 1)");
 		OptionBuilder.hasArg();
@@ -256,10 +256,10 @@ public class VTool {
 	}
 	
 	/**
-	 * Parses the command line
+	 * Parses the VTool command-line
 	 * @param argv arguments given on the command-line
 	 */
-	private void parseLine(String[] argv) {
+	public void parseLine(String[] argv) {
 		try {
 			cmd = parser.parse(options, argv);
 		}
@@ -270,13 +270,11 @@ public class VTool {
 	}
 	
 	/** 
-	 * Queries the command line of VTool 
+	 * Queries the VTool command-line 
 	 *
 	 */
-	private void queryCmdLine() {
-
-		try {
-			
+	public void queryCmdLine() {
+		try {			
 			// Check for unrecognized arguments on the command-line
 			for(Iterator i = cmd.getArgList().iterator(); i.hasNext();)
 				throw new UnrecognizedOptionException( "Unrecognized option/argument: " + i.next().toString());
@@ -289,12 +287,16 @@ public class VTool {
 				showVersion();
 			// Check if a configuration file was specified
 			if(cmd.hasOption("c")) {
-				config = new File(cmd.getOptionValue("c"));
+				String file = cmd.getOptionValue("c");
+				if(isURL(file))
+					config = new URL(file);
+				else
+					config = new File(file).toURL();
 				readConfigFile(config);
 			}
 			// Check for the 'o' flag to specify a file where the reporting will be written to
-			if(cmd.hasOption("o"))
-				setOutput(new File(cmd.getOptionValue("o")));
+			if(cmd.hasOption("L"))
+				setLogFile(new File(cmd.getOptionValue("L")));
 			// verbose flag
 			if(cmd.hasOption("v")) {
 				try {
@@ -336,9 +338,6 @@ public class VTool {
 			// Check to see if regular expressions were set
 			if(cmd.hasOption("e"))
 				setRegexp(Arrays.asList(cmd.getOptionValues("e")));
-			// Check to see if the report will be in xml format
-			if(cmd.hasOption("x"))
-				setXml(true);
 			// Check to get file that contains file patterns to ignore
 			if(cmd.hasOption("X"))
 				setNoFiles(Arrays.asList(cmd.getOptionValues("X")));
@@ -486,16 +485,16 @@ public class VTool {
 	 * Get the output file name
 	 * @return an output file name for the validation report
 	 */
-	public File getOutput() {
-		return output;
+	public File getLogFile() {
+		return logFile;
 	}
 	
 	/**
 	 * Set the output file name where the validation report will go. Default is the standard out.
 	 * @param o a report file name
 	 */
-	public void setOutput(File o) {
-		output = o;
+	public void setLogFile(File f) {
+		logFile = f;
 	}
 	
 	/**
@@ -597,30 +596,14 @@ public class VTool {
 			throw new IllegalArgumentException("Invalid value entered for 'v' flag." + 
 														" Valid values can only be 0, 1, 2, or 3");
 		}
-		if(verbose == 0) 
-			Logger.getRootLogger().setLevel(Level.DEBUG);
+		if(verbose == 0)
+			severity = new String("Debug");
 		else if(verbose == 1)
-			Logger.getRootLogger().setLevel(Level.INFO);
+			severity = new String("Info");
 		else if(verbose == 2)
-			Logger.getRootLogger().setLevel(Level.WARN);
+			severity = new String("Warning");
 		else if(verbose == 3)
-			Logger.getRootLogger().setLevel(Level.ERROR);
-	}
-	
-	/**
-	 * Get the XML flag
-	 * @return 'true' if format will be printed in xml, 'false' otherwise
-	 */
-	public boolean getXml() {
-		return xml;
-	}
-	
-	/**
-	 * Set the xml flag to determine whether to format the report in xml
-	 * @param x 'true' to set report format in xml, 'false' otherwise
-	 */
-	public void setXml(boolean x) {
-		xml = x;
+			severity = new String("Error");
 	}
 	
 	/**
@@ -630,11 +613,8 @@ public class VTool {
 	 * 
 	 * @param file a file containing keyword/value statements
 	 */
-	public void readConfigFile(File file) {
+	public void readConfigFile(URL file) {
 		Configuration config = null;
-		Logger configlog = Logger.getLogger(ConfigurationUtils.class);
-		configlog.addAppender(new ConsoleAppender(new PatternLayout("%m%n")));
-		configlog.setAdditivity(false);
 		AbstractConfiguration.setDelimiter(' ');
 		
 		try {	
@@ -647,92 +627,112 @@ public class VTool {
 		
 		try {
 			if(config.isEmpty())
-				throw new Exception("Configuration file is empty or does not exist: " + file.toString());
-			if(config.containsKey("vtool.output"))
-				setOutput(new File(config.getString("vtool.output")));
-			if(config.containsKey("vtool.verbose"))
-				setVerbose(config.getShort("vtool.verbose"));
-			if(config.containsKey("vtool.dataobjects"))
-				setDataObj(config.getBoolean("vtool.dataobjects"));
-			if(config.containsKey("vtool.dict"))
-				setDictionaries(config.getList("vtool.dict"));
-			if(config.containsKey("vtool.follow"))
-				setFollowPtrs(config.getBoolean("vtool.follow"));
-			if(config.containsKey("vtool.ignorefiles")) {
-				setNoFiles(config.getList("vtool.ignorefiles"));
+				throw new Exception("Configuration file is empty: " + file.toString());
+			if(config.containsKey(ALIAS))
+				setAlias(config.getBoolean(ALIAS));
+			if(config.containsKey(LOG))
+				setLogFile(new File(config.getString(LOG)));
+			if(config.containsKey(VERBOSE))
+				setVerbose(config.getShort(VERBOSE));
+			if(config.containsKey(DATAOBJ))
+				setDataObj(config.getBoolean(DATAOBJ));
+			if(config.containsKey(DICT))
+				setDictionaries(config.getList(DICT));
+			if(config.containsKey(FOLLOW))
+				setFollowPtrs(config.getBoolean(FOLLOW));
+			if(config.containsKey(IGNOREFILE)) {
+				setNoFiles(config.getList(IGNOREFILE));
 				// Removes quotes surrounding each pattern being specified
 				for(int i=0; i < noFiles.size(); i++)
 					noFiles.set(i, noFiles.get(i).toString().replace('"',' ').trim());
 			}
-			if(config.containsKey("vtool.ignoredirs")) {
-				setNoDirs(config.getList("vtool.ignoredirs"));
+			if(config.containsKey(IGNOREDIR)) {
+				setNoDirs(config.getList(IGNOREDIR));
 				// Removes quotes surrounding each pattern being specified
 				for(int i=0; i < noDirs.size(); i++)
 					noDirs.set(i, noDirs.get(i).toString().replace('"',' ').trim());
 			}
-			if(config.containsKey("vtool.includepaths"))
-				setIncludePaths(config.getList("vtool.includepaths"));
-			if(config.containsKey("vtool.outputstyle"))
-				setOutputFmt(config.getString("vtool.outputstyle"));
-			if(config.containsKey("vtool.patterns")) {
-				setRegexp(config.getList("vtool.patterns"));
+			if(config.containsKey(INCLUDES))
+				setIncludePaths(config.getList(INCLUDES));
+			if(config.containsKey(STYLE))
+				setOutputFmt(config.getString(STYLE));
+			if(config.containsKey(REGEXP)) {
+				setRegexp(config.getList(REGEXP));
 				// Removes quotes surrounding each pattern being specified
 				for(int i=0; i < regexp.size(); i++)
 					regexp.set(i, regexp.get(i).toString().replace('"',' ').trim());
 			}
-			if(config.containsKey("vtool.recursive"))
-				setRecursive(config.getBoolean("vtool.recursive"));
-			if(config.containsKey("vtool.target"))
-				setTargets(config.getList("vtool.target"));
-			if(config.containsKey("vtool.xmloutput"))
-				setXml(config.getBoolean("vtool.xmloutput"));
+			if(config.containsKey(RECURSE))
+				setRecursive(config.getBoolean(RECURSE));
+			if(config.containsKey(TARGET))
+				setTargets(config.getList(TARGET));
 		} catch(ConversionException ce) {
 			System.err.println(ce.getMessage());
 			System.exit(1);
 		} catch(Exception ex) {
-			ex.printStackTrace();
+			System.err.println(ex.getMessage());
 			System.exit(1);
 		}
 	}
 	
 	/**
-	 * Prints DEBUG messages of the various VTool command-line options
+	 * Logs the various VTool command-line options into the logger
 	 *
 	 */
-	private void printDebug() {
-		log.debug("Target(s): " + targets);
-		log.debug("Dictionary file(s): " + dictionaries);
-		log.debug("Output file set to: " + output);
-		log.debug("Message severity level set to: " + verbose);
-		log.debug("Files to look for: " + regexp);
-		log.debug("Excluded directories: " + noDirs);
-		log.debug("Excluded files: " + noFiles);
-		log.debug("Alias flag set to: " + alias);
-		log.debug("Data object flag set to: " + dataObj);
-		log.debug("Follow pointers flag set to: " + followPtrs);
-		log.debug("Included path(s):" + includePaths);
-		log.debug("Ouptut format set to: " + outputFmt);
-		log.debug("Recursive flag set to: " + recursive);
-		log.debug("Xml flag set to: " + xml);
+	public void logParams() {
+		//TODO: Print out report file, report style, data object validation, standalone fragment validation
+		log.log(new ToolsLogRecord(Level.CONFIG, "Target(s)                 " + targets));
+		if(dictionaries != null)
+			log.log(new ToolsLogRecord(Level.CONFIG, "Dictionary file(s)        " + dictionaries));
+		log.log(new ToolsLogRecord(Level.CONFIG, "Aliasing                  " + alias));
+		log.log(new ToolsLogRecord(Level.CONFIG, "Directory Recursion       " + recursive));
+		log.log(new ToolsLogRecord(Level.CONFIG, "Follow Fragment Pointers  " + followPtrs));
+		if(logFile != null)
+			log.log(new ToolsLogRecord(Level.CONFIG, "Log File                  " + logFile));
+		log.log(new ToolsLogRecord(Level.CONFIG, "Severity Level            " + severity));
+		if(includePaths != null)
+			log.log(new ToolsLogRecord(Level.CONFIG, "Include Path(s)           " + includePaths));
+		if(config != null)
+			log.log(new ToolsLogRecord(Level.CONFIG, "Configuration File        " + config));
+		if(regexp != null)
+			log.log(new ToolsLogRecord(Level.CONFIG, "Files Patterns            " + regexp));
+		if(noDirs != null)
+			log.log(new ToolsLogRecord(Level.CONFIG, "Excluded Directories      " + noDirs));
+		if(noFiles != null)
+			log.log(new ToolsLogRecord(Level.CONFIG, "Excluded Files            " + noFiles));
 	}
 	
 	/**
-	 * Configures the logger from the log4j class
+	 * Configures the java logging
 	 *
 	 */
-	private void setupLogger() {
-
-		if(output != null) {
+	public void setupLogger() {
+		Logger logger = Logger.getLogger("");
+		logger.setLevel(Level.ALL);
+		Handler []handler = logger.getHandlers();
+		for(int i=0; i < logger.getHandlers().length; i++) 
+			logger.removeHandler(handler[i]);
+		
+		if(logFile == null) {
+			ConsoleHandler console = new ConsoleHandler();
+			console.setFormatter(new ToolsLogFormatter());
+			logger.addHandler(console);
+			console.setLevel(Level.ALL);
+		}
+		else {
 			try {
-				BasicConfigurator.configure(new FileAppender(new PatternLayout("%-5p %m%n"), output.toString(), false));
-			}
-			catch (IOException ioe) {
-				System.out.println( ioe.getMessage() );
+				FileHandler file = new FileHandler(logFile.toString(), false);
+				file.setLevel(Level.ALL);
+				file.setFormatter(new ToolsLogFormatter());
+				logger.addHandler(file);
+			} catch (SecurityException s) {
+				System.err.println(s.getMessage());
+				System.exit(1);
+			} catch (IOException iEx) {
+				System.err.println(iEx.getMessage());
 				System.exit(1);
 			}
 		}
-		else
-			BasicConfigurator.configure(new ConsoleAppender(new PatternLayout("%-5p %m%n")));
 	}
 	
 	/**
@@ -741,8 +741,7 @@ public class VTool {
 	 * @param s
 	 * @return
 	 */
-	private boolean isURL(String s) {
-		
+	private boolean isURL(String s) {	
 		try {
 			URL url = new URL(s);
 		}
@@ -753,11 +752,11 @@ public class VTool {
 	}
 	
 	/**
-	 * Read and parse the dictionary file(s) passed into the VTool command line
+	 * Parse the dictionary files.
 	 * 
-	 * @param dictionary a List object containing the data dictionary files
+	 * @param dictionary a list of dictionary files
 	 * @return a Dictionary object that includes all the dictionary information from
-	 *  all the dictionary files passed in. Returns null if dictionary has a null value.
+	 *  all the dictionary files passed in.
 	 */
 	public Dictionary readDictionaries(List dictionary) {
 		Dictionary dict = null;
@@ -768,16 +767,15 @@ public class VTool {
 		
 		try {
 			if(isURL(dd))
-				dict = DictionaryParser.parse(new URL(dd));
+				dict = DictionaryParser.parse(new URL(dd), alias);
 			else
-				dict = DictionaryParser.parse(new File(dd).toURL());
-
+				dict = DictionaryParser.parse(new File(dd).toURL(), alias);
 			while( i.hasNext() ) {
 				dd = new String(i.next().toString());
 				if(isURL(dd))
-					dict.merge( DictionaryParser.parse(new URL(dd)), true );
+					dict.merge( DictionaryParser.parse(new URL(dd), alias), true );
 				else
-					dict.merge( DictionaryParser.parse(new File(dd).toURL()), true );
+					dict.merge( DictionaryParser.parse(new File(dd).toURL(), alias), true );
 			}
 		} catch( MalformedURLException uex) {
 			System.err.println("Dictionary file does not exist: " + dd);
@@ -786,10 +784,9 @@ public class VTool {
 			System.err.println(iex.getMessage());
 			System.exit(1);
 		} catch( gov.nasa.pds.tools.label.parser.ParseException pe) {
-			System.err.println("Problems parsing Dictionary file");
 			System.exit(1);
 		}
-
+		
 		return dict;
 		
 	}
@@ -822,7 +819,7 @@ public class VTool {
 	}
 	
 	/**
-	 * Validate labels found within the specified targets. If the target
+	 * Validate labels found in the specified targets. If the target
 	 * is a directory, this method will validate all labels found within
 	 * the directory and its sub-directories. If recursion is turned OFF,
 	 * then sub-directories will not be looked into.
@@ -884,7 +881,7 @@ public class VTool {
 	/**
 	 * Validate a label file. Can perform both syntactic and semantic validation.
 	 * 
-	 * @param files a list of label files to be validated
+	 * @param files The URL of the file to be validated
 	 * @param dict a Dictionary object needed for semantic validation. If null,
 	 *             only syntactic validation will be performed.
 	 */
@@ -896,14 +893,13 @@ public class VTool {
 		
 ///		if(progress)
 //			showProgress(file);
-		System.out.println("\nValidating: " + file);
-		
 		try {
 			if(dict == null)
 				parser.parse(file);
 			else
 				parser.parse(file, dict);
 		} catch (gov.nasa.pds.tools.label.parser.ParseException pEx) {
+			log.log(new ToolsLogRecord(Level.FINE, "SKIP", file.toString()));
 			return;
 		}catch (IOException iEx) {
 			System.err.println(iEx.getMessage());
@@ -913,9 +909,9 @@ public class VTool {
 	
 	/**
 	 * When progress reporting is enabled, this method will print out the current directory
-	 * being validated.
+	 * being validated. (not yet fully implemented)
 	 * 
-	 * @param file
+	 * @param file The URL of the file being validated
 	 */
 	public void showProgress(URL file) {
 		URL dir = null;
@@ -936,25 +932,46 @@ public class VTool {
 		}
 	}
 	
+	/**
+	 * main class
+	 * 
+	 * Calls the following methods (in this order):
+	 * 
+	 * buildOpts
+	 * parseLine
+	 * queryCmdLine
+	 * setupLogger
+	 * logParams
+	 * readDictionaries
+	 * validateLabels
+	 * 
+	 * The setupLogger method is called after parsing and querying the command-line
+	 * since we can accept a configuration file as input and by rule, anything on
+	 * the command-line overrides parameters set in the configuration file. So, by
+	 * design, VTool would not know where to direct its logs until after it queries
+	 * the command-line.  
+	 * 
+	 * @param argv
+	 */
 	public static void main(String[] argv) {
 		VTool vtool = new VTool();
 		Dictionary mainDictionary = null;
-		vtool.setVerbose(Short.parseShort("1")); // Set severity level to INFO and above
-		
+
 		if(argv.length == 0) {
 			System.out.println("\nType 'VTool -h' for usage");
 			return;
 		}
+		vtool.setVerbose(Short.parseShort("2"));
 		// Define options
 		vtool.buildOpts();
 		// Parse the command line
 		vtool.parseLine(argv);
 		// Query the command line
 		vtool.queryCmdLine();
-		// Setup the logger
+		//Setup the logger
 		vtool.setupLogger();
-		// Print debug messages if severity level is set to '0'
-		vtool.printDebug();	
+		// Log parameter settings
+		vtool.logParams();	
 		
 		if(vtool.dictionaries != null) {
 			mainDictionary = vtool.readDictionaries(vtool.dictionaries);
