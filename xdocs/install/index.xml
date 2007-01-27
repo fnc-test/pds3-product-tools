@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+Copyright 2007, by the California Institute of 
+Technology. ALL RIGHTS RESERVED. United States Government 
+Sponsorship acknowledged. Any commercial use must be negotiated with 
+the Office of Technology Transfer at the California Institute of 
+Technology.
+
+This software may be subject to U.S. export control laws. By 
+accepting this software, the user agrees to comply with all 
+applicable U.S. export laws and regulations. User has the 
+responsibility to obtain export licenses, or other export authority 
+as may be required before exporting such information to foreign 
+countries or providing access to foreign persons.
+
+$Id$
+-->
+
+<document>
+  <properties>
+    <title>Installation</title>
+    <author email="Michael.Cayanan@jpl.nasa.gov">Michael Cayanan</author>
+    <author email="Sean.Hardman@jpl.nasa.gov">Sean Hardman</author>
+  </properties>
+
+  <body>
+    <section name="Installing the Tools">
+      <p>This section describes how to install the tools contained in the <i>product-tools</i> package. The following topics can be found in this section:
+      </p>
+
+      <ul>
+        <li><a href="#System Requirements">System Requirements</a></li>
+        <li><a href="#Unpacking the Tools Package">Unpacking the Tools Package</a></li>
+      </ul>
+
+      <subsection name="System Requirements">
+        <p>The tools contained in the <i>product-tools</i> package were developed using Java and will run on any platform with a supported Java Runtime Environment (JRE). The tools were specifically developed under Sun Java version 1.4, so the tool will execute correctly under versions 1.4 or 1.5.
+        </p>
+
+        <p>Since the tools are developed using Sun's Java, this is the preferred Java environment for operation. The Sun Java package can be obtained from the <a href="http://java.sun.com/" target="_blank"> Sun Java</a> web site. Other Java environments are relatively compatible with Sun's Java. Testing has been performed with GNU's Java environment. The result is that release 4.1.1 at a minimum is required for nominal operations.
+        </p>
+      </subsection>
+
+      <subsection name="Unpacking the Tools Package">
+        <p>Download the <i>product-tools</i> package from the Engineering Node web site as specified in the Release Description Document (RDD). The binary distribution is available in identical zip or tar/gzip packages. Unpack the selected file with one of the following commands (where X.X.X is the current version):
+        </p>
+
+        <source>
+[node: ~] unzip product-tools-X.X.X.zip
+or
+[node: ~] tar -xzvf product-tools-X.X.X.tar.gz
+        </source>
+
+        <p><b>Note:</b> Depending on the platform, the native version of <i>tar</i> may produce an error when attempting to unpack the distribution file because many of the file paths are greater than 100 characters. If available, the GNU version of tar will resolve this problem. If that is not available or cannot be installed, the zipped package will work just fine in a UNIX environment.
+        </p>
+
+        <p>The above commands result in the creation of the <i>product-tools-X.X.X</i> directory with the following directory structure:
+        </p>
+
+        <ul>
+          <li><b>LICENSE.txt</b>
+          </li>
+          <li><b>doc/</b>
+            <p>This document directory contains a local web site with the Product Tools Guide, javadoc, unit test results and other configuration management related information. Just point your favorite browser to the <i>index.html</i> file in this directory.
+            </p>
+          </li>
+          <li><b>lib/</b>
+            <p>This directory contains the support jar files for the tool including: antlr-2.7.6.jar, commons-cli-1.0.jar, commons-io-1.2.jar and log4j-1.2.13.jar. The directory also includes the jar file (product-tools-X.X.X.jar) containing the Validation Tool software.
+            </p>
+          </li>
+        </ul>
+      </subsection>  
+    </section>
+  </body>
+</document>

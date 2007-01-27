@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- 
-Copyright 2006, by the California Institute of 
+Copyright 2006-2007, by the California Institute of 
 Technology. ALL RIGHTS RESERVED. United States Government 
 Sponsorship acknowledged. Any commercial use must be negotiated with 
 the Office of Technology Transfer at the California Institute of 
@@ -17,7 +17,27 @@ countries or providing access to foreign persons.
 $Id$
 -->
 
-<project default="jar" xmlns:ant="jelly:ant" xmlns:deploy="deploy">
+<project default="jar" xmlns:ant="jelly:ant" xmlns:j="jelly:core" xmlns:deploy="deploy" xmlns:velocity="jelly:org.apache.commons.jelly.tags.velocity.VelocityTagLibrary">
+
+  <!-- Process the navigation file template. -->
+  <preGoal name="site">
+    <attainGoal name="site-template"/>
+  </preGoal>
+
+  <goal name="site-template">
+    <fileScanner var="templates">
+      <fileset dir="${basedir}/templates">
+        <include name="*.xml"/>
+      </fileset>
+    </fileScanner>
+
+    <j:forEach var="template" items="${templates.iterator()}">
+      <j:set var="templateName" value="${template.name}"/>
+      <echo>Processing template ${templateName} ...</echo> 
+      <velocity:merge name="${basedir}/xdocs/${templateName}" basedir="${basedir}/templates" template="${templateName}"/>
+    </j:forEach>
+  </goal>
+
   <!--
     Include the dependencies in the binary distribution
     and put all jar files in the lib directory.
@@ -27,6 +47,16 @@ $Id$
     <deploy:copy-deps todir="${maven.dist.bin.assembly.dir}/lib"/>
     <ant:move todir="${maven.dist.bin.assembly.dir}/lib"
               file="${maven.dist.bin.assembly.dir}/${maven.final.name}.jar"/>
+  </postGoal>
+
+  <!-- Generate a PDF of the online documentation. -->
+  <postGoal name="site">
+    <attainGoal name="pdf"/>
+  </postGoal>
+
+  <!-- Clean up the navigation file that was generated from the template. -->
+  <postGoal name='clean:clean'>
+    <delete file='${maven.docs.src}/navigation.xml' failonerror='false'/>
   </postGoal>
 </project>
 

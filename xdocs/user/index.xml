@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-Copyright 2006, by the California Institute of 
+Copyright 2006-2007, by the California Institute of 
 Technology. ALL RIGHTS RESERVED. United States Government 
 Sponsorship acknowledged. Any commercial use must be negotiated with 
 the Office of Technology Transfer at the California Institute of 
@@ -19,14 +19,14 @@ $Id: index.xml 1157 2006-06-16 19:50:08Z shardman $
 
 <document>
   <properties>
-    <title>User Guide</title>
+    <title>Use and Operation</title>
     <author email="Michael.Cayanan@jpl.nasa.gov">Michael Cayanan</author>
     <author email="Sean.Hardman@jpl.nasa.gov">Sean Hardman</author>
   </properties>
 
   <body>
-    <section name="User Guide">
-      <p>This document describes how to use the Validation Tool (VTool) in order to perform automated validation of data products. The following sections can be found in this document:
+    <section name="Using the Validation Tool">
+      <p>This section describes how to use the Validation Tool (VTool) in order to perform automated validation of data products. The following topics can be found in this section:
       </p>
 
       <ul>
@@ -39,7 +39,7 @@ $Id: index.xml 1157 2006-06-16 19:50:08Z shardman $
         <li><a href="#Common Errors">Common Errors</a></li>
       </ul>
 
-      <p>Note: The command-line examples in this document have been broken into multiple lines for readability. The commands should be reassembled into a single line prior to execution.
+      <p>Note: The command-line examples in this section have been broken into multiple lines for readability. The commands should be reassembled into a single line prior to execution.
       </p>
 
       <subsection name="Overview">

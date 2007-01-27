@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-Copyright 2006, by the California Institute of 
+Copyright 2006-2007, by the California Institute of 
 Technology. ALL RIGHTS RESERVED. United States Government 
 Sponsorship acknowledged. Any commercial use must be negotiated with 
 the Office of Technology Transfer at the California Institute of 
@@ -19,14 +19,17 @@ $Id$
 
 <document>
   <properties>
-    <title>Developer Guide</title>
+    <title>Development</title>
     <author email="Paul.Ramirez@jpl.nasa.gov">Paul Ramirez</author>
     <author email="Sean.Hardman@jpl.nasa.gov">Sean Hardman</author>
   </properties>
 
   <body>
-    <section name="Developer Guide">
-       <p>TBD
+    <section name="Developing Tools">
+       <p>This section describes how a user can utilize the underlying Application Program Interface (API) of the <i>product-tools</i> package to develop their own tool.
+       </p>
+
+       <p>Much more to come.
        </p>
     </section>
   </body>

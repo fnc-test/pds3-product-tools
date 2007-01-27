@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-Copyright 2006, by the California Institute of 
+Copyright 2006-2007, by the California Institute of 
 Technology. ALL RIGHTS RESERVED. United States Government 
 Sponsorship acknowledged. Any commercial use must be negotiated with 
 the Office of Technology Transfer at the California Institute of 
@@ -23,7 +23,11 @@ $Id$
     <author email="Sean.Hardman@jpl.nasa.gov">Sean Hardman</author>
   </properties>
   <body>
-    <release version="???" date="in SVN" description="Release in progress.">
+    <release version="0.4.0" date="in SVN" description="Binary release for the beta test phase.">
+      <action dev="shardman" type="add">
+        Added documentation for Installation and Develoment along with the capability to generate a PDF of the newly named Product Tools Guide.
+      </action>
+
       <action dev="shardman" type="update">
         Added a <i>Common Errors</i> section to the User Guide as well as clarifying some aspects of setting the <i>CLASSPATH</i> environment variable in the <i>Setup</i> section.
       </action>
