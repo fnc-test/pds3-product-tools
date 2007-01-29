@@ -9,6 +9,7 @@ package gov.nasa.pds.tools.dict;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -185,6 +186,12 @@ public class Dictionary {
     public void addDefinition(Definition definition, boolean overwrite) {
         if (overwrite || (!overwrite && !definitions.containsKey(definition.getIdentifier()))) {
             definitions.put(definition.getIdentifier(), definition);
+            if (definition instanceof ElementDefinition) {
+                ElementDefinition elementDefinition = (ElementDefinition) definition;
+                if (elementDefinition.getUnitId() != null && units.get(elementDefinition.getUnitId()) != null) {
+                    elementDefinition.setUnitList((List) units.get(elementDefinition.getUnitId()));
+                }
+            }
             for (Iterator i = definition.getAliases().iterator(); i.hasNext();) {
                 String alias = (String) i.next();
                 definitions.put(alias, definition);
@@ -287,16 +294,25 @@ public class Dictionary {
     
     /**
      * Retrieves the map of definitions
-     * @return the map of definitions.
+     * @return map of definitions.
      */
     protected Map getDefinitions() {
         return definitions;
     }
     
+    /**
+     * Retrieves map of valid units. All units have been upper cased for leniency
+     * @return map of UNIT_ID to list of valid units
+     */
     public Map getUnits() {
         return units;
     }
     
+    /**
+     * Sets the valid units for use when performing validation against this dictionary
+     * @param units mapped set of units of the form UNIT_ID to units list
+     *              (A) -> ('A', 'AMPERE')
+     */
     public void setUnits(Map units) {
         this.units = units;
     }

@@ -18,6 +18,7 @@ package gov.nasa.pds.tools.dict;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * @author pramirez
@@ -26,7 +27,8 @@ import java.util.Collection;
  */
 public class ElementDefinition extends Definition {
     private String dataType;
-    private String units;
+    private String unitId;
+    private List unitList;
     private String valueType;
     private int minLength;
     private int maxLength;
@@ -37,7 +39,8 @@ public class ElementDefinition extends Definition {
     public ElementDefinition(String identifier) {
         super(identifier);
         dataType = null;
-        units = null;
+        unitList = new ArrayList();
+        unitId = null;
         valueType = null;
         minLength = 0;
         maxLength = Integer.MAX_VALUE;
@@ -117,17 +120,21 @@ public class ElementDefinition extends Definition {
     }
     
     /**
-     * @return Returns the units.
+     * @return Returns the unit id that can be looked up in a dictionary.
      */
-    public String getUnits() {
-        return units;
+    public String getUnitId() {
+        return unitId;
     }
     
     /**
-     * @param units The units to set.
+     * @param unitId
      */
-    public void setUnits(String units) {
-        this.units = units;
+    public void setUnitId(String unitId) {
+        this.unitId = unitId;
+    }
+    
+    public void setUnitList(List unitList) {
+        this.unitList = unitList;
     }
 
     /**
@@ -175,5 +182,9 @@ public class ElementDefinition extends Definition {
             return true;
         return false;
     }
-
+    
+    public boolean isUnitAllowed(String unit) {
+        return unitList.contains(unit);
+    }
+ 
 }

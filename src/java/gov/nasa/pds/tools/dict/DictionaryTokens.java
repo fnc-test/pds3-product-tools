@@ -47,6 +47,7 @@ public interface DictionaryTokens {
     public static final String OPTIONAL_ELEMENTS = "OPTIONAL_ELEMENT_SET";
     public static final String OBJECT_ALIASES = "OBJECT_ALIAS_SEQUENCE";
     public static final String ELEMENT_ALIASES = "ELEMENT_ALIAS_SEQUENCE";
+    public static final String UNIT_SEQUENCE = "UNIT_SEQUENCE";
     public static final String ALIAS_LIST = "ALIAS_LIST";
     public static final String UNIT_LIST = "UNIT_LIST";
     public static final String VALUE_TYPE_SUGGESTED = "SUGGESTED";
