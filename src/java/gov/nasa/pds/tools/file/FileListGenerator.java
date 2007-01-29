@@ -9,6 +9,7 @@ package gov.nasa.pds.tools.file;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
@@ -25,9 +26,6 @@ import javax.swing.text.html.HTML;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.NotFileFilter;
@@ -138,9 +136,8 @@ public class FileListGenerator {
 	 * @return A FileList object that contains the files and sub-directories
 	 * @throws BadLocationException 
 	 * @throws IOException 
-	 * @throws HttpException 
 	 */
-	public FileList visitTarget(String target, boolean getSubDirs) throws HttpException, IOException, BadLocationException {
+	public FileList visitTarget(String target, boolean getSubDirs) throws IOException, BadLocationException {
 		File file = null;
 		FileList fileList = new FileList();
 		
@@ -222,11 +219,10 @@ public class FileListGenerator {
 	 * @param url The URL to crawl
 	 * @param getSubDirURLs Set to 'true' to retrieve sub-directory URLs, 'false' otherwise
 	 * @return A FileList object containing the files and sub-directories that were found.
-	 * @throws HttpException
 	 * @throws IOException
 	 * @throws BadLocationException
 	 */
-	public FileList crawl(URL url, boolean getSubDirURLs) throws HttpException, IOException, BadLocationException {
+	public FileList crawl(URL url, boolean getSubDirURLs) throws IOException, BadLocationException {
 		Set links = new LinkedHashSet();
 		FileList fileList = new FileList();
 		
@@ -247,24 +243,22 @@ public class FileListGenerator {
 	 * @return A Set of hyperlinks
 	 * 
 	 * @throws IOException
-	 * @throws HttpException 
 	 * @throws BadLocationException 
 	 */
-	public Set getHyperLinks(URL url) throws HttpException, IOException, BadLocationException {
-		HttpClient client = new HttpClient();
-		GetMethod httpGet = new GetMethod(url.toString());
+	public Set getHyperLinks(URL url) throws IOException, BadLocationException {
+		InputStreamReader stream = null;
 		HTMLDocument doc = null;
 		EditorKit kit = null;
 		Set links = new LinkedHashSet();
 		
 		try {
-			client.executeMethod(httpGet);
+			stream = new InputStreamReader(url.openStream());
 			kit = new HTMLEditorKit();
 			doc = (HTMLDocument) kit.createDefaultDocument();
-			kit.read(httpGet.getResponseBodyAsStream(), doc, 0);
+			kit.read(stream, doc, 0);
 		}
 		finally {
-			httpGet.releaseConnection();
+			stream.close();
 		}
 
 		for(HTMLDocument.Iterator i = doc.getIterator(HTML.Tag.A); i.isValid(); i.next()) {

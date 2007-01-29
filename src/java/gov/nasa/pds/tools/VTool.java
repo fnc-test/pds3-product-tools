@@ -37,7 +37,6 @@ import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.ConversionException;
 import org.apache.commons.configuration.PropertiesConfiguration;
-import org.apache.commons.httpclient.HttpException;
 
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
@@ -897,9 +896,6 @@ public class VTool implements VToolConfigKeys {
 		
 		try {
 			list = fileGen.visitTarget(target, getSubDirs);
-		} catch (HttpException hEx) {
-			System.err.println(hEx.getMessage());
-			System.exit(1);
 		} catch (MalformedURLException uEx) {
 			System.err.println(uEx.getMessage());
 			System.exit(1);
