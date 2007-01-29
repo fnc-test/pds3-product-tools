@@ -70,7 +70,11 @@ public class Numeric extends Scalar {
      * @param units of the numeric
      */
     public void setUnits(String units) {
-        this.units = units;
+        //Remove angle brackets if found
+        if (units.startsWith("<") && units.endsWith(">"))
+           this.units = units.substring(1, units.length()-1).trim();
+        else
+            this.units = units.trim();
     }
     
     /**
