@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 import gov.nasa.pds.tools.dict.Dictionary;
 import gov.nasa.pds.tools.dict.ElementDefinition;
 import gov.nasa.pds.tools.label.AttributeStatement;
+import gov.nasa.pds.tools.label.Numeric;
 import gov.nasa.pds.tools.label.Sequence;
 import gov.nasa.pds.tools.label.Set;
 import gov.nasa.pds.tools.label.Value;
@@ -186,8 +187,19 @@ public class ElementValidator implements DictionaryTokens {
                         }
                     }
                     
-                    //Check units if found
-                    //FIXME: Support units
+                    //Check units if found and definition required.
+                    //Look at definition to see if we should check units
+                    if (value instanceof Numeric && !skipValue(definition.getUnitId())) {
+                        Numeric number = (Numeric) value;
+                        if ("NONE".equals(definition.getUnitId()) && number.getUnits() != null) {
+                            log.log(new ToolsLogRecord(Level.WARNING, "Units specified for " + attribute.getElementIdentifier() +
+                                    " when none should be present. Found " + number.getUnits(), "FILE", attribute.getLineNumber()));
+                        } else if (number.getUnits() != null && !definition.isUnitAllowed(number.getUnits().toUpperCase())) {
+                            log.log(new ToolsLogRecord(Level.SEVERE, "Units do not match those specified for " +  
+                                    attribute.getElementIdentifier() +" by dictionary. Found " + number.getUnits(),
+                                    "FILE", attribute.getLineNumber()));
+                        }
+                    }
                 }
             }
         }
