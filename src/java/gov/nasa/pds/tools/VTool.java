@@ -152,7 +152,7 @@ public class VTool implements VToolConfigKeys {
 	 */
 	public void buildOpts() {
 		options.addOption("a", "alias", false, "Enable aliasing");
-		options.addOption("F", "no-follow", false, "Do not look for files referenced by pointer statements in a label");
+		options.addOption("F", "no-follow", false, "Do not follow or check for the existence of files referenced by pointer statements in a label");
 		options.addOption("h", "help", false, "Display usage");
 		options.addOption("O", "no-obj", false, "Do not perform data object validation");
 		options.addOption("f", "force", false, "Force VTool to validate a label fragment");
@@ -659,44 +659,46 @@ public class VTool implements VToolConfigKeys {
 				throw new Exception("Configuration file is empty: " + file.toString());
 			if(config.containsKey(ALIAS))
 				setAlias(config.getBoolean(ALIAS));
-			if(config.containsKey(LOG))
-				setLogFile(new File(config.getString(LOG)));
-			if(config.containsKey(REPORT))
-				setRptFile(new File(config.getString(REPORT)));
-			if(config.containsKey(VERBOSE))
-				setVerbose(config.getShort(VERBOSE));
 			if(config.containsKey(DATAOBJ))
 				setDataObj(config.getBoolean(DATAOBJ));
 			if(config.containsKey(DICT))
 				setDictionaries(config.getList(DICT));
 			if(config.containsKey(FOLLOW))
 				setFollowPtrs(config.getBoolean(FOLLOW));
-			if(config.containsKey(IGNOREFILE)) {
-				setNoFiles(config.getList(IGNOREFILE));
-				// Removes quotes surrounding each pattern being specified
-				for(int i=0; i < noFiles.size(); i++)
-					noFiles.set(i, noFiles.get(i).toString().replace('"',' ').trim());
-			}
 			if(config.containsKey(IGNOREDIR)) {
 				setNoDirs(config.getList(IGNOREDIR));
 				// Removes quotes surrounding each pattern being specified
 				for(int i=0; i < noDirs.size(); i++)
 					noDirs.set(i, noDirs.get(i).toString().replace('"',' ').trim());
 			}
+			if(config.containsKey(IGNOREFILE)) {
+				setNoFiles(config.getList(IGNOREFILE));
+				// Removes quotes surrounding each pattern being specified
+				for(int i=0; i < noFiles.size(); i++)
+					noFiles.set(i, noFiles.get(i).toString().replace('"',' ').trim());
+			}
 			if(config.containsKey(INCLUDES))
 				setIncludePaths(config.getList(INCLUDES));
-			if(config.containsKey(STYLE))
-				setRptStyle(config.getString(STYLE));
+			if(config.containsKey(LOG))
+				setLogFile(new File(config.getString(LOG)));
+			if(config.containsKey(PROGRESS))
+				setProgress(config.getBoolean(PROGRESS));
+			if(config.containsKey(RECURSE))
+				setRecursive(config.getBoolean(RECURSE));
 			if(config.containsKey(REGEXP)) {
 				setRegexp(config.getList(REGEXP));
 				// Removes quotes surrounding each pattern being specified
 				for(int i=0; i < regexp.size(); i++)
 					regexp.set(i, regexp.get(i).toString().replace('"',' ').trim());
 			}
-			if(config.containsKey(RECURSE))
-				setRecursive(config.getBoolean(RECURSE));
+			if(config.containsKey(REPORT))
+				setRptFile(new File(config.getString(REPORT)));
+			if(config.containsKey(STYLE))
+				setRptStyle(config.getString(STYLE));
 			if(config.containsKey(TARGET))
 				setTargets(config.getList(TARGET));
+			if(config.containsKey(VERBOSE))
+				setVerbose(config.getShort(VERBOSE));
 		} catch(ConversionException ce) {
 			System.err.println(ce.getMessage());
 			System.exit(1);

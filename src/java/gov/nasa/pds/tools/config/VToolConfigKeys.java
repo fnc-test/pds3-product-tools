@@ -12,6 +12,7 @@ package gov.nasa.pds.tools.config;
  *      vtool.ignorefile<br>
  *      vtool.includepaths<br>
  *      vtool.logfile<br>
+ *      vtool.progress<br>
  *      vtool.recursive<br>
  *      vtool.regexp<br>
  *      vtool.report<br>
@@ -31,6 +32,7 @@ public interface VToolConfigKeys {
 	public final String IGNOREFILE = "vtool.ignorefile";
 	public final String INCLUDES = "vtool.includepaths";
 	public final String LOG = "vtool.logfile";
+	public final String PROGRESS = "vtool.progress";
 	public final String RECURSE = "vtool.recursive";
 	public final String REGEXP = "vtool.regexp";
 	public final String REPORT = "vtool.report";
