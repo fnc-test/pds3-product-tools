@@ -199,6 +199,7 @@ c:\product-tools-X.X.X\bin\product-tools-X.X.X-app.jar \
           <tr><td>-l,--log-file &lt;file&gt;</td><td>Specify the file name for the machine-readable log. Default is to print the log to standard out.</td></tr>
           <tr><td>-r, --report-file &lt;file&gt;</td><td>Specify the file name for the human-readable report. Default is to print to the standard out.</td></tr>
           <tr><td>-s, --report-style</td><td>Specify the standard human-readable report format. Valid values are "full" for a full report, "min" for a minimal report, or "sum" for a summary report.</td></tr>
+          <tr><td>-v, --verbose</td><td>Specify the message severity level and above to include in the human-readable report (0=Debug, 1=Info, 2=Warnings, 3=Fatal and Error). Default is warnings (level 2).</td></tr>
           <tr><td>-I, include &lt;paths&gt;</td><td>Specify path(s) to search for files referenced by pointers in a label. Default is to always look in the directory of the label, then search the specified directories.</td></tr>
           <tr><td>-F, --no-follow</td><td>Do not follow or check for the existence of files referenced by pointer statements in a label.</td></tr>
           <tr><td>-c,--config &lt;file&gt;</td><td>Specify a configuration file to set the default values for VTool.</td></tr>
@@ -223,11 +224,21 @@ c:\product-tools-X.X.X\bin\product-tools-X.X.X-app.jar \
 -t TEST.LBL
         </source>
 
-        <p>By default, the tool will write the human-readable report to the terminal. The following command demonstrates the same validation as above, but writing the report to a file:
+        <p>Every run of the tool will generate a complete log in machine-readable format. By default, this log will be sent to the terminal and all other report-related options are ignored, except for progress reporting. When a file specification is given for the machine-readable log, a human-readable report can be generated. By default, this report will be sent to the terminal in full format.
+        </p>
+
+        <p>The following command demonstrates the same validation as the previous example above, but generating a human-readable, full report to the terminal:
         </p>
         <source>
 [node:~] java gov.nasa.pds.tools.VTool -d pdsdd.full \
--t TEST.LBL -r report.txt
+-t TEST.LBL -l log.xml
+        </source>
+
+        <p>The following command demonstrates the same validation as above, but writing this human-readable report in a file called rpt.txt.
+        </p>
+        <source>
+[node:~] java gov.nasa.pds.tools.VTool -d pdsdd.full \
+-t TEST.LBL -l log.xml -r rpt.txt
         </source>
 
         <p>The following command demonstrates the validation of a single data product label against the PSDD and a local dictionary:
@@ -329,6 +340,7 @@ localdd.full -t TEST.LBL
           <tr><td>vtool.logfile</td><td>-l</td><td>Specify the machine-readable log file name (do not specify if wanting to write to standard out)</td></tr>
           <tr><td>vtool.report</td><td>-r</td><td>Specify the human-readable report file name (do not specify if wanting to write to standard out)</td></tr>
           <tr><td>vtool.style</td><td>-s</td><td>Specify the standard human-readable report format ("full", "min", or "sum")</td></tr>
+          <tr><td>vtool.verbose</td><td>-v</td><td>Specify the message severity level and above to include in the human-readable report(0=Debug, 1=Info, 2=Warning, 3=Error and Fatal). Default is warnings (level 2).</td></tr>
           <tr><td>vtool.includepaths</td><td>-I</td><td>Specify paths to search for files refererenced by pointers in a label</td></tr>
           <tr><td>vtool.follow</td><td>-F</td><td>Set to 'false' to not look for files referenced by pointer statements in a label, set to 'true' otherwise</td></tr>
           <tr><td>vtool.recursive</td><td>-L</td><td>Set to 'false' to not traverse a directory, set to 'true' otherwise</td></tr>
