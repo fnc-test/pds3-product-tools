@@ -146,12 +146,16 @@ $Id$
       <url>http://www.ibiblio.org/maven/commons-codec/</url>
     </dependency>        
     <dependency>
-      <id>velocity</id>
+      <groupId>velocity</groupId>
+      <artifactId>velocity</artifactId>
       <version>1.4</version>
+      <url>http://www.ibiblio.org/maven/velocity/</url>
     </dependency>
     <dependency>
-      <id>commons-jelly+tags-velocity</id>
+      <groupId>commons-jelly</groupId>
+      <artifactId>commons-jelly-tags-velocity</artifactId>
       <version>20040902.073917</version>
+      <url>http://www.ibiblio.org/maven/commons-jelly/</url>
     </dependency>
   </dependencies>
 

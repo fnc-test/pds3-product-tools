@@ -19,6 +19,11 @@ $Id$
 
 <project default="jar" xmlns:ant="jelly:ant" xmlns:j="jelly:core" xmlns:deploy="deploy" xmlns:velocity="jelly:org.apache.commons.jelly.tags.velocity.VelocityTagLibrary">
 
+  <!-- Generate an executable jar with all dependencies included. -->
+  <postGoal name="jar:jar">
+    <attainGoal name="javaapp:jar"/>
+  </postGoal>
+
   <!-- Process the navigation file template. -->
   <preGoal name="site">
     <attainGoal name="site-template"/>
@@ -38,6 +43,11 @@ $Id$
     </j:forEach>
   </goal>
 
+  <!-- Generate a PDF of the online documentation. -->
+  <postGoal name="site">
+    <attainGoal name="pdf"/>
+  </postGoal>
+
   <!--
     Include the dependencies in the binary distribution
     and put all jar files in the lib directory.
@@ -47,14 +57,12 @@ $Id$
     <deploy:copy-deps todir="${maven.dist.bin.assembly.dir}/lib"/>
     <ant:move todir="${maven.dist.bin.assembly.dir}/lib"
               file="${maven.dist.bin.assembly.dir}/${maven.final.name}.jar"/>
+    <ant:mkdir dir="${maven.dist.bin.assembly.dir}/bin"/>
+    <ant:copy todir="${maven.dist.bin.assembly.dir}/bin"
+              file="${maven.build.dir}/${maven.javaapp.jar.name}"/>
   </postGoal>
 
-  <!-- Generate a PDF of the online documentation. -->
-  <postGoal name="site">
-    <attainGoal name="pdf"/>
-  </postGoal>
-
-  <!-- Clean up the navigation file that was generated from the template. -->
+  <!-- Clean up the navigation file that was generated from its template. -->
   <postGoal name='clean:clean'>
     <delete file='${maven.docs.src}/navigation.xml' failonerror='false'/>
   </postGoal>
