@@ -254,9 +254,9 @@ public class VTool implements VToolConfigKeys {
 		
 		// Option to specify the severity level and above
 		OptionBuilder.withLongOpt("verbose");
-		OptionBuilder.withDescription("Specify the severity level and above to include in the reporting: " + 
+		OptionBuilder.withDescription("Specify the severity level and above to include in the human-readable report: " + 
 				                             "(0=Debug, 1=Info, 2=Warning, 3=Error or Fatal). " + 
-				                             "Default is Info and above (level 1)");
+				                             "Default is Warnings and above (level 2)");
 		OptionBuilder.hasArg();
 		OptionBuilder.withArgName("0|1|2|3");
 		OptionBuilder.withType(short.class);
