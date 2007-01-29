@@ -104,6 +104,7 @@ public class VTool implements VToolConfigKeys {
 		recursive = true;
 		rptFile = null;
 		rptStyle = "full";
+		severity = null;
 		logFile = null;
 		currDir = null;
 		options = new Options();
@@ -313,7 +314,7 @@ public class VTool implements VToolConfigKeys {
 					setVerbose(Short.parseShort(cmd.getOptionValue("v")));
 				}
 				catch( NumberFormatException ne) {
-					throw new Exception("Problems parsing value set for the 'v' flag: " + cmd.getOptionValue("v"));
+					throw new Exception("Problems parsing value for the 'v' flag: " + cmd.getOptionValue("v"));
 				}
 				catch(IllegalArgumentException ae) {
 					throw new Exception(ae.getMessage());
@@ -536,17 +537,17 @@ public class VTool implements VToolConfigKeys {
 	
 	/**
 	 * Set the output style for the report
-	 * @param f 'sum' for a summary report, 'min' for a minimal report, and 'full' for a complete
+	 * @param style 'sum' for a summary report, 'min' for a minimal report, and 'full' for a complete
 	 * report
 	 */
-	public void setRptStyle(String f) {
-		if( (f.equalsIgnoreCase("sum") == false) &&
-				(f.equalsIgnoreCase("min") == false) &&
-				(f.equalsIgnoreCase("full") == false) ) {
-				throw new IllegalArgumentException("Invalid value entered for 'od' flag." + 
+	public void setRptStyle(String style) {
+		if( (style.equalsIgnoreCase("sum") == false) &&
+				(style.equalsIgnoreCase("min") == false) &&
+				(style.equalsIgnoreCase("full") == false) ) {
+				throw new IllegalArgumentException("Invalid value entered for 's' flag." + 
 													" Value can only be either 'full', 'sum', or 'min'");
 		}
-		rptStyle = f;
+		rptStyle = style;
 	}
 	
 	/**
@@ -725,8 +726,10 @@ public class VTool implements VToolConfigKeys {
 			log.log(new ToolsLogRecord(ToolsLevel.PARAMETER, "Log File                  " + logFile));
 		if(rptFile != null)
 			log.log(new ToolsLogRecord(ToolsLevel.PARAMETER, "Report File               " + rptFile));
-		log.log(new ToolsLogRecord(ToolsLevel.PARAMETER, "Report Style              " + rptStyle));
-		log.log(new ToolsLogRecord(ToolsLevel.PARAMETER, "Severity Level            " + severity));
+		if(rptStyle != null)
+		    log.log(new ToolsLogRecord(ToolsLevel.PARAMETER, "Report Style              " + rptStyle));
+		if(severity != null)
+			log.log(new ToolsLogRecord(ToolsLevel.PARAMETER, "Severity Level            " + severity));
 		if(includePaths != null)
 			log.log(new ToolsLogRecord(ToolsLevel.PARAMETER, "Include Path(s)           " + includePaths));
 		if(config != null)
@@ -754,6 +757,10 @@ public class VTool implements VToolConfigKeys {
 			StreamHandler stream = new StreamHandler(System.out, new ToolsLogFormatter());
 			logger.addHandler(stream);
 			stream.setLevel(Level.ALL);
+			log.log(new ToolsLogRecord(Level.INFO, "Log being directed to standard out. Report-related options will be ignored"));
+			severity = null;
+			rptFile = null;
+			rptStyle = null;
 		}
 		else {
 			try {
