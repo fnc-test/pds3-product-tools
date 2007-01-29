@@ -44,6 +44,7 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.util.logging.StreamHandler;
 
+import gov.nasa.pds.tools.logging.ToolsLevel;
 import gov.nasa.pds.tools.logging.ToolsLogRecord;
 import gov.nasa.pds.tools.logging.ToolsLogFormatter;
 
@@ -56,7 +57,7 @@ import gov.nasa.pds.tools.logging.ToolsLogFormatter;
  */
 public class VTool implements VToolConfigKeys {
 	
-	final private String version_id = "0.3.0"; 
+	final private String versionId = "0.4.0"; 
 	private static Logger log = Logger.getLogger(VTool.class.getName());
 	
 	private Options options;
@@ -114,7 +115,7 @@ public class VTool implements VToolConfigKeys {
 	 *
 	 */	
 	public void showVersion() {
-		System.out.println("PDS Validation Tool (VTool) " + version_id);
+		System.out.println("PDS Validation Tool (VTool) " + versionId);
 		System.out.println("\nDISCLAIMER:\n" + 
 				           "THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE CALIFORNIA\n" + 
 				           "INSTITUTE OF TECHNOLOGY (CALTECH) UNDER A U.S. GOVERNMENT CONTRACT WITH THE\n" +
@@ -712,29 +713,30 @@ public class VTool implements VToolConfigKeys {
 	 *
 	 */
 	public void logParams() {
-		//TODO: Print out report file, report style, data object validation, standalone fragment validation
-		log.log(new ToolsLogRecord(Level.CONFIG, "Target(s)                 " + targets));
+		//TODO: Print out data object validation, standalone fragment validation
+		log.log(new ToolsLogRecord(Level.CONFIG, "VTool Version             " + versionId));
+		log.log(new ToolsLogRecord(ToolsLevel.PARAMETER, "Target(s)                 " + targets));
 		if(dictionaries != null)
-			log.log(new ToolsLogRecord(Level.CONFIG, "Dictionary file(s)        " + dictionaries));
-		log.log(new ToolsLogRecord(Level.CONFIG, "Aliasing                  " + alias));
-		log.log(new ToolsLogRecord(Level.CONFIG, "Directory Recursion       " + recursive));
-		log.log(new ToolsLogRecord(Level.CONFIG, "Follow Fragment Pointers  " + followPtrs));
+			log.log(new ToolsLogRecord(ToolsLevel.PARAMETER, "Dictionary file(s)        " + dictionaries));
+		log.log(new ToolsLogRecord(ToolsLevel.PARAMETER, "Aliasing                  " + alias));
+		log.log(new ToolsLogRecord(ToolsLevel.PARAMETER, "Directory Recursion       " + recursive));
+		log.log(new ToolsLogRecord(ToolsLevel.PARAMETER, "Follow Fragment Pointers  " + followPtrs));
 		if(logFile != null)
-			log.log(new ToolsLogRecord(Level.CONFIG, "Log File                  " + logFile));
+			log.log(new ToolsLogRecord(ToolsLevel.PARAMETER, "Log File                  " + logFile));
 		if(rptFile != null)
-			log.log(new ToolsLogRecord(Level.CONFIG, "Report File               " + rptFile));
-		log.log(new ToolsLogRecord(Level.CONFIG, "Report Style                  " + rptStyle));
-		log.log(new ToolsLogRecord(Level.CONFIG, "Severity Level            " + severity));
+			log.log(new ToolsLogRecord(ToolsLevel.PARAMETER, "Report File               " + rptFile));
+		log.log(new ToolsLogRecord(ToolsLevel.PARAMETER, "Report Style              " + rptStyle));
+		log.log(new ToolsLogRecord(ToolsLevel.PARAMETER, "Severity Level            " + severity));
 		if(includePaths != null)
-			log.log(new ToolsLogRecord(Level.CONFIG, "Include Path(s)           " + includePaths));
+			log.log(new ToolsLogRecord(ToolsLevel.PARAMETER, "Include Path(s)           " + includePaths));
 		if(config != null)
-			log.log(new ToolsLogRecord(Level.CONFIG, "Configuration File        " + config));
+			log.log(new ToolsLogRecord(ToolsLevel.PARAMETER, "Configuration File        " + config));
 		if(regexp != null)
-			log.log(new ToolsLogRecord(Level.CONFIG, "Files Patterns            " + regexp));
+			log.log(new ToolsLogRecord(ToolsLevel.PARAMETER, "Files Patterns            " + regexp));
 		if(noDirs != null)
-			log.log(new ToolsLogRecord(Level.CONFIG, "Excluded Directories      " + noDirs));
+			log.log(new ToolsLogRecord(ToolsLevel.PARAMETER, "Excluded Directories      " + noDirs));
 		if(noFiles != null)
-			log.log(new ToolsLogRecord(Level.CONFIG, "Excluded Files            " + noFiles));
+			log.log(new ToolsLogRecord(ToolsLevel.PARAMETER, "Excluded Files            " + noFiles));
 	}
 	
 	/**
@@ -798,18 +800,19 @@ public class VTool implements VToolConfigKeys {
 		Iterator i = dictionary.iterator();
 		
 		dd = new String( i.next().toString() );
-		
 		try {
 			if(isURL(dd))
 				dict = DictionaryParser.parse(new URL(dd), alias);
 			else
 				dict = DictionaryParser.parse(new File(dd).toURL(), alias);
+			log.log(new ToolsLogRecord(Level.CONFIG, "Dictionary version        " + dict.getInformation(), dd));
 			while( i.hasNext() ) {
 				dd = new String(i.next().toString());
 				if(isURL(dd))
 					dict.merge( DictionaryParser.parse(new URL(dd), alias), true );
 				else
 					dict.merge( DictionaryParser.parse(new File(dd).toURL(), alias), true );
+				log.log(new ToolsLogRecord(Level.CONFIG, "Dictionary version        " + dict.getInformation(), dd));
 			}
 		} catch( MalformedURLException uex) {
 			System.err.println("Dictionary file does not exist: " + dd);
@@ -820,7 +823,6 @@ public class VTool implements VToolConfigKeys {
 		} catch( gov.nasa.pds.tools.label.parser.ParseException pe) {
 			System.exit(1);
 		}
-		
 		return dict;
 		
 	}
@@ -930,7 +932,7 @@ public class VTool implements VToolConfigKeys {
 			else
 				parser.parse(file, dict);
 		} catch (gov.nasa.pds.tools.label.parser.ParseException pEx) {
-			log.log(new ToolsLogRecord(Level.FINE, "SKIP", file.toString()));
+			log.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, "SKIP", file.toString()));
 			return;
 		}catch (IOException iEx) {
 			System.err.println(iEx.getMessage());
