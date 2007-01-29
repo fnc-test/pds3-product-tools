@@ -196,17 +196,20 @@ c:\product-tools-X.X.X\bin\product-tools-X.X.X-app.jar \
           <tr><th colspan="2">VTool Command-Line Options</th></tr>
           <tr><td nowrap="nowrap">-t,--target &lt;labels,URLs,dirs&gt;</td><td>Specify the label files, directories, and URLs to validate (required option)</td></tr>
           <tr><td>-d,--dict &lt;.full files&gt;</td><td>Specify the Planetary Science Data Dictionary full file name and any local dictionaries.</td></tr>
-          <tr><td>-L,--log-file &lt;file&gt;</td><td>Specify the log file name for the machine-readable log. Default is to print the log to standard out.</td></tr>
+          <tr><td>-l,--log-file &lt;file&gt;</td><td>Specify the file name for the machine-readable log. Default is to print the log to standard out.</td></tr>
+          <tr><td>-r, --report-file &lt;file&gt;</td><td>Specify the file name for the human-readable report. Default is to print to the standard out.</td></tr>
+          <tr><td>-s, --report-style</td><td>Specify the standard human-readable report format. Valid values are "full" for a full report, "min" for a minimal report, or "sum" for a summary report.</td></tr>
           <tr><td>-I, include &lt;paths&gt;</td><td>Specify path(s) to search for files referenced by pointers in a label. Default is to always look in the directory of the label, then search the specified directories.</td></tr>
-          <tr><td>-F, --no-follow</td><td>Do not follow ^STRUCTURE pointers in a label.</td></tr>
+          <tr><td>-F, --no-follow</td><td>Do not follow or check for the existence of files referenced by pointer statements in a label.</td></tr>
           <tr><td>-c,--config &lt;file&gt;</td><td>Specify a configuration file to set the default values for VTool.</td></tr>
-          <tr><td>-l,--local</td><td>Validate files only in the input directory rather than recursively traversing down the subdirectories.</td></tr>
+          <tr><td>-L,--local</td><td>Validate files only in the input directory rather than recursively traversing down the sub-directories.</td></tr>
           <tr><td nowrap="nowrap">-e,--regexp &lt;expressions&gt;</td><td>Specify file patterns to look for when validating a directory. Each pattern must be surrounded by quotes (i.e. -e "*.LBL" "*.FMT"). Pattern matching is case-insensitive in Windows, but case-sensitive for other systems.
           </td></tr>
           <tr><td nowrap="nowrap">-X,--ignore-file &lt;expressions&gt;</td><td>Specify file patterns to ignore when validating a directory. Each pattern must be surrounded by quotes (i.e. -X "*.TXT" "*.TAB"). Pattern matching is case-insensitive in Windows, but case-sensitive for other systems.
           </td></tr>
           <tr><td nowrap="nowrap">-D, --ignore-dir &lt;expressions&gt;</td><td>Specify the directory pattterns to ignore. Each pattern must be surrounded by quotes (i.e. -D "LABEL" "EXTRAS"). Pattern matching is case-insensitive in Windows, but case-sensitive for other systems.
           </td></tr>
+          <tr><td>-p, --progress</td><td>Enable validation progress reporting. Default is no.</td></tr>
           <tr><td>-h,--help</td><td>Display VTool usage</td></tr>
           <tr><td>-V,--version</td><td>Display VTool version</td></tr>
         </table>
@@ -220,11 +223,11 @@ c:\product-tools-X.X.X\bin\product-tools-X.X.X-app.jar \
 -t TEST.LBL
         </source>
 
-        <p>By default, the tool will write the validation report to the terminal. The following command demonstrates the same validation as above, but writing the validation report to a file:
+        <p>By default, the tool will write the human-readable report to the terminal. The following command demonstrates the same validation as above, but writing the report to a file:
         </p>
         <source>
 [node:~] java gov.nasa.pds.tools.VTool -d pdsdd.full \
--t TEST.LBL -o report.txt
+-t TEST.LBL -r report.txt
         </source>
 
         <p>The following command demonstrates the validation of a single data product label against the PSDD and a local dictionary:
@@ -259,7 +262,7 @@ localdd.full -t TEST.LBL
         </p>
         <source>
 [node:~] java gov.nasa.pds.tools.VTool -d pdsdd.full \ 
--t ./TEST_DIR -p "*LBL" "*FMT" -l
+-t ./TEST_DIR -p "*LBL" "*FMT" -L
         </source>
 
         <p>The following command demonstrates the validation of multiple data product labels contained in a directory except for files ending in a .IMG or .TAB:
@@ -323,13 +326,16 @@ localdd.full -t TEST.LBL
           <tr><th>KEYWORD</th><th>ASSOCIATED FLAG</th><th>valid value(s)</th></tr>
           <tr><td>vtool.target</td><td>-t</td><td>Specify labels,directories, and URLs</td></tr>
           <tr><td>vtool.dict</td><td>-d</td><td>Specify dictionary files</td></tr>
-          <tr><td>vtool.logfile</td><td>-o</td><td>Specify log file (do not specify if wanting to write to standard out)</td></tr>
+          <tr><td>vtool.logfile</td><td>-l</td><td>Specify the machine-readable log file name (do not specify if wanting to write to standard out)</td></tr>
+          <tr><td>vtool.report</td><td>-r</td><td>Specify the human-readable report file name (do not specify if wanting to write to standard out)</td></tr>
+          <tr><td>vtool.style</td><td>-s</td><td>Specify the standard human-readable report format ("full", "min", or "sum")</td></tr>
           <tr><td>vtool.includepaths</td><td>-I</td><td>Specify paths to search for files refererenced by pointers in a label</td></tr>
           <tr><td>vtool.follow</td><td>-F</td><td>Set to 'false' to not look for files referenced by pointer statements in a label, set to 'true' otherwise</td></tr>
-          <tr><td>vtool.recursive</td><td>-l</td><td>Set to 'false' to not traverse a directory, set to 'true' otherwise</td></tr>
+          <tr><td>vtool.recursive</td><td>-L</td><td>Set to 'false' to not traverse a directory, set to 'true' otherwise</td></tr>
           <tr><td>vtool.regexp</td><td>-e</td><td>Specify file patterns to search for when validating a directory.</td></tr>
           <tr><td>vtool.ignorefile</td><td>-X</td><td>Specify file patterns to ignore when validating a directory.</td></tr>
           <tr><td>vtool.ignoredir</td><td>-D</td><td>Specify dictionary patterns to ignore.</td></tr>
+          <tr><td>vtool.progress</td><td>-p</td><td>Enable progress reporting.</td></tr>
         </table>
 
         <p>The following example demonstrates how to set a configuration file:</p>
@@ -339,6 +345,7 @@ localdd.full -t TEST.LBL
 vtool.target = ./TEST_DIR
 vtool.dict = pdsdd.full
 vtool.logfile = log.xml
+vtool.report = rpt.txt
 vtool.recursive = false
 vtool.includepaths = /home/path
 vtool.regexp = "*.LBL"
@@ -346,8 +353,8 @@ vtool.regexp = "*.LBL"
 
         <p>This is equivalent to running the tool with the following flags:</p>
         <source>
--t ./TEST_DIR -d pdsdd.full -L log.xml -l -e "*.LBL" \
--I /home/path
+-t ./TEST_DIR -d pdsdd.full -l log.xml -L -e "*.LBL" \
+-I /home/path -r rpt.txt
         </source>          
 
         <p>The following example demonstrates how to set a configuration file with multiple values for a keyword:
