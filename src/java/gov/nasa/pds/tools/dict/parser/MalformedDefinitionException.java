@@ -7,6 +7,9 @@
 package gov.nasa.pds.tools.dict.parser;
 
 /**
+ * This excpetion will be thrown if the definition does not follow as 
+ * defined in the PDS Data dictionary document.
+ * 
  * @author pramirez
  * @version $Revision$
  * 

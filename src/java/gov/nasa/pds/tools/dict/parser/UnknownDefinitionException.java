@@ -8,6 +8,8 @@ package gov.nasa.pds.tools.dict.parser;
 
 
 /**
+ * This exception will be thrown when the type of definition can not be determined.
+ * 
  * @author pramirez
  * @version $Revision$
  * 

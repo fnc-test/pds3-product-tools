@@ -6,7 +6,6 @@
 
 package gov.nasa.pds.tools.dict.parser;
 
-
 import gov.nasa.pds.tools.label.antlr.ODLTokenTypes;
 import gov.nasa.pds.tools.dict.Definition;
 import gov.nasa.pds.tools.dict.DictionaryTokens;
@@ -26,15 +25,25 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+
 /**
  * This class builds definitions from ObjectStatements. The format of the object 
- * statement should be in compliance standard PDS dictionary.
+ * statement should be in compliance standard PDS dictionary. These definitions 
+ * can then be added to a {@link Dictionary}.
+ * 
  * @author pramirez
  * @version $Revision$
  * 
  */
 public class DefinitionFactory implements ODLTokenTypes, DictionaryTokens {
 
+    /**
+     * This method will determine the type of definition and created it. If it can not 
+     * determine the type of definition that should be generated an error will be thrown.
+     * @param object from which the defintion will be created
+     * @return a {@link Definition} that represents an entry in a PDS data dictionary
+     * @throws UnknownDefinitionException thrown when the type of definition can not be recognized.
+     */
     public static Definition createDefinition(ObjectStatement object) throws UnknownDefinitionException {
         Definition definition = null;
         
@@ -56,6 +65,13 @@ public class DefinitionFactory implements ODLTokenTypes, DictionaryTokens {
         return definition;
     }
     
+    /**
+     * This method creates an {@link ObjectDefinition} by gathering the attributes required 
+     * from the {@link ObjectStatement} as specified in the PDS Data Dictionary document.
+     * @param object that has the information to form an {@link ObjectDefinition}
+     * @return a {@link Definition} that represents an entry in a PDS data dictionary
+     * @throws UnknownDefinitionException thrown when the type of definition can not be recognized.
+     */
     public static ObjectDefinition createObjectDefinition(ObjectStatement object) throws UnknownDefinitionException {
         ObjectDefinition definition = null;
         
@@ -125,6 +141,13 @@ public class DefinitionFactory implements ODLTokenTypes, DictionaryTokens {
         return definition;
     }
     
+    /**
+     * This method creates an {@link GroupDefinition} by gathering the attributes required 
+     * from the {@link ObjectStatement} as specified in the PDS Data Dictionary document.
+     * @param object that has the information to form an {@link GroupDefinition}
+     * @return a {@link Definition} that represents an entry in a PDS data dictionary
+     * @throws UnknownDefinitionException thrown when the type of definition can not be recognized.
+     */
     public static GroupDefinition createGroupDefinition(ObjectStatement object) throws UnknownDefinitionException {
         GroupDefinition definition = null;
         
@@ -171,6 +194,13 @@ public class DefinitionFactory implements ODLTokenTypes, DictionaryTokens {
         return definition;
     }
     
+    /**
+     * This method creates an {@link ElementDefinition} by gathering the attributes required 
+     * from the {@link ObjectStatement} as specified in the PDS Data Dictionary document.
+     * @param object that has the information to form an {@link ElementDefinition}
+     * @return a {@link Definition} that represents an entry in a PDS data dictionary
+     * @throws UnknownDefinitionException thrown when the type of definition can not be recognized.
+     */
     public static ElementDefinition createElementDefinition(ObjectStatement object) throws UnknownDefinitionException {
         ElementDefinition definition = null;
         
@@ -195,7 +225,7 @@ public class DefinitionFactory implements ODLTokenTypes, DictionaryTokens {
             //Find and set units
             attribute = object.getAttribute(DictionaryTokens.UNITS);
             if (attribute != null) 
-                definition.setUnits(attribute.getValue().toString());
+                definition.setUnitId(attribute.getValue().toString());
             
             //Find and set min length
             attribute = object.getAttribute(MIN_LENGTH);

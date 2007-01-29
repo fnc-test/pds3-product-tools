@@ -34,6 +34,19 @@ import java.util.logging.Logger;
 
 
 /**
+ * This class provides the means to parse a PDS compliant data dictionary. 
+ * The {@link Dictionary} created can be used for validation purposes or just 
+ * to examine the contents programmatically. To parse a dictionary use the following:
+ * <p>
+ * <code>
+ * Dictionary dictionary = DictionaryParser.parse(new URL("<url to dictionar>"));
+ * </code>
+ * <p>If you wanted to turn of aliases the alternative parse method could be used:
+ * <p>
+ * <code>
+ * Dictionary dictionary = DictionaryParser.parse(new URL("<url to dictionar>"), false);
+ * </code>
+ * 
  * @author pramirez
  * @version $Revision$
  * 
@@ -41,17 +54,35 @@ import java.util.logging.Logger;
 public class DictionaryParser implements ODLTokenTypes, DictionaryTokens {
     private static Logger log = Logger.getLogger(DictionaryParser.class.getName());
     
-    public static Dictionary parse(URL file) throws ParseException, IOException {
-        return parse(file, false);
+    /**
+     * Parses a {@link URL} that is compliant with the PDS Data Dictionary document
+     * and formulates a {@link Dictionary} with aliases turned off.
+     * @param url points to the location of the dictionary
+     * @return a data dictionary with element, group, and object definitions
+     * @throws ParseException thrown when dictionary can not be parsed correctly
+     * @throws IOException thrown when dictionary can not be accessed
+     */
+    public static Dictionary parse(URL url) throws ParseException, IOException {
+        return parse(url, false);
     }
     
-    public static Dictionary parse(URL file, boolean aliasing) throws ParseException, IOException {
+    /**
+     * Parses a {@link URL} that is compliant with the PDS Data Dictionary document
+     * and formulates a {@link Dictionary} with a flag to indicated whether aliases
+     * should be read in.
+     * @param url points to the location of the dictionary
+     * @param aliasing indicates if aliases should be read in
+     * @return a data dictionary with element, group, and object definitions
+     * @throws ParseException thrown when dictionary can not be parsed correctly
+     * @throws IOException thrown when dictionary can not be accessed
+     */
+    public static Dictionary parse(URL url, boolean aliasing) throws ParseException, IOException {
         Dictionary dictionary = new Dictionary();
-        InputStream input = file.openStream();
+        InputStream input = url.openStream();
         ODLLexer lexer = new ODLLexer(input);
         ODLParser parser = new ODLParser(lexer);
         
-        log.log(new ToolsLogRecord(Level.INFO, "Parsing dictionary.", file.toString()));
+        log.log(new ToolsLogRecord(Level.INFO, "Parsing dictionary.", url.toString()));
         try {
             List labels = new ArrayList();
             //Attempt to parse a dictionary
@@ -82,6 +113,8 @@ public class DictionaryParser implements ODLTokenTypes, DictionaryTokens {
                 Map aliases = new HashMap();
                 Map units = new HashMap();
                 
+                //Go through statements in the label and start formulating the different parts of 
+                //the dictinary. Aliases, units, and definitions will be pulled out.
                 for (Iterator i = labels.iterator(); i.hasNext();) {
                     for (Iterator s = ((Label) i.next()).getStatements().iterator(); s.hasNext();) {
                         Statement statement = (Statement) s.next();
@@ -99,7 +132,10 @@ public class DictionaryParser implements ODLTokenTypes, DictionaryTokens {
                     }
                 }
                 
+                //Put units in the dictionary
                 dictionary.setUnits(units);
+                
+                //If aliasing is turned on then they need to added to the definitions
                 if (aliasing) {
                     //Go through the aliases and add to appropriate deifnitions
                     for (Iterator i = aliases.keySet().iterator(); i.hasNext();) {
@@ -118,7 +154,7 @@ public class DictionaryParser implements ODLTokenTypes, DictionaryTokens {
             throw new ParseException(ex.getMessage());
         }
         
-        log.log(new ToolsLogRecord(Level.INFO, "Finshed parsing dictionary.", file.toString()));
+        log.log(new ToolsLogRecord(Level.INFO, "Finshed parsing dictionary.", url.toString()));
 
         return dictionary;
     }
@@ -159,8 +195,22 @@ public class DictionaryParser implements ODLTokenTypes, DictionaryTokens {
     }
     
     private static Map generateUnits(ObjectStatement object) {
-        //FIXME: support
-        return new HashMap();
+        Map units = new HashMap();
+        //Process unit lists 
+        //They are just are just a list of lists of valid units (('A','ampere'), ('A/m', 'ampere/meter') ....)
+        AttributeStatement unitSequence = object.getAttribute(UNIT_SEQUENCE);
+        if (unitSequence != null) {
+            for (Iterator i = ((Sequence) unitSequence.getValue()).iterator(); i.hasNext();) {
+                List unitList = new ArrayList();
+                Sequence values = (Sequence) i.next();
+                for (Iterator v = values.iterator(); v.hasNext();) {
+                    String unit = v.next().toString().toUpperCase();
+                    unitList.add(unit);
+                    units.put(unit, unitList);
+                }
+            }
+        }
+        return units;
     }
     
     public static void main(String [] args) throws Exception {
