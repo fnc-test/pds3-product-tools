@@ -1,22 +1,23 @@
 package gov.nasa.pds.tools.config;
 
 /**
- * Contains the valid keys for a VTool configuration file
+ * Contains the valid keys for a VTool configuration file <br><br>
  * 
- * Current keys are:
- *      vtool.alias
- *      vtool.dataobject
- *      vtool.dict
- *      vtool.follow
- *      vtool.ignoredir
- *      vtool.ignorefile
- *      vtool.includepaths
- *      vtool.logfile
- *      vtool.recursive
- *      vtool.regexp
- *      vtool.style
- *      vtool.target
- *      vtool.verbose
+ * Current keys are:<br>
+ *      vtool.alias<br>
+ *      vtool.dataobject<br>
+ *      vtool.dict<br>
+ *      vtool.follow<br>
+ *      vtool.ignoredir<br>
+ *      vtool.ignorefile<br>
+ *      vtool.includepaths<br>
+ *      vtool.logfile<br>
+ *      vtool.recursive<br>
+ *      vtool.regexp<br>
+ *      vtool.report<br>
+ *      vtool.style<br>
+ *      vtool.target<br>
+ *      vtool.verbose<br>
  *      
  * @author mcayanan
  *
@@ -32,6 +33,7 @@ public interface VToolConfigKeys {
 	public final String LOG = "vtool.logfile";
 	public final String RECURSE = "vtool.recursive";
 	public final String REGEXP = "vtool.regexp";
+	public final String REPORT = "vtool.report";
 	public final String STYLE = "vtool.style";
 	public final String TARGET = "vtool.target";
 	public final String VERBOSE = "vtool.verbose";

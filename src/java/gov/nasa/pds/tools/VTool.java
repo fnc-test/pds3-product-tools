@@ -39,11 +39,11 @@ import org.apache.commons.configuration.ConversionException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.httpclient.HttpException;
 
-import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.logging.StreamHandler;
 
 import gov.nasa.pds.tools.logging.ToolsLogRecord;
 import gov.nasa.pds.tools.logging.ToolsLogFormatter;
@@ -65,8 +65,6 @@ public class VTool implements VToolConfigKeys {
 	private CommandLine cmd;
 	
 	//TODO: Flags to be implemented: partial (-f,--force), data object(-O,--no-obj),
-	//progress(-p,--show-progress), alias(-a,--alias),  
-	//reporting style (-s,--output-style) 
 	
 	private boolean alias;
 	private URL config;
@@ -81,7 +79,8 @@ public class VTool implements VToolConfigKeys {
 	private boolean recursive;
 	private List targets;
 	private File logFile;
-	private String outputFmt;
+	private File rptFile;
+	private String rptStyle;
 	private short verbose;
 	private String severity;
 	
@@ -103,7 +102,8 @@ public class VTool implements VToolConfigKeys {
 		progress = false;
 		regexp = null;
 		recursive = true;
-		outputFmt = "full";
+		rptFile = null;
+		rptStyle = "full";
 		logFile = null;
 		currDir = null;
 		options = new Options();
@@ -156,7 +156,7 @@ public class VTool implements VToolConfigKeys {
 		options.addOption("h", "help", false, "Display usage");
 		options.addOption("O", "no-obj", false, "Do not perform data object validation");
 		options.addOption("f", "force", false, "Force VTool to validate a label fragment");
-		options.addOption("l", "local", false, "Validate files only in the input directory rather than " + 
+		options.addOption("L", "local", false, "Validate files only in the input directory rather than " + 
 				                               "recursively traversing down the subdirectories.");
 		options.addOption("p", "progress", false, "Enable progress reporting");
 		options.addOption("V", "version", false, "Display VTool version");
@@ -226,14 +226,23 @@ public class VTool implements VToolConfigKeys {
 		OptionBuilder.withType(String.class);
 		options.addOption(OptionBuilder.create("D"));
 		
-		// Option to specify the report file name
+		// Option to specify the log file name
 		OptionBuilder.withLongOpt("log-file");
-		OptionBuilder.withDescription("Specify the file name for the report. Default is to print to the terminal");
+		OptionBuilder.withDescription("Specify the file name for the machine-readable report. Default is to print to the terminal");
 		OptionBuilder.hasArg();
 		OptionBuilder.withArgName("file");
 		OptionBuilder.withType(String.class);
-		options.addOption(OptionBuilder.create("L"));
+		options.addOption(OptionBuilder.create("l"));
 
+		
+		//Option to specify the report file name
+		OptionBuilder.withLongOpt("report-file");
+		OptionBuilder.withDescription("Specify the file name for the human-readable report. Default is to print to the terminal");
+		OptionBuilder.hasArg();
+		OptionBuilder.withArgName("file");
+		OptionBuilder.withType(String.class);
+		options.addOption(OptionBuilder.create("r"));
+		
 		// Option to specify how detail the reporting should be
 		OptionBuilder.withLongOpt("report-style");
 		OptionBuilder.withDescription("Specify the level of detail for the reporting. " +
@@ -295,9 +304,9 @@ public class VTool implements VToolConfigKeys {
 					config = new File(file).toURL();
 				readConfigFile(config);
 			}
-			// Check for the 'o' flag to specify a file where the reporting will be written to
-			if(cmd.hasOption("L"))
-				setLogFile(new File(cmd.getOptionValue("L")));
+			// Check for the 'l' flag to specify a file where the log will be written to
+			if(cmd.hasOption("l"))
+				setLogFile(new File(cmd.getOptionValue("l")));
 			// verbose flag
 			if(cmd.hasOption("v")) {
 				try {
@@ -334,7 +343,7 @@ public class VTool implements VToolConfigKeys {
 			if(cmd.hasOption("p"))
 				setProgress(true);
 			// Check to see if VTool will not recurse down a directory tree
-			if(cmd.hasOption("l"))
+			if(cmd.hasOption("L"))
 				setRecursive(false);
 			// Check to see if regular expressions were set
 			if(cmd.hasOption("e"))
@@ -350,7 +359,10 @@ public class VTool implements VToolConfigKeys {
 				setDictionaries(Arrays.asList(cmd.getOptionValues("d")));
 			// Check to see what type of reporting style the report will have
 			if(cmd.hasOption("s"))				
-				setOutputFmt(cmd.getOptionValue("s"));
+				setRptStyle(cmd.getOptionValue("s"));
+			// Check to see where the human-readable report will go
+			if(cmd.hasOption("r"))
+				setRptFile(new File(cmd.getOptionValue("r")));
 
 		}
 		catch(MissingOptionException moe) {
@@ -415,7 +427,7 @@ public class VTool implements VToolConfigKeys {
 	}
 	
 	/**
-	 * Get flag status that determines whether to follow ^STRUCTURE pointers in validation
+	 * Get flag status that determines whether to follow pointers found in a label
 	 * @return 'true' to follow, 'false' otherwise
 	 */
 	public boolean getFollowPtrs() {
@@ -423,7 +435,7 @@ public class VTool implements VToolConfigKeys {
 	}
 	
 	/**
-	 * Set the flag that determines whether to follow ^STRUCTURE pointers in validation
+	 * Set the flag that determines whether to follow pointers found in a label
 	 * @param f 'true' to follow, 'false' otherwise
 	 */
 	public void setFollowPtrs(boolean f) {
@@ -431,7 +443,7 @@ public class VTool implements VToolConfigKeys {
 	}
 	
 	/**
-	 * Get the starting path to search for the non-STRUCTURE pointers
+	 * Get the paths to search for files referenced by pointers in a label.
 	 * @return a start path
 	 */
 	public List getIncludePaths() {
@@ -439,9 +451,9 @@ public class VTool implements VToolConfigKeys {
 	}
 	
 	/**
-	 * Set the starting path to search for non-STRUCTURE pointers. Default directory is
-	 * the current working directory
-	 * @param i a start path
+	 * Set the paths to search for files referenced by pointers. Default is to always look
+	 * first in the same directory as the label, then search specified directories.
+	 * @param i List of paths
 	 */
 	public void setIncludePaths(List i) {
 		includePaths = i;
@@ -483,27 +495,43 @@ public class VTool implements VToolConfigKeys {
 	}
 	
 	/**
-	 * Get the output file name
-	 * @return an output file name for the validation report
+	 * Get the machine-readable log file name
+	 * @return log file
 	 */
 	public File getLogFile() {
 		return logFile;
 	}
 	
 	/**
-	 * Set the output file name where the validation report will go. Default is the standard out.
-	 * @param o a report file name
+	 * Set the file name for the machine-readable log
+	 * @param f file name of the log
 	 */
 	public void setLogFile(File f) {
 		logFile = f;
 	}
 	
 	/**
+	 * Get the report file name for the human-readable report
+	 * @return Report file name
+	 */
+	public File getRptFile() {
+		return rptFile;
+	}
+	
+	/**
+	 * Set the file for the human-readable report
+	 * @param f file name
+	 */
+	public void setRptFile(File f) {
+		rptFile = f;
+	}
+	
+	/**
 	 * Get the output style that was set for the validation report
 	 * @return 'full' for a full report, 'sum' for a summary report or 'min' for minimal detail
 	 */
-	public String getOuputFmt() {
-		return outputFmt;
+	public String getRptStyle() {
+		return rptStyle;
 	}
 	
 	/**
@@ -511,14 +539,14 @@ public class VTool implements VToolConfigKeys {
 	 * @param f 'sum' for a summary report, 'min' for a minimal report, and 'full' for a complete
 	 * report
 	 */
-	public void setOutputFmt(String f) {
+	public void setRptStyle(String f) {
 		if( (f.equalsIgnoreCase("sum") == false) &&
 				(f.equalsIgnoreCase("min") == false) &&
 				(f.equalsIgnoreCase("full") == false) ) {
 				throw new IllegalArgumentException("Invalid value entered for 'od' flag." + 
 													" Value can only be either 'full', 'sum', or 'min'");
 		}
-		outputFmt = f;
+		rptStyle = f;
 	}
 	
 	/**
@@ -633,6 +661,8 @@ public class VTool implements VToolConfigKeys {
 				setAlias(config.getBoolean(ALIAS));
 			if(config.containsKey(LOG))
 				setLogFile(new File(config.getString(LOG)));
+			if(config.containsKey(REPORT))
+				setRptFile(new File(config.getString(REPORT)));
 			if(config.containsKey(VERBOSE))
 				setVerbose(config.getShort(VERBOSE));
 			if(config.containsKey(DATAOBJ))
@@ -656,7 +686,7 @@ public class VTool implements VToolConfigKeys {
 			if(config.containsKey(INCLUDES))
 				setIncludePaths(config.getList(INCLUDES));
 			if(config.containsKey(STYLE))
-				setOutputFmt(config.getString(STYLE));
+				setRptStyle(config.getString(STYLE));
 			if(config.containsKey(REGEXP)) {
 				setRegexp(config.getList(REGEXP));
 				// Removes quotes surrounding each pattern being specified
@@ -690,6 +720,9 @@ public class VTool implements VToolConfigKeys {
 		log.log(new ToolsLogRecord(Level.CONFIG, "Follow Fragment Pointers  " + followPtrs));
 		if(logFile != null)
 			log.log(new ToolsLogRecord(Level.CONFIG, "Log File                  " + logFile));
+		if(rptFile != null)
+			log.log(new ToolsLogRecord(Level.CONFIG, "Report File               " + rptFile));
+		log.log(new ToolsLogRecord(Level.CONFIG, "Report Style                  " + rptStyle));
 		log.log(new ToolsLogRecord(Level.CONFIG, "Severity Level            " + severity));
 		if(includePaths != null)
 			log.log(new ToolsLogRecord(Level.CONFIG, "Include Path(s)           " + includePaths));
@@ -715,10 +748,9 @@ public class VTool implements VToolConfigKeys {
 			logger.removeHandler(handler[i]);
 		
 		if(logFile == null) {
-			ConsoleHandler console = new ConsoleHandler();
-			console.setFormatter(new ToolsLogFormatter());
-			logger.addHandler(console);
-			console.setLevel(Level.ALL);
+			StreamHandler stream = new StreamHandler(System.out, new ToolsLogFormatter());
+			logger.addHandler(stream);
+			stream.setLevel(Level.ALL);
 		}
 		else {
 			try {
@@ -892,8 +924,8 @@ public class VTool implements VToolConfigKeys {
 		LabelParser parser = factory.newLabelParser();
 		setParserProps(parser);
 		
-///		if(progress)
-//			showProgress(file);
+		if(progress)
+			showProgress(file);
 		try {
 			if(dict == null)
 				parser.parse(file);
@@ -910,7 +942,7 @@ public class VTool implements VToolConfigKeys {
 	
 	/**
 	 * When progress reporting is enabled, this method will print out the current directory
-	 * being validated. (not yet fully implemented)
+	 * being validated and represent each file being validated by a an asterisk.
 	 * 
 	 * @param file The URL of the file being validated
 	 */
@@ -934,25 +966,23 @@ public class VTool implements VToolConfigKeys {
 	}
 	
 	/**
-	 * main class
+	 * The main calls the following methods (in this order):<br><br>
 	 * 
-	 * Calls the following methods (in this order):
-	 * 
-	 * buildOpts
-	 * parseLine
-	 * queryCmdLine
-	 * setupLogger
-	 * logParams
-	 * readDictionaries
-	 * validateLabels
-	 * 
+	 * buildOpts<br>
+	 * parseLine<br>
+	 * queryCmdLine<br>
+	 * setupLogger<br>
+	 * logParams<br>
+	 * readDictionaries<br>
+	 * validateLabels<br>
+	 * <br>
 	 * The setupLogger method is called after parsing and querying the command-line
 	 * since we can accept a configuration file as input and by rule, anything on
 	 * the command-line overrides parameters set in the configuration file. So, by
 	 * design, VTool would not know where to direct its logs until after it queries
 	 * the command-line.  
 	 * 
-	 * @param argv
+	 * @param argv Arguments passed on the command-line
 	 */
 	public static void main(String[] argv) {
 		VTool vtool = new VTool();
