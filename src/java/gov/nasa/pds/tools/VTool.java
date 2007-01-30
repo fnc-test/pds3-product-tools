@@ -821,6 +821,7 @@ public class VTool implements VToolConfigKeys {
 					dict.merge( DictionaryParser.parse(new File(dd).toURL(), alias), true );
 				log.log(new ToolsLogRecord(Level.CONFIG, "Dictionary version        " + dict.getInformation(), dd));
 			}
+			log.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, "PASS", dd.toString()));
 		} catch( MalformedURLException uex) {
 			System.err.println("Dictionary file does not exist: " + dd);
 			System.exit(1);
@@ -828,6 +829,7 @@ public class VTool implements VToolConfigKeys {
 			System.err.println(iex.getMessage());
 			System.exit(1);
 		} catch( gov.nasa.pds.tools.label.parser.ParseException pe) {
+			log.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, "FAIL", dd.toString()));
 			System.exit(1);
 		}
 		return dict;
@@ -945,6 +947,7 @@ public class VTool implements VToolConfigKeys {
 			System.err.println(iEx.getMessage());
 			System.exit(1);			
 		}
+		log.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, "PASS", file.toString()));
 	}
 	
 	/**
