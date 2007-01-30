@@ -48,10 +48,7 @@ $Id$
     <attainGoal name="pdf"/>
   </postGoal>
 
-  <!--
-    Include the dependencies in the binary distribution
-    and put all jar files in the lib directory.
-  -->
+  <!-- Include the dependencies in the binary distribution. -->
   <postGoal name="dist:prepare-bin-filesystem">
     <ant:mkdir dir="${maven.dist.bin.assembly.dir}/lib"/>
     <deploy:copy-deps todir="${maven.dist.bin.assembly.dir}/lib"/>

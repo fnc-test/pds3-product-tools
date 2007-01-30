@@ -79,10 +79,8 @@ $HOME/product-tools-X.X.X/bin/product-tools-X.X.X-app.jar
 [node:~] setenv CLASSPATH ${CLASSPATH}:\
 $HOME/product-tools-X.X.X/lib/antlr-2.7.6.jar:\
 $HOME/product-tools-X.X.X/lib/commons-cli-1.0.jar:\
-$HOME/product-tools-X.X.X/lib/commons-codec-1.3.jar:\
 $HOME/product-tools-X.X.X/lib/commons-collections-3.1.jar:\
 $HOME/product-tools-X.X.X/lib/commons-configuration-1.2.jar:\
-$HOME/product-tools-X.X.X/lib/commons-httpclient-3.0.1.jar:\
 $HOME/product-tools-X.X.X/lib/commons-io-1.2.jar:\
 $HOME/product-tools-X.X.X/lib/commons-lang-2.1.jar:\
 $HOME/product-tools-X.X.X/lib/commons-logging-1.0.3.jar:\
@@ -149,10 +147,8 @@ C:\&gt; echo %CLASSPATH%
 C:\&gt; set CLASSPATH=%CLASSPATH%;\
 c:\product-tools-X.X.X\lib\antlr-2.7.6.jar;\
 c:\product-tools-X.X.X\lib\commons-cli-1.0.jar;\
-c:\product-tools-X.X.X\lib\commons-codec-1.3.jar;\
 c:\product-tools-X.X.X\lib\commons-collections-3.1.jar;\
 c:\product-tools-X.X.X\lib\commons-configuration-1.2.jar;\
-c:\product-tools-X.X.X\lib\commons-httpclient-3.0.1.jar;\
 c:\product-tools-X.X.X\lib\commons-io-1.2.jar;\
 c:\product-tools-X.X.X\lib\commons-lang-2.1.jar;\
 c:\product-tools-X.X.X\lib\commons-logging-1.0.3.jar;\
@@ -562,7 +558,7 @@ Exception in thread "main" java.lang.NoClassDefFoundError:
 gov/nasa/pds/tools/VTool
         </source>
 
-        <p>The actual class name may vary but the above error is the result of the <i>CLASSPATH</i> environment variable not being set correctly. Verify that the variable contains all of the specified jar files and that there are no space characters in the value. See the <a href="#Setup">Setup</a> section for details.
+        <p>The actual class name may vary but the above error is the result of the <i>CLASSPATH</i> environment variable not being set correctly. Verify that the variable contains all of the specified jar files and that there are no space characters in the value. See either the <a href="#UNIX-Based Setup">UNIX-Based Setup</a> or <a href="#Windows Setup">Windows Setup</a> section for details.
         </p>
       </subsection>
     </section>

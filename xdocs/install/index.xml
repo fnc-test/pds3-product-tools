@@ -72,7 +72,7 @@ or
             </p>
           </li>
           <li><b>lib/</b>
-            <p>This directory contains the support jar files for the tool including: antlr-2.7.6.jar, commons-cli-1.0.jar, commons-io-1.2.jar and log4j-1.2.13.jar. The directory also includes the jar file (product-tools-X.X.X.jar) containing the Validation Tool software.
+            <p>This directory contains the dependent jar files for the tool along with the jar file (product-tools-X.X.X.jar) containing the Validation Tool software.
             </p>
           </li>
         </ul>
