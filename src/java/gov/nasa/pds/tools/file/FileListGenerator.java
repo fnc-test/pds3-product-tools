@@ -51,8 +51,7 @@ public class FileListGenerator {
 	private final int fileExt = 3;
 	
 	/**
-	 * Constructor that takes in a list of supplied targets (files, URLs, directories)
-	 * @param list a list of files, URLs, and directories
+	 * Default constructor
 	 *
 	 */
 	public FileListGenerator() {
@@ -108,7 +107,7 @@ public class FileListGenerator {
 	}
 	
 	/**
-	 * Sets all possible filters when looking in a directory
+	 * Sets all possible filters when looking in a directory.
 	 * 
 	 * @param regexp File patterns to include when finding files in a directory
 	 * @param noFiles File patterns to ignore when finding files in a directory
@@ -239,7 +238,7 @@ public class FileListGenerator {
 	/**
 	 * Gets hyperlinks to found in an HTML document of a URL. No duplicate links will be returned.
 	 * 
-	 * @param url
+	 * @param url location
 	 * @return A Set of hyperlinks
 	 * 
 	 * @throws IOException
