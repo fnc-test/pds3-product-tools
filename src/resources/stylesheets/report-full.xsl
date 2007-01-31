@@ -7,6 +7,7 @@
 ]>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:output method="text"/>
+<xsl:param name="level" select="'INFO'" />
 
 <xsl:template match="/">
   <xsl:text>PDS Validation Tool Report&nl;</xsl:text>
@@ -29,9 +30,25 @@
     <xsl:variable name="file" select="file" /><xsl:text>&nl;</xsl:text>
     <xsl:text>&pad2;</xsl:text><xsl:value-of select="message" />: <xsl:value-of select="$file" /><xsl:text>&nl;</xsl:text>
     
-    <xsl:for-each select="//record[file=$file and level != 'NOTIFICATION']">
-      <xsl:text>&pad6;</xsl:text><xsl:value-of select="level" /><xsl:text>&pad2;</xsl:text><xsl:value-of select="message" /><xsl:text>&nl;</xsl:text>
-    </xsl:for-each>
+    <xsl:choose>
+      <xsl:when test="$level='INFO'">
+        <xsl:for-each select="//record[file=$file and level!='NOTIFICATION']">
+          <xsl:text>&pad6;</xsl:text><xsl:value-of select="level" /><xsl:text>&pad2;</xsl:text><xsl:value-of select="message" /><xsl:text>&nl;</xsl:text>
+        </xsl:for-each>
+      </xsl:when>
+      
+      <xsl:when test="$level='WARNING' or $level='INFO'">
+        <xsl:for-each select="//record[file=$file and level!='NOTIFICATION' and level!='INFO']">
+          <xsl:text>&pad6;</xsl:text><xsl:value-of select="level" /><xsl:text>&pad2;</xsl:text><xsl:value-of select="message" /><xsl:text>&nl;</xsl:text>
+        </xsl:for-each>
+      </xsl:when>
+      
+      <xsl:when test="$level='SEVERE' or $level='WARNING' or $level='INFO'">
+        <xsl:for-each select="//record[file=$file and level!='NOTIFICATION' and level!='INFO' and level!='WARNING']">
+          <xsl:text>&pad6;</xsl:text><xsl:value-of select="level" /><xsl:text>&pad2;</xsl:text><xsl:value-of select="message" /><xsl:text>&nl;</xsl:text>
+        </xsl:for-each>
+      </xsl:when>
+    </xsl:choose>
   </xsl:for-each>
   
   <xsl:text>&nl;End Of Report&nl;</xsl:text>

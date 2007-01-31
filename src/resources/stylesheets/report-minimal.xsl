@@ -8,6 +8,7 @@
 ]>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:output method="text"/>
+<xsl:param name="level" select="'INFO'" />
 
 <xsl:variable name="numErrors" select="count(log/record [level='SEVERE']/file)" />
 <xsl:variable name="numWarnings" select="count(log/record [level='WARNING']/file)" />
@@ -29,22 +30,60 @@
   <xsl:text>&pad2;</xsl:text><xsl:value-of select="count(log/record [level='NOTIFICATION' and message='PASS'])" /> of <xsl:value-of select="count(log/record [level='NOTIFICATION' and (message='PASS' or message='FAIL')])" /> passed<xsl:text>&nl;</xsl:text>
 
   <xsl:text>&nl;Total Messages:&nl;</xsl:text>
-  <xsl:text>&nl;ERROR&pad2;WARN&pad2;INFO&nl;</xsl:text>
-  <xsl:value-of select="substring('&pad5;', string-length($numErrors) + 1)" /><xsl:value-of select="$numErrors" />
-  <xsl:value-of select="substring('&pad6;', string-length($numWarnings) + 1)" /><xsl:value-of select="$numWarnings" />
-  <xsl:value-of select="substring('&pad6;', string-length($numInfo) + 1)" /><xsl:value-of select="$numInfo" />
+  <xsl:choose>
+    <xsl:when test="$level='INFO'">
+      <xsl:text>&nl;ERROR&pad2;WARN&pad2;INFO&nl;</xsl:text>
+    </xsl:when>
+    
+    <xsl:when test="$level='WARNING'">
+      <xsl:text>&nl;ERROR&pad2;WARN&nl;</xsl:text>
+    </xsl:when>
+    
+    <xsl:when test="$level='SEVERE'">
+      <xsl:text>&nl;ERROR&nl;</xsl:text>
+    </xsl:when>
+  </xsl:choose>
+  
+  <xsl:if test="$level='SEVERE' or $level='WARNING' or $level='INFO'">
+    <xsl:value-of select="substring('&pad5;', string-length($numErrors) + 1)" /><xsl:value-of select="$numErrors" />
+  </xsl:if>
+  <xsl:if test="$level='WARNING' or $level='INFO'">
+    <xsl:value-of select="substring('&pad6;', string-length($numWarnings) + 1)" /><xsl:value-of select="$numWarnings" />
+  </xsl:if>
+  <xsl:if test="$level='INFO'">
+    <xsl:value-of select="substring('&pad6;', string-length($numInfo) + 1)" /><xsl:value-of select="$numInfo" />
+  </xsl:if>
 
   <xsl:text>&nl;&nl;Message Counts by File:&nl;</xsl:text>
-  <xsl:text>&nl;ERROR&pad2;WARN&pad2;INFO&pad2;FILE&nl;</xsl:text>
+  <xsl:choose>
+    <xsl:when test="$level='INFO'">
+      <xsl:text>&nl;ERROR&pad2;WARN&pad2;INFO&pad2;FILE&nl;</xsl:text>
+    </xsl:when>
+    
+    <xsl:when test="$level='WARNING'">
+      <xsl:text>&nl;ERROR&pad2;WARN&pad2;FILE&nl;</xsl:text>
+    </xsl:when>
+    
+    <xsl:when test="$level='SEVERE'">
+      <xsl:text>&nl;ERROR&pad2;FILE&nl;</xsl:text>
+    </xsl:when>
+  </xsl:choose>
+  
   <xsl:for-each select="log/record[level='NOTIFICATION']">
     <xsl:sort select="file" />
     <xsl:variable name="file" select="file" />
-    <xsl:variable name="numFileErrors" select="count(//record [level='SEVERE' and file=$file])" />
-    <xsl:variable name="numFileWarnings" select="count(//record [level='WARNING' and file=$file])" />
-    <xsl:variable name="numFileInfo" select="count(//record [level='INFO' and file=$file])" />
-    <xsl:value-of select="substring('&pad5;', string-length($numFileErrors) + 1)" /><xsl:value-of select="$numFileErrors" />
-    <xsl:value-of select="substring('&pad6;', string-length($numFileWarnings) + 1)" /><xsl:value-of select="$numFileWarnings" />
-    <xsl:value-of select="substring('&pad6;', string-length($numFileInfo) + 1)" /><xsl:value-of select="$numFileInfo" />
+    <xsl:if test="$level='SEVERE' or $level='WARNING' or $level='INFO'">
+      <xsl:variable name="numFileErrors" select="count(//record [level='SEVERE' and file=$file])" />
+      <xsl:value-of select="substring('&pad5;', string-length($numFileErrors) + 1)" /><xsl:value-of select="$numFileErrors" />
+    </xsl:if>
+    <xsl:if test="$level='WARNING' or $level='INFO'">
+      <xsl:variable name="numFileWarnings" select="count(//record [level='WARNING' and file=$file])" />
+      <xsl:value-of select="substring('&pad6;', string-length($numFileWarnings) + 1)" /><xsl:value-of select="$numFileWarnings" />
+    </xsl:if>
+    <xsl:if test="$level='INFO'">
+      <xsl:variable name="numFileInfo" select="count(//record [level='INFO' and file=$file])" />
+      <xsl:value-of select="substring('&pad6;', string-length($numFileInfo) + 1)" /><xsl:value-of select="$numFileInfo" />
+    </xsl:if>
     <xsl:text>&pad2;</xsl:text><xsl:value-of select="$file" /><xsl:text>&nl;</xsl:text>
   </xsl:for-each>
   
