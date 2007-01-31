@@ -36,10 +36,10 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
-import java.util.logging.ConsoleHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.logging.StreamHandler;
 
 import antlr.ANTLRException;
 
@@ -297,9 +297,8 @@ public class DefaultLabelParser implements LabelParser {
         for (int i = 0; i < logger.getHandlers().length; i++)
             logger.removeHandler(handler[i]);
         
-        ConsoleHandler console = new ConsoleHandler();
-        console.setFormatter(new ToolsLogFormatter());
-        logger.addHandler(console);
+        StreamHandler stream = new StreamHandler(System.out, new ToolsLogFormatter());
+        logger.addHandler(stream);
         logger.setLevel(Level.ALL);
         
         LabelParserFactory factory = LabelParserFactory.getInstance();
@@ -342,8 +341,8 @@ public class DefaultLabelParser implements LabelParser {
         else
             label = parser.parse(labelURL, DictionaryParser.parse(dictionaryURL, aliasing.booleanValue()));
         
-        System.out.println("Label:");
-        System.out.println(label.toString());
+        stream.flush();
+        stream.close();
     }
 
     /* (non-Javadoc)
