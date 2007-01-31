@@ -150,8 +150,16 @@ $Id$
   <build>
     <nagEmailAddress>Paul.Ramirez@jpl.nasa.gov</nagEmailAddress>
     <sourceDirectory>${basedir}/src/java</sourceDirectory>
+    <resources>
+      <resource>
+        <directory>${basedir}/src/resources/stylesheets</directory>
+        <targetPath>gov/nasa/pds/tools</targetPath>
+        <includes>
+          <include>*.xsl</include>
+        </includes>
+      </resource>
+    </resources>
     <unitTestSourceDirectory>${basedir}/src/test</unitTestSourceDirectory>
-    <resources/>
     <unitTest>
       <includes>
 	     <include>**/*Test*.java</include>
