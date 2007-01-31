@@ -26,7 +26,6 @@
 
   <xsl:text>&nl;Validation Details:&nl;</xsl:text>
   <xsl:for-each select="log/record[level='NOTIFICATION']">
-    <xsl:sort select="file" />
     <xsl:variable name="file" select="file" /><xsl:text>&nl;</xsl:text>
     <xsl:text>&pad2;</xsl:text><xsl:value-of select="message" />: <xsl:value-of select="$file" /><xsl:text>&nl;</xsl:text>
     
