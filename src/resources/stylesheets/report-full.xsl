@@ -6,7 +6,7 @@
 <!ENTITY pad6 "      ">
 ]>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-<xsl:output method="text"/>
+<xsl:output method="text" encoding="UTF-8"/>
 <xsl:param name="level" select="'INFO'" />
 
 <xsl:template match="/">
@@ -21,7 +21,7 @@
   </xsl:for-each>
   
   <xsl:text>&nl;Summary:&nl;</xsl:text>
-  <xsl:text>&pad2;</xsl:text><xsl:value-of select="count(log/record [level='NOTIFICATION' and message!='SKIP'])" /> of <xsl:value-of select="count(log/record [level='NOTIFICATION'])" /> validated, <xsl:value-of select="count(log/record [level='NOTIFICATION' and message='SKIP'])" /><xsl:text> skipped&nl;</xsl:text>
+  <xsl:text>&pad2;</xsl:text><xsl:value-of select="count(log/record [level='NOTIFICATION' and message!='SKIP'])" /> of <xsl:value-of select="count(log/record [level='NOTIFICATION' and message!='SKIP'])" /> validated, <xsl:value-of select="count(log/record [level='NOTIFICATION' and message='SKIP'])" /><xsl:text> skipped&nl;</xsl:text>
   <xsl:text>&pad2;</xsl:text><xsl:value-of select="count(log/record [level='NOTIFICATION' and message='PASS'])" /> of <xsl:value-of select="count(log/record [level='NOTIFICATION' and (message='PASS' or message='FAIL')])" /><xsl:text> passed&nl;</xsl:text>
 
   <xsl:text>&nl;Validation Details:&nl;</xsl:text>
