@@ -23,15 +23,30 @@ $Id$
     <author email="Sean.Hardman@jpl.nasa.gov">Sean Hardman</author>
   </properties>
   <body>
-    <release version="0.4.0" date="in SVN" description="Binary release for the beta test phase.">
-      <action dev="mcayanan" type="fix">
-        Fixed to properly handle URLs (for targets, dictionaries, Includes)
+    <release version="0.4.0" date="2007-01-31" description="Binary release for the beta test phase.">
+      <action dev="pramirez" type="add">
+        Added the following capabilities related to semantic validation:
+        <ul>
+          <li>White space stripping for element value comparison.</li>
+          <li>Support for element and object aliases.</li>
+          <li>Verifying the existence of referenced data objects and files.</li>
+        </ul>
       </action>
+
+      <action dev="pramirez" type="add">
+        Implemented reporting including generation of an XML formatted log file which can then be transformed via XSLT stylesheeets into the specified human-readable report formats.
+      </action>
+
       <action dev="mcayanan" type="add">
         Implemented progress reporting, which prints to standard error. This feature will report the directory being validated and then represent each file being validated with an asterisk instead of the actual file name.
       </action>
+
+      <action dev="shardman" type="add">
+        Added documentation for Installation and a template for Develoment along with the capability to generate a PDF of the newly named Product Tools Guide.
+      </action>
+
       <action dev="mcayanan" type="update">
-        Added the following command-line options:
+        Added and/or modified the following command-line options:
         
         <table>
           <tr><td>-a</td><td>Enable aliasing</td></tr>
@@ -43,18 +58,25 @@ $Id$
           <tr><td>-v</td><td>Specify the severity level and above to include in the human-reable report</td></tr>
         </table>
       </action>
+
       <action dev="mcayanan" type="update">
         Changed the "p" (patterns) flag to an "e" (regexp) flag. Also changed the "l" (local) flag to an "L" flag.
       </action>
+
       <action dev="mcayanan" type="update">
         Updated VTool to validate files in a directory first before moving on to its sub-directories. Before, validation of files in a directory were interleaved with validation of files in its sub-directories.
-      </action>
-      <action dev="shardman" type="add">
-        Added documentation for Installation and Develoment along with the capability to generate a PDF of the newly named Product Tools Guide.
       </action>
 
       <action dev="shardman" type="update">
         Added a <i>Common Errors</i> section to the User Guide as well as clarifying some aspects of setting the <i>CLASSPATH</i> environment variable in the <i>Setup</i> section.
+      </action>
+
+      <action dev="pramirez" type="fix">
+        Corrected a problem where the tool was not completing syntactic validation on a label.
+      </action>
+
+      <action dev="mcayanan" type="fix">
+        Fixed to properly handle URLs (for targets, dictionaries, Includes).
       </action>
     </release>
     

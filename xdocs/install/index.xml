@@ -67,7 +67,7 @@ or
             <p>This directory contains the executable jar file containing the Validation Tool software.
             </p>
           </li>
-          <li><b>doc/</b>
+          <li><b>docs/</b>
             <p>This document directory contains a local web site with the Product Tools Guide, javadoc, unit test results and other configuration management related information. Just point your favorite browser to the <i>index.html</i> file in this directory.
             </p>
           </li>

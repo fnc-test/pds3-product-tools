@@ -31,6 +31,7 @@ $Id: index.xml 1157 2006-06-16 19:50:08Z shardman $
 
       <ul>
         <li><a href="#Overview">Overview</a></li>
+        <li><a href="#Data Dictionary Requirement">Data Dictionary Requirement</a></li>
         <li><a href="#UNIX-Based Setup">UNIX-Based Setup</a></li>
         <li><a href="#Windows Setup">Windows Setup</a></li>
         <li><a href="#Command-Line Options">Command-Line Options</a></li>
@@ -45,6 +46,11 @@ $Id: index.xml 1157 2006-06-16 19:50:08Z shardman $
 
       <subsection name="Overview">
         <p>The goal of VTool is to programmatically ascertain if a given data product is PDS compliant (or "valid"). Typically, this means the data product is well formed, complete, syntactically and semantically correct, and that it conforms to all applicable PDS standards. The standards themselves are defined in the <a href="http://pds.nasa.gov/documents/sr/" target="_blank">PDS Standards Reference</a>.
+        </p>
+      </subsection>
+
+      <subsection name="Data Dictionary Requirement">
+        <p>With this release of VTool, the requirement of using the provided PDS data dictionary is no longer necessary. Through the efforts of many, the anomalies found in past versions of the data dictionary have been corrected in release <i>1r64</i>. So, this release or later of the data dictionary is required for VTool. The latest version of the PDS data dictionary can be retrieved from the <a href="http://pds.nasa.gov/tools/data_dictionary_lookup.cfm" target="_blank">PDS Data Dictionary Lookup</a> web page.
         </p>
       </subsection>
 
