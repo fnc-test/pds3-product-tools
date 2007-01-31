@@ -15,6 +15,7 @@ import gov.nasa.pds.tools.label.parser.LabelParser;
 import gov.nasa.pds.tools.label.parser.LabelParserFactory;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
@@ -22,6 +23,14 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.text.BadLocationException;
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.transform.Result;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.Transformer;
 
 import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.HelpFormatter;
@@ -974,6 +983,17 @@ public class VTool implements VToolConfigKeys {
 			System.err.print("*");
 		}
 	}
+    
+    private void generateReport(File logFile, String report, String level, OutputStream output) throws TransformerException {
+        Source xmlSource = new StreamSource(logFile);
+        Source xsltSource = new StreamSource(getClass().getResourceAsStream(report));
+        Result result = new StreamResult(output);
+        TransformerFactory factory = TransformerFactory.newInstance();
+        Transformer transformer = factory.newTransformer(xsltSource);
+        
+        transformer.setParameter("level", level);
+        transformer.transform(xmlSource, result);
+    }
 	
 	/**
 	 * The main calls the following methods (in this order):<br><br>
