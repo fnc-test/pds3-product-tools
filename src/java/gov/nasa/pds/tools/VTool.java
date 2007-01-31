@@ -270,7 +270,7 @@ public class VTool implements VToolConfigKeys {
 		// Option to specify the severity level and above
 		OptionBuilder.withLongOpt("verbose");
 		OptionBuilder.withDescription("Specify the severity level and above to include in the human-readable report: " + 
-				                             "(0=Debug, 1=Info, 2=Warning, 3=Error or Fatal). " + 
+				                             "(1=Info, 2=Warning, 3=Severe). " + 
 				                             "Default is Warnings and above (level 2)");
 		OptionBuilder.hasArg();
 		OptionBuilder.withArgName("0|1|2|3");
@@ -648,12 +648,12 @@ public class VTool implements VToolConfigKeys {
 	 */
 	public void setVerbose(short v) {
 		verbose = v;
-		if(verbose < 0 || verbose > 3) {
+		if(verbose < 1 || verbose > 3) {
 			throw new IllegalArgumentException("Invalid value entered for 'v' flag." + 
-														" Valid values can only be 0, 1, 2, or 3");
+														" Valid values can only be 1, 2, or 3");
 		}
-		if(verbose == 0)
-			severity = new String("Debug");
+/*		if(verbose == 0)
+			severity = new String("Debug");*/
 		else if(verbose == 1)
 			severity = new String("Info");
 		else if(verbose == 2)
