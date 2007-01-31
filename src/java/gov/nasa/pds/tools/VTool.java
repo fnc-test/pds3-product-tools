@@ -14,10 +14,13 @@ import gov.nasa.pds.tools.file.FileListGenerator;
 import gov.nasa.pds.tools.label.parser.LabelParser;
 import gov.nasa.pds.tools.label.parser.LabelParserFactory;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -68,6 +71,7 @@ public class VTool implements VToolConfigKeys {
 	
 	final private String versionId = "0.4.0"; 
 	private static Logger log = Logger.getLogger(VTool.class.getName());
+	private Handler logHandler = null;
 	
 	private Options options;
 	private CommandLineParser parser;
@@ -433,7 +437,20 @@ public class VTool implements VToolConfigKeys {
 	 * @param d a List object of dictionary files
 	 */
 	public void setDictionaries(List d) {
-		dictionaries = d;
+		dictionaries = new ArrayList();
+		//Transform all dictionary inputs to URL
+		for(Iterator i = d.iterator(); i.hasNext();) {
+			String dd = i.next().toString();
+			try {
+				if(isURL(dd))
+					dictionaries.add(new URL(dd));
+				else
+					dictionaries.add(new File(dd).toURI().toURL());
+			}catch(MalformedURLException uEx) {
+				System.err.println(uEx.getMessage());
+				System.exit(1);
+			}
+		}
 	}
 	
 	/**
@@ -642,7 +659,7 @@ public class VTool implements VToolConfigKeys {
 		else if(verbose == 2)
 			severity = new String("Warning");
 		else if(verbose == 3)
-			severity = new String("Error");
+			severity = new String("Severe");
 	}
 	
 	/**
@@ -764,6 +781,7 @@ public class VTool implements VToolConfigKeys {
 		
 		if(logFile == null) {
 			StreamHandler stream = new StreamHandler(System.out, new ToolsLogFormatter());
+			logHandler = stream;
 			logger.addHandler(stream);
 			stream.setLevel(Level.ALL);
 			log.log(new ToolsLogRecord(Level.INFO, "Log being directed to standard out. Report-related options will be ignored"));
@@ -774,6 +792,7 @@ public class VTool implements VToolConfigKeys {
 		else {
 			try {
 				FileHandler file = new FileHandler(logFile.toString(), false);
+				logHandler = file;
 				file.setLevel(Level.ALL);
 				file.setFormatter(new ToolsLogFormatter());
 				logger.addHandler(file);
@@ -806,33 +825,30 @@ public class VTool implements VToolConfigKeys {
 	/**
 	 * Parse the dictionary files.
 	 * 
-	 * @param dictionary a list of dictionary files
+	 * @param dictionary a list of dictionary URLs
 	 * @return a Dictionary object that includes all the dictionary information from
 	 *  all the dictionary files passed in.
 	 */
 	public Dictionary readDictionaries(List dictionary) {
 		Dictionary dict = null;
-		String dd = null;
+		URL dd = null;
 		Iterator i = dictionary.iterator();
 		
-		dd = new String( i.next().toString() );
 		try {
-			if(isURL(dd))
-				dict = DictionaryParser.parse(new URL(dd), alias);
-			else
-				dict = DictionaryParser.parse(new File(dd).toURL(), alias);
-			log.log(new ToolsLogRecord(Level.CONFIG, "Dictionary version        " + dict.getInformation(), dd));
-			while( i.hasNext() ) {
-				dd = new String(i.next().toString());
-				if(isURL(dd))
-					dict.merge( DictionaryParser.parse(new URL(dd), alias), true );
-				else
-					dict.merge( DictionaryParser.parse(new File(dd).toURL(), alias), true );
-				log.log(new ToolsLogRecord(Level.CONFIG, "Dictionary version        " + dict.getInformation(), dd));
-			}
+			//Parse the first dictionary
+			dd = new URL(i.next().toString());
+			dict = DictionaryParser.parse(dd, alias);
+            log.log(new ToolsLogRecord(Level.CONFIG, "Dictionary version        \n" + dict.getInformation(), dd.toString()));
 			log.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, "PASS", dd.toString()));
+			//Parse the rest of the dictionaries
+			while( i.hasNext() ) {
+				dd = new URL(i.next().toString());
+				dict.merge( DictionaryParser.parse(dd, alias), true );
+				log.log(new ToolsLogRecord(Level.CONFIG, "Dictionary version        \n" + dict.getInformation(), dd.toString()));
+				log.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, "PASS", dd.toString()));
+			}
 		} catch( MalformedURLException uex) {
-			System.err.println("Dictionary file does not exist: " + dd);
+			System.err.println(uex.getMessage());
 			System.exit(1);
 		} catch( IOException iex) {
 			System.err.println(iex.getMessage());
@@ -841,8 +857,7 @@ public class VTool implements VToolConfigKeys {
 			log.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, "FAIL", dd.toString()));
 			System.exit(1);
 		}
-		return dict;
-		
+		return dict;	
 	}
 	
 	/**
@@ -983,7 +998,48 @@ public class VTool implements VToolConfigKeys {
 			System.err.print("*");
 		}
 	}
-    
+	
+	/**
+	 * Creates a human-readable report
+	 * 
+	 * @param log The xml log
+	 * @param report Where the human-readable report will be written to. If null, then
+	 *        it goes to standard out.
+	 * @param level The severity level to include in the warning. Can be "INFO", "WARNING", or "SEVERE".
+	 * @param style The reporting style to generate. Can be either "full", "sum", or "min" for a
+	 *        full, summary, or minimal report, respectively.
+	 */
+	public void doReporting(File log, File report, String level, String style) {
+		String rptType = null;
+		
+		if( (level.equalsIgnoreCase("info") == false) && 
+            (level.equalsIgnoreCase("warning") == false) &&
+            (level.equalsIgnoreCase("severe") == false) )
+				throw new IllegalArgumentException("Invalid severity level: " + level + ". Must be 'info', 'warning', or 'severe'.");
+		
+		if(style.equalsIgnoreCase("full"))
+			rptType = new String("report-full.xsl");
+		else if(style.equalsIgnoreCase("sum"))
+			rptType = new String("report-summary.xsl");
+		else if(style.equalsIgnoreCase("min"))
+			rptType = new String("report-minimal.xsl");
+		else
+			throw new IllegalArgumentException("Invalid style specified: " + style + ". Must be 'full', 'sum' or 'min'");
+		
+		try {
+			if(report == null)
+				generateReport(log, rptType, level.toUpperCase(), System.out);
+			else
+				generateReport(log, rptType, level.toUpperCase(), new FileOutputStream(report));
+		} catch(TransformerException tEx) {
+			System.err.println(tEx.getMessage());
+			System.exit(1);
+		} catch (FileNotFoundException fEx) {
+			System.err.println(fEx.getMessage());
+			System.exit(1);
+		}
+	}
+	
     private void generateReport(File logFile, String report, String level, OutputStream output) throws TransformerException {
         Source xmlSource = new StreamSource(logFile);
         Source xsltSource = new StreamSource(getClass().getResourceAsStream(report));
@@ -993,6 +1049,10 @@ public class VTool implements VToolConfigKeys {
         
         transformer.setParameter("level", level);
         transformer.transform(xmlSource, result);
+    }
+    
+    private void closeHandler() {
+    	logHandler.close();
     }
 	
 	/**
@@ -1005,6 +1065,7 @@ public class VTool implements VToolConfigKeys {
 	 * logParams<br>
 	 * readDictionaries<br>
 	 * validateLabels<br>
+	 * doReporting<br>
 	 * <br>
 	 * The setupLogger method is called after parsing and querying the command-line
 	 * since we can accept a configuration file as input and by rule, anything on
@@ -1040,7 +1101,12 @@ public class VTool implements VToolConfigKeys {
 		}
 		else 
 			vtool.validateLabels(vtool.targets, null);
- 
+		
+		vtool.closeHandler();
+		
+		if(vtool.logFile != null)
+			vtool.doReporting(vtool.logFile, vtool.rptFile, vtool.severity, vtool.rptStyle);
+		
 		System.exit(0);
 	}
 }
