@@ -94,9 +94,13 @@ tokens {
     public void setStatus(String status) {
         //Make sure we aren't trying to set status to unknown
         if (!Status.UNKNOWN.equals(status)) {
-            //if current status equal to unknown or we are trying to set to fail
-            if (Status.UNKNOWN.equals(this.status) || Status.FAIL.equals(status))
-              this.status = status;
+           //Set to pass if unknown 
+           //Set to fail if that is the status being passed in
+           //Drop everything else
+           if (Status.PASS.equals(status) && Status.UNKNOWN.equals(this.status))
+              this.status = Status.PASS;
+           else if (Status.FAIL.equals(status))
+              this.status = Status.FAIL;
         }
     }
     
@@ -305,6 +309,7 @@ pointer_statement returns [PointerStatement result = null]
                IncludePointer ip = (IncludePointer) result;
                try {
                   ip.loadReferencedStatements(includePaths);
+                  setStatus(ip.getLoadStatus());
                } catch (gov.nasa.pds.tools.label.parser.ParseException pe) {
                   setStatus(Status.FAIL);
                   log.log(new ToolsLogRecord(Level.SEVERE, pe.getMessage(), filename, context, a.getLineNumber()));
@@ -525,9 +530,13 @@ options {
     public void setStatus(String status) {
         //Make sure we aren't trying to set status to unknown
         if (!Status.UNKNOWN.equals(status)) {
-            //if current status equal to unknown or we are trying to set to fail
-            if (Status.UNKNOWN.equals(this.status) || Status.FAIL.equals(status))
-              this.status = status;
+           //Set to pass if unknown 
+           //Set to fail if that is the status being passed in
+           //Drop everything else
+           if (Status.PASS.equals(status) && Status.UNKNOWN.equals(this.status))
+              this.status = Status.PASS;
+           else if (Status.FAIL.equals(status))
+              this.status = Status.FAIL;
         }
     }
     
