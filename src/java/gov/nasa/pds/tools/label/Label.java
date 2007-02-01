@@ -6,6 +6,8 @@
 
 package gov.nasa.pds.tools.label;
 
+import gov.nasa.pds.tools.label.validate.Status;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -18,10 +20,11 @@ import java.util.Iterator;
  * @version $Revision$
  * 
  */
-public class Label implements LabelType {
+public class Label implements LabelType, Status {
     private volatile int labelType;
     private Map statements;
     private String filename;
+    private String status;
     
     /**
      * Constructs an object representation of a PDS label.
@@ -31,6 +34,7 @@ public class Label implements LabelType {
         statements = new HashMap();
         labelType = UNDEFINED;
         filename = null;
+        status = Status.UNKNOWN;
     }
 
     /**
@@ -231,5 +235,17 @@ public class Label implements LabelType {
     
     public String getFilename() {
         return filename;
+    }
+    
+    public String getStatus() {
+        return status;
+    }
+    
+    public void setStatus(String status) {
+        //Set status if it current status is unknown, or setting to fail, 
+        //or current status is unknown and has passed
+        if (UNKNOWN.equals(status) || FAIL.equals(status) ||
+                (UNKNOWN.equals(this.status) && PASS.equals(status)))
+            this.status = status;
     }
 }
