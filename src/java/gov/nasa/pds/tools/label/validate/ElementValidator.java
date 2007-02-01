@@ -196,10 +196,17 @@ public class ElementValidator implements DictionaryTokens {
                                     " when none should be present. Found " + number.getUnits(), attribute.getFilename(), 
                                     attribute.getContext(), attribute.getLineNumber()));
                         } else if (number.getUnits() != null && !definition.isUnitAllowed(number.getUnits().toUpperCase())) {
-                            valid = false;
-                            log.log(new ToolsLogRecord(Level.SEVERE, "Units do not match those specified for " +  
-                                    attribute.getElementIdentifier() +" by dictionary. Found " + number.getUnits(),
-                                    attribute.getFilename(), attribute.getContext(), attribute.getLineNumber()));
+                            boolean unitsValid = false;
+                            if (number.getUnits().toUpperCase().endsWith("S") && 
+                                    definition.isUnitAllowed(number.getUnits().toUpperCase().substring(0, number.getUnits().length() - 1))) {
+                                unitsValid = true;
+                            }
+                            if (!unitsValid) {
+                                valid = false;
+                                log.log(new ToolsLogRecord(Level.SEVERE, "Units do not match those specified for " +  
+                                        attribute.getElementIdentifier() +" by dictionary. Found " + number.getUnits(),
+                                        attribute.getFilename(), attribute.getContext(), attribute.getLineNumber()));
+                            }
                         }
                     }
                 }
