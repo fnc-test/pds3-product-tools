@@ -108,34 +108,38 @@ public class FileCharacteristicValidator implements LabelValidator, LabelType, R
         
         for (Iterator i = label.getObjects("FILE").iterator(); i.hasNext();) {
             ObjectStatement fileObject = (ObjectStatement) i.next();
-            pass = checkFileObject(fileObject, label.getFilename());
+            pass = checkFileObject(fileObject);
         }
         
         return pass;
     }
     
-    private boolean checkFileObject(ObjectStatement object, String filename) {
+    private boolean checkFileObject(ObjectStatement object) {
         boolean pass = true;
         
         if (object.getAttribute(RECORD_TYPE) == null) {
-            log.log(new ToolsLogRecord(Level.SEVERE, "File object does not contain the required RECORD_TYPE element.", filename));
+            log.log(new ToolsLogRecord(Level.SEVERE, "File object does not contain the required RECORD_TYPE element.", 
+                    object.getFilename(), object.getContext(), object.getLineNumber()));
             return false;
         }
         
         String recordType = object.getAttribute(RECORD_TYPE).getValue().toString();
         if (!FIXED_LENGTH.equals(recordType) && !VARIABLE_LENGTH.equals(recordType) && 
                 !STREAM.equals(recordType) && !RecordType.UNDEFINED.equals(recordType)) {
-            log.log(new ToolsLogRecord(Level.WARNING, "Could not determine RECORD_TYPE file characteristics will not be checked", filename));
+            log.log(new ToolsLogRecord(Level.WARNING, "Could not determine RECORD_TYPE file characteristics will not be checked", 
+                    object.getFilename(), object.getContext(), object.getLineNumber()));
             return false;
         }
         
         if (FIXED_LENGTH.equals(recordType) || VARIABLE_LENGTH.equals(recordType)) {
             if (object.getAttribute(RECORD_BYTES) == null) {
-                log.log(new ToolsLogRecord(Level.SEVERE, "File object does not contain required element " + RECORD_BYTES, filename));
+                log.log(new ToolsLogRecord(Level.SEVERE, "File object does not contain required element " + RECORD_BYTES, 
+                        object.getFilename(), object.getContext(), object.getLineNumber()));
                 pass = false;
             }
             if (object.getAttribute(FILE_RECORDS) == null) {
-                log.log(new ToolsLogRecord(Level.SEVERE, "File object does not contain required element " + FILE_RECORDS, filename));
+                log.log(new ToolsLogRecord(Level.SEVERE, "File object does not contain required element " + FILE_RECORDS, 
+                        object.getFilename(), object.getContext(), object.getLineNumber()));
                 pass = false;
             }
         } 

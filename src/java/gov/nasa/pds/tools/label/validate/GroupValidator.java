@@ -39,11 +39,6 @@ public class GroupValidator {
     
     public static boolean isValid(Dictionary dictionary, GroupStatement group) 
        throws DefinitionNotFoundException {
-        return isValid(dictionary, group, null);
-    }
-    
-    public static boolean isValid(Dictionary dictionary, GroupStatement group, String filename) 
-       throws DefinitionNotFoundException {
         boolean valid = true;
         
         //Lookup group definition, can't do anything without it
@@ -58,7 +53,7 @@ public class GroupValidator {
                 valid = false;
                 log.log(new ToolsLogRecord(Level.SEVERE, "Group " + group.getIdentifier() + 
                         " does not contain required element " + required,
-                        filename, group.getLineNumber()));
+                        group.getFilename(), group.getContext(), group.getLineNumber()));
             }
         }
         
@@ -74,7 +69,7 @@ public class GroupValidator {
                     log.log(new ToolsLogRecord(Level.SEVERE, "Group " + group.getIdentifier() +  
                             " contains the element " + attribute.getIdentifier() + 
                             " which is neither required nor optional.",
-                            filename, group.getLineNumber()));
+                            attribute.getFilename(), attribute.getContext(), attribute.getLineNumber()));
                 }
             }
         }
@@ -88,9 +83,11 @@ public class GroupValidator {
             try {
                 elementValid = ElementValidator.isValid(dictionary, attribute);
             } catch (UnsupportedTypeException ute) {
-                log.log(new ToolsLogRecord(Level.SEVERE, ute.getMessage(), filename, attribute.getLineNumber()));
+                log.log(new ToolsLogRecord(Level.SEVERE, ute.getMessage(), attribute.getFilename(), 
+                        attribute.getContext(), attribute.getLineNumber()));
             } catch (DefinitionNotFoundException dnfe) {
-                log.log(new ToolsLogRecord(Level.SEVERE, dnfe.getMessage(), filename, attribute.getLineNumber()));
+                log.log(new ToolsLogRecord(Level.SEVERE, dnfe.getMessage(), attribute.getFilename(), 
+                        attribute.getContext(), attribute.getLineNumber()));
             }
             if (!elementValid)
                 valid = false;

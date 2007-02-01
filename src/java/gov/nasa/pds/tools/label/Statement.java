@@ -16,6 +16,8 @@ package gov.nasa.pds.tools.label;
 public abstract class Statement implements Comparable {  
     protected int lineNumber;
     protected String identifier;
+    protected String filename;
+    protected String context;
     
     /**
      * Constructs a statement
@@ -23,8 +25,18 @@ public abstract class Statement implements Comparable {
      * @param identifier which uniquely identifies this statement
      */
     public Statement(int lineNumber, String identifier) {
+        this(null, lineNumber, identifier);
+    }
+    
+    public Statement(String filename, int lineNumber, String identifier) {
+        this(null, filename, lineNumber, identifier);
+    }
+    
+    public Statement(String context, String filename, int lineNumber, String identifier) {
         this.lineNumber = lineNumber;
         this.identifier = identifier;
+        this.filename = filename;
+        this.context = context;
     }
     
     /**
@@ -42,7 +54,23 @@ public abstract class Statement implements Comparable {
     public String getIdentifier() {
         return identifier;
     }
+    
+    public String getFilename() {
+        return filename;
+    }
+    
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
 
+    public String getContext() {
+        return context;
+    }
+    
+    public void setContext(String context) {
+        this.context = context;
+    }
+    
     public abstract void attachComment(CommentStatement commet);
     
     public int compareTo(Object o) {

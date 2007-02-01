@@ -49,7 +49,10 @@ public class IncludePointer extends ExternalPointer implements PointerType {
         if (!loaded) {
             loaded = true;
             LabelParser parser = LabelParserFactory.getInstance().newLabelParser();
-            Label label = parser.parsePartial(labelURL);
+            String labelContext = context;
+            if (labelContext == null)
+                labelContext = filename;
+            Label label = parser.parsePartial(labelContext, labelURL);
             statements = label.getStatements();
         }
     }

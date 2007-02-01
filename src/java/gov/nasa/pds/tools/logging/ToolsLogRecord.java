@@ -16,7 +16,7 @@ import java.util.logging.LogRecord;
  */
 public class ToolsLogRecord extends LogRecord {
     private String file;
-    private String root;
+    private String context;
     private int line;
 
     public ToolsLogRecord(Level level, String message) {
@@ -49,10 +49,10 @@ public class ToolsLogRecord extends LogRecord {
      * @param level of error
      * @param message describing error
      * @param file in which error occured
-     * @param root file which referenced file where error occured
+     * @param context file which referenced file where error occured
      */
-    public ToolsLogRecord(Level level, String message, String file, String root) {
-        this(level, message, file, root, -1);
+    public ToolsLogRecord(Level level, String message, String file, String context) {
+        this(level, message, file, context, -1);
     }
     
     /**
@@ -60,19 +60,19 @@ public class ToolsLogRecord extends LogRecord {
      * @param level of error
      * @param message describing error
      * @param file in which error occured
-     * @param root file which referenced file where error occured
+     * @param context file which referenced file where error occured
      * @param line number at which occured
      */
-    public ToolsLogRecord(Level level, String message, String file, String root, int line) {
+    public ToolsLogRecord(Level level, String message, String file, String context, int line) {
         super(level, message);
         this.file = file;
-        this.root = root;
+        this.context = context;
         this.line = line;
     }
 
     public String getFile() {return file;}
     
-    public String getRoot() {return root;}
+    public String getContext() {return context;}
     
     public int getLine() {return line;}
  

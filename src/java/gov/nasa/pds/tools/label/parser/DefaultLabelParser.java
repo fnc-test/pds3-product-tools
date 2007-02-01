@@ -23,6 +23,7 @@ import gov.nasa.pds.tools.label.validate.ElementValidator;
 import gov.nasa.pds.tools.label.validate.GroupValidator;
 import gov.nasa.pds.tools.label.validate.LabelValidator;
 import gov.nasa.pds.tools.label.validate.ObjectValidator;
+import gov.nasa.pds.tools.logging.ToolsLevel;
 import gov.nasa.pds.tools.logging.ToolsLogFormatter;
 import gov.nasa.pds.tools.logging.ToolsLogRecord;
 
@@ -64,16 +65,16 @@ public class DefaultLabelParser implements LabelParser {
     /* (non-Javadoc)
      * @see gov.nasa.jpl.pds.tools.label.parser.LabelParser#parse(java.net.URL)
      */
-    public Label parse(URL file) throws ParseException, IOException {
+    public Label parse(URL url) throws ParseException, IOException {
         Label label = null;
         
         //Not all streams can support marking so stream will be open multiple times to look for header
         //First time to process the SFDUs
-        InputStream sfduCheck = file.openStream();
+        InputStream sfduCheck = url.openStream();
         
         List sfdus = consumeSFDUHeader(sfduCheck);
         for (Iterator i = sfdus.iterator(); i.hasNext();) {
-            log.log(new ToolsLogRecord(Level.INFO, "Found SFDU Label: " + i.next().toString(), file.toString()));
+            log.log(new ToolsLogRecord(Level.INFO, "Found SFDU Label: " + i.next().toString(), url.toString()));
         }
         
         //On the next input stream we will need to skip 20 bytes for every SFDULabel
@@ -84,7 +85,7 @@ public class DefaultLabelParser implements LabelParser {
         
         sfduCheck.close();
         
-        InputStream pdsCheck = file.openStream();
+        InputStream pdsCheck = url.openStream();
         //Now look for PDS_VERSION_ID to ensure that this is a file we want to validate
         BufferedReader reader = new BufferedReader(new InputStreamReader(pdsCheck));
         reader.skip(skip);
@@ -92,42 +93,44 @@ public class DefaultLabelParser implements LabelParser {
         String[] line = version.split("=");  
         
         if (line.length != 2) {
-            log.log(new ToolsLogRecord(Level.WARNING, file.toString() + " is not a label. Could not find the PDS_VERSION_ID in the first line."));
-            throw new ParseException(file.toString() + " is not a label. Could not find the PDS_VERSION_ID in the first line.");
+            log.log(new ToolsLogRecord(Level.WARNING, "Not a label. Could not find the PDS_VERSION_ID in the first line.", url.toString()));
+            throw new ParseException("Not a label. Could not find the PDS_VERSION_ID in the first line.");
         }
         
         String name = line[0].trim();
         String value = line[1].trim();
           
         if (!"PDS_VERSION_ID".equals(name)) {
-            log.log(new ToolsLogRecord(Level.WARNING, file.toString() + " is not a label. Could not find the PDS_VERSION_ID in the first line."));
-            throw new ParseException(file.toString() + " is not a label. Could not find the PDS_VERSION_ID in the first line.");
+            log.log(new ToolsLogRecord(Level.WARNING, "Not a label. Could not find the PDS_VERSION_ID in the first line.", url.toString()));
+            throw new ParseException("Not a label. Could not find the PDS_VERSION_ID in the first line.");
         }
         
         pdsCheck.close();
-        InputStream input = file.openStream();
+        InputStream input = url.openStream();
         input.skip(skip);
         ODLLexer lexer = new ODLLexer(input);
+        lexer.setFilename(url.toString());
         ODLParser parser = new ODLParser(lexer);
+        parser.setFilename(url.toString());
         parser.setFollowPointers(Boolean.valueOf(properties.getProperty("parser.pointers", "true")).booleanValue());
-        log.log(new ToolsLogRecord(Level.INFO, "Parsing label with PDS_VERSION_ID = " + value, file.toString()));
+        log.log(new ToolsLogRecord(Level.INFO, "Parsing label with PDS_VERSION_ID = " + value, url.toString()));
         
         if (Boolean.valueOf(properties.getProperty("parser.pointers", "true")).booleanValue()) {
-            URL base = new URL(file.toString().substring(0, file.toString().lastIndexOf("/")));
+            URL base = new URL(url.toString().substring(0, url.toString().lastIndexOf("/")));
             includePaths.add(0, base);
             parser.setIncludePaths(includePaths);
         } else {
-            log.log(new ToolsLogRecord(Level.INFO, "Pointers disabled. Pointers will not be followed.", file.toString()));
+            log.log(new ToolsLogRecord(Level.INFO, "Pointers disabled. Pointers will not be followed.", url.toString()));
         }
         
         try {
             label = parser.label();
         } catch (ANTLRException ex) {
-            log.severe(ex.getMessage());
+            log.log(new ToolsLogRecord(Level.SEVERE, ex.getMessage(), url.toString()));
             throw new ParseException(ex.getMessage());
         }
         
-        log.log(new ToolsLogRecord(Level.INFO, "Finished parsing", file.toString()));
+        log.log(new ToolsLogRecord(Level.INFO, "Finished parsing", url.toString()));
         
         for (Iterator i = validators.iterator(); i.hasNext();) {
             LabelValidator validator = (LabelValidator) i.next();
@@ -163,13 +166,13 @@ public class DefaultLabelParser implements LabelParser {
     /* (non-Javadoc)
      * @see gov.nasa.jpl.pds.tools.label.parser.LabelParser#parse(java.net.URL, gov.nasa.jpl.pds.tools.dict.Dictionary)
      */
-    public Label parse(URL file, Dictionary dictionary) throws ParseException, IOException {
+    public Label parse(URL url, Dictionary dictionary) throws ParseException, IOException {
         Label label = null;
         
         //First parse the file and get back the label object
-        label = parse(file);
+        label = parse(url);
         
-        log.log(new ToolsLogRecord(Level.INFO, "Starting semantic validation on " + file.toString()));
+        log.log(new ToolsLogRecord(Level.INFO, "Starting semantic validation.", url.toString()));
         //Check all the statements
         List statements = label.getStatements();
         Collections.sort(statements);
@@ -179,26 +182,26 @@ public class DefaultLabelParser implements LabelParser {
                 try {
                     ElementValidator.isValid(dictionary, (AttributeStatement) statement);
                 } catch (DefinitionNotFoundException dnfe) {
-                    log.log(new ToolsLogRecord(Level.SEVERE, dnfe.getMessage(), file.toString(), statement.getLineNumber()));
+                    log.log(new ToolsLogRecord(Level.SEVERE, dnfe.getMessage(), url.toString(), statement.getLineNumber()));
                 } catch (UnsupportedTypeException ute) {
-                    log.log(new ToolsLogRecord(Level.SEVERE, ute.getMessage(), file.toString(), statement.getLineNumber()));
+                    log.log(new ToolsLogRecord(Level.SEVERE, ute.getMessage(), url.toString(), statement.getLineNumber()));
                 }
             } else if (statement instanceof ObjectStatement) {
                 try {
                     ObjectValidator.isValid(dictionary, (ObjectStatement) statement);
                 } catch (DefinitionNotFoundException dnfe) {
-                    log.log(new ToolsLogRecord(Level.SEVERE, dnfe.getMessage(), file.toString(), statement.getLineNumber()));
+                    log.log(new ToolsLogRecord(Level.SEVERE, dnfe.getMessage(), url.toString(), statement.getLineNumber()));
                 }
             } else if (statement instanceof GroupStatement) {
                 try {
                     GroupValidator.isValid(dictionary, (GroupStatement) statement);
                 } catch (DefinitionNotFoundException dnfe) {
-                    log.log(new ToolsLogRecord(Level.SEVERE, dnfe.getMessage(), file.toString(), statement.getLineNumber()));
+                    log.log(new ToolsLogRecord(Level.SEVERE, dnfe.getMessage(), url.toString(), statement.getLineNumber()));
                 }
             }
         }
         
-        log.log(new ToolsLogRecord(Level.INFO, "Finished semantic validation.", file.toString()));
+        log.log(new ToolsLogRecord(Level.INFO, "Finished semantic validation.", url.toString()));
         
         return label;
     }
@@ -242,29 +245,41 @@ public class DefaultLabelParser implements LabelParser {
     /* (non-Javadoc)
      * @see gov.nasa.pds.tools.label.parser.LabelParser#parsePartial(java.net.URL)
      */
-    public Label parsePartial(URL file) throws ParseException, IOException {
+    public Label parsePartial(URL url) throws ParseException, IOException {
+        return parsePartial(null, url);
+    }
+    
+    /**
+     * @see gov.nasa.pds.tools.label.parser.LabelParser#parsePartial(String,java.net.URL)
+     */
+    public Label parsePartial(String context, URL url) throws ParseException, IOException {
         Label label = null;
-        InputStream input = file.openStream();
+        InputStream input = url.openStream();
         ODLLexer lexer = new ODLLexer(input);
+        lexer.setFilename(url.toString());
+        lexer.setContext(context);
         ODLParser parser = new ODLParser(lexer);
-        log.log(new ToolsLogRecord(Level.INFO, "Parsing label fragment.", file.toString()));
+        parser.setFilename(url.toString());
+        parser.setContext(context);
+        
+        log.log(new ToolsLogRecord(Level.INFO, "Parsing label fragment.", url.toString(), context));
         
         if (Boolean.valueOf(properties.getProperty("parser.pointers", "true")).booleanValue()) {
-            URL base = new URL(file.toString().substring(0, file.toString().lastIndexOf("/")));
+            URL base = new URL(url.toString().substring(0, url.toString().lastIndexOf("/")));
             includePaths.add(0, base);
             parser.setIncludePaths(includePaths);
         } else {
-            log.log(new ToolsLogRecord(Level.INFO, "Pointers disabled. Pointers will not be followed.", file.toString()));
+            log.log(new ToolsLogRecord(Level.INFO, "Pointers disabled. Pointers will not be followed.", url.toString(), context));
         }
         
         try {
             label = parser.label();
         } catch (ANTLRException ex) {
-            log.log(new ToolsLogRecord(Level.SEVERE, ex.getMessage(), file.toString()));
+            log.log(new ToolsLogRecord(Level.SEVERE, ex.getMessage(), url.toString(), context));
             throw new ParseException(ex.getMessage());
         }
 
-        log.log(new ToolsLogRecord(Level.INFO, "Finished parsing label fragment.", file.toString()));
+        log.log(new ToolsLogRecord(Level.INFO, "Finished parsing label fragment.", url.toString(), context));
         
         return label;
     }
@@ -336,10 +351,15 @@ public class DefaultLabelParser implements LabelParser {
         if (includePathURL != null)
             parser.addIncludePath(includePathURL);
         
-        if (dictionaryURL == null)
+        Logger logFile = Logger.getLogger(DefaultLabelParser.class.getName());
+        if (dictionaryURL == null) {
             label = parser.parse(labelURL);
-        else
+            logFile.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, "PASS", labelURL.toString()));
+        } else {
             label = parser.parse(labelURL, DictionaryParser.parse(dictionaryURL, aliasing.booleanValue()));
+            logFile.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, "PASS", labelURL.toString()));
+            logFile.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, "PASS", dictionaryURL.toString()));
+        }
         
         stream.flush();
         stream.close();

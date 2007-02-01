@@ -59,7 +59,7 @@ public class ElementValidator implements DictionaryTokens {
             if (attribute.getNamespace().length() > NAMESPACE_LENGTH) {
                 valid = false;
                 log.log(new ToolsLogRecord(Level.SEVERE, "Namespace exceeds max length of " + 
-                    ELEMENT_IDENT_LENGTH + " characters.", "FILE",  attribute.getLineNumber()));
+                    ELEMENT_IDENT_LENGTH + " characters.", attribute.getFilename(), attribute.getContext(), attribute.getLineNumber()));
             }
         }
         
@@ -67,7 +67,7 @@ public class ElementValidator implements DictionaryTokens {
         if (attribute.getElementIdentifier().length() > ELEMENT_IDENT_LENGTH) {
             valid = false;
             log.log(new ToolsLogRecord(Level.SEVERE, "Identifier exceeds max length of " + 
-                    ELEMENT_IDENT_LENGTH + " characters.", "FILE", attribute.getLineNumber()));
+                    ELEMENT_IDENT_LENGTH + " characters.", attribute.getFilename(), attribute.getContext(), attribute.getLineNumber()));
         }
 
         //Load the type checker
@@ -86,7 +86,7 @@ public class ElementValidator implements DictionaryTokens {
         boolean valid = true;
         if (value == null) {
             log.log(new ToolsLogRecord(Level.WARNING, "Found no value for " + attribute.getIdentifier(), 
-                    "FILE", attribute.getLineNumber()));
+                    attribute.getFilename(), attribute.getContext(), attribute.getLineNumber()));
         } else if (value instanceof Set || value instanceof Sequence) {
             boolean validValues = true;
             for (Iterator i = ((Collection) value).iterator(); i.hasNext();) {
@@ -124,16 +124,16 @@ public class ElementValidator implements DictionaryTokens {
                             if (!VALUE_TYPE_STATIC.equals(definition.getValueType())) {
                                log.log(new ToolsLogRecord(Level.WARNING, value.toString() + 
                                         " is not in the suggested list of valid values for " + attribute.getIdentifier(), 
-                                        "FILE", attribute.getLineNumber()));
+                                        attribute.getFilename(), attribute.getContext(), attribute.getLineNumber()));
                             } else {
                                log.log(new ToolsLogRecord(Level.SEVERE, value.toString() + 
                                          " is not in the list of valid values for " + attribute.getIdentifier(),
-                                         "FILE", attribute.getLineNumber()));
+                                         attribute.getFilename(), attribute.getContext(), attribute.getLineNumber()));
                             }
                         } else if (manipulated) {
                             //Value had to be manipulated to make a match
                             log.log(new ToolsLogRecord(Level.INFO, "Manipulated value for " + attribute.getIdentifier() +
-                                       " to find valid value.", "FILE", attribute.getLineNumber()));
+                                       " to find valid value.", attribute.getFilename(), attribute.getContext(), attribute.getLineNumber()));
                         }
                     }
                 }
@@ -144,7 +144,7 @@ public class ElementValidator implements DictionaryTokens {
                     castedValue = checker.cast(value.toString());
                 } catch (InvalidTypeException ite) {
                     valid = false;
-                    log.log(new ToolsLogRecord(Level.SEVERE, ite.getMessage(), "FILE", attribute.getLineNumber()));
+                    log.log(new ToolsLogRecord(Level.SEVERE, ite.getMessage(), attribute.getFilename(), attribute.getContext(), attribute.getLineNumber()));
                 }
                 
                 //Check min length
@@ -152,7 +152,7 @@ public class ElementValidator implements DictionaryTokens {
                     checker.checkMinLength(value.toString(), definition.getMinLength());
                 } catch (InvalidLengthException ile) {
                     valid = false;
-                    log.log(new ToolsLogRecord(Level.SEVERE, ile.getMessage(), "FILE", attribute.getLineNumber()));
+                    log.log(new ToolsLogRecord(Level.SEVERE, ile.getMessage(), attribute.getFilename(), attribute.getContext(), attribute.getLineNumber()));
                 }
                 
                 //Check max length
@@ -160,7 +160,7 @@ public class ElementValidator implements DictionaryTokens {
                     checker.checkMaxLength(value.toString(), definition.getMaxLength());
                 } catch (InvalidLengthException ile) {
                     valid = false;
-                    log.log(new ToolsLogRecord(Level.SEVERE, ile.getMessage(), "FILE", attribute.getLineNumber()));
+                    log.log(new ToolsLogRecord(Level.SEVERE, ile.getMessage(), attribute.getFilename(), attribute.getContext(), attribute.getLineNumber()));
                 }
                 
                 //Check to see if this is a numeric type checker if so then do further checking
@@ -173,7 +173,7 @@ public class ElementValidator implements DictionaryTokens {
                             numericChecker.checkMinValue((Number) castedValue, definition.getMinimum());
                         } catch (OutOfRangeException oor) {
                             valid = false;
-                            log.log(new ToolsLogRecord(Level.SEVERE, oor.getMessage(), "FILE", attribute.getLineNumber()));
+                            log.log(new ToolsLogRecord(Level.SEVERE, oor.getMessage(), attribute.getFilename(), attribute.getContext(), attribute.getLineNumber()));
                         }
                     }
                     
@@ -183,7 +183,7 @@ public class ElementValidator implements DictionaryTokens {
                             numericChecker.checkMaxValue((Number) castedValue, definition.getMaximum());
                         } catch (OutOfRangeException oor) {
                             valid = false;
-                            log.log(new ToolsLogRecord(Level.SEVERE, oor.getMessage(), "FILE", attribute.getLineNumber()));
+                            log.log(new ToolsLogRecord(Level.SEVERE, oor.getMessage(), attribute.getFilename(), attribute.getContext(), attribute.getLineNumber()));
                         }
                     }
                     
@@ -193,11 +193,12 @@ public class ElementValidator implements DictionaryTokens {
                         Numeric number = (Numeric) value;
                         if ("NONE".equals(definition.getUnitId()) && number.getUnits() != null) {
                             log.log(new ToolsLogRecord(Level.WARNING, "Units specified for " + attribute.getElementIdentifier() +
-                                    " when none should be present. Found " + number.getUnits(), "FILE", attribute.getLineNumber()));
+                                    " when none should be present. Found " + number.getUnits(), attribute.getFilename(), 
+                                    attribute.getContext(), attribute.getLineNumber()));
                         } else if (number.getUnits() != null && !definition.isUnitAllowed(number.getUnits().toUpperCase())) {
                             log.log(new ToolsLogRecord(Level.SEVERE, "Units do not match those specified for " +  
                                     attribute.getElementIdentifier() +" by dictionary. Found " + number.getUnits(),
-                                    "FILE", attribute.getLineNumber()));
+                                    attribute.getFilename(), attribute.getContext(), attribute.getLineNumber()));
                         }
                     }
                 }

@@ -37,13 +37,8 @@ import java.util.logging.Logger;
  */
 public class ObjectValidator {
     private static Logger log = Logger.getLogger(ObjectValidator.class.getName());
-
-    public static boolean isValid(Dictionary dictionary, ObjectStatement object) throws 
-       DefinitionNotFoundException {
-        return isValid(dictionary, object, null);
-    }
     
-    public static boolean isValid(Dictionary dictionary, ObjectStatement object, String filename) throws 
+    public static boolean isValid(Dictionary dictionary, ObjectStatement object) throws 
        DefinitionNotFoundException {
         boolean valid = true;
         
@@ -73,7 +68,8 @@ public class ObjectValidator {
                 if (!foundAlias) {
                     valid = false;
                     log.log(new ToolsLogRecord(Level.SEVERE, "Object " + object.getIdentifier() + 
-                            " does not contain required element " + required, filename));
+                            " does not contain required element " + required, object.getFilename(), 
+                            object.getContext(), object.getLineNumber()));
                 }
             }
         }
@@ -91,7 +87,8 @@ public class ObjectValidator {
                 if (elementDefinition == null || !definition.isElementPossible(elementDefinition.getIdentifier())) {
                     valid = false;
                     log.log(new ToolsLogRecord(Level.SEVERE, "Object " + object.getIdentifier() +  " contains the element " +
-                            attribute.getIdentifier() + " which is neither required nor optional.", filename));
+                            attribute.getIdentifier() + " which is neither required nor optional.", attribute.getFilename(),
+                            attribute.getContext(), attribute.getLineNumber()));
                 }
             }
             //Validate attribute
@@ -99,9 +96,11 @@ public class ObjectValidator {
             try {
                 elementValid = ElementValidator.isValid(dictionary, definition.getIdentifier(), attribute);
             } catch (UnsupportedTypeException ute) {
-                log.log(new ToolsLogRecord(Level.SEVERE, ute.getMessage(), filename, attribute.getLineNumber()));
+                log.log(new ToolsLogRecord(Level.SEVERE, ute.getMessage(), attribute.getFilename(), 
+                        attribute.getContext(), attribute.getLineNumber()));
             } catch (DefinitionNotFoundException dnfe) {
-                log.log(new ToolsLogRecord(Level.SEVERE, dnfe.getMessage(), filename, attribute.getLineNumber()));
+                log.log(new ToolsLogRecord(Level.SEVERE, dnfe.getMessage(), attribute.getFilename(), 
+                        attribute.getContext(), attribute.getLineNumber()));
             }
             if (!elementValid)
                 valid = false;
@@ -126,7 +125,8 @@ public class ObjectValidator {
                 if (!foundAlias) {
                     valid = false;
                     log.log(new ToolsLogRecord(Level.SEVERE, "Object " + object.getIdentifier() + 
-                            " does not contain required object " + required, filename));
+                            " does not contain required object " + required, object.getFilename(), 
+                            object.getContext(), object.getLineNumber()));
                 }
             }
         }
@@ -144,15 +144,17 @@ public class ObjectValidator {
                 if (objectDefinition == null || !definition.isObjectPossible(objectDefinition.getIdentifier())) {
                     valid = false;
                     log.log(new ToolsLogRecord(Level.SEVERE, "Object " + object.getIdentifier() +  " contains the element " +
-                            obj.getIdentifier() + " which is neither required nor optional.", filename));
+                            obj.getIdentifier() + " which is neither required nor optional.", obj.getFilename(), 
+                            obj.getContext(), obj.getLineNumber()));
                 }
             }
             //Validate nested object
             boolean objValid = false;
             try {
-                ObjectValidator.isValid(dictionary, obj, filename);
+                ObjectValidator.isValid(dictionary, obj);
             } catch (DefinitionNotFoundException dnfe) {
-                log.log(new ToolsLogRecord(Level.SEVERE, dnfe.getMessage(), filename, obj.getLineNumber()));
+                log.log(new ToolsLogRecord(Level.SEVERE, dnfe.getMessage(), obj.getFilename(), 
+                        obj.getContext(), obj.getLineNumber()));
             }
             if (!objValid)
                 valid = false;
