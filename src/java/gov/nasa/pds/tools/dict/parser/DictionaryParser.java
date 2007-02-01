@@ -19,6 +19,7 @@ import gov.nasa.pds.tools.label.antlr.ODLLexer;
 import gov.nasa.pds.tools.label.antlr.ODLParser;
 import gov.nasa.pds.tools.label.antlr.ODLTokenTypes;
 import gov.nasa.pds.tools.label.parser.ParseException;
+import gov.nasa.pds.tools.label.validate.Status;
 import gov.nasa.pds.tools.logging.ToolsLogRecord;
 
 import java.io.IOException;
@@ -51,7 +52,7 @@ import java.util.logging.Logger;
  * @version $Revision$
  * 
  */
-public class DictionaryParser implements ODLTokenTypes, DictionaryTokens {
+public class DictionaryParser implements ODLTokenTypes, DictionaryTokens, Status {
     private static Logger log = Logger.getLogger(DictionaryParser.class.getName());
     
     /**
@@ -85,9 +86,12 @@ public class DictionaryParser implements ODLTokenTypes, DictionaryTokens {
         log.log(new ToolsLogRecord(Level.INFO, "Parsing dictionary.", url.toString()));
         try {
             List labels = new ArrayList();
+            dictionary.setStatus(PASS);
             //Attempt to parse a dictionary
             while (input.available() > 0) {
                 Label label = parser.label();
+                dictionary.setStatus(lexer.getStatus());
+                dictionary.setStatus(parser.getStatus());
                 if (label != null)
                     labels.add(label);
             }
@@ -150,6 +154,7 @@ public class DictionaryParser implements ODLTokenTypes, DictionaryTokens {
             }
             //TODO: Update to catch thrown exception not all exceptions
         } catch (Exception ex) {
+            dictionary.setStatus(FAIL);
             log.log(new ToolsLogRecord(Level.SEVERE, ex.getMessage()));
             throw new ParseException(ex.getMessage());
         }

@@ -191,7 +191,9 @@ public class Label implements LabelType, Status {
         }
         if (statement instanceof IncludePointer) {
             stmnts.add(statement);
-            for (Iterator i = ((IncludePointer) statement).getStatements().iterator(); i.hasNext();)
+            IncludePointer ip = (IncludePointer) statement;
+            setStatus(ip.getLoadStatus());
+            for (Iterator i = ip.getStatements().iterator(); i.hasNext();)
                 addStatement((Statement) i.next());
         }
         else 
@@ -242,10 +244,11 @@ public class Label implements LabelType, Status {
     }
     
     public void setStatus(String status) {
-        //Set status if it current status is unknown, or setting to fail, 
-        //or current status is unknown and has passed
-        if (UNKNOWN.equals(status) || FAIL.equals(status) ||
-                (UNKNOWN.equals(this.status) && PASS.equals(status)))
-            this.status = status;
+        //Make sure we aren't trying to set status to unknown
+        if (!UNKNOWN.equals(status)) {
+            //if current status equal to unknown or we are trying to set to fail
+            if (UNKNOWN.equals(this.status) || FAIL.equals(status))
+              this.status = status;
+        }
     }
 }

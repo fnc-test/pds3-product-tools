@@ -14,6 +14,7 @@ import java.util.List;
 import gov.nasa.pds.tools.label.parser.LabelParser;
 import gov.nasa.pds.tools.label.parser.LabelParserFactory;
 import gov.nasa.pds.tools.label.parser.ParseException;
+import gov.nasa.pds.tools.label.validate.Status;
 
 /**
  * This class represents a pointer that is a set of external statements that can and should
@@ -22,9 +23,10 @@ import gov.nasa.pds.tools.label.parser.ParseException;
  * @version $Revision$
  * 
  */
-public class IncludePointer extends ExternalPointer implements PointerType {
+public class IncludePointer extends ExternalPointer implements PointerType, Status {
     private List statements;
     private boolean loaded = false;
+    private String loadStatus = null;
 
     /**
      * Constructs a pointer that can be resolved to a set of statements.
@@ -35,6 +37,7 @@ public class IncludePointer extends ExternalPointer implements PointerType {
     public IncludePointer(int lineNumber, String identifier, Value value) {
         super(INCLUDE, lineNumber, identifier, value);
         statements = new ArrayList();
+        loadStatus = UNKNOWN;
     }
     
     /**
@@ -53,6 +56,7 @@ public class IncludePointer extends ExternalPointer implements PointerType {
             if (labelContext == null)
                 labelContext = filename;
             Label label = parser.parsePartial(labelContext, labelURL);
+            loadStatus = label.getStatus();
             statements = label.getStatements();
         }
     }
@@ -71,6 +75,10 @@ public class IncludePointer extends ExternalPointer implements PointerType {
      */
     public boolean isLoaded() {
         return loaded;
+    }
+    
+    public String getLoadStatus() {
+        return loadStatus;
     }
 
 }

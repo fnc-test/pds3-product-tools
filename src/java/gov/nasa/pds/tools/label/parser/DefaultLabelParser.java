@@ -23,6 +23,7 @@ import gov.nasa.pds.tools.label.validate.ElementValidator;
 import gov.nasa.pds.tools.label.validate.GroupValidator;
 import gov.nasa.pds.tools.label.validate.LabelValidator;
 import gov.nasa.pds.tools.label.validate.ObjectValidator;
+import gov.nasa.pds.tools.label.validate.Status;
 import gov.nasa.pds.tools.logging.ToolsLevel;
 import gov.nasa.pds.tools.logging.ToolsLogFormatter;
 import gov.nasa.pds.tools.logging.ToolsLogRecord;
@@ -50,7 +51,7 @@ import antlr.ANTLRException;
  * @version $Revision$
  * 
  */
-public class DefaultLabelParser implements LabelParser {
+public class DefaultLabelParser implements LabelParser, Status {
     private static Logger log = Logger.getLogger(DefaultLabelParser.class.getName());
     private Properties properties;
     private List includePaths;
@@ -125,6 +126,9 @@ public class DefaultLabelParser implements LabelParser {
         
         try {
             label = parser.label();
+            label.setStatus(PASS);
+            label.setStatus(lexer.getStatus());
+            label.setStatus(parser.getStatus());
         } catch (ANTLRException ex) {
             log.log(new ToolsLogRecord(Level.SEVERE, ex.getMessage(), url.toString()));
             throw new ParseException(ex.getMessage());
@@ -134,7 +138,9 @@ public class DefaultLabelParser implements LabelParser {
         
         for (Iterator i = validators.iterator(); i.hasNext();) {
             LabelValidator validator = (LabelValidator) i.next();
-            validator.isValid(label);
+            boolean valid = validator.isValid(label);
+            if (!valid)
+                label.setStatus(FAIL);
         }
 
         return label;
@@ -180,22 +186,32 @@ public class DefaultLabelParser implements LabelParser {
             Statement statement = (Statement) i.next();
             if (statement instanceof AttributeStatement) {
                 try {
-                    ElementValidator.isValid(dictionary, (AttributeStatement) statement);
+                    boolean valid = ElementValidator.isValid(dictionary, (AttributeStatement) statement);
+                    if (!valid)
+                        label.setStatus(FAIL);
                 } catch (DefinitionNotFoundException dnfe) {
+                    label.setStatus(FAIL);
                     log.log(new ToolsLogRecord(Level.SEVERE, dnfe.getMessage(), url.toString(), statement.getLineNumber()));
                 } catch (UnsupportedTypeException ute) {
+                    label.setStatus(FAIL);
                     log.log(new ToolsLogRecord(Level.SEVERE, ute.getMessage(), url.toString(), statement.getLineNumber()));
                 }
             } else if (statement instanceof ObjectStatement) {
                 try {
-                    ObjectValidator.isValid(dictionary, (ObjectStatement) statement);
+                    boolean valid = ObjectValidator.isValid(dictionary, (ObjectStatement) statement);
+                    if (!valid)
+                        label.setStatus(FAIL);
                 } catch (DefinitionNotFoundException dnfe) {
+                    label.setStatus(FAIL);
                     log.log(new ToolsLogRecord(Level.SEVERE, dnfe.getMessage(), url.toString(), statement.getLineNumber()));
                 }
             } else if (statement instanceof GroupStatement) {
                 try {
-                    GroupValidator.isValid(dictionary, (GroupStatement) statement);
+                    boolean valid = GroupValidator.isValid(dictionary, (GroupStatement) statement);
+                    if (!valid)
+                        label.setStatus(FAIL);
                 } catch (DefinitionNotFoundException dnfe) {
+                    label.setStatus(FAIL);
                     log.log(new ToolsLogRecord(Level.SEVERE, dnfe.getMessage(), url.toString(), statement.getLineNumber()));
                 }
             }
@@ -274,6 +290,9 @@ public class DefaultLabelParser implements LabelParser {
         
         try {
             label = parser.label();
+            label.setStatus(PASS);
+            label.setStatus(lexer.getStatus());
+            label.setStatus(parser.getStatus());
         } catch (ANTLRException ex) {
             log.log(new ToolsLogRecord(Level.SEVERE, ex.getMessage(), url.toString(), context));
             throw new ParseException(ex.getMessage());
@@ -356,9 +375,10 @@ public class DefaultLabelParser implements LabelParser {
             label = parser.parse(labelURL);
             logFile.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, "PASS", labelURL.toString()));
         } else {
-            label = parser.parse(labelURL, DictionaryParser.parse(dictionaryURL, aliasing.booleanValue()));
-            logFile.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, "PASS", labelURL.toString()));
-            logFile.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, "PASS", dictionaryURL.toString()));
+            Dictionary dictionary = DictionaryParser.parse(dictionaryURL, aliasing.booleanValue());
+            label = parser.parse(labelURL, dictionary);
+            logFile.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, label.getStatus(), labelURL.toString()));
+            logFile.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, dictionary.getStatus(), dictionaryURL.toString()));
         }
         
         stream.flush();
