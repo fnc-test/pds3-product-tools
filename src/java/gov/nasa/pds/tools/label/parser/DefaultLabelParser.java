@@ -130,6 +130,7 @@ public class DefaultLabelParser implements LabelParser, Status {
             label.setStatus(lexer.getStatus());
             label.setStatus(parser.getStatus());
         } catch (ANTLRException ex) {
+            label.setStatus(FAIL);
             log.log(new ToolsLogRecord(Level.SEVERE, ex.getMessage(), url.toString()));
             throw new ParseException(ex.getMessage());
         }
@@ -294,6 +295,7 @@ public class DefaultLabelParser implements LabelParser, Status {
             label.setStatus(lexer.getStatus());
             label.setStatus(parser.getStatus());
         } catch (ANTLRException ex) {
+            label.setStatus(FAIL);
             log.log(new ToolsLogRecord(Level.SEVERE, ex.getMessage(), url.toString(), context));
             throw new ParseException(ex.getMessage());
         }
@@ -373,7 +375,7 @@ public class DefaultLabelParser implements LabelParser, Status {
         Logger logFile = Logger.getLogger(DefaultLabelParser.class.getName());
         if (dictionaryURL == null) {
             label = parser.parse(labelURL);
-            logFile.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, "PASS", labelURL.toString()));
+            logFile.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, label.getStatus(), labelURL.toString()));
         } else {
             Dictionary dictionary = DictionaryParser.parse(dictionaryURL, aliasing.booleanValue());
             label = parser.parse(labelURL, dictionary);
