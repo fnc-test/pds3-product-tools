@@ -30,31 +30,43 @@
     <xsl:choose>
       <xsl:when test="$level='INFO'">
         <xsl:for-each select="//record[file=$file and level!='NOTIFICATION' and (level='INFO' or level='WARNING' or level='SEVERE')]">
-          <xsl:value-of select="$pad6" /><xsl:value-of select="level" /><xsl:value-of select="$pad2" /><xsl:value-of select="message" /><xsl:text>&#xd;&#xa;</xsl:text>
+          <xsl:value-of select="$pad6" /><xsl:value-of select="level" /><xsl:value-of select="$pad2" />
+          <xsl:if test="line">line <xsl:value-of select="line" />: </xsl:if>
+          <xsl:value-of select="message" /><xsl:text>&#xd;&#xa;</xsl:text>
         </xsl:for-each>
         
         <xsl:for-each select="//record[context=$file and level!='NOTIFICATION' and (level='INFO' or level='WARNING' or level='SEVERE')]">
-          <xsl:value-of select="$pad6" /><xsl:value-of select="level" /><xsl:value-of select="$pad2" /><xsl:value-of select="message" /><xsl:text>&#xd;&#xa;</xsl:text>
+          <xsl:value-of select="$pad6" /><xsl:value-of select="level" /><xsl:value-of select="$pad2" />
+          <xsl:if test="line">line <xsl:value-of select="line" />: </xsl:if>
+          <xsl:value-of select="message" /><xsl:text>&#xd;&#xa;</xsl:text>
         </xsl:for-each>
       </xsl:when>
       
       <xsl:when test="$level='WARNING' or $level='INFO'">
         <xsl:for-each select="//record[file=$file and level!='NOTIFICATION' and (level='WARNING' or level='SEVERE')]">
-          <xsl:value-of select="$pad6" /><xsl:value-of select="level" /><xsl:value-of select="$pad2" /><xsl:value-of select="message" /><xsl:text>&#xd;&#xa;</xsl:text>
+          <xsl:value-of select="$pad6" /><xsl:value-of select="level" /><xsl:value-of select="$pad2" />
+          <xsl:if test="line">line <xsl:value-of select="line" />: </xsl:if>
+          <xsl:value-of select="message" /><xsl:text>&#xd;&#xa;</xsl:text>
         </xsl:for-each>
         
         <xsl:for-each select="//record[context=$file and level!='NOTIFICATION' and (level='WARNING' or level='SEVERE')]">
-          <xsl:value-of select="$pad6" /><xsl:value-of select="level" /><xsl:value-of select="$pad2" /><xsl:value-of select="message" /><xsl:text>&#xd;&#xa;</xsl:text>
+          <xsl:value-of select="$pad6" /><xsl:value-of select="level" /><xsl:value-of select="$pad2" />
+          <xsl:if test="line">line <xsl:value-of select="line" />: </xsl:if>
+          <xsl:value-of select="message" /><xsl:text>&#xd;&#xa;</xsl:text>
         </xsl:for-each>
       </xsl:when>
       
       <xsl:when test="$level='SEVERE' or $level='WARNING' or $level='INFO'">
         <xsl:for-each select="//record[file=$file and level!='NOTIFICATION' and level='SEVERE']">
-          <xsl:value-of select="$pad6" /><xsl:value-of select="level" /><xsl:value-of select="$pad2" /><xsl:value-of select="message" /><xsl:text>&#xd;&#xa;</xsl:text>
+          <xsl:value-of select="$pad6" /><xsl:value-of select="level" /><xsl:value-of select="$pad2" />
+          <xsl:if test="line">line <xsl:value-of select="line" />: </xsl:if>
+          <xsl:value-of select="message" /><xsl:text>&#xd;&#xa;</xsl:text>
         </xsl:for-each>
         
         <xsl:for-each select="//record[context=$file and level!='NOTIFICATION' and level='SEVERE']">
-          <xsl:value-of select="$pad6" /><xsl:value-of select="level" /><xsl:value-of select="$pad2" /><xsl:value-of select="message" /><xsl:text>&#xd;&#xa;</xsl:text>
+          <xsl:value-of select="$pad6" /><xsl:value-of select="level" /><xsl:value-of select="$pad2" />
+          <xsl:if test="line">line <xsl:value-of select="line" />: </xsl:if>
+          <xsl:value-of select="message" /><xsl:text>&#xd;&#xa;</xsl:text>
         </xsl:for-each>
       </xsl:when>
     </xsl:choose>
