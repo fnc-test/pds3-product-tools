@@ -19,7 +19,7 @@
   </xsl:for-each>
   
   <xsl:text>&#xd;&#xa;Summary:&#xd;&#xa;</xsl:text>
-  <xsl:value-of select="$pad2" /><xsl:value-of select="count(log/record [level='NOTIFICATION' and message!='SKIP'])" /> of <xsl:value-of select="count(log/record [level='NOTIFICATION' and message!='SKIP'])" /> validated, <xsl:value-of select="count(log/record [level='NOTIFICATION' and message='SKIP'])" /><xsl:text> skipped&#xd;&#xa;</xsl:text>
+  <xsl:value-of select="$pad2" /><xsl:value-of select="count(log/record [level='NOTIFICATION' and message!='SKIP' and message!='UNKNOWN'])" /> of <xsl:value-of select="count(log/record [level='NOTIFICATION' and message!='SKIP'])" /> validated, <xsl:value-of select="count(log/record [level='NOTIFICATION' and message='SKIP'])" /><xsl:text> skipped&#xd;&#xa;</xsl:text>
   <xsl:value-of select="$pad2" /><xsl:value-of select="count(log/record [level='NOTIFICATION' and message='PASS'])" /> of <xsl:value-of select="count(log/record [level='NOTIFICATION' and (message='PASS' or message='FAIL')])" /> passed<xsl:text>&#xd;&#xa;&#xd;&#xa;</xsl:text>
 
   <xsl:if test="$level='SEVERE' or $level='WARNING' or $level='INFO'">
