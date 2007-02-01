@@ -31,7 +31,7 @@ public class ToolsLogFormatter extends Formatter {
             buffer.append("  <line>" + toolsRecord.getLine() + "</line>\n");
         if (toolsRecord.getRoot() != null)
             buffer.append("  <rootFile>" + toolsRecord.getRoot() + "</rootFile>\n");
-        buffer.append("  <message>" + record.getMessage() + "</message>\n");
+        buffer.append("  <message><![CDATA[" + record.getMessage() + "]]></message>\n");
         buffer.append(" </record>\n");
         return buffer.toString();
     }
