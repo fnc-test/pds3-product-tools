@@ -36,6 +36,7 @@ import gov.nasa.pds.tools.label.Symbol;
 import gov.nasa.pds.tools.label.TextString;
 import gov.nasa.pds.tools.label.Value;
 import gov.nasa.pds.tools.logging.ToolsLogRecord;
+import gov.nasa.pds.tools.label.validate.Status;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -68,6 +69,7 @@ tokens {
     private boolean followPointers = true;
     private String filename = null;
     private String context = null;
+    private String status = Status.UNKNOWN;
     
     public void setFilename(String filename) {
        this.filename = filename;
@@ -85,15 +87,31 @@ tokens {
        return context;
     }
     
+    public String getStatus() {
+        return status;
+    }
+    
+    public void setStatus(String status) {
+        //Make sure we aren't trying to set status to unknown
+        if (!Status.UNKNOWN.equals(status)) {
+            //if current status equal to unknown or we are trying to set to fail
+            if (Status.UNKNOWN.equals(this.status) || Status.FAIL.equals(status))
+              this.status = status;
+        }
+    }
+    
     public void reportError(RecognitionException re) {
+        setStatus(Status.FAIL);
         log.log(new ToolsLogRecord(Level.SEVERE, re.toString(), filename, context, re.getLine()));
     }
     
     public void reportError(RecognitionException re, String s) {
+        setStatus(Status.FAIL);
         log.log(new ToolsLogRecord(Level.SEVERE, re.toString(), filename, context, re.getLine()));
     }
     
     public void reportError(String message, int line) {
+        setStatus(Status.FAIL);
         log.log(new ToolsLogRecord(Level.SEVERE, message, filename, context, line));
     }
     
@@ -280,6 +298,7 @@ pointer_statement returns [PointerStatement result = null]
                result.setContext(context);
             } catch (MalformedURLException mue) {
                result = null;
+               setStatus(Status.FAIL);
                log.log(new ToolsLogRecord(Level.SEVERE, mue.getMessage(), filename, context, a.getLineNumber()));
             }
             if (followPointers && result != null && result instanceof IncludePointer) {
@@ -287,8 +306,10 @@ pointer_statement returns [PointerStatement result = null]
                try {
                   ip.loadReferencedStatements(includePaths);
                } catch (gov.nasa.pds.tools.label.parser.ParseException pe) {
+                  setStatus(Status.FAIL);
                   log.log(new ToolsLogRecord(Level.SEVERE, pe.getMessage(), filename, context, a.getLineNumber()));
                } catch (IOException ioe) {
+                  setStatus(Status.FAIL);
                   log.log(new ToolsLogRecord(Level.SEVERE, ioe.getMessage(), filename, context, a.getLineNumber()));
                } 
             } else if (followPointers && result != null && result instanceof ExternalPointer) {
@@ -296,6 +317,7 @@ pointer_statement returns [PointerStatement result = null]
                try {
                   ep.resolveURL(includePaths);
                } catch (IOException ioe) {
+                  setStatus(Status.FAIL);
                   log.log(new ToolsLogRecord(Level.SEVERE, ioe.getMessage(), filename, context, a.getLineNumber()));
                }
             }
@@ -375,19 +397,28 @@ date_time_value returns [DateTime result = null]
         {
            try {
               result = new DateTime(d.getText());
-           } catch (ParseException pe) {log.log(new ToolsLogRecord(Level.SEVERE, pe.getMessage(), filename, context, d.getLine()));}
+           } catch (ParseException pe) {
+              setStatus(Status.FAIL);
+              log.log(new ToolsLogRecord(Level.SEVERE, pe.getMessage(), filename, context, d.getLine()));
+           }
         }
     | t:TIME
         {
            try {
               result = new DateTime(t.getText());
-           } catch (ParseException pe) {log.log(new ToolsLogRecord(Level.SEVERE, pe.getMessage(), filename, context, t.getLine()));}
+           } catch (ParseException pe) {
+              setStatus(Status.FAIL);
+              log.log(new ToolsLogRecord(Level.SEVERE, pe.getMessage(), filename, context, t.getLine()));
+           }
         }
     | dt:DATETIME
         {
            try {
               result = new DateTime(dt.getText());
-           } catch (ParseException pe) {log.log(new ToolsLogRecord(Level.SEVERE, pe.getMessage(), filename, context, dt.getLine()));}
+           } catch (ParseException pe) {
+              setStatus(Status.FAIL);
+              log.log(new ToolsLogRecord(Level.SEVERE, pe.getMessage(), filename, context, dt.getLine()));
+           }
         }
     ;
     
@@ -469,6 +500,7 @@ options {
     private static Logger log = Logger.getLogger(ODLLexer.class.getName());
     private String filename = null;
     private String context = null;
+    private String status = Status.UNKNOWN;
     
     public void setFilename(String filename) {
        this.filename = filename;
@@ -486,15 +518,31 @@ options {
        return context;
     }
     
+    public String getStatus() {
+        return status;
+    }
+    
+    public void setStatus(String status) {
+        //Make sure we aren't trying to set status to unknown
+        if (!Status.UNKNOWN.equals(status)) {
+            //if current status equal to unknown or we are trying to set to fail
+            if (Status.UNKNOWN.equals(this.status) || Status.FAIL.equals(status))
+              this.status = status;
+        }
+    }
+    
     public void reportError(RecognitionException re) {
+        setStatus(Status.FAIL);
         log.log(new ToolsLogRecord(Level.SEVERE, re.toString(), filename, context, re.getLine()));
     }
     
     public void reportError(RecognitionException re, String s) {
+        setStatus(Status.FAIL);
         log.log(new ToolsLogRecord(Level.SEVERE, re.toString(), filename, context, re.getLine()));
     }
     
     public void reportError(String message, int line) {
+        setStatus(Status.FAIL);
         log.log(new ToolsLogRecord(Level.SEVERE, message, filename, context, line));
     }
     
