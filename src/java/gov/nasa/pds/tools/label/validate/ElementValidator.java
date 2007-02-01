@@ -118,15 +118,14 @@ public class ElementValidator implements DictionaryTokens {
                         }
                        
                         if (!foundValue) {
-                            //Could not find valid value.
-                            valid = false;
                             //Only produce a warning if the standard value list is anything other than static
                             if (!VALUE_TYPE_STATIC.equals(definition.getValueType())) {
-                               log.log(new ToolsLogRecord(Level.WARNING, value.toString() + 
+                                log.log(new ToolsLogRecord(Level.WARNING, value.toString() + 
                                         " is not in the suggested list of valid values for " + attribute.getIdentifier(), 
                                         attribute.getFilename(), attribute.getContext(), attribute.getLineNumber()));
                             } else {
-                               log.log(new ToolsLogRecord(Level.SEVERE, value.toString() + 
+                                valid = false;
+                                log.log(new ToolsLogRecord(Level.SEVERE, value.toString() + 
                                          " is not in the list of valid values for " + attribute.getIdentifier(),
                                          attribute.getFilename(), attribute.getContext(), attribute.getLineNumber()));
                             }
