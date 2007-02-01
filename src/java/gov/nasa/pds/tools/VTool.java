@@ -11,6 +11,7 @@ import gov.nasa.pds.tools.dict.Dictionary;
 import gov.nasa.pds.tools.dict.parser.DictionaryParser;
 import gov.nasa.pds.tools.file.FileList;
 import gov.nasa.pds.tools.file.FileListGenerator;
+import gov.nasa.pds.tools.label.Label;
 import gov.nasa.pds.tools.label.parser.LabelParser;
 import gov.nasa.pds.tools.label.parser.LabelParserFactory;
 import java.io.File;
@@ -98,6 +99,7 @@ public class VTool implements VToolConfigKeys {
 	private String severity;
 	
 	private String currDir;
+	private boolean dictPassed;
 	
 	/** 
 	 * Default constructor
@@ -107,6 +109,7 @@ public class VTool implements VToolConfigKeys {
 		config = null;
 		dictionaries = null;
 		dataObj = true;
+		dictPassed = true;
 		noFiles = null;
 		noDirs = null;
 		followPtrs = true;
@@ -839,13 +842,14 @@ public class VTool implements VToolConfigKeys {
 			dd = new URL(i.next().toString());
 			dict = DictionaryParser.parse(dd, alias);
             log.log(new ToolsLogRecord(Level.CONFIG, "Dictionary version        \n" + dict.getInformation(), dd.toString()));
-			log.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, "PASS", dd.toString()));
+			log.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, dict.getStatus(), dd.toString()));
 			//Parse the rest of the dictionaries
 			while( i.hasNext() ) {
 				dd = new URL(i.next().toString());
-				dict.merge( DictionaryParser.parse(dd, alias), true );
+				Dictionary mergeDict = DictionaryParser.parse(dd, alias);
+				dict.merge( mergeDict, true );
 				log.log(new ToolsLogRecord(Level.CONFIG, "Dictionary version        \n" + dict.getInformation(), dd.toString()));
-				log.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, "PASS", dd.toString()));
+				log.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, mergeDict.getStatus(), dd.toString()));
 			}
 		} catch( MalformedURLException uex) {
 			System.err.println(uex.getMessage());
@@ -855,7 +859,7 @@ public class VTool implements VToolConfigKeys {
 			System.exit(1);
 		} catch( gov.nasa.pds.tools.label.parser.ParseException pe) {
 			log.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, "FAIL", dd.toString()));
-			System.exit(1);
+			dictPassed = false;
 		}
 		return dict;	
 	}
@@ -955,15 +959,16 @@ public class VTool implements VToolConfigKeys {
 	public void validateLabel(URL file, Dictionary dict) {		
 		LabelParserFactory factory = LabelParserFactory.getInstance();
 		LabelParser parser = factory.newLabelParser();
+		Label label = null;
 		setParserProps(parser);
 		
 		if(progress)
 			showProgress(file);
 		try {
 			if(dict == null)
-				parser.parse(file);
+				label = parser.parse(file);
 			else
-				parser.parse(file, dict);
+				label = parser.parse(file, dict);
 		} catch (gov.nasa.pds.tools.label.parser.ParseException pEx) {
 			log.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, "SKIP", file.toString()));
 			return;
@@ -971,7 +976,7 @@ public class VTool implements VToolConfigKeys {
 			System.err.println(iEx.getMessage());
 			System.exit(1);			
 		}
-		log.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, "PASS", file.toString()));
+		log.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, label.getStatus(), file.toString()));
 	}
 	
 	/**
@@ -1097,11 +1102,12 @@ public class VTool implements VToolConfigKeys {
 		
 		if(vtool.dictionaries != null) {
 			mainDictionary = vtool.readDictionaries(vtool.dictionaries);
-			vtool.validateLabels(vtool.targets, mainDictionary);
+			if(vtool.dictPassed)
+				vtool.validateLabels(vtool.targets, mainDictionary);
 		}
 		else 
 			vtool.validateLabels(vtool.targets, null);
-		
+
 		vtool.closeHandler();
 		
 		if(vtool.logFile != null)
