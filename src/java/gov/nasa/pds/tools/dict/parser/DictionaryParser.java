@@ -81,7 +81,9 @@ public class DictionaryParser implements ODLTokenTypes, DictionaryTokens, Status
         Dictionary dictionary = new Dictionary();
         InputStream input = url.openStream();
         ODLLexer lexer = new ODLLexer(input);
+        lexer.setFilename(url.toString());
         ODLParser parser = new ODLParser(lexer);
+        parser.setFilename(url.toString());
         
         log.log(new ToolsLogRecord(Level.INFO, "Parsing dictionary.", url.toString()));
         try {
