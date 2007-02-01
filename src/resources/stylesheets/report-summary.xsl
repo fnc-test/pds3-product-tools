@@ -1,87 +1,85 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE xsl:stylesheet [
-<!ENTITY nl "&#xd;&#xa;">
-<!ENTITY pad2 "  ">
-<!ENTITY pad4 "    ">
-<!ENTITY pad6 "      ">
-]>
+
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:output method="text" encoding="UTF-8"/>
 <xsl:param name="level" select="'INFO'" />
+<xsl:variable name="pad2" select="'  '" />
+<xsl:variable name="pad4" select="'    '" />
+<xsl:variable name="pad6" select="'      '" />
 
 <xsl:template match="/">
-  <xsl:text>PDS Validation Tool Report&nl;</xsl:text>
+  <xsl:text>PDS Validation Tool Report&#xd;&#xa;</xsl:text>
   <xsl:for-each select="log/record [level='CONFIG']">
-    <xsl:text>&pad2;</xsl:text><xsl:value-of select="message"/><xsl:text>&nl;</xsl:text>
+    <xsl:value-of select="$pad2" /><xsl:value-of select="message"/><xsl:text>&#xd;&#xa;</xsl:text>
   </xsl:for-each>
   
-  <xsl:text>&nl;Parameter Settings:&nl;</xsl:text>
+  <xsl:text>&#xd;&#xa;Parameter Settings:&#xd;&#xa;</xsl:text>
   <xsl:for-each select="log/record [level='PARAMETER']">
-    <xsl:text>&pad2;</xsl:text><xsl:value-of select="message"/><xsl:text>&nl;</xsl:text>
+    <xsl:value-of select="$pad2" /><xsl:value-of select="message"/><xsl:text>&#xd;&#xa;</xsl:text>
   </xsl:for-each>
   
-  <xsl:text>&nl;Summary:&nl;</xsl:text>
-  <xsl:text>&pad2;</xsl:text><xsl:value-of select="count(log/record [level='NOTIFICATION' and message!='SKIP'])" /> of <xsl:value-of select="count(log/record [level='NOTIFICATION' and message!='SKIP'])" /> validated, <xsl:value-of select="count(log/record [level='NOTIFICATION' and message='SKIP'])" /><xsl:text> skipped&nl;</xsl:text>
-  <xsl:text>&pad2;</xsl:text><xsl:value-of select="count(log/record [level='NOTIFICATION' and message='PASS'])" /> of <xsl:value-of select="count(log/record [level='NOTIFICATION' and (message='PASS' or message='FAIL')])" /> passed<xsl:text>&nl;&nl;</xsl:text>
+  <xsl:text>&#xd;&#xa;Summary:&#xd;&#xa;</xsl:text>
+  <xsl:value-of select="$pad2" /><xsl:value-of select="count(log/record [level='NOTIFICATION' and message!='SKIP'])" /> of <xsl:value-of select="count(log/record [level='NOTIFICATION' and message!='SKIP'])" /> validated, <xsl:value-of select="count(log/record [level='NOTIFICATION' and message='SKIP'])" /><xsl:text> skipped&#xd;&#xa;</xsl:text>
+  <xsl:value-of select="$pad2" /><xsl:value-of select="count(log/record [level='NOTIFICATION' and message='PASS'])" /> of <xsl:value-of select="count(log/record [level='NOTIFICATION' and (message='PASS' or message='FAIL')])" /> passed<xsl:text>&#xd;&#xa;&#xd;&#xa;</xsl:text>
 
   <xsl:if test="$level='SEVERE' or $level='WARNING' or $level='INFO'">
-    <xsl:text>Errors Found:&nl;&nl;</xsl:text>
+    <xsl:text>Errors Found:&#xd;&#xa;&#xd;&#xa;</xsl:text>
     <xsl:for-each select="log/record [level='SEVERE']">
       <xsl:sort select="message" />
       <xsl:variable name="errorMessage" select="message" />
     
       <xsl:if test="not(preceding-sibling::record[message=$errorMessage])">
         <xsl:variable name="record" select="//record[message=$errorMessage]" />
-        <xsl:text>&pad2;ERROR&pad2;</xsl:text><xsl:value-of select="$errorMessage" /><xsl:text>&nl;</xsl:text>
+        <xsl:value-of select="$pad2" /><xsl:text>ERROR</xsl:text><xsl:value-of select="$pad2" /><xsl:value-of select="$errorMessage" /><xsl:text>&#xd;&#xa;</xsl:text>
       
         <xsl:if test="$record[file]">
-          <xsl:text>&pad2;</xsl:text>Example: <xsl:if test="$record/line">line <xsl:value-of select="$record/line" /> of </xsl:if><xsl:value-of select="$record/file" /><xsl:text>&nl;</xsl:text>
+          <xsl:value-of select="$pad2" />Example: <xsl:if test="$record/line">line <xsl:value-of select="$record/line" /> of </xsl:if><xsl:value-of select="$record/file" /><xsl:text>&#xd;&#xa;</xsl:text>
         </xsl:if>
       
-        <xsl:text>&pad2;</xsl:text><xsl:value-of select="count(//record[message=$errorMessage and level='SEVERE'])" /><xsl:text> occurrence(s)&nl;&nl;</xsl:text>
+        <xsl:value-of select="$pad2" /><xsl:value-of select="count(//record[message=$errorMessage and level='SEVERE'])" /><xsl:text> occurrence(s)&#xd;&#xa;&#xd;&#xa;</xsl:text>
       </xsl:if>
     </xsl:for-each>
   </xsl:if>
   
   <xsl:if test="$level='WARNING' or $level='INFO'">
-    <xsl:text>Warnings Found:&nl;&nl;</xsl:text>
+    <xsl:text>Warnings Found:&#xd;&#xa;&#xd;&#xa;</xsl:text>
     <xsl:for-each select="log/record [level='WARNING']">
       <xsl:sort select="message" />
       <xsl:variable name="warningMessage" select="message" />
     
       <xsl:if test="not(preceding-sibling::record[message=$warningMessage])">
         <xsl:variable name="record" select="//record[message=$warningMessage]" />
-        <xsl:text>&pad2;WARNING&pad2;</xsl:text><xsl:value-of select="$warningMessage" /><xsl:text>&nl;</xsl:text>
+        <xsl:value-of select="$pad2" /><xsl:text>WARNING</xsl:text><xsl:value-of select="$pad2" /><xsl:value-of select="$warningMessage" /><xsl:text>&#xd;&#xa;</xsl:text>
       
         <xsl:if test="$record[file]">
-          <xsl:text>&pad2;</xsl:text>Example: <xsl:if test="$record/line">line <xsl:value-of select="$record/line" /> of </xsl:if><xsl:value-of select="$record/file" /><xsl:text>&nl;</xsl:text>
+          <xsl:value-of select="$pad2" />Example: <xsl:if test="$record/line">line <xsl:value-of select="$record/line" /> of </xsl:if><xsl:value-of select="$record/file" /><xsl:text>&#xd;&#xa;</xsl:text>
         </xsl:if>
       
-        <xsl:text>&pad2;</xsl:text><xsl:value-of select="count(//record[message=$warningMessage and level='WARNING'])" /><xsl:text> occurrence(s)&nl;&nl;</xsl:text>
+        <xsl:value-of select="$pad2" /><xsl:value-of select="count(//record[message=$warningMessage and level='WARNING'])" /><xsl:text> occurrence(s)&#xd;&#xa;&#xd;&#xa;</xsl:text>
       </xsl:if>
     </xsl:for-each>
   </xsl:if>
   
   <xsl:if test="$level='INFO'">
-    <xsl:text>Info Found:&nl;&nl;</xsl:text>
+    <xsl:text>Info Found:&#xd;&#xa;&#xd;&#xa;</xsl:text>
     <xsl:for-each select="log/record [level='INFO']">
       <xsl:sort select="message" />
       <xsl:variable name="infoMessage" select="message" />
     
       <xsl:if test="not(preceding-sibling::record[message=$infoMessage])">
         <xsl:variable name="record" select="//record[message=$infoMessage]" />
-        <xsl:text>&pad2;INFO&pad2;</xsl:text><xsl:value-of select="$infoMessage" /><xsl:text>&nl;</xsl:text>
+        <xsl:value-of select="$pad2" /><xsl:text>INFO</xsl:text><xsl:value-of select="$pad2" /><xsl:value-of select="$infoMessage" /><xsl:text>&#xd;&#xa;</xsl:text>
       
         <xsl:if test="$record[file]">
-          <xsl:text>&pad2;</xsl:text>Example: <xsl:if test="$record/line">line <xsl:value-of select="$record/line" /> of </xsl:if><xsl:value-of select="$record/file" /><xsl:text>&nl;</xsl:text>
+          <xsl:value-of select="$pad2" />Example: <xsl:if test="$record/line">line <xsl:value-of select="$record/line" /> of </xsl:if><xsl:value-of select="$record/file" /><xsl:text>&#xd;&#xa;</xsl:text>
         </xsl:if>
       
-        <xsl:text>&pad2;</xsl:text><xsl:value-of select="count(//record[message=$infoMessage and level='INFO'])" /><xsl:text> occurrence(s)&nl;&nl;</xsl:text>
+        <xsl:value-of select="$pad2" /><xsl:value-of select="count(//record[message=$infoMessage and level='INFO'])" /><xsl:text> occurrence(s)&#xd;&#xa;&#xd;&#xa;</xsl:text>
       </xsl:if>
     </xsl:for-each>
   </xsl:if>
   
-  <xsl:text>End Of Report&nl;</xsl:text>
+  <xsl:text>End Of Report&#xd;&#xa;</xsl:text>
 </xsl:template>
 
 </xsl:stylesheet>
