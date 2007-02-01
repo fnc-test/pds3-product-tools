@@ -155,7 +155,7 @@ public class DictionaryParser implements ODLTokenTypes, DictionaryTokens, Status
             //TODO: Update to catch thrown exception not all exceptions
         } catch (Exception ex) {
             dictionary.setStatus(FAIL);
-            log.log(new ToolsLogRecord(Level.SEVERE, ex.getMessage()));
+            log.log(new ToolsLogRecord(Level.SEVERE, ex.getMessage(), url.toString()));
             throw new ParseException(ex.getMessage());
         }
         
