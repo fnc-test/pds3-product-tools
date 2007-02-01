@@ -151,7 +151,7 @@ public class ObjectValidator {
             //Validate nested object
             boolean objValid = false;
             try {
-                ObjectValidator.isValid(dictionary, obj);
+                objValid = ObjectValidator.isValid(dictionary, obj);
             } catch (DefinitionNotFoundException dnfe) {
                 log.log(new ToolsLogRecord(Level.SEVERE, dnfe.getMessage(), obj.getFilename(), 
                         obj.getContext(), obj.getLineNumber()));
