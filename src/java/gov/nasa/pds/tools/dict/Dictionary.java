@@ -6,6 +6,8 @@
 
 package gov.nasa.pds.tools.dict;
 
+import gov.nasa.pds.tools.label.validate.Status;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -18,16 +20,17 @@ import java.util.Map;
  * @version $Revision$
  * 
  */
-public class Dictionary {
+public class Dictionary implements Status {
     private Map definitions;
     private String information;
     private Map units;
+    private String status;
     
     public Dictionary() {
         definitions = new HashMap();
         units = new HashMap();
         information = "";
-        //TODO: add support for units
+        status = Status.UNKNOWN;
     }
     
     /**
@@ -315,5 +318,17 @@ public class Dictionary {
      */
     public void setUnits(Map units) {
         this.units = units;
+    }
+    
+    public String getStatus() {
+        return status;
+    }
+    
+    public void setStatus(String status) {
+        //Set status if it current status is unknown, or setting to fail, 
+        //or current status is unknown and has passed
+        if (UNKNOWN.equals(status) || FAIL.equals(status) ||
+                (UNKNOWN.equals(this.status) && PASS.equals(status)))
+            this.status = status;
     }
 }
