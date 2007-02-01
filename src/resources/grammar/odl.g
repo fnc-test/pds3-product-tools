@@ -66,21 +66,39 @@ tokens {
     private static Logger log = Logger.getLogger(ODLParser.class.getName()); 
     private static List includePaths = new ArrayList();
     private boolean followPointers = true;
+    private String filename = null;
+    private String context = null;
+    
+    public void setFilename(String filename) {
+       this.filename = filename;
+    }
+    
+    public String getFilename() {
+       return filename;
+    }
+    
+    public void setContext(String context) {
+       this.context = context;
+    }
+    
+    public String getContext() {
+       return context;
+    }
     
     public void reportError(RecognitionException re) {
-        log.log(new ToolsLogRecord(Level.SEVERE, re.toString(), re.getFilename(), re.getLine()));
+        log.log(new ToolsLogRecord(Level.SEVERE, re.toString(), filename, context, re.getLine()));
     }
     
     public void reportError(RecognitionException re, String s) {
-        log.log(new ToolsLogRecord(Level.SEVERE, re.toString(), re.getFilename(), re.getLine()));
+        log.log(new ToolsLogRecord(Level.SEVERE, re.toString(), filename, context, re.getLine()));
     }
     
-    public void reportError(String message, String filename, int line) {
-        log.log(new ToolsLogRecord(Level.SEVERE, message, filename, line));
+    public void reportError(String message, int line) {
+        log.log(new ToolsLogRecord(Level.SEVERE, message, filename, context, line));
     }
     
-    public void reportWarning(String message, String filename, int line) {
-        log.log(new ToolsLogRecord(Level.WARNING, message, filename, line));
+    public void reportWarning(String message, int line) {
+        log.log(new ToolsLogRecord(Level.WARNING, message, filename, context, line));
     }
     
     public void setIncludePaths(List includePaths) {
@@ -126,12 +144,12 @@ tokens {
 
 // a label is a series of one or more expressions followed by an END
 label returns [Label label = new Label();]
-{Statement s = null;}
+{Statement s = null; label.setFilename(filename);}
     : (
         s=statement {if (s != null) {label.addStatement(s);}}
       | 
         (~ END) => t:.
-          {reportError("Illegal start of statement: '" + t.getText() + "'", t.getFilename(), t.getLine());}
+          {reportError("Illegal start of statement: '" + t.getText() + "'", t.getLine());}
         (~ EOL)* EOL
       )* (END)?
     ;
@@ -157,6 +175,8 @@ simple_statement returns [Statement result = null]
            if (c == null) {result = null;}
            else {
               CommentStatement comment = new CommentStatement(c.getLine());
+              comment.setFilename(filename);
+              comment.setContext(context);
               comment.setComment(c.getText());
               result = comment;
            }
@@ -165,6 +185,8 @@ simple_statement returns [Statement result = null]
         {
            if (c1 != null) {
               CommentStatement comment = new CommentStatement(c1.getLine());
+              comment.setFilename(filename);
+              comment.setContext(context);
               comment.setComment(c1.getText());
               s.attachComment(comment);
            }
@@ -174,6 +196,8 @@ simple_statement returns [Statement result = null]
         {
            if (c2 != null) {
               CommentStatement comment = new CommentStatement(c2.getLine());
+              comment.setFilename(filename);
+              comment.setContext(context);
               comment.setComment(c2.getText());
               s.attachComment(comment);
            }
@@ -187,8 +211,12 @@ object_statement returns [ObjectStatement result = null]
     : "OBJECT" nl EQUALS nl id:IDENTIFIER (c:COMMENT)? EOL
       {
          result = new ObjectStatement(id.getLine(), id.getText());
+         result.setFilename(filename);
+         result.setContext(context);
          if (c != null) {
             CommentStatement comment = new CommentStatement(c.getLine());
+            comment.setFilename(filename);
+            comment.setContext(context);
             comment.setComment(c.getText());
             result.attachComment(comment);
          }
@@ -197,7 +225,7 @@ object_statement returns [ObjectStatement result = null]
         s=statement {if (s != null) {result.addStatement(s);}}
       |
         (~ END_OBJECT) => t:.
-          {reportError("Illegal start of statement: '" + t.getText() + "'", t.getFilename(), t.getLine());}
+          {reportError("Illegal start of statement: '" + t.getText() + "'", t.getLine());}
         (~ EOL)* EOL
       )*
       END_OBJECT (EQUALS id2:IDENTIFIER)?
@@ -205,6 +233,8 @@ object_statement returns [ObjectStatement result = null]
       {
          if (c2 != null) {
             CommentStatement comment = new CommentStatement(c2.getLine());
+            comment.setFilename(filename);
+            comment.setContext(context);
             comment.setComment(c.getText());
             result.attachComment(comment);
          }
@@ -217,8 +247,12 @@ group_statement returns [GroupStatement result = null]
     : "GROUP" nl EQUALS nl id:IDENTIFIER (c:COMMENT)? EOL
       {
          result = new GroupStatement(id.getLine(), id.getText());
+         result.setFilename(filename);
+         result.setContext(context);
          if (c != null) {
             CommentStatement comment = new CommentStatement(c.getLine());
+            comment.setFilename(filename);
+            comment.setContext(context);
             comment.setComment(c.getText());
             result.attachComment(comment);
          }
@@ -227,7 +261,7 @@ group_statement returns [GroupStatement result = null]
         s=simple_statement {if (s != null) {result.addStatement(s);}}
       | 
         (~ END_GROUP) => t:.
-          {reportError("Illegal start of statement: '" + t.getText() + "'", t.getFilename(), t.getLine());}
+          {reportError("Illegal start of statement: '" + t.getText() + "'", t.getLine());}
         (~ EOL)* EOL
       )*
       END_GROUP (EQUALS id2:IDENTIFIER)?
@@ -242,25 +276,27 @@ pointer_statement returns [PointerStatement result = null]
          if (a != null) {
             try {
                result = PointerStatementFactory.newInstance(a.getLineNumber(), a.getIdentifier(), a.getValue());
+               result.setFilename(filename);
+               result.setContext(context);
             } catch (MalformedURLException mue) {
                result = null;
-               log.log(new ToolsLogRecord(Level.SEVERE, mue.getMessage(), getFilename(), a.getLineNumber()));
+               log.log(new ToolsLogRecord(Level.SEVERE, mue.getMessage(), filename, context, a.getLineNumber()));
             }
             if (followPointers && result != null && result instanceof IncludePointer) {
                IncludePointer ip = (IncludePointer) result;
                try {
                   ip.loadReferencedStatements(includePaths);
                } catch (gov.nasa.pds.tools.label.parser.ParseException pe) {
-                  log.log(new ToolsLogRecord(Level.SEVERE, pe.getMessage(), getFilename(), a.getLineNumber()));
+                  log.log(new ToolsLogRecord(Level.SEVERE, pe.getMessage(), filename, context, a.getLineNumber()));
                } catch (IOException ioe) {
-                  log.log(new ToolsLogRecord(Level.SEVERE, ioe.getMessage(), getFilename(), a.getLineNumber()));
+                  log.log(new ToolsLogRecord(Level.SEVERE, ioe.getMessage(), filename, context, a.getLineNumber()));
                } 
             } else if (followPointers && result != null && result instanceof ExternalPointer) {
                ExternalPointer ep = (ExternalPointer) result;
                try {
                   ep.resolveURL(includePaths);
                } catch (IOException ioe) {
-                  log.log(new ToolsLogRecord(Level.SEVERE, ioe.getMessage(), getFilename(), a.getLineNumber()));
+                  log.log(new ToolsLogRecord(Level.SEVERE, ioe.getMessage(), filename, context, a.getLineNumber()));
                }
             }
          }
@@ -272,10 +308,15 @@ assignment_statement returns [AttributeStatement result = null]
 {AttributeStatement a = null; Value v = null;}
     : (eid:ELEMENT_IDENT|id:IDENTIFIER) nl EQUALS nl v=value
       { 
-        if (eid != null) 
+        if (eid != null) {
            result = new AttributeStatement(eid.getLine(), eid.getText(), v);
-        else 
+           result.setFilename(filename);
+           result.setContext(context);
+        } else {
            result = new AttributeStatement(id.getLine(), id.getText(), v);
+           result.setFilename(filename);
+           result.setContext(context);
+        }
       }
     ;
 
@@ -334,19 +375,19 @@ date_time_value returns [DateTime result = null]
         {
            try {
               result = new DateTime(d.getText());
-           } catch (ParseException pe) {log.log(new ToolsLogRecord(Level.SEVERE, pe.getMessage(), d.getFilename(), d.getLine()));}
+           } catch (ParseException pe) {log.log(new ToolsLogRecord(Level.SEVERE, pe.getMessage(), filename, context, d.getLine()));}
         }
     | t:TIME
         {
            try {
               result = new DateTime(t.getText());
-           } catch (ParseException pe) {log.log(new ToolsLogRecord(Level.SEVERE, pe.getMessage(), t.getFilename(), t.getLine()));}
+           } catch (ParseException pe) {log.log(new ToolsLogRecord(Level.SEVERE, pe.getMessage(), filename, context, t.getLine()));}
         }
     | dt:DATETIME
         {
            try {
               result = new DateTime(dt.getText());
-           } catch (ParseException pe) {log.log(new ToolsLogRecord(Level.SEVERE, pe.getMessage(), dt.getFilename(), dt.getLine()));}
+           } catch (ParseException pe) {log.log(new ToolsLogRecord(Level.SEVERE, pe.getMessage(), filename, context, dt.getLine()));}
         }
     ;
     
@@ -426,21 +467,39 @@ options {
 
 {
     private static Logger log = Logger.getLogger(ODLLexer.class.getName());
+    private String filename = null;
+    private String context = null;
+    
+    public void setFilename(String filename) {
+       this.filename = filename;
+    }
+    
+    public String getFilename() {
+       return filename;
+    }
+    
+    public void setContext(String context) {
+       this.context = context;
+    }
+    
+    public String getContext() {
+       return context;
+    }
     
     public void reportError(RecognitionException re) {
-        log.log(new ToolsLogRecord(Level.SEVERE, re.toString(), re.getFilename(), re.getLine()));
+        log.log(new ToolsLogRecord(Level.SEVERE, re.toString(), filename, context, re.getLine()));
     }
     
     public void reportError(RecognitionException re, String s) {
-        log.log(new ToolsLogRecord(Level.SEVERE, re.toString(), re.getFilename(), re.getLine()));
+        log.log(new ToolsLogRecord(Level.SEVERE, re.toString(), filename, context, re.getLine()));
     }
     
-    public void reportError(String message, String filename, int line) {
-        log.log(new ToolsLogRecord(Level.SEVERE, message, filename, line));
+    public void reportError(String message, int line) {
+        log.log(new ToolsLogRecord(Level.SEVERE, message, filename, context, line));
     }
     
-    public void reportWarning(String message, String filename, int line) {
-        log.log(new ToolsLogRecord(Level.WARNING, message, filename, line));
+    public void reportWarning(String message, int line) {
+        log.log(new ToolsLogRecord(Level.WARNING, message, filename, context, line));
     }
 }
 
@@ -688,7 +747,7 @@ IGNORE
 		{
 			int column = (getColumn() > 2) ? getColumn()-2 : 1;
 			reportError("Unexpected character: '" + $getText + "' "
-					    + "(value might need quotes)", getFilename(), getLine());
+					    + "(value might need quotes)", getLine());
 			// Skip to the end of the current line.
 			while (LA(1)!='\n' && LA(1)!=EOF_CHAR) {
 			    match(LA(1));
