@@ -327,9 +327,13 @@ public class Dictionary implements Status {
     public void setStatus(String status) {
         //Make sure we aren't trying to set status to unknown
         if (!UNKNOWN.equals(status)) {
-            //if current status equal to unknown or we are trying to set to fail
-            if (UNKNOWN.equals(this.status) || FAIL.equals(status))
-              this.status = status;
+           //Set to pass if unknown 
+           //Set to fail if that is the status being passed in
+           //Drop everything else
+           if (PASS.equals(status) && UNKNOWN.equals(this.status))
+              this.status = PASS;
+           else if (FAIL.equals(status))
+              this.status = FAIL;
         }
     }
 }
