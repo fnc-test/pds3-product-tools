@@ -11,6 +11,8 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -36,7 +38,7 @@ import gov.nasa.pds.tools.file.filefilter.WildcardOSFilter;
 
 /**
  * Class that can generate a list of files from a supplied directory and optionally, a specified
- * filter. The resulting list is a set of URLs.
+ * filter. The resulting files and directories are stored in a FileList.
  * 
  * @author mcayanan
  * @version $Revision $
@@ -126,9 +128,8 @@ public class FileListGenerator {
 	}
 	
 	/**
-	 * Allows one to pass in a file or URL. If it is a file being passed in, then it will be 
-	 * converted into a URL. Directories will be visited if the target is a directory. The
-	 * resulting list is stored in a FileList object.
+	 * Allows one to pass in a file or URL. Directories will be visited if the
+	 * target is a directory. The resulting list is stored in a FileList object.
 	 * 
 	 * @param getSubDirs 'true' to look for sub-directories, 'false' to just search for files when
 	 *                   given a directory as input
@@ -157,10 +158,9 @@ public class FileListGenerator {
 	}
 	
 	/**
-	 * Visits the file being supplied. If a file is being passed in, then it will be
-	 * converted to URL. If a directory is being passed in, then it will look for
-	 * files and sub-directories (if it is turned ON). In either case, a FileList
-	 * object is returned, where the files and sub-directories will be URLs. 
+	 * Visits the file being supplied. If a directory is being passed in, then it
+	 * will look for files and sub-directories (if it is turned ON). Otherwise, it
+	 * simply gets stored in the FileList. 
 	 * 
 	 * @param file A file or a directory. If it is a directory, then the visitDir method
 	 *      will be called and the list of files can be retrieved via the getFiles and
@@ -174,14 +174,13 @@ public class FileListGenerator {
 		if(file.isDirectory())
 			fileList = visitDir(file, getSubDirs);
 		else
-			fileList.addToFileList(file.toURI().toURL());
+			fileList.addToFileList(file);
 		
 		return fileList;
 	}
 	
 	/**
-	 * Gets a list of files under a given directory. The resulting list will be
-	 * in URLs.
+	 * Gets a list of files under a given directory.
 	 * 
 	 * Filters must be set via setFileFilters prior to calling this method in order to look
 	 * for specific files and filter out un-wanted files and sub-drirectories.
@@ -198,13 +197,12 @@ public class FileListGenerator {
 			throw new IllegalArgumentException("parameter 'dir' is not a directory: " + dir);
 		
 		//Find files only first. Convert resulting list into URLs
-		List list = new ArrayList(FileUtils.listFiles(dir, effFileFilter, null));
-		fileList.addToFileList( Arrays.asList(FileUtils.toURLs(FileUtils.convertFileCollectionToFileArray(list))) );
+		fileList.addToFileList(FileUtils.listFiles(dir, effFileFilter, null));
 		
 		//Visit sub-directories if the recurse flag is set
 		if(getSubDirs)
-			fileList.addToDirList(Arrays.asList(FileUtils.toURLs(dir.listFiles(effDirFilter))) );
-		
+			fileList.addToDirList(Arrays.asList(dir.listFiles(effDirFilter)));
+	
 		return fileList;
 	}
 		

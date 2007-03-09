@@ -195,7 +195,7 @@ public class VTool implements VToolConfigKeys {
 				                      "and any local dictionaries to include for validation. Separate each file name with a space.");
 		OptionBuilder.hasArgs();
 		OptionBuilder.withArgName(".full files");
-		OptionBuilder.withValueSeparator();
+		OptionBuilder.withValueSeparator(' ');
 		OptionBuilder.withType(String.class);
 		options.addOption(OptionBuilder.create("d"));
 		
@@ -209,11 +209,13 @@ public class VTool implements VToolConfigKeys {
 		options.addOption(OptionBuilder.create("X"));
 		
 		// Option to specify the label(s) to validate
+
 		OptionBuilder.withLongOpt("target");
 		OptionBuilder.withDescription("Specify the label file(s), URL(s) and/or directories to validate (required option)");
 		OptionBuilder.hasArgs();
 		OptionBuilder.withArgName("labels,URLs,dirs");
 		OptionBuilder.withType(String.class);
+		OptionBuilder.withValueSeparator(' ');
 		options.addOption(OptionBuilder.create("t"));
 		
 		// Option to specify a pattern to match against the input directory to be validated
@@ -301,11 +303,9 @@ public class VTool implements VToolConfigKeys {
 	 *
 	 */
 	public void queryCmdLine() {
-		try {			
-			// Check for unrecognized arguments on the command-line
-			for(Iterator i = cmd.getArgList().iterator(); i.hasNext();)
-				throw new UnrecognizedOptionException( "Unrecognized option/argument: " + i.next().toString());
-			
+		List targetList = new ArrayList();
+		
+		try {
 			// Check if the help flag was set
 			if(cmd.hasOption("h"))
 				showHelp();
@@ -314,12 +314,8 @@ public class VTool implements VToolConfigKeys {
 				showVersion();
 			// Check if a configuration file was specified
 			if(cmd.hasOption("c")) {
-				String file = cmd.getOptionValue("c");
-				if(isURL(file))
-					config = new URL(file);
-				else
-					config = new File(file).toURL();
-				readConfigFile(config);
+				URL file = toURL(cmd.getOptionValue("c"));
+				readConfigFile(file);
 			}
 			// Check for the 'l' flag to specify a file where the log will be written to
 			if(cmd.hasOption("l"))
@@ -337,12 +333,15 @@ public class VTool implements VToolConfigKeys {
 				}
 		
 			}
-			// Check if the -t flag was set in either the config file or the command line
+			
+			//Grab the targets specified implicitly
+			if(cmd.getArgList().size() != 0)
+				targetList.addAll(cmd.getArgList());
+			//Grab the targets specified explicitly
 			if(cmd.hasOption("t")) {
-				setTargets(Arrays.asList(cmd.getOptionValues("t")));
+				targetList.addAll(Arrays.asList(cmd.getOptionValues("t")));
 			}
-			else if(targets == null)
-				throw new MissingOptionException("The 't' flag is required or must be set in the configuration file");
+			setTargets(targetList);
 			
 			// Check to see if aliasing is turned on
 			if(cmd.hasOption("a"))
@@ -440,20 +439,7 @@ public class VTool implements VToolConfigKeys {
 	 * @param d a List object of dictionary files
 	 */
 	public void setDictionaries(List d) {
-		dictionaries = new ArrayList();
-		//Transform all dictionary inputs to URL
-		for(Iterator i = d.iterator(); i.hasNext();) {
-			String dd = i.next().toString();
-			try {
-				if(isURL(dd))
-					dictionaries.add(new URL(dd));
-				else
-					dictionaries.add(new File(dd).toURI().toURL());
-			}catch(MalformedURLException uEx) {
-				System.err.println(uEx.getMessage());
-				System.exit(1);
-			}
-		}
+		dictionaries = d;
 	}
 	
 	/**
@@ -810,19 +796,21 @@ public class VTool implements VToolConfigKeys {
 	}
 	
 	/**
-	 * Determines whether a string is a URL
-	 * 
-	 * @param s
-	 * @return
+	 * Convert a string to a URL
 	 */
-	private boolean isURL(String s) {	
+	private URL toURL(String s) {
+		URL url = null;		
 		try {
-			URL url = new URL(s);
+			url = new URL(s);
+		} catch (MalformedURLException ex) {
+			try {
+				url = new File(s).toURI().toURL();
+			} catch (MalformedURLException mEx) {
+				System.err.println(mEx.getMessage());
+				System.exit(1);
+			}
 		}
-		catch(MalformedURLException e) {
-			return false;
-		}
-		return true;
+		return url;
 	}
 	
 	/**
@@ -839,13 +827,13 @@ public class VTool implements VToolConfigKeys {
 		
 		try {
 			//Parse the first dictionary
-			dd = new URL(i.next().toString());
+			dd = toURL(i.next().toString());
 			dict = DictionaryParser.parse(dd, alias);
             log.log(new ToolsLogRecord(Level.CONFIG, "Dictionary version        \n" + dict.getInformation(), dd.toString()));
 			log.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, dict.getStatus(), dd.toString()));
 			//Parse the rest of the dictionaries
 			while( i.hasNext() ) {
-				dd = new URL(i.next().toString());
+				dd = toURL(i.next().toString());
 				Dictionary mergeDict = DictionaryParser.parse(dd, alias);
 				dict.merge( mergeDict, true );
 				log.log(new ToolsLogRecord(Level.CONFIG, "Dictionary version        \n" + dict.getInformation(), dd.toString()));
@@ -870,20 +858,11 @@ public class VTool implements VToolConfigKeys {
 	 * @param parser
 	 */
 	private void setParserProps(LabelParser parser) {
+		URL path = null;
 		if(includePaths != null) {
 			for( Iterator i = includePaths.iterator(); i.hasNext(); ) {
-				String path = new String(i.next().toString());
-				
-				try {
-					if(isURL(path))
-						parser.addIncludePath(new URL(path));
-					else
-						parser.addIncludePath(new File(path).toURL());
-				} catch (MalformedURLException f) {
-					System.err.println("Cannot add file to include path: " + path);
-					System.exit(1);
-				}
-				
+				path = toURL(i.next().toString());
+				parser.addIncludePath(path);
 			}
 		}
 
@@ -901,17 +880,14 @@ public class VTool implements VToolConfigKeys {
 	 * @param dict the dictionary file
 	 */	
 	public void validateLabels(List targets, Dictionary dict) {
+		URL target = null;
+		
 		for(Iterator i1 = targets.iterator(); i1.hasNext();) {
 			FileList fileList = new FileList();
 			fileList = processTarget(i1.next().toString(), recursive);
 			for(Iterator i2 = fileList.getFiles().iterator(); i2.hasNext();) {
-				String target = i2.next().toString();				
-				try {
-					validateLabel(new URL(target), dict);
-				}catch(MalformedURLException uEx) {
-					System.err.println(uEx.getMessage());
-					System.exit(1);
-				}
+				target = toURL(i2.next().toString());				
+				validateLabel(target, dict);
 			}
 			if(!fileList.getDirs().isEmpty())
 				validateLabels(fileList.getDirs(), dict);
@@ -921,8 +897,7 @@ public class VTool implements VToolConfigKeys {
 	
 	/**
 	 * Process the specified target. A file list and directory list object are passed
-	 * into the method in order to retrieve the list of files and sub-directories found
-	 * as a result of visiting the target.
+	 * into the method in order to retrieve the files and sub-directories found.
 	 * 
 	 * @param target The file or URL to process
 	 * @param fileGen A FileListGenerator object that will contain the list of files found
@@ -973,8 +948,9 @@ public class VTool implements VToolConfigKeys {
 			log.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, "SKIP", file.toString()));
 			return;
 		}catch (IOException iEx) {
-			System.err.println(iEx.getMessage());
-			System.exit(1);			
+			log.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, "SKIP", file.toString()));
+			log.log(new ToolsLogRecord(ToolsLevel.WARNING, iEx.getMessage(), file.toString()));
+			return;			
 		}
 		log.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, label.getStatus(), file.toString()));
 	}
