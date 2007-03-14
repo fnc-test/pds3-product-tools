@@ -8,6 +8,7 @@ package gov.nasa.pds.tools.config;
  *      vtool.dataobject<br>
  *      vtool.dict<br>
  *      vtool.follow<br>
+ *      vtool.force<br>
  *      vtool.ignoredir<br>
  *      vtool.ignorefile<br>
  *      vtool.includepaths<br>
@@ -24,19 +25,20 @@ package gov.nasa.pds.tools.config;
  *
  */
 public interface VToolConfigKeys {
-	public final String ALIAS = "vtool.alias";
-	public final String DATAOBJ = "vtool.dataobject";
-	public final String DICT = "vtool.dict";
-	public final String FOLLOW = "vtool.follow";
-	public final String IGNOREDIR = "vtool.ignoredir";
-	public final String IGNOREFILE = "vtool.ignorefile";
-	public final String INCLUDES = "vtool.includepaths";
-	public final String LOG = "vtool.logfile";
-	public final String PROGRESS = "vtool.progress";
-	public final String RECURSE = "vtool.recursive";
-	public final String REGEXP = "vtool.regexp";
-	public final String REPORT = "vtool.report";
-	public final String STYLE = "vtool.style";
-	public final String TARGET = "vtool.target";
-	public final String VERBOSE = "vtool.verbose";
+	public final String ALIASKEY = "vtool.alias";
+	public final String DATAOBJKEY = "vtool.dataobject";
+	public final String DICTKEY = "vtool.dict";
+	public final String FORCEKEY = "vtool.force";
+	public final String FOLLOWKEY = "vtool.follow";
+	public final String IGNOREDIRKEY = "vtool.ignoredir";
+	public final String IGNOREFILEKEY = "vtool.ignorefile";
+	public final String INCLUDESKEY = "vtool.includepaths";
+	public final String LOGKEY = "vtool.logfile";
+	public final String PROGRESSKEY = "vtool.progress";
+	public final String RECURSEKEY = "vtool.recursive";
+	public final String REGEXPKEY = "vtool.regexp";
+	public final String REPORTKEY = "vtool.report";
+	public final String STYLEKEY = "vtool.style";
+	public final String TARGETKEY = "vtool.target";
+	public final String VERBOSEKEY = "vtool.verbose";
 }
