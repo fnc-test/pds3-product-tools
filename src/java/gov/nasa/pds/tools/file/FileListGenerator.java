@@ -241,8 +241,9 @@ public class FileListGenerator {
 	 * 
 	 * @throws IOException
 	 * @throws BadLocationException 
+	 * @throws NullPointerException
 	 */
-	public Set getHyperLinks(URL url) throws IOException, BadLocationException {
+	public Set getHyperLinks(URL url) throws IOException, BadLocationException, NullPointerException {
 		InputStreamReader stream = null;
 		HTMLDocument doc = null;
 		EditorKit kit = null;
