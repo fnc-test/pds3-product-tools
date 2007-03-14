@@ -7,23 +7,26 @@ package gov.nasa.pds.tools.config;
  *
  */
 public interface Flags {
-	public final String ALIAS = "a";
-	public final String CONFIG = "c";
-	public final String DATAOBJ = "O";
-	public final String DICT = "c";
-	public final String FORCE = "f";
-	public final String FOLLOW = "F";
-	public final String HELP = "h";
-	public final String IGNOREDIR = "D";
-	public final String IGNOREFILE = "X";
-	public final String INCLUDES = "I";
-	public final String LOCAL = "L";	
-	public final String LOG = "l";
-	public final String PROGRESS = "p";
-	public final String REGEXP = "e";
-	public final String REPORT = "r";
-	public final String RPTSTYLE = "s";
-	public final String TARGET = "t";
-	public final String VERBOSE = "v";
-	public final String VERSION = "V";
+	public final int SHORT = 0;
+	public final int LONG = 1;
+	
+	public final String ALIAS[] = {"a", "alias"};
+	public final String CONFIG[] = {"c", "config"};
+	public final String DATAOBJ[] = {"O", "no-obj"};
+	public final String DICT[] = {"d", "dict"};
+	public final String FOLLOW[] = {"F", "no-follow"};
+	public final String HELP[] = {"h", "help"};
+	public final String IGNOREDIR[] = {"D", "ignore-dir"};
+	public final String IGNOREFILE[] = {"X", "ignore-file"};
+	public final String INCLUDES[] = {"I", "include"};
+	public final String LOCAL[] = {"L", "local"};	
+	public final String LOG[] = {"l", "log-file"};
+	public final String PARTIAL[] = {"f", "force"};
+	public final String PROGRESS[] = {"p", "progress"};
+	public final String REGEXP[] = {"e", "regexp"};
+	public final String REPORT[] = {"r", "report-file"};
+	public final String RPTSTYLE[] = {"s", "report-style"};
+	public final String TARGET[] = {"t", "target"};
+	public final String VERBOSE[] = {"v", "verbose"};
+	public final String VERSION[] = {"V", "version"};
 }
