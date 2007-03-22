@@ -35,6 +35,8 @@ $Id: index.xml 1157 2006-06-16 19:50:08Z shardman $
         <li><a href="#UNIX-Based Setup">UNIX-Based Setup</a></li>
         <li><a href="#Windows Setup">Windows Setup</a></li>
         <li><a href="#Command-Line Options">Command-Line Options</a></li>
+        <li><a href="#Specifying Targets">Specifying Targets</a></li>
+        <li><a href="#Report And Log Generation">Report And Log Generation</a></li>
         <li><a href="#Examples">Examples</a></li>
         <li><a href="#Using a Configuration File">Using a Configuration File</a></li>
         <li><a href="#Multiple Dictionary Support">Multiple Dictionary Support</a></li>
@@ -196,126 +198,272 @@ c:\product-tools-X.X.X\bin\product-tools-X.X.X-app.jar \
 
         <table>
           <tr><th colspan="2">VTool Command-Line Options</th></tr>
-          <tr><td nowrap="nowrap">-t,--target &lt;labels,URLs,dirs&gt;</td><td>Specify the label files, directories, and URLs to validate (required option)</td></tr>
-          <tr><td>-d,--dict &lt;.full files&gt;</td><td>Specify the Planetary Science Data Dictionary full file name and any local dictionaries.</td></tr>
-          <tr><td>-l,--log-file &lt;file&gt;</td><td>Specify the file name for the machine-readable log. Default is to print the log to standard out.</td></tr>
-          <tr><td>-r, --report-file &lt;file&gt;</td><td>Specify the file name for the human-readable report. Default is to print to the standard out.</td></tr>
-          <tr><td>-s, --report-style</td><td>Specify the standard human-readable report format. Valid values are "full" for a full report, "min" for a minimal report, or "sum" for a summary report.</td></tr>
-          <tr><td>-v, --verbose</td><td>Specify the message severity level and above to include in the human-readable report (0=Debug, 1=Info, 2=Warnings, 3=Fatal and Error). Default is warnings (level 2).</td></tr>
-          <tr><td>-I, include &lt;paths&gt;</td><td>Specify path(s) to search for files referenced by pointers in a label. Default is to always look in the directory of the label, then search the specified directories.</td></tr>
+          <tr><td nowrap="nowrap">-t, --target &lt;labels,URLs,dirs&gt;</td><td>Explicitly specify the targets (label files, directories, and URLs) to validate. Targets can be specified implicitly as well (example: VTool label.lbl). If targets are specified both implicitly and explicitly on the command-line, then the implicit targets will get processed first.</td></tr>
+          <tr><td>-d, --dict &lt;.full files&gt;</td><td>Specify the Planetary Science Data Dictionary full file name and any local dictionaries.</td></tr>
+          <tr><td>-l, --log-file &lt;file (optional)&gt;</td><td>Specify the file name for the machine-readable log. A file specification is optional. If no file name is given, then the log will be written to standard out. If the log will be written to a file and a directory is going to be validated, it is recommended to write the log to a location different from this target directory as the tool will see this as a potential label file to validate and report on it.</td></tr>
+          <tr><td>-r, --report-file &lt;file&gt;</td><td>Specify the file name for the human-readable report. Default is to write to the standard out if this flag is not specified. This report, however, will not print to standard out if this flag is missing AND the log file flag is specified with no file name.</td></tr>
+          <tr><td>-s, --report-style</td><td>Specify the standard human-readable report format. Valid values are "full" for a full view, "min" for a minimal view, or "sum" for a summary view. Default is to generate a full report if this flag is not specified.</td></tr>
+          <tr><td>-v, --verbose</td><td>Specify the message severity level and above to include in the human-readable report (1=Info, 2=Warning, 3=Error). Default is warnings and above(level 2).</td></tr>
+          <tr><td>-I, --include &lt;paths&gt;</td><td>Specify paths to search for files referenced by pointers in a label. Separate each path with a space. Default is to always look in the directory of the label, then search the specified directories.</td></tr>
           <tr><td>-F, --no-follow</td><td>Do not follow or check for the existence of files referenced by pointer statements in a label.</td></tr>
-          <tr><td>-c,--config &lt;file&gt;</td><td>Specify a configuration file to set the default values for VTool.</td></tr>
-          <tr><td>-L,--local</td><td>Validate files only in the input directory rather than recursively traversing down the sub-directories.</td></tr>
-          <tr><td nowrap="nowrap">-e,--regexp &lt;expressions&gt;</td><td>Specify file patterns to look for when validating a directory. Each pattern must be surrounded by quotes (i.e. -e "*.LBL" "*.FMT"). Pattern matching is case-insensitive in Windows, but case-sensitive for other systems.
+          <tr><td>-f, --force</td><td>Enable standalone label fragment validation. Default is to not validate them.</td></tr>
+          <tr><td>-c, --config &lt;file&gt;</td><td>Specify a configuration file to set the default values for VTool.</td></tr>
+          <tr><td>-L, --local</td><td>Validate files only in the input directory rather than recursively traversing down the sub-directories.</td></tr>
+          <tr><td nowrap="nowrap">-e, --regexp &lt;expressions&gt;</td><td>Specify file patterns to look for when validating a directory. Separate each pattern with a space. Patterns should be surrounded in quotes (example: -e "*.LBL *.FMT" or -e "*.LBL" "*.FMT") to avoid having the system shell mistakingly interpreting them (This has been seen on non-Windows systems). Pattern matching is case-insensitive in Windows, but case-sensitive for other systems.
           </td></tr>
-          <tr><td nowrap="nowrap">-X,--ignore-file &lt;expressions&gt;</td><td>Specify file patterns to ignore when validating a directory. Each pattern must be surrounded by quotes (i.e. -X "*.TXT" "*.TAB"). Pattern matching is case-insensitive in Windows, but case-sensitive for other systems.
+          <tr><td nowrap="nowrap">-X, --ignore-file &lt;expressions&gt;</td><td>Specify file patterns to ignore when validating a directory. Separate each pattern with a space. Patterns should be surrounded in quotes (i.e. -X "*.TXT *.TAB" or -X "*.TXT" "*.TAB") to avoid having the system shell mistakingly interpreting them (This has been seen on non-Windows systems). Pattern matching is case-insensitive in Windows, but case-sensitive for other systems.
           </td></tr>
-          <tr><td nowrap="nowrap">-D, --ignore-dir &lt;expressions&gt;</td><td>Specify the directory pattterns to ignore. Each pattern must be surrounded by quotes (i.e. -D "LABEL" "EXTRAS"). Pattern matching is case-insensitive in Windows, but case-sensitive for other systems.
+          <tr><td nowrap="nowrap">-D, --ignore-dir &lt;expressions&gt;</td><td>Specify the directory pattterns to ignore. Separate each pattern with a space. Patterns should be surrounded by quotes (i.e. -D "LABEL EXTRAS" or -D "LABEL" "EXTRAS") to avoid having the system shell mistakingly interpreting them (This has been seen on non-Windows systems). Pattern matching is case-insensitive in Windows, but case-sensitive for other systems.
           </td></tr>
-          <tr><td>-p, --progress</td><td>Enable validation progress reporting. Default is no.</td></tr>
-          <tr><td>-h,--help</td><td>Display VTool usage</td></tr>
-          <tr><td>-V,--version</td><td>Display VTool version</td></tr>
+          <tr><td>-p, --progress</td><td>Enable validation progress reporting. Default is no. When this option is enabled, the current directory being validated will be written to standard error, followed by a series of asterisk "*" symbols, which represents a file being validated.</td></tr>
+          <tr><td>-h, --help</td><td>Display VTool usage</td></tr>
+          <tr><td>-V, --version</td><td>Display VTool version</td></tr>
         </table>
       </subsection> 
 
+      <subsection name="Specifying Targets">
+        <p>Targets are validated in the order in which they are specified on the command-line. They can be specified implicitly and explicitly.
+        </p>
+        
+        <p>To specify targets implicitly, specify them first on the command-line before setting any other flag.
+        </p>
+        
+        <p>The following command demonstrates the validation of a single data product label, specified implicitly, against the PSDD:
+        </p>
+        <source>
+[node:~] java gov.nasa.pds.tools.VTool LABEL.LBL \
+-d pdsdd.full
+        </source>        
+        
+        <p>The following command demonstrates the validation of multiple data product labels, both specified implicitly, against the PSDD:
+        </p>
+        <source>
+[node:~] java gov.nasa.pds.tools.VTool LABEL.LBL $HOME/DIR \
+-d pdsdd.full
+        </source>
+        
+        <p><b>Specifying a target implicitly (see the example below) after specifying flags is not allowed. Unexpected results will occur.</b>
+        </p>
+        <source>
+[node:~] java gov.nasa.pds.tools.VTool -d pdsdd.full \
+LABEL.LBL
+        </source>         
+        
+        <p>Targets can be specified both implicitly and explicitly at the same time. Targets specified implicitly are validated first, followed by those that are specified explicitly with the target flag.
+        </p>
+        
+        <p>The following command demonstrates the validation of multiple data product labels, specified both implicitly and explicitly, against the PSDD:
+        </p> 
+        
+        <source>
+[node:~] java gov.nasa.pds.tools.VTool LABEL1.LBL \
+LABEL2.LBL -d pdsdd.full -t LABEL3.LBL $HOME/DIR
+        </source>            
+        
+        <p>In this example, LABEL1.LBL and LABEL2.LBL will get validated first, then LABEL3.LBL and the labels in $HOME/DIR will get validated next.
+        </p>
+      </subsection>
+        
+      <subsection name="Report And Log Generation">
+        <p>The examples below will demonstrate how to generate a human-readable report and machine-readable log with VTool.
+        </p>
+        
+        <p><b>Writing A Human-Readable Report To File</b></p>
+        
+        <p>Specify the report file flag to write the human-readable report to file. The report style flag is used to specify the report format. If the style flag is not specified, the default is to show a full report.
+        </p>
+                
+        <p>The following command demonstrates writing the human-readable, full report to a file named <i>report.txt</i>:
+        </p>
+        <source>
+[node:~] java gov.nasa.pds.tools.VTool LABEL.LBL \
+-d pdsdd.full -r report.txt
+        </source>
+
+        <p><b>Writing A Human-Readble Report To Standard Out</b></p>
+
+        <p>Do not specify the report file flag to write the human-readable report to file.
+        </p>
+        
+        <p>The following command demonstrates the validation of a single data product label against the PSDD, where the human-readable, full report is written to standard out instead:
+        </p>
+        <source>
+[node:~] java gov.nasa.pds.tools.VTool LABEL.LBL \
+-d pdsdd.full
+        </source>
+        
+        <p>In the above examples, the machine-readable log is written to memory. The examples below will demonstrate how to see the machine-readable log.
+        </p>
+        
+        <p><b>Writing The Machine-Readable Log To Standard Out With No Human-Readable Report</b></p>
+        <p>Use the log file flag <i>with no file specification</i> and do not specify the report file flag.
+        </p>
+  
+        <p>The following command demonstrates writing the machine-readable log to standard out with no human-readable report generated:
+        </p>       
+        <source>
+[node:~] java gov.nasa.pds.tools.VTool LABEL.LBL \
+-d pdsdd.full -l
+        </source>
+        
+        <p><b>Writing The Machine-Readable Log To A File, Writing The Human-Readable Report To Standard Out</b></p>
+        
+        <p>Specify the report file flag and the log file flag <i>with a file name specification</i>.
+        </p>
+        
+        <p>The following command demonstrates writing the machine-readable log to a file named <i>log.xml</i> and writing a human-readable, full report to standard out.
+        </p>        
+        <source>
+[node:~] java gov.nasa.pds.tools.VTool LABEL.LBL \
+-d pdsdd.full -l log.xml
+        </source>
+        
+        <p><b>Writing Both The Machine-Readable Log And Human-Readable Report To A File</b></p>
+        
+        <p>Specify the report file flag and the log file flag with a file specification. The file names should be different. The log and report cannot be written to the same file.
+        </p>
+
+        <p>The following command demonstrates writing the machine-readable log to a file named <i>log.xml</i> and writing the human-readable report to a file named <i>report.txt</i>
+        </p>       
+        <source>
+[node:~] java gov.nasa.pds.tools.VTool LABEL.LBL \
+-d pdsdd.full -l log.xml -r report.txt
+        </source>   
+
+        <p><b>Writing The Machine-Readable Log To Standard Out, Writing The Human-Readable Report To A File</b></p>
+
+        <p>Specify the report file flag and the log file flag with no file specification.
+        </p>
+        
+        <p>The following command demonstrates writing the machine-readable log to standard out and writing the human-readable report to a file named <i>report.txt</i>
+        </p>       
+        <source>
+[node:~] java gov.nasa.pds.tools.VTool -d pdsdd.full \
+-t LABEL.LBL -l -r report.txt
+        </source>        
+      </subsection>
+        
       <subsection name="Examples">
+        <p>The examples below demonstrate the many ways that the tool can be executed to perform automated validation.
+        </p>
+        
+        <p><b>Validating Against a Single Dictionary</b></p>
+        
         <p>The following command demonstrates the validation of a single data product label against the PSDD:
         </p>
+        
         <source>
-[node:~] java gov.nasa.pds.tools.VTool -d pdsdd.full \
--t TEST.LBL
-        </source>
-
-        <p>Every run of the tool will generate a complete log in machine-readable format. By default, this log will be sent to the terminal and all other report-related options are ignored, except for progress reporting. When a file specification is given for the machine-readable log, a human-readable report can be generated. By default, this report will be sent to the terminal in full format.
-        </p>
-
-        <p>The following command demonstrates the same validation as the previous example above, but generating a human-readable, full report to the terminal:
-        </p>
-        <source>
-[node:~] java gov.nasa.pds.tools.VTool -d pdsdd.full \
--t TEST.LBL -l log.xml
-        </source>
-
-        <p>The following command demonstrates the same validation as above, but writing this human-readable report in a file called rpt.txt.
-        </p>
-        <source>
-[node:~] java gov.nasa.pds.tools.VTool -d pdsdd.full \
--t TEST.LBL -l log.xml -r rpt.txt
-        </source>
-
+[node:~] java gov.nasa.pds.tools.VTool LABEL.LBL \
+-d pdsdd.full 
+        </source>       
+        
+        <p><b>Validating Against Multiple Dictionaries</b></p>
+        
         <p>The following command demonstrates the validation of a single data product label against the PSDD and a local dictionary:
         </p>
         <source>
-[node:~] java gov.nasa.pds.tools.VTool -d pdsdd.full \
-localdd.full -t TEST.LBL 
+[node:~] java gov.nasa.pds.tools.VTool LABEL.LBL \
+-d pdsdd.full localdd.full 
         </source>
 
-        <p>The following command demonstrates the validation of multiple data product labels if contained in a directory:
+        <p>For more information on how the tool behaves when multiple dictionaries are passed in, please see the <a href="#Multiple Dictionary Support">multiple dictionary support</a> section.
+        </p>
+
+        <p><b>Validating Files With A Specific File Pattern</b></p>
+
+        <p>The following command demonstrates the validation of multiple data product labels in a specified target directory, where validation only occurs on file names that end in ".LBL" or begins with the letters "MER":
         </p>
         <source>
-[node:~] java gov.nasa.pds.tools.VTool -d pdsdd.full \
--t ./TEST_DIR
+[node:~] java gov.nasa.pds.tools.VTool $HOME/DIR \
+-d pdsdd.full -e "*.LBL" "MER*"
         </source>
 
-        <p>The following command demonstrates the validation of multiple targets - a single data product label and multiple data product labels contained in another directory location:
+        <p><b>Ignoring Sub-Directories During Validation</b></p>
+        
+        <p>By default, the tool will recursively traverse down a directory tree when a target directory is specified, validating files within the sub-directories. Sub-directories can be ignored with the ignore directories flag.
+        </p>
+        
+        <p>The following command demonstrates the validation of multiple data product labels in a specified target directory, where directories named "EXTRAS" or "LABEL" are ignored.
         </p>
         <source>
-[node:~] java gov.nasa.pds.tools.VTool -d pdsdd.full \
--t TEST.LBL ./TEST_DIR
+[node:~] java gov.nasa.pds.tools.VTool $HOME/DIR \
+-d pdsdd.full -D "EXTRAS" "LABEL"
+        </source>        
+        
+        <p>The local flag can also be used to stop the tool from recursing down a directory tree.
+        </p>
+        
+        <p>The following command demonstrates the same validation as above, but without recursion:
+        </p>
+        <source>
+[node:~] java gov.nasa.pds.tools.VTool $HOME/DIR \
+-d pdsdd.full -L
         </source>
 
-        <p>The following command demonstrates the validation of multiple data product labels contained in a directory whose extension ends in either .LBL or .FMT:
-        </p>
-        <source>
-[node:~] java gov.nasa.pds.tools.VTool -d pdsdd.full \
--t ./TEST_DIR -p "*LBL" "*FMT"
-        </source>
+        <p><b>Ignoring Files With A Specific File Pattern</b></p>
 
-        <p>By default, the tool will recursively traverse the directory tree assuming there are sub-directories contained within the specified directory. The following command demonstrates the same validation as above, but without recursion:
+        <p>The ignore files flag can be used to tell the tool which files to ignore during validation.
         </p>
-        <source>
-[node:~] java gov.nasa.pds.tools.VTool -d pdsdd.full \ 
--t ./TEST_DIR -p "*LBL" "*FMT" -L
-        </source>
 
-        <p>The following command demonstrates the validation of multiple data product labels contained in a directory except for files ending in a .IMG or .TAB:
+        <p>The following command demonstrates the validation of multiple data product labels contained in a directory except for files ending in a ".IMG" or ".TAB":
         </p>
         <source>
-[node:~] java gov.nasa.pds.tools.VTool -d pdsdd.full \
--t ./TEST_DIR -X "*IMG" "*TAB"
+[node:~] java gov.nasa.pds.tools.VTool $HOME/DIR \
+-d pdsdd.full -X "*IMG" "*TAB"
         </source>
-          
-        <p>If a data product label contains a pointer statement that references a file, it will always assume it is co-located with the label. If it cannot be found there, then VTool will look for that referenced file in the path specified by the include directories option.
+        
+        <p><b>Checking For Referenced Files In Different Locations</b></p>
+        
+        <p>If a data product label contains a pointer statement that references a file, it will always assume it is co-located with the label. If it cannot be found there, then VTool will look for that referenced file in the paths specified by the include directories option.
         </p>
         
         <p>The following command demonstrates the validation of a data product label that contains a pointer statement to a file located in a directory called DIR.
         </p>
         <source>
-[node:~] java gov.nasa.pds.tools.VTool -d pdsdd.full \
--t TEST.LBL -I $HOME/DIR
+[node:~] java gov.nasa.pds.tools.VTool LABELPTR.LBL \
+-d pdsdd.full -I $HOME/path
         </source>
         
         <p>If the data product label contains pointer statements that reference files located in two different locations, then multiple paths can be specified.
         </p>
         
-        <p>The following command demonstrates the validation of a data product label that contains pointer statements that reference files located in two different locations, DIR1 and DIR2.
+        <p>The following command demonstrates the validation of a data product label that contains pointer statements that reference files located in two different locations, path1 and path2.
         </p>
         <source>
-[node:~] java gov.nasa.pds.tools.VTool -d pdsdd.full \
--t TEST.LBL -I $HOME/DIR1 $HOME/DIR2
+[node:~] java gov.nasa.pds.tools.VTool LABELPTR2.LBL \
+-d pdsdd.full -I $HOME/path1 $HOME/path2
         </source>
         
-        <p>If a data product label points to a label fragment, VTool has the capability of validating this label without having to validate the associated label fragment with the no follow pointers option. This would be used in cases where the label fragment is not complete or in cases where the user wishes to simply check that the overall label structure is PDS compliant.
+        <p><b>Not Following A Pointer</b></p>
+        
+        <p>If a data product label points to a label fragment, VTool has the capability of validating this label without having to validate the associated label fragment with the no follow pointers option. This would be used in cases where the label fragment is not complete or in cases where the user wishes to simply check that the parent label structure is PDS compliant.
         </p>
         
         <p>The following command demonstrates the validation of a data product label that contains a label fragment, but specifying to the tool to not follow the pointer:
         </p>
         <source>
-[node:~] java gov.nasa.pds.tools.VTool -d pdsdd.full \
--t TEST.LBL -F
+[node:~] java gov.nasa.pds.tools.VTool LABEL.LBL \
+-d pdsdd.full -F
         </source>
         
-        <p>A configuration file can be passed into the command-line to change the default behaviors of the tool and to also provide users a way to perform validation with a single flag (see the section below for details on how to set the configuration file). The following command demonstrates performing validation using a configuration file:
+        <p><b>Standalone Label Fragment Validation</b></p>
+        
+        <p>The force flag is used to force standalone label fragment validation. When this flag is specified, standalone label fragment validation will occur on files whose extension ends in a .FMT
+        </p>
+        
+        <p>The following command demonstrates the validation of multiple data products, including performing standalone label fragment validation on any files it finds with a .FMT extension:
+        </p>
+        <source>
+[node:~] java gov.nasa.pds.tools.VTool $HOME/DIR \
+-d pdsdd.full -f
+        </source>         
+        
+        <p><b>Changing Tool Behaviors With The Configuration File</b></p>
+        
+        <p>A configuration file can be passed into the command-line to change the default behaviors of the tool and to also provide users a way to perform validation with a single flag (see the section below for details on how to set the configuration file). 
+        </p>
+        
+        <p>The following command demonstrates performing validation using a configuration file:
         </p>
         <source>
 [node:~] java gov.nasa.pds.tools.VTool -c config.txt
@@ -339,17 +487,19 @@ localdd.full -t TEST.LBL
           <tr><th>KEYWORD</th><th>ASSOCIATED FLAG</th><th>valid value(s)</th></tr>
           <tr><td>vtool.target</td><td>-t</td><td>Specify labels,directories, and URLs</td></tr>
           <tr><td>vtool.dict</td><td>-d</td><td>Specify dictionary files</td></tr>
-          <tr><td>vtool.logfile</td><td>-l</td><td>Specify the machine-readable log file name (do not specify if wanting to write to standard out)</td></tr>
+          <tr><td>vtool.logfile</td><td nowrap="nowrap">-l (with a file spec)</td><td>Specify the machine-readable log file name.</td></tr>
+          <tr><td>vtool.showlog</td><td nowrap="nowrap">-l (with no file spec)</td><td>Set to 'true' to write the log to standard out, 'false' otherwise or do not specify. Setting this to 'true' and specifying 'vtool.logfile' is not allowed.</td></tr>
           <tr><td>vtool.report</td><td>-r</td><td>Specify the human-readable report file name (do not specify if wanting to write to standard out)</td></tr>
-          <tr><td>vtool.style</td><td>-s</td><td>Specify the standard human-readable report format ("full", "min", or "sum")</td></tr>
-          <tr><td>vtool.verbose</td><td>-v</td><td>Specify the message severity level and above to include in the human-readable report(0=Debug, 1=Info, 2=Warning, 3=Error and Fatal). Default is warnings (level 2).</td></tr>
-          <tr><td>vtool.includepaths</td><td>-I</td><td>Specify paths to search for files refererenced by pointers in a label</td></tr>
+          <tr><td>vtool.style</td><td>-s</td><td>Specify the standard human-readable report format ("full", "min", or "sum"). If not specified, then a full report will be generated</td></tr>
+          <tr><td>vtool.verbose</td><td>-v</td><td>Specify the message severity level and above to include in the human-readable report(1=Info, 2=Warning, 3=Error). Default is warnings and above(level 2).</td></tr>
+          <tr><td nowrap="nowrap">vtool.includepaths</td><td>-I</td><td>Specify paths to search for files refererenced by pointers in a label</td></tr>
           <tr><td>vtool.follow</td><td>-F</td><td>Set to 'false' to not look for files referenced by pointer statements in a label, set to 'true' otherwise</td></tr>
+          <tr><td>vtool.force</td><td>-f</td><td>Set to 'true' to enable standalone label fragment validation, 'false' otherwise</td></tr>
           <tr><td>vtool.recursive</td><td>-L</td><td>Set to 'false' to not traverse a directory, set to 'true' otherwise</td></tr>
           <tr><td>vtool.regexp</td><td>-e</td><td>Specify file patterns to search for when validating a directory.</td></tr>
           <tr><td>vtool.ignorefile</td><td>-X</td><td>Specify file patterns to ignore when validating a directory.</td></tr>
-          <tr><td>vtool.ignoredir</td><td>-D</td><td>Specify dictionary patterns to ignore.</td></tr>
-          <tr><td>vtool.progress</td><td>-p</td><td>Enable progress reporting.</td></tr>
+          <tr><td>vtool.ignoredir</td><td>-D</td><td>Specify directory patterns to ignore.</td></tr>
+          <tr><td>vtool.progress</td><td>-p</td><td>Set to 'true' to enable progress reporting, 'false' otherwise.</td></tr>
         </table>
 
         <p>The following example demonstrates how to set a configuration file:</p>
