@@ -198,9 +198,9 @@ c:\product-tools-X.X.X\bin\product-tools-X.X.X-app.jar \
 
         <table>
           <tr><th colspan="2">VTool Command-Line Options</th></tr>
-          <tr><td nowrap="nowrap">-t, --target &lt;labels,URLs,dirs&gt;</td><td>Explicitly specify the targets (label files, directories, and URLs) to validate. Targets can be specified implicitly as well (example: VTool label.lbl). If targets are specified both implicitly and explicitly on the command-line, then the implicit targets will get processed first.</td></tr>
+          <tr><td nowrap="nowrap">-t, --target &lt;labels,URLs,dirs&gt;</td><td>Explicitly specify the targets (label files, directories, and URLs) to validate. Targets can be specified implicitly as well (example: VTool label.lbl). For more details on target specification, see the <a href="#Specifying Targets">Specifying Targets</a> section</td></tr>
           <tr><td>-d, --dict &lt;.full files&gt;</td><td>Specify the Planetary Science Data Dictionary full file name and any local dictionaries.</td></tr>
-          <tr><td>-l, --log-file &lt;file (optional)&gt;</td><td>Specify the file name for the machine-readable log. A file specification is optional. If no file name is given, then the log will be written to standard out. If the log will be written to a file and a directory is going to be validated, it is recommended to write the log to a location different from this target directory as the tool will see this as a potential label file to validate and report on it.</td></tr>
+          <tr><td>-l, --log-file &lt;file (optional)&gt;</td><td>Specify the file name for the machine-readable log. A file specification is optional. If no file name is given, then the log will be written to standard out. For more details on writing the log to a file, see the <a href="#Report And Log Generation">Report And Log Generation</a> section</td></tr>
           <tr><td>-r, --report-file &lt;file&gt;</td><td>Specify the file name for the human-readable report. Default is to write to the standard out if this flag is not specified. This report, however, will not print to standard out if this flag is missing AND the log file flag is specified with no file name.</td></tr>
           <tr><td>-s, --report-style</td><td>Specify the standard human-readable report format. Valid values are "full" for a full view, "min" for a minimal view, or "sum" for a summary view. Default is to generate a full report if this flag is not specified.</td></tr>
           <tr><td>-v, --verbose</td><td>Specify the message severity level and above to include in the human-readable report (1=Info, 2=Warning, 3=Error). Default is warnings and above(level 2).</td></tr>
@@ -310,6 +310,9 @@ LABEL2.LBL -d pdsdd.full -t LABEL3.LBL $HOME/DIR
         
         <p>Specify the report file flag and the log file flag <i>with a file name specification</i>.
         </p>
+        
+        <p><i>NOTE: When a directory is being validated and the log will be written to a file, the log should be written to a location different from the target directory. Otherwise, the tool will attempt to validate the log and it will be seen in the report.
+        </i></p>       
         
         <p>The following command demonstrates writing the machine-readable log to a file named <i>log.xml</i> and writing a human-readable, full report to standard out.
         </p>        
