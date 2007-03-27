@@ -338,8 +338,8 @@ LABEL2.LBL -d pdsdd.full -t LABEL3.LBL $HOME/DIR
         <p>The following command demonstrates writing the machine-readable log to standard out and writing the human-readable report to a file named <i>report.txt</i>
         </p>       
         <source>
-[node:~] java gov.nasa.pds.tools.VTool -d pdsdd.full \
--t LABEL.LBL -l -r report.txt
+[node:~] java gov.nasa.pds.tools.VTool LABEL.LBL \
+-d pdsdd.full -l -r report.txt
         </source>        
       </subsection>
         
