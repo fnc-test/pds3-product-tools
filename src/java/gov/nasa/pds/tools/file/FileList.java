@@ -54,16 +54,16 @@ public class FileList {
 	}
 	
 	/**
-	 * Get the list of files
-	 * @return
+	 * Gets files that were added to the list
+	 * @return a list of files
 	 */
 	public List getFiles() {
 		return files;
 	}
 	
 	/**
-	 * Gets the list of directories
-	 * @return
+	 * Gets directories that were added to the list
+	 * @return a list of directories
 	 */
 	public List getDirs() {
 		return dirs;
