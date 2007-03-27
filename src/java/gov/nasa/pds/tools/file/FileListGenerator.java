@@ -11,8 +11,6 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -295,7 +293,7 @@ public class FileListGenerator {
 	/**
 	 * Finds links to sub-directory URLs
 	 * 
-	 * @param url
+	 * @param url The location
 	 * @param links The Set of files and directories found inside the URL
 	 * @return a list of sub directory URLs
 	 * @throws MalformedURLException
@@ -324,7 +322,7 @@ public class FileListGenerator {
 	 * then it is a file. Otherwise, false is returned.
 	 * 
 	 * @param link The hyperlink name to examine
-	 * @return
+	 * @return 'true' if hyperlink contains a 3 character file extension, 'false' otherwise
 	 */
 	public boolean isLinkFile(String link) {
 		String ext = FilenameUtils.getExtension(link);
@@ -341,7 +339,7 @@ public class FileListGenerator {
 	 * 
 	 * @param url The location
 	 * @param link The hyperlink name to examine
-	 * @return
+	 * @return 'true' if hyperlink is a sub-directory, 'false' otherwise
 	 */
 	public boolean isLinkSubDir(URL url, String link) {
 		if( !isLinkFile(link) && link.indexOf('#') == -1 && link.indexOf('?') == -1) {
