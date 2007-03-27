@@ -4,8 +4,8 @@ package gov.nasa.pds.tools.config;
  * Contains the valid keys for a VTool configuration file <br><br>
  * 
  * Current keys are:<br>
+ * <ul>
  *      vtool.alias<br>
- *      vtool.dataobject<br>
  *      vtool.dict<br>
  *      vtool.follow<br>
  *      vtool.force<br>
@@ -17,16 +17,18 @@ package gov.nasa.pds.tools.config;
  *      vtool.recursive<br>
  *      vtool.regexp<br>
  *      vtool.report<br>
+ *      vtool.showlog<br>
  *      vtool.style<br>
  *      vtool.target<br>
  *      vtool.verbose<br>
- *      
+ * </ul>     
  * @author mcayanan
  *
  */
 public interface VToolConfigKeys {
 	public final String ALIASKEY = "vtool.alias";
-	public final String DATAOBJKEY = "vtool.dataobject";
+//	TODO: Add data object key to turn ON/OFF object validation when it is implemented
+//	public final String DATAOBJKEY = "vtool.dataobject";
 	public final String DICTKEY = "vtool.dict";
 	public final String FORCEKEY = "vtool.force";
 	public final String FOLLOWKEY = "vtool.follow";
@@ -38,6 +40,7 @@ public interface VToolConfigKeys {
 	public final String RECURSEKEY = "vtool.recursive";
 	public final String REGEXPKEY = "vtool.regexp";
 	public final String REPORTKEY = "vtool.report";
+	public final String SHOWLOGKEY = "vtool.showlog";
 	public final String STYLEKEY = "vtool.style";
 	public final String TARGETKEY = "vtool.target";
 	public final String VERBOSEKEY = "vtool.verbose";
