@@ -79,8 +79,6 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	private final String versionID = "0.4.0";
 	private final String fileRep = "*";
 	private final String partialExt = "FMT";
-	private final SimpleDateFormat timeFormat = 
-		new SimpleDateFormat("EEE, MMM dd yyyy 'at' HH:mm:ss a");
 	
 	private static Logger log = Logger.getLogger(VTool.class.getName());
 	private Handler logHandler;
@@ -879,7 +877,8 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 				"VTool Version             " + versionID));
 		try {
 			log.log(new ToolsLogRecord(Level.CONFIG, 
-				"Execution Date            " + time.getTime(timeFormat)));
+				"Execution Date            " 
+				+ time.getTime(new SimpleDateFormat("EEE, MMM dd yyyy 'at' HH:mm:ss a"))));
 		} catch(IllegalArgumentException eX) {
 			System.out.println(eX.getMessage());
 			System.exit(TOOLFAILURE);

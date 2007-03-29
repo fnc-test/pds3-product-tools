@@ -25,10 +25,8 @@ public class ToolsTime {
 	 * the patterns and letters defined in Java's SimpleDateFormat class.
 	 * 
 	 * @return the current date and time
-	 * @throws IllegalArgumentException If the format being passed in does
-	 * not match the patterns defined in the SimpleDateFormat class
 	 */
-	public String getTime(SimpleDateFormat df) throws IllegalArgumentException {
+	public String getTime(SimpleDateFormat df) {
 		Date date = calendar.getTime();
 		return df.format(date);
 	}
