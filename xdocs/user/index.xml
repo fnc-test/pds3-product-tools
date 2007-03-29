@@ -37,6 +37,7 @@ $Id: index.xml 1157 2006-06-16 19:50:08Z shardman $
         <li><a href="#Command-Line Options">Command-Line Options</a></li>
         <li><a href="#Specifying Targets">Specifying Targets</a></li>
         <li><a href="#Report And Log Generation">Report And Log Generation</a></li>
+        <li><a href="#Report Formats">Report Formats</a></li>
         <li><a href="#Examples">Examples</a></li>
         <li><a href="#Using a Configuration File">Using a Configuration File</a></li>
         <li><a href="#Multiple Dictionary Support">Multiple Dictionary Support</a></li>
@@ -345,6 +346,14 @@ LABEL2.LBL -d pdsdd.full -t LABEL3.LBL $HOME/DIR
 -d pdsdd.full -l -r report.txt
         </source>        
       </subsection>
+      
+      <subsection name="Report Formats">
+        <p>VTool provides 3 different report formats for the human-readable report: a full view, a summary view, and a minimal view. The report style flag is used to change the formatting. When this flag is not specified on the command-line, the default is to show a full report.
+        </p>
+      
+        <p>Place holder for reporting examples</p>
+      
+      </subsection>
         
       <subsection name="Examples">
         <p>The examples below demonstrate the many ways that the tool can be executed to perform automated validation.
@@ -461,6 +470,36 @@ LABEL2.LBL -d pdsdd.full -t LABEL3.LBL $HOME/DIR
 -d pdsdd.full -f
         </source>         
         
+        <p><b>Progress Reporting</b></p>
+        
+        <p>Validation progress reporting is enabled with the progress flag. With progress reporting enabled, VTool will print, to the standard error, the current location that is being validated followed by a series of asterisk "*" symbols that represents a file it has encountered. The default behavior is to have this feature disabled.
+        </p>
+        
+        <p>The following command demonstrates the validation of multiple data products found in a directory, <i>DIR</i>, and its sub-directories with progress reporting enabled.
+        </p>
+        
+        <source>
+[node:~] java gov.nasa.pds.tools.VTool /home/user/DIR \
+-d pdsdd.full -p
+        </source>
+        
+        <p>The progress reporting would look something like the following:
+        </p>
+        
+        <source>
+Validating file(s) in: file:/home/user/DIR
+*
+Validating file(s) in: file:/home/user/DIR/subDir1
+*****
+Validating file(s) in: file:/home/user/DIR/subDir2
+***
+
+...
+        </source>
+        
+        <p>In the above example, 1 file was validated in the DIR directory, 5 files were validated in DIR/subDir1, and 3 files were validated in DIR/subDir2.
+        </p>
+                
         <p><b>Changing Tool Behaviors With The Configuration File</b></p>
         
         <p>A configuration file can be passed into the command-line to change the default behaviors of the tool and to also provide users a way to perform validation with a single flag (see the section below for details on how to set the configuration file). 
