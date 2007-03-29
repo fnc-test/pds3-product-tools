@@ -7,6 +7,6 @@ package gov.nasa.pds.tools.xsl;
  */
 public interface StyleSheet {
 	public final String FULLXSL = "report-full.xsl";
-	public final String MINXSL = "report-min.xsl";
-	public final String SUMXSL = "report-sum.xsl";
+	public final String MINXSL = "report-minimal.xsl";
+	public final String SUMXSL = "report-summary.xsl";
 }
