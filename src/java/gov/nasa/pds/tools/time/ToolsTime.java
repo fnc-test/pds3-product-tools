@@ -21,7 +21,7 @@ public class ToolsTime {
 	/**
 	 * Get the current Date and Time
 	 * 
-	 * @param format How the date and time will be represented. Use
+	 * @param df How the date and time will be represented. Use
 	 * the patterns and letters defined in Java's SimpleDateFormat class.
 	 * 
 	 * @return the current date and time
