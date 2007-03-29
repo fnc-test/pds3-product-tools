@@ -13,29 +13,23 @@ import java.util.Date;
 public class ToolsTime {
 	
 	private Calendar calendar;
-	private Date date;
-	private String datetime;
 	
 	public ToolsTime() {
 		calendar = Calendar.getInstance();
-		date = null;
-		datetime = null;
 	}
 
 	/**
 	 * Get the current Date and Time
 	 * 
-	 * @param format How the date and time will be represented. Must use
+	 * @param format How the date and time will be represented. Use
 	 * the patterns and letters defined in Java's SimpleDateFormat class.
 	 * 
 	 * @return the current date and time
 	 * @throws IllegalArgumentException If the format being passed in does
 	 * not match the patterns defined in the SimpleDateFormat class
 	 */
-	public String getTime(String format) throws IllegalArgumentException {
-		SimpleDateFormat df = new SimpleDateFormat(format);
-		date = calendar.getTime();
-		datetime = df.format(date);
-		return datetime;
+	public String getTime(SimpleDateFormat df) throws IllegalArgumentException {
+		Date date = calendar.getTime();
+		return df.format(date);
 	}
 }

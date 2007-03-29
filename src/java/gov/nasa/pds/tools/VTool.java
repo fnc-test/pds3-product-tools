@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -78,7 +79,8 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	private final String versionID = "0.4.0";
 	private final String fileRep = "*";
 	private final String partialExt = "FMT";
-	private final String timeFormat = "EEE, MMM dd yyyy 'at' HH:mm:ss a";
+	private final SimpleDateFormat timeFormat = 
+		new SimpleDateFormat("EEE, MMM dd yyyy 'at' HH:mm:ss a");
 	
 	private static Logger log = Logger.getLogger(VTool.class.getName());
 	private Handler logHandler;
