@@ -22,15 +22,56 @@ $Id$
     <title>Development</title>
     <author email="Paul.Ramirez@jpl.nasa.gov">Paul Ramirez</author>
     <author email="Sean.Hardman@jpl.nasa.gov">Sean Hardman</author>
+    <author email="Michael.Cayanan@jpl.nasa.gov">Michael Cayanan</author>
   </properties>
 
   <body>
     <section name="Developing Tools">
        <p>This section describes how a user can utilize the underlying Application Program Interface (API) of the <i>product-tools</i> package to develop their own tool.
        </p>
-
+       
+              
        <p>Much more to come.
        </p>
+       
+       <subsection name="Exit Status Values">
+         <p>The Validation Tool returns an exit status based on the PDS validation results or if an application failure has occurred. This section details what exit status values to expect when the tool is validating a single data product label and when it is validating multiple data product labels in a single run.
+         </p>
+         
+         <p><b>Validation Of A Single Data Product</b></p>
+         
+         <p>The following table shows what exit values can be returned when the tool validates just one data product label in a single run:
+         </p>
+         
+         <table>
+           <tr><th nowrap="nowrap">Exit Status Value</th><th>Meaning</th></tr>
+           <tr><td><center>0</center></td><td>The data product label has passed the PDS validation step.</td></tr>
+           <tr><td><center>1</center></td><td>The data product label has failed or skipped the PDS validation step.</td></tr>
+           <tr><td><center>-1</center></td><td>A tool application error has occurred (invalid command-line option, file cannot be read, etc.)</td></tr>
+         </table>
+         
+         <p><b>Validation Of Multiple Data Products</b></p>
+         
+         <p>The following table shows what exit values can be returned when the tool validates multiple data product labels in a single run:
+         </p>
+         
+         <table>
+           <tr><th nowrap="nowrap">Exit Status Value</th><th>Meaning</th></tr>
+           <tr><td><center>0</center></td><td>One of the following has occurred:
+                                            <ul>
+                                              <li>All data product labels have passed the PDS validation step.</li>
+                                              <li>Data product labels have passed and skipped the PDS validation step.</li>
+                                            </ul>
+                                          </td></tr>
+           <tr><td><center>1</center></td><td>One of the following has occurred:
+                                            <ul>
+                                              <li>One or more of the data product labels has failed the PDS validation step.</li>
+                                              <li>All data product labels have skipped the validation step.</li>
+                                            </ul>
+                                          </td></tr>
+           <tr><td><center>-1</center></td><td>A tool application error has occurred (invalid command-line option, file cannot be read, etc.)</td></tr>
+         </table>         
+       </subsection>
     </section>
   </body>
 </document>
