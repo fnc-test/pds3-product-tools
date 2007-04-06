@@ -1,5 +1,14 @@
-//Copyright (c) 2005, California Institute of Technology.
-//ALL RIGHTS RESERVED. U.S. Government sponsorship acknowledged.
+// Copyright 2006-2007, by the California Institute of Technology.
+// ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+// Any commercial use must be negotiated with the Office of Technology Transfer
+// at the California Institute of Technology.
+//
+// This software is subject to U. S. export control laws and regulations
+// (22 C.F.R. 120-130 and 15 C.F.R. 730-774). To the extent that the software
+// is subject to U.S. export control laws and regulations, the recipient has
+// the responsibility to obtain export licenses or other export authority as
+// may be required before exporting such information to foreign countries or
+// providing access to foreign nationals.
 //
 // $Id$ 
 //
@@ -8,6 +17,7 @@ package gov.nasa.pds.tools.dict;
 
 import gov.nasa.pds.tools.label.validate.Status;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -24,11 +34,13 @@ public class Dictionary implements Status {
     private Map definitions;
     private String information;
     private Map units;
+    private List unitList;
     private String status;
     
     public Dictionary() {
         definitions = new HashMap();
         units = new HashMap();
+        unitList = new ArrayList();
         information = "";
         status = Status.UNKNOWN;
     }
@@ -191,9 +203,7 @@ public class Dictionary implements Status {
             definitions.put(definition.getIdentifier(), definition);
             if (definition instanceof ElementDefinition) {
                 ElementDefinition elementDefinition = (ElementDefinition) definition;
-                if (elementDefinition.getUnitId() != null && units.get(elementDefinition.getUnitId()) != null) {
-                    elementDefinition.setUnitList((List) units.get(elementDefinition.getUnitId()));
-                }
+                elementDefinition.setUnitList(unitList);
             }
             for (Iterator i = definition.getAliases().iterator(); i.hasNext();) {
                 String alias = (String) i.next();
@@ -318,6 +328,10 @@ public class Dictionary implements Status {
      */
     public void setUnits(Map units) {
         this.units = units;
+        unitList = new ArrayList();
+        for (Iterator i = units.values().iterator(); i.hasNext(); ) {
+            unitList.addAll((List) i.next());
+        }
     }
     
     public String getStatus() {
