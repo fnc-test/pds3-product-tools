@@ -1,5 +1,14 @@
-//Copyright (c) 2005, California Institute of Technology.
-//ALL RIGHTS RESERVED. U.S. Government sponsorship acknowledged.
+// Copyright 2006-2007, by the California Institute of Technology.
+// ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+// Any commercial use must be negotiated with the Office of Technology Transfer
+// at the California Institute of Technology.
+//
+// This software is subject to U. S. export control laws and regulations
+// (22 C.F.R. 120-130 and 15 C.F.R. 730-774). To the extent that the software
+// is subject to U.S. export control laws and regulations, the recipient has
+// the responsibility to obtain export licenses or other export authority as
+// may be required before exporting such information to foreign countries or
+// providing access to foreign nationals.
 //
 // $Id$ 
 //
@@ -27,22 +36,15 @@ public class Utility {
         return filteredValue;
     }
     
-    public static String filterString(String value, boolean upperCase) {
+    public static String filterString(String value) {
         String filteredValue = value;
         //Replace all '_' with ' '
         filteredValue = filteredValue.replaceAll("_", " ");
         //Replace multiple spaces with a single space
         filteredValue = filteredValue.replaceAll("\\s+", " ");
-        //Uppercase everything
-        if (upperCase)
-            filteredValue = filteredValue.toUpperCase();
         //Trim whitespace
         filteredValue = filteredValue.trim();
         return filteredValue;
-    }
-    
-    public static String filterString(String value) {
-        return filterString(value, true);
     }
     
     public static String trimString(String value, int length) {
@@ -51,7 +53,7 @@ public class Utility {
         if (trimmedString.length() > length*3)
             trimmedString = trimmedString.substring(0, length*3);
         trimmedString = stripNewLines(trimmedString);
-        trimmedString = filterString(trimmedString, false);
+        trimmedString = filterString(trimmedString);
         if (trimmedString.length() > length)
             trimmedString = trimmedString.substring(0, length-1);
         
