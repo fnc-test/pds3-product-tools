@@ -1,15 +1,14 @@
-//Copyright 2006, by the California Institute of 
-//Technology. ALL RIGHTS RESERVED. United States Government 
-//Sponsorship acknowledged. Any commercial use must be negotiated with 
-//the Office of Technology Transfer at the California Institute of 
-//Technology.
+// Copyright 2006-2007, by the California Institute of Technology.
+// ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+// Any commercial use must be negotiated with the Office of Technology Transfer
+// at the California Institute of Technology.
 //
-//This software may be subject to U.S. export control laws. By 
-//accepting this software, the user agrees to comply with all 
-//applicable U.S. export laws and regulations. User has the 
-//responsibility to obtain export licenses, or other export authority 
-//as may be required before exporting such information to foreign 
-//countries or providing access to foreign persons.
+// This software is subject to U. S. export control laws and regulations
+// (22 C.F.R. 120-130 and 15 C.F.R. 730-774). To the extent that the software
+// is subject to U.S. export control laws and regulations, the recipient has
+// the responsibility to obtain export licenses or other export authority as
+// may be required before exporting such information to foreign countries or
+// providing access to foreign nationals.
 //
 // $Id$ 
 //
@@ -164,7 +163,10 @@ tokens {
     }
 }
 
-// a label is a series of one or more expressions followed by an END
+// The following describes the grammar for PDS label files as prescribed 
+// by the PDS Standards Referenece.
+ 
+// A label is a series of one or more statements followed by an END
 label returns [Label label = new Label();]
 {Statement s = null; label.setFilename(filename);}
     : (
@@ -178,8 +180,9 @@ label returns [Label label = new Label();]
     
 
 
-// an expression is an assignment like identifer = value
-//      or an object block
+// There are several different type of statements. Directly from the standards
+// reference there is a group and object statement. A simple statement is
+// describes all other lines which can occur within a label file.
 statement returns [Statement result = null]
 {Statement s = null;}
     : s=simple_statement
@@ -190,6 +193,11 @@ statement returns [Statement result = null]
         {result = s;}
     ;
     
+// A simple statement describes a label line that contains anything other than
+// an object or group statement. The first case below takes care of a blank line
+// and a comment on a line. The second case describes an assigment statement 
+// followed by and optional comment. The third case accounts for a pointer 
+// statement followed by an optional comment.
 simple_statement returns [Statement result = null]
 {Statement s = null;}
     : /*empty statement*/ (c:COMMENT)? EOL
@@ -227,7 +235,10 @@ simple_statement returns [Statement result = null]
         }
     ;
     
-// an object block
+// The following describes an object statement. Essentially an object opens with
+// an "OBJECT = <OBJECT_ID>". This is then followed by a series of statements. 
+// Finally this is closed off by an "END_OBJECT = <OBJECT_ID>". It should be noted
+// that the "= <OBJECT_ID" can be left off".
 object_statement returns [ObjectStatement result = null]
 {Statement s = null;}
     : "OBJECT" nl EQUALS nl id:IDENTIFIER (c:COMMENT)? EOL
@@ -263,7 +274,11 @@ object_statement returns [ObjectStatement result = null]
       }
     ;
 
-// a group block
+// The following describes a group statement. A group statement opens with a
+// "GROUP = <GROUP_ID>". This is then followed by a group of statements which
+// can be anything other than a nested group or object statement. The group 
+// statement is closed off by "END GROUP = <GROUP_ID>". It should be noted 
+// that on the close the "= <GROUP_ID>" may be left off.
 group_statement returns [GroupStatement result = null]
 {Statement s = null;}
     : "GROUP" nl EQUALS nl id:IDENTIFIER (c:COMMENT)? EOL
@@ -290,7 +305,8 @@ group_statement returns [GroupStatement result = null]
       (c3:COMMENT)? EOL
     ;
 
-// a pointer
+// The following describes a pointer statement. A pointer statement essentially looks like
+// an assignment statement except that it starts off with a caret.
 pointer_statement returns [PointerStatement result = null]
 {AttributeStatement a = null;}
     : POINT_OPERATOR a=assignment_statement
@@ -330,7 +346,9 @@ pointer_statement returns [PointerStatement result = null]
       }
     ;
 
-// an attribute assignment
+// The following describes an attribute statement. An attribute statement takes the 
+// form of "<identifier> = <value>". The identifier portion can be qualified with 
+// a namespace.
 assignment_statement returns [AttributeStatement result = null]
 {AttributeStatement a = null; Value v = null;}
     : (eid:ELEMENT_IDENT|id:IDENTIFIER) nl EQUALS nl v=value
@@ -347,7 +365,8 @@ assignment_statement returns [AttributeStatement result = null]
       }
     ;
 
-// a value is a scalar, sequence, or set
+// The following describes a value which is the RHS of an attribute statement. A
+// value can be a scalar, sequence, or set.
 value returns [Value result = null]
 {Value v = null;}
     : v=scalar_value
@@ -358,7 +377,7 @@ value returns [Value result = null]
         {result = v;}
     ;
 
-// a scalar is a numeric, date time, text string, or symbol
+// A scalar is a numeric, date time, text string, or symbol
 scalar_value returns [Scalar result = null]
 {Scalar s = null;}
     : s=numeric_value
@@ -371,7 +390,7 @@ scalar_value returns [Scalar result = null]
         {result = s;}
     ;
     
-// a numeric is an integer, based integer, or real followed by optional units
+// A numeric is an integer, based integer, or real followed by optional units
 numeric_value returns [Numeric result = null]
     : i:INTEGER (u:UNITS)?
         {
@@ -390,13 +409,13 @@ numeric_value returns [Numeric result = null]
         }
     ;
 
-// a text string is quoted with double quotes
+// A text string is quoted with double quotes
 text_string_value returns [TextString result = null]
     : q:QUOTED
         {result = new TextString(q.getText());}
     ;
 
-// a date time formatted to PDS specification 
+// A date time formatted to PDS specification 
 date_time_value returns [DateTime result = null]
     : d:DATE
         {
@@ -427,7 +446,7 @@ date_time_value returns [DateTime result = null]
         }
     ;
     
-// a symbol  
+// A symbol can be an identifier or symbol as described in the PDS Standards Reference
 symbol_value returns [Symbol result = null]
     : id:IDENTIFIER
         {result = new Symbol(id.getText());}
@@ -435,6 +454,7 @@ symbol_value returns [Symbol result = null]
         {result = new Symbol(qs.getText());}
     ;
 
+// A sequence can be either one or two dimensional
 sequence_value returns [Sequence result = null]
 {Sequence s = null;}
     : (SEQUENCE_OPENING nl SEQUENCE_OPENING) => s=sequence_2d 
@@ -443,6 +463,7 @@ sequence_value returns [Sequence result = null]
         {result = s;}
     ;
     
+// A one dimensional sequence is an ordered set of scalars
 sequence_1d returns [Sequence result = null]
 {Sequence s = null;}
     : SEQUENCE_OPENING nl s=scalar_list SEQUENCE_CLOSING
@@ -456,12 +477,14 @@ scalar_list returns [Sequence result=new Sequence()]
         ((LIST_SEPARATOR nl)? s2=scalar_value nl {result.add(s2);})*
     ;
 
+// A two dimensional sequence can simply contain nested sequences.
 sequence_2d returns [Sequence result = null]
 {Sequence s = null; Sequence s2 = null;}
     : SEQUENCE_OPENING nl s=sequence_list SEQUENCE_CLOSING
         {result = s;}
     ;
 
+// The following describes the contents of a two dimensional sequence
 sequence_list returns [Sequence result = new Sequence()]
 {Sequence s = null; Sequence s2 = null;}
     : /*empty*/
@@ -469,11 +492,13 @@ sequence_list returns [Sequence result = new Sequence()]
         ((LIST_SEPARATOR nl)? s2=sequence_1d nl {result.add(s2);})*
     ;
 
+// A set can only be one dimensional.
 set_value returns [Set result = null;]
 {Set s = null;}
     : SET_OPENING nl s=item_list {result=s;} SET_CLOSING
     ;
     
+// The following defines that only scalars can appear within a set.
 item_list returns [Set result = new Set()]
 {Scalar s = null; Scalar s2 = null;}
     : /*empty*/
