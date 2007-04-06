@@ -191,14 +191,9 @@ public class ElementValidator implements DictionaryTokens {
                     
                     //Check units if found and definition required.
                     //Look at definition to see if we should check units
-                    if (value instanceof Numeric && !skipValue(definition.getUnitId())) {
+                    if (value instanceof Numeric) {
                         Numeric number = (Numeric) value;
-                        if ("NONE".equals(definition.getUnitId()) && number.getUnits() != null) {
-                            valid = false;
-                            log.log(new ToolsLogRecord(Level.WARNING, "Units specified for " + attribute.getElementIdentifier() +
-                                    " when none should be present. Found " + number.getUnits(), attribute.getFilename(), 
-                                    attribute.getContext(), attribute.getLineNumber()));
-                        } else if (number.getUnits() != null && !definition.isUnitAllowed(number.getUnits().toUpperCase())) {
+                        if (number.getUnits() != null && !definition.isUnitAllowed(number.getUnits().toUpperCase())) {
                             boolean unitsValid = false;
                             if (number.getUnits().toUpperCase().endsWith("S") && 
                                     definition.isUnitAllowed(number.getUnits().toUpperCase().substring(0, number.getUnits().length() - 1))) {
