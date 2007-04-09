@@ -25,10 +25,10 @@ $Id: index.xml 1157 2006-06-16 19:50:08Z shardman $
 
   <body>
     <section name="Overview">
-      <p>The goal of VTool is to programmatically ascertain if a given data product is PDS compliant (or "valid"). Typically, this means the data product is well formed, complete, syntactically and semantically correct, and that it conforms to all applicable PDS standards. The standards themselves are defined in the <a href="http://pds.nasa.gov/documents/sr/" target="_blank">PDS Standards Reference</a>.
+      <p>The goal of the Validation Tool (VTool) is to programmatically ascertain if a given data product is PDS compliant (or "valid"). Typically, this means the data product is well formed, complete, syntactically and semantically correct, and that it conforms to all applicable PDS standards. The standards themselves are defined in the <a href="http://pds.nasa.gov/documents/sr/" target="_blank">PDS Standards Reference</a>.
       </p>
       
-      <p>This section describes how to use the Validation Tool (VTool) in order to perform automated validation of data products. The following topics can be found in this section:
+      <p>This section describes how to use VTool in order to perform automated validation of data products. The following topics can be found in this section:
       </p>
 
       <ul>
