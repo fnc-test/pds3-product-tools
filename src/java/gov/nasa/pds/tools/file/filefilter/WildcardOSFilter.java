@@ -1,5 +1,14 @@
-//	Copyright (c) 2005, California Institute of Technology.
-//	ALL RIGHTS RESERVED. U.S. Government sponsorship acknowledged.
+//Copyright 2006-2007, by the California Institute of Technology.
+//ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+//Any commercial use must be negotiated with the Office of Technology Transfer
+//at the California Institute of Technology.
+//
+//This software is subject to U. S. export control laws and regulations
+//(22 C.F.R. 120-130 and 15 C.F.R. 730-774). To the extent that the software
+//is subject to U.S. export control laws and regulations, the recipient has
+//the responsibility to obtain export licenses or other export authority as
+//may be required before exporting such information to foreign countries or
+//providing access to foreign nationals.
 //
 //	 $Id: WildcardOSFilter.java 1429 2006-07-14 22:25:54Z mcayanan $ 
 //
@@ -47,6 +56,14 @@ public class WildcardOSFilter extends AbstractFileFilter {
 		this.wildcards.add(wc); 
 	}
 
+	/**
+	 * Returns list of filters that were set
+	 * @return a list of filters
+	 */
+	public List getWildcards() {
+		return wildcards;
+	}
+	
 	/**
 	 * Constructor for a list of wildcards
 	 * 
