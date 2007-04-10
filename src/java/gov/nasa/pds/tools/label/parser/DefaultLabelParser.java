@@ -1,5 +1,14 @@
-//Copyright (c) 2005, California Institute of Technology.
-//ALL RIGHTS RESERVED. U.S. Government sponsorship acknowledged.
+// Copyright 2006-2007, by the California Institute of Technology.
+// ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+// Any commercial use must be negotiated with the Office of Technology Transfer
+// at the California Institute of Technology.
+//
+// This software is subject to U. S. export control laws and regulations
+// (22 C.F.R. 120-130 and 15 C.F.R. 730-774). To the extent that the software
+// is subject to U.S. export control laws and regulations, the recipient has
+// the responsibility to obtain export licenses or other export authority as
+// may be required before exporting such information to foreign countries or
+// providing access to foreign nationals.
 //
 // $Id$ 
 //
@@ -271,15 +280,34 @@ public class DefaultLabelParser implements LabelParser, Status {
      */
     public Label parsePartial(String context, URL url) throws ParseException, IOException {
         Label label = null;
+        
+        log.log(new ToolsLogRecord(Level.INFO, "Parsing label fragment.", url.toString(), context));
+        
+        //Not all streams can support marking so stream will be open multiple times to look for header
+        //First time to process the SFDUs
+        InputStream sfduCheck = url.openStream();
+        
+        List sfdus = consumeSFDUHeader(sfduCheck);
+        
+        //On the next input stream we will need to skip 20 bytes for every SFDULabel
+        int skip = sfdus.size()*20;
+        //Also add 2 for carriage return line feed if there is a header
+        if (skip != 0)
+            skip += 2;
+        
+        sfduCheck.close();
+        if (sfdus.size() > 0) {
+            log.log(new ToolsLogRecord(Level.WARNING, "Label fragments should not contain SFDU headers."));
+        }
+        
         InputStream input = url.openStream();
+        input.skip(skip);
         ODLLexer lexer = new ODLLexer(input);
         lexer.setFilename(url.toString());
         lexer.setContext(context);
         ODLParser parser = new ODLParser(lexer);
         parser.setFilename(url.toString());
         parser.setContext(context);
-        
-        log.log(new ToolsLogRecord(Level.INFO, "Parsing label fragment.", url.toString(), context));
         
         if (Boolean.valueOf(properties.getProperty("parser.pointers", "true")).booleanValue()) {
             URL base = new URL(url.toString().substring(0, url.toString().lastIndexOf("/")));
@@ -298,6 +326,10 @@ public class DefaultLabelParser implements LabelParser, Status {
             label.setStatus(FAIL);
             log.log(new ToolsLogRecord(Level.SEVERE, ex.getMessage(), url.toString(), context));
             throw new ParseException(ex.getMessage());
+        }
+        
+        if (label.getStatement("PDS_VERSION_ID") != null) {
+            log.log(new ToolsLogRecord(Level.WARNING, "Fragment contains PDS_VERSION_ID which should not be present in a label fragment.", url.toString(), context));
         }
 
         log.log(new ToolsLogRecord(Level.INFO, "Finished parsing label fragment.", url.toString(), context));
