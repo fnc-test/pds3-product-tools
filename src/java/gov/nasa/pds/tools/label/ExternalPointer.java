@@ -1,5 +1,14 @@
-//Copyright (c) 2005, California Institute of Technology.
-//ALL RIGHTS RESERVED. U.S. Government sponsorship acknowledged.
+// Copyright 2006-2007, by the California Institute of Technology.
+// ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+// Any commercial use must be negotiated with the Office of Technology Transfer
+// at the California Institute of Technology.
+//
+// This software is subject to U. S. export control laws and regulations
+// (22 C.F.R. 120-130 and 15 C.F.R. 730-774). To the extent that the software
+// is subject to U.S. export control laws and regulations, the recipient has
+// the responsibility to obtain export licenses or other export authority as
+// may be required before exporting such information to foreign countries or
+// providing access to foreign nationals.
 //
 // $Id$ 
 //
@@ -40,12 +49,7 @@ public class ExternalPointer extends PointerStatement {
         URL resolvedURL = null;
         String filename = "";
         
-        //The name of the file will be the first element in the sequence or the value if not 
-        //contained in a sequence
-        if (value instanceof Sequence)
-            filename = ((Sequence) value).get(0).toString();
-        else
-            filename = value.toString();
+        filename = getFilename();
         
         //Go through the list of directories and see if pointed to file can be resolved
         for (Iterator i = includePaths.iterator(); i.hasNext() && resolvedURL == null;) {
@@ -61,11 +65,46 @@ public class ExternalPointer extends PointerStatement {
             } catch (IOException ioEx) {
                 //Ignore this must not be the path to the pointed file
             }
+            
+            //Check to see if we can find the file as upper case
+            if (resolvedURL == null) {
+                fileURL = new URL(url + filename.toUpperCase());
+                try {
+                    fileURL.openStream();
+                    resolvedURL = fileURL;
+                } catch (IOException ioEx) {
+                    //Ignore this must not be the path to the pointed file
+                }
+            }
+
+            //Check to see if we can find the file as lower case
+            if (resolvedURL == null) {
+                fileURL = new URL(url + filename.toLowerCase());
+                try {
+                    fileURL.openStream();
+                    resolvedURL = fileURL;
+                } catch (IOException ioEx) {
+                    //Ignore this must not be the path to the pointed file
+                }
+            }
         }
         
         if (resolvedURL == null)
             throw new IOException("Could not find referenced pointer " + filename);
         
         return resolvedURL;
+    }
+    
+    public String getFilename() {
+        String filename = "";
+        
+        //The name of the file will be the first element in the sequence or the value if not 
+        //contained in a sequence
+        if (value instanceof Sequence)
+            filename = ((Sequence) value).get(0).toString();
+        else
+            filename = value.toString();
+        
+        return filename;
     }
 }
