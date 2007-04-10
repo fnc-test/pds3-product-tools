@@ -1,5 +1,14 @@
-//Copyright (c) 2005, California Institute of Technology.
-//ALL RIGHTS RESERVED. U.S. Government sponsorship acknowledged.
+// Copyright 2006-2007, by the California Institute of Technology.
+// ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+// Any commercial use must be negotiated with the Office of Technology Transfer
+// at the California Institute of Technology.
+//
+// This software is subject to U. S. export control laws and regulations
+// (22 C.F.R. 120-130 and 15 C.F.R. 730-774). To the extent that the software
+// is subject to U.S. export control laws and regulations, the recipient has
+// the responsibility to obtain export licenses or other export authority as
+// may be required before exporting such information to foreign countries or
+// providing access to foreign nationals.
 //
 // $Id$ 
 //
@@ -211,13 +220,15 @@ public class Label implements LabelType, Status {
             for (Iterator i = pointers.iterator(); i.hasNext() && labelType == UNDEFINED;) {
                 PointerStatement pointer = (PointerStatement) i.next();
                 if (pointer.getPointerType() == PointerType.DATA_LOCATION && pointer.getValue() instanceof Numeric)
-                    labelType = LabelType.ATTACHED;
+                    labelType = ATTACHED;
                 else
-                    labelType = LabelType.DETACHED;
+                    labelType = DETACHED;
             }
             //If label type is still undefined we need to check if its a combined detached label
             if (labelType == UNDEFINED && getObjects("FILE").size() != 0)
-                labelType = LabelType.COMBINED_DETACHED;
+                labelType = COMBINED_DETACHED;
+            //If all fails default to attached label
+            labelType = ATTACHED;
         }
         
         return labelType;
