@@ -289,6 +289,8 @@ c:\product-tools-X.X.X\bin\product-tools-X.X.X-app.jar \
 -d pdsdd.full 
         </source>       
         
+        <p>If there is a dictionary error, the tool will not perform label validation.</p>
+        
         <p><b><i>Validating Against Multiple Dictionaries</i></b></p>
         
         <p>The following command demonstrates the validation of a single data product label against the PSDD and a local dictionary:
