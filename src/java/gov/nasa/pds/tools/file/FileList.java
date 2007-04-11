@@ -35,7 +35,7 @@ public class FileList {
 	
 	/**
 	 * Adds a single object to the end of the file list
-	 * @param o
+	 * @param o a single file to add
 	 */
 	public void addToFileList(Object o) {
 		files.add(o);
@@ -43,7 +43,7 @@ public class FileList {
 	
 	/**
 	 * Adds a list of objects to the end of the file list
-	 * @param c
+	 * @param c a list of files to add
 	 */
 	public void addToFileList(Collection c) {
 		files.addAll(c);
@@ -51,7 +51,7 @@ public class FileList {
 	
 	/**
 	 * Adds a single object to the end of the directory list
-	 * @param o
+	 * @param o a single directory to add
 	 */
 	public void addToDirList(Object o) {
 		dirs.add(o);
@@ -59,7 +59,7 @@ public class FileList {
 	
 	/**
 	 * Adds a list of objects to the end of the directory list
-	 * @param c
+	 * @param c a list of directories to add
 	 */
 	public void addToDirList(Collection c) {
 		dirs.addAll(c);
