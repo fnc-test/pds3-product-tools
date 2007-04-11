@@ -1,6 +1,15 @@
-//Copyright (c) 2005, California Institute of Technology.
-//ALL RIGHTS RESERVED. U.S. Government sponsorship acknowledged.
+//Copyright 2006-2007, by the California Institute of Technology.
+//ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+//Any commercial use must be negotiated with the Office of Technology Transfer
+//at the California Institute of Technology.
 //
+//This software is subject to U. S. export control laws and regulations
+//(22 C.F.R. 120-130 and 15 C.F.R. 730-774). To the extent that the software
+//is subject to U.S. export control laws and regulations, the recipient has
+//the responsibility to obtain export licenses or other export authority as
+//may be required before exporting such information to foreign countries or
+//providing access to foreign nationals.
+
 // $Id$
 //
 
@@ -23,10 +32,14 @@ import gov.nasa.pds.tools.status.ExitStatus;
 import gov.nasa.pds.tools.time.ToolsTime;
 import gov.nasa.pds.tools.xsl.StyleSheet;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -67,7 +80,8 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.io.FilenameUtils;
 
 /**
- * Class to replace LVTool functionality
+ * Class to perform automated validation to determine if a given data product
+ * is PDS compliant. This replaces LVTool functionality.
  *  
  * @author mcayanan
  * @version $Revision$
@@ -76,15 +90,16 @@ import org.apache.commons.io.FilenameUtils;
  */
 public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus, 
                               Status, StyleSheet {
-	private final String versionID = "0.4.0";
-	private final String fileRep = "*";
-	private final String partialExt = "FMT";
+	private final String VERSION_ID = "0.5.0";
+	private final String FILE_REP = "*";
+	private final String FRAG_EXT = "FMT";
 	
 	private static Logger log = Logger.getLogger(VTool.class.getName());
-	private Handler logHandler;
+	private ByteArrayOutputStream byteStream;
 	private String currDir;
 	private boolean dictPassed;
 	
+	private List logHandlers;
 	private Options options;
 	private CommandLineParser parser;
 	private CommandLine cmd;
@@ -93,7 +108,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	
 	private boolean alias;
 	private URL config;
-	private boolean dataObj;
+//	private boolean dataObj;
 	private List dictionaries;
 	private List noFiles;
 	private List noDirs;
@@ -122,7 +137,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 		alias = false;
 		config = null;
 		dictionaries = null;
-		dataObj = true;
+//		dataObj = true;
 		dictPassed = true;
 		noFiles = null;
 		noDirs = null;
@@ -135,14 +150,15 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 		recursive = true;
 		rptFile = null;
 		rptStyle = "full";
-		severity = null;
+		severity = "Warning";
 		logFile = null;
 		showLog = false;
+		verbose = 2;
 		
 		currDir = null;
-		logHandler = null;
 		options = new Options();
 		parser = new GnuParser();
+		logHandlers = new ArrayList();
 		
 		goodLbls = 0;
 		badLbls = 0;
@@ -154,25 +170,17 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	 *
 	 */	
 	public void showVersion() {
-		System.out.println("PDS Validation Tool (VTool) " + versionID);
-		System.out.println("\nDISCLAIMER:\n"
-				           + "THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE CALIFORNIA\n"
-				           + "INSTITUTE OF TECHNOLOGY (CALTECH) UNDER A U.S. GOVERNMENT CONTRACT WITH THE\n"
-				           + "NATIONAL AERONAUTICS AND SPACE ADMINISTRATION (NASA). THE SOFTWARE IS\n"
-				           + "TECHNOLOGY AND SOFTWARE PUBLICLY AVAILABLE UNDER U.S. EXPORT LAWS AND IS\n"
-				           + "PROVIDED \"AS-IS\" TO THE RECIPIENT WITHOUT WARRANTY OF ANY KIND, INCLUDING\n"
-				           + "ANY WARRANTIES OF PERFORMANCE OR MERCHANTABILITY OR FITNESS FOR A PARTICULAR\n"
-				           + "USE OR PURPOSE (AS SET FORTH IN UNITED STATES UCC2312-2313) OR FOR ANY\n"
-				           + "PURPOSE WHATSOEVER, FOR THE SOFTWARE AND RELATED MATERIALS, HOWEVER USED. IN\n"
-				           + "NO EVENT SHALL CALTECH, ITS JET PROPULSION LABORATORY, OR NASA BE LIABLE FOR\n"
-				           + "ANY DAMAGES AND/OR COSTS, INCLUDING, BUT NOT LIMITED TO, INCIDENTAL OR\n"
-				           + "CONSEQUENTIAL DAMAGES OF ANY KIND, INCLUDING ECONOMIC DAMAGE OR INJURY TO\n"
-				           + "PROPERTY AND LOST PROFITS, REGARDLESS OF WHETHER CALTECH, JPL, OR NASA BE\n"
-				           + "ADVISED, HAVE REASON TO KNOW, OR, IN FACT, SHALL KNOW OF THE POSSIBILITY.\n"
-				           + "RECIPIENT BEARS ALL RISK RELATING TO QUALITY AND PERFORMANCE OF THE SOFTWARE\n"
-				           + "AND ANY RELATED MATERIALS, AND AGREES TO INDEMNIFY CALTECH AND NASA FOR ALL\n"
-				           + "THIRD-PARTY CLAIMS RESULTING FROM THE ACTIONS OF RECIPIENT IN THE USE OF THE\n"
-				           + "SOFTWARE.");
+		System.out.println("\nPDS Validation Tool (VTool) " + VERSION_ID);
+		System.out.println("\nCopyright 2006-2007, by the California Institute of Technology. ALL\n"
+				           + "RIGHTS RESERVED. United States Government Sponsorship acknowledged.\n"
+				           + "Any commercial use must be negotiated with the Office of Technology\n"
+				           + "Transfer at the California Institute of Technology. This software\n"
+				           + "may be subject to U.S. export control laws. By accepting this\n"
+				           + "software, the user agrees to comply with all applicable U.S. export\n"
+				           + "laws and regulations. User has the responsibility to obtain export\n"
+				           + "licenses, or other export authority as may be required before\n"
+				           + "exporting such information to foreign countries or providing access\n"
+				           + "to foreign persons.");
 		System.exit(GOODRUN);
 	}
 	
@@ -332,7 +340,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 		OptionBuilder.withDescription(
 		  "Specify the severity level and above to include in the "
 		  + "human-readable report: (1=Info, 2=Warning, 3=Error). "
-		  + "Default is Warnings and above (level 2)");
+		  + "Default is Warning and above (level 2)");
 		OptionBuilder.hasArg();
 		OptionBuilder.withArgName("1|2|3");
 		OptionBuilder.withType(short.class);
@@ -489,19 +497,21 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	/**
 	 * Get data object validation flag
 	 */
+/*
 	public boolean getDataObj() {
 		return this.dataObj;
 	}
-	
+*/	
 	/**
 	 * Set data object flag
 	 * @param d 'true' if data object validation is to be performed, 
 	 * 'false' otherwise
 	 */
+/*
 	public void setDataObj(boolean d) {
 		this.dataObj = d;
 	}
-
+*/
 	/**
 	 * Get a list of dictionary files passed into VTool
 	 * @return a List object of dictionary file names
@@ -755,14 +765,13 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	 * @param v '1' for info, '2' for warnings, and '3' for errors
 	 */
 	public void setVerbose(short v) {
-		verbose = v;
-		if (verbose < 1 || verbose > 3) {
+		if (v < 1 || v > 3) {
 			throw new IllegalArgumentException(
 					"Invalid value entered for 'v' flag. "
 					+ "Valid values can only be 1, 2, or 3");
 		}
-/*		if (verbose == 0)
-			severity = new String("Debug");*/
+		verbose = v;
+
 		if (verbose == 1)
 			severity = new String("Info");
 		else if (verbose == 2)
@@ -823,17 +832,15 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 			}
 			if (config.containsKey(INCLUDESKEY))
 				setIncludePaths(config.getList(INCLUDESKEY));
-			if (config.containsKey(LOGKEY))
-				setLogFile(new File(config.getString(LOGKEY)));
-			if (config.containsKey(SHOWLOGKEY)) {
-				if ((config.getBoolean(SHOWLOGKEY)) 
-					&& (config.containsKey(LOGKEY))) {
-					throw new Exception(
-							"'vtool.showlog' is set to 'true'. Cannot define "
-							+ "'vtool.logfile' also.");
+			if (config.containsKey(LOGKEY)) {
+				String logValue = new String(config.getProperty(LOGKEY).toString());
+				// Check for a boolean value or a file name
+				if(logValue.equalsIgnoreCase("true") 
+						|| logValue.equalsIgnoreCase("false")) {
+					setShowLog(Boolean.valueOf(logValue).booleanValue());
 				}
 				else
-					setShowLog(config.getBoolean(SHOWLOGKEY));
+					setLogFile(new File(logValue));
 			}
 			if (config.containsKey(PROGRESSKEY))
 				setProgress(config.getBoolean(PROGRESSKEY));
@@ -874,7 +881,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 
 		//TODO: Print out data object validation
 		log.log(new ToolsLogRecord(Level.CONFIG, 
-				"VTool Version             " + versionID));
+				"VTool Version             " + VERSION_ID));
 		try {
 			log.log(new ToolsLogRecord(Level.CONFIG, 
 				"Execution Date            " 
@@ -896,7 +903,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 		log.log(new ToolsLogRecord(ToolsLevel.PARAMETER, 
 				"Directory Recursion            " + recursive));
 		log.log(new ToolsLogRecord(ToolsLevel.PARAMETER, 
-				"Follow Fragment Pointers       " + followPtrs));
+				"Follow Pointers                " + followPtrs));
 		log.log(new ToolsLogRecord(ToolsLevel.PARAMETER, 
 				"Validate Standalone Fragments  " + force));
 		
@@ -936,44 +943,92 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 			log.log(new ToolsLogRecord(ToolsLevel.PARAMETER, 
 					"Excluded Files                 " + noFiles));
 		}
+		log.log(new ToolsLogRecord(ToolsLevel.PARAMETER, 
+				"Progress Reporting             " + progress));
 	}
 	
 	/**
-	 * Configures the java logging
+	 * Configures the logger. If a log file was specified on the 
+	 * command-line, the log will be written to that file. If the
+	 * log flag was specified with no file spec, then the log will
+	 * be written to standard out. Otherwise, the log will be
+	 * written to memory (ByteArrayOutputStream). 
 	 *
 	 */
 	public void setupLogger() {
 		Logger logger = Logger.getLogger("");
 		logger.setLevel(Level.ALL);
+		
 		Handler []handler = logger.getHandlers();
 		for(int i = 0; i < logger.getHandlers().length; i++) 
 			logger.removeHandler(handler[i]);
+
 		
-		if (showLog == true) {
-			StreamHandler stream = new StreamHandler(System.out, 
-					                            new ToolsLogFormatter());
-			logHandler = stream;
+		//Write to a file if a log file was specified
+		if(logFile != null) {
+			FileHandler file = setupFileHandler(logFile);
+			logger.addHandler(file);
+			logHandlers.add(file);
+		}
+		//Write to standard out if the log option flag was specified
+		else if (showLog == true && rptFile == null) {
+			StreamHandler stream = setupStreamHandler(System.out);
 			logger.addHandler(stream);
-			stream.setLevel(Level.ALL);
-			log.log(new ToolsLogRecord(Level.INFO, 
-					"Log being directed to standard out. Report-related "
-					+ "options will be ignored"));
+			logHandlers.add(stream);
 		}
+		//Write to both standard out and memory if the log option flag
+		//was specified and no report file was specified
+		else if (showLog == true && rptFile != null) {
+			byteStream = new ByteArrayOutputStream();
+			StreamHandler byteArray = setupStreamHandler(byteStream);
+			logger.addHandler(byteArray);
+			logHandlers.add(byteArray);
+			
+			StreamHandler stream = setupStreamHandler(System.out);
+			logger.addHandler(stream);
+			logHandlers.add(stream);
+		}
+		//Write to memory if none of the above conditions exist
 		else {
-			try {
-				FileHandler file = new FileHandler(logFile.toString(), false);
-				logHandler = file;
-				file.setLevel(Level.ALL);
-				file.setFormatter(new ToolsLogFormatter());
-				logger.addHandler(file);
-			} catch (SecurityException s) {
-				System.err.println(s.getMessage());
-				System.exit(TOOLFAILURE);
-			} catch (IOException iEx) {
-				System.err.println(iEx.getMessage());
-				System.exit(TOOLFAILURE);
-			}
+			byteStream = new ByteArrayOutputStream();
+			StreamHandler byteArray = setupStreamHandler(byteStream);
+			logger.addHandler(byteArray);
+			logHandlers.add(byteArray);
 		}
+			
+	}
+	
+	/**
+	 * Sets up a handler to an outputstream
+	 * @param out An outputstream to write the logger to
+	 * @return a stream handler
+	 */
+	private StreamHandler setupStreamHandler(OutputStream out) {
+		StreamHandler stream = new StreamHandler(out, new ToolsLogFormatter());
+		stream.setLevel(Level.ALL);
+		
+		return stream;
+	}
+	
+	/**
+	 * Sets up a file handler
+	 * @param log The name of the file to write the logger to
+	 * @return a file handler to the input file
+	 */
+	private FileHandler setupFileHandler(File log) {
+		FileHandler file = null;
+		try {
+			file = new FileHandler(log.toString(), false);
+			file.setLevel(Level.ALL);
+			file.setFormatter(new ToolsLogFormatter());
+		} catch (SecurityException s) {
+			System.err.println(s.getMessage());
+			System.exit(TOOLFAILURE);
+		} catch (IOException iEx) {
+			System.err.println(iEx.getMessage());
+			System.exit(TOOLFAILURE);
+		}
+		return file;
 	}
 	
 	/**
@@ -1015,22 +1070,26 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
             log.log(new ToolsLogRecord(Level.CONFIG, 
             		"Dictionary version        \n"
             		+ dict.getInformation(), dd.toString()));
-			log.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, 
+            //Log dictionary status only upon a FAIL
+            if(dict.getStatus().equals(FAIL)) {
+            	log.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, 
 					dict.getStatus(), dd.toString()));
+            }
 			//Parse the rest of the dictionaries
 			while (i.hasNext()) {
 				dd = toURL(i.next().toString());
 				Dictionary mergeDict = DictionaryParser.parse(dd, alias);
 				dict.merge( mergeDict, true );
 				log.log(new ToolsLogRecord(Level.CONFIG, 
-						"Dictionary version        \n"
-						+ dict.getInformation(), dd.toString()));
-				log.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, 
+				    "Dictionary version        \n"
+					+ mergeDict.getInformation(), dd.toString()));
+				//Log dictionary status only upon a FAIL
+				if(mergeDict.getStatus().equals(FAIL)) {
+					log.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, 
 						mergeDict.getStatus(), dd.toString()));
+				}
 			}
 		} catch (MalformedURLException uex) {
-			log.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, 
-					"FAIL", dd.toString()));
 			System.err.println(uex.getMessage());
 			System.exit(TOOLFAILURE);
 		} catch (IOException iex) {
@@ -1106,21 +1165,28 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	
 	/**
 	 * Returns an exit status code based on the validation results
-	 * @return '0' if files have passed and a '1' if any of the following
-	 * occurs:
+	 * 
+	 * @return '0' if files "passed" and a '1' if any of the following
+	 * occurs:<br>
 	 * <ul>
-	 * a file had a validation error<br>
-	 * a file skipped validation<br>
-	 * dictionary validation failed<br>
+	 * <li>one or more files failed validation</li>
+	 * <li>one or more files skipped validation and in addition,  
+	 *   no other files passed validation</li>
+	 * <li>dictionary validation failed</li>
 	 * </ul>
 	 */
-	private int getExitStatus() {
+	public int getExitStatus() {
 		int status = 0;
 		
+		//Bad run if there were one or more bad labels
 		if (badLbls > 0)
 			status = BADRUN;
+		//Bad run if there were one or more files that 
+		//skipped validation and in addition, no other
+		//files passed
 		else if (unkLbls > 0 && goodLbls == 0)
 			status = BADRUN;
+		//Bad run if there was a dictionary error
 		else if (dictPassed == false)
 			status = BADRUN;
 		else
@@ -1182,8 +1248,8 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 		try {
 			//Check to see if the file is a fragment and if standalone fragment
 			//validation was enabled
-			if (FilenameUtils.getExtension(
-					file.getFile()).equalsIgnoreCase(partialExt) && force) {
+			if ( (FilenameUtils.getExtension(file.getFile()).equalsIgnoreCase(FRAG_EXT))
+				&& (force) ) {
 				if (dict == null)
 					label = parser.parsePartial(file);
 				else
@@ -1209,12 +1275,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 		log.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, 
 				label.getStatus(), file.toString()));
 		
-		if (PASS.equals(label.getStatus()))
-			return PASS;
-		else if(FAIL.equals(label.getStatus()))
-			return FAIL;
-		else
-			return UNKNOWN;
+		return label.getStatus();
 	}
 	
 	/**
@@ -1235,28 +1296,54 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 		}
 		
 		if (dir.toString().equals(currDir)) {
-			System.err.print(fileRep);
+			System.err.print(FILE_REP);
 		}
 		else {
 			currDir = new String(dir.toString());
 			System.err.println("\nValidating file(s) in: " + currDir);
-			System.err.print(fileRep);
+			System.err.print(FILE_REP);
 		}
 	}
 	
 	/**
+	 * Transforms an XML log to a human-readable report
+	 * 
+	 * @param in inputstream of the XML log
+	 * @param xsl the stylesheet to use in creating the human-readable report
+	 * @param level the severity level to set for the report (info, warning, or error)
+	 * @param output The stream type for the final report
+	 * @throws TransformerException If there was an error during the transformation
+	 *  of the log to the final report
+	 */
+    private void generateReport(InputStream in, String xsl, String level, 
+    							OutputStream output) throws TransformerException {
+
+        Source xmlSource = new StreamSource(in);
+        Source xsltSource = new StreamSource(getClass().getResourceAsStream(xsl));
+        Result result = new StreamResult(output);
+        TransformerFactory factory = TransformerFactory.newInstance();
+        Transformer transformer = factory.newTransformer(xsltSource);
+        
+        transformer.setParameter("level", level);
+        transformer.transform(xmlSource, result);
+    }
+	
+	/**
 	 * Creates a human-readable report
 	 * 
-	 * @param log The xml log
+	 * @param log Where the xml log is located. If null, then the xml log
+	 *  will be read from memory.
 	 * @param report Where the human-readable report will be written to.
 	 *  If null, then it goes to standard out.
-	 * @param level The severity level to include in the warning. Can be
+	 * @param level The severity level to include in the report. Can be
 	 *  "INFO", "WARNING", or "ERROR".
 	 * @param style The reporting style to generate. Can be either "full",
 	 *  "sum", or "min" for a full, summary, or minimal report, respectively.
 	 */
 	public void doReporting(File log, File report, String level, String style) {
-		String rptType = null;
+		String xsl = null;
+		InputStream input = null;
+		OutputStream output = null;
 		
 		if ( (level.equalsIgnoreCase("info") == false) 
 			  && (level.equalsIgnoreCase("warning") == false)
@@ -1265,67 +1352,127 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 						+ level + ". Must be 'info', 'warning', or 'error'.");
 		}
 		
+		xsl = getXSL(style);
+
+		try {
+			input = getRptInStream(log);
+			output = getRptOutStream(report);
+		} catch (FileNotFoundException ex) {
+			System.err.println(ex.getMessage());
+			System.exit(TOOLFAILURE);
+		}
+		
+		try {
+			generateReport(input, xsl, level.toUpperCase(), output);
+		} catch (TransformerException t) {
+			System.err.println(t.getMessage());
+			System.exit(TOOLFAILURE);
+		}
+		//If report is written to standard out, add an extra line terminator
+		if(report == null)
+			System.out.println();
+	}
+	
+	/**
+	 * Gets the proper XSL stylesheet
+	 * 
+	 * @param style 'full' for a full XSL, 'sum' for a summary XSL, or 'min'
+	 *  for a minimal XSL 
+	 * @return The XSL stylesheet name
+	 */
+	private String getXSL(String style) {
 		if (style.equalsIgnoreCase("full"))
-			rptType = FULLXSL;
+			return FULLXSL;
 		else if (style.equalsIgnoreCase("sum"))
-			rptType = SUMXSL;
+			return SUMXSL;
 		else if (style.equalsIgnoreCase("min"))
-			rptType = MINXSL;
+			return MINXSL;
 		else {
 			throw new IllegalArgumentException("Invalid style specified: "
-					+ style + ". Must be 'full', 'sum' or 'min'");
-		}
-		try {
-			if (report == null)
-				generateReport(log, rptType, level.toUpperCase(), System.out);
-			else {
-				generateReport(log, rptType, level.toUpperCase(), 
-						new FileOutputStream(report));
-			}
-		} catch (TransformerException tEx) {
-			System.err.println(tEx.getMessage());
-			System.exit(TOOLFAILURE);
-		} catch (FileNotFoundException fEx) {
-			System.err.println(fEx.getMessage());
-			System.exit(TOOLFAILURE);
+				+ style + ". Must be 'full', 'sum' or 'min'");
 		}
 	}
 	
-    private void generateReport(File logFile, String report, String level, 
-    							OutputStream output) throws TransformerException {
-        Source xmlSource = new StreamSource(logFile);
-        Source xsltSource = new StreamSource(getClass().getResourceAsStream(report));
-        Result result = new StreamResult(output);
-        TransformerFactory factory = TransformerFactory.newInstance();
-        Transformer transformer = factory.newTransformer(xsltSource);
-        
-        transformer.setParameter("level", level);
-        transformer.transform(xmlSource, result);
-    }
-    
-    private void closeHandler() {
-    	logHandler.close();
-    }
+	/**
+	 * Returns the input stream of the XML log for the final report.
+	 * 
+	 * @param file A file name. If null, then a ByteArrayInputStream is returned. 
+	 * 
+	 * @return The proper input stream 
+	 * @throws FileNotFoundException 
+	 */
+	private InputStream getRptInStream(File file) throws FileNotFoundException {	
+		if(file != null)
+				return new FileInputStream(file);
+		else
+			return new ByteArrayInputStream(byteStream.toByteArray());
+	}
 	
+	/**
+	 * Returns the appropriate output stream for the final report
+	 * @param rpt The report file name. If null, then the standard out
+	 *  stream is returned.
+	 * 
+	 * @return The proper output stream
+	 * @throws FileNotFoundException
+	 */
+	private OutputStream getRptOutStream(File rpt) throws FileNotFoundException {
+		if(rpt != null) 
+			return new FileOutputStream(rpt);
+		else
+			return System.out;
+	}
+	  
+    /**
+     * Closes the handlers that were set for the logger
+     *
+     */
+	public void closehandle() {
+		for(Iterator i=logHandlers.iterator(); i.hasNext();) {
+			Handler handler = (Handler) i.next();
+			handler.close();
+		}
+	}
 	/**
 	 * The main calls the following methods (in this order):<br><br>
 	 * 
-	 * buildOpts<br>
-	 * parseLine<br>
-	 * queryCmdLine<br>
-	 * setupLogger<br>
-	 * logParams<br>
-	 * readDictionaries<br>
-	 * validateLabels<br>
-	 * doReporting<br>
+	 * To setup the flags and parse the command-line options:
+	 * <ul> 
+	 * <li>buildOpts</li>
+	 * <li>parseLine</li>
+	 * <li>queryCmdLine</li>
+	 * </ul>
 	 * <br>
-	 * The setupLogger method is called after parsing and querying the
-	 * command-line since we can accept a configuration file as input
-	 * and by rule, anything on the command-line overrides parameters
-	 * set in the configuration file. So, by design, VTool would not
-	 * know where to direct its logs until after it queries the
-	 * command-line.  
-	 * 
+	 * To setup the logger and log the report header information:
+	 * <ul>
+	 * <li>setupLogger</li>
+	 * <li>logRptHeader</li>
+	 * </ul>
+	 * <br>
+	 * To perform validation:
+	 * <ul>
+	 * <li>readDictionaries (if the PSDD was passed in)</li>
+	 * <li>validateLabels</li>
+	 * </ul>
+	 * <br>
+	 * To create the final report:
+	 * <ul>
+	 * <li>closehandle (to flush the buffers)</li>
+	 * <li>doReporting</li>
+	 * </ul>
+	 * <br>
+	 * Reporting is not generated if the log flag was specified with
+	 * no file spec and the report file flag was not specified
+	 * <br><br>
+	 * VTool returns an appropriate exit status based on validation results.
+	 * <br>
+	 * In general, the following is returned:
+	 * <ul>
+	 * <li>'0' upon "successful" validation</li>
+	 * <li>'1' upon a valiadation "failure"</li>
+	 * <li>'-1' upon application failure</li>
+	 * </ul>
+	 *  
 	 * @param argv Arguments passed on the command-line
 	 */
 	public static void main(String[] argv) {
@@ -1334,9 +1481,9 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 
 		if (argv.length == 0) {
 			System.out.println("\nType 'VTool -h' for usage");
-			return;
+			System.exit(GOODRUN);
 		}
-		vtool.setVerbose(Short.parseShort("2"));
+		
 		// Define options
 		vtool.buildOpts();
 		// Parse the command line
@@ -1350,17 +1497,24 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 		
 		if (vtool.dictionaries != null) {
 			dictionary = vtool.readDictionaries(vtool.dictionaries);
+			
+			//Validate labels only if the dictionary passed
 			if (vtool.dictPassed)
 				vtool.validateLabels(vtool.targets, dictionary);
 		}
 		else
 			vtool.validateLabels(vtool.targets, null);
-			
-		vtool.closeHandler();
 		
-		if (vtool.logFile != null) {
-			vtool.doReporting(vtool.logFile, vtool.rptFile,
-								vtool.severity, vtool.rptStyle);
+		vtool.closehandle();
+		
+		//Add extra line terminator if progress reporting was enabled
+		if(vtool.progress == true)
+			System.err.println();
+		
+		//If the log flag with no file spec was specified AND the
+		//report file flag is not specified, then do not create a report
+		if( !(vtool.showLog && vtool.rptFile == null) ) {
+			vtool.doReporting(vtool.logFile, vtool.rptFile, vtool.severity, vtool.rptStyle);
 		}
 		
 		System.exit(vtool.getExitStatus());

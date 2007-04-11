@@ -1,3 +1,15 @@
+//Copyright 2006-2007, by the California Institute of Technology.
+//ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+//Any commercial use must be negotiated with the Office of Technology Transfer
+//at the California Institute of Technology.
+//
+//This software is subject to U. S. export control laws and regulations
+//(22 C.F.R. 120-130 and 15 C.F.R. 730-774). To the extent that the software
+//is subject to U.S. export control laws and regulations, the recipient has
+//the responsibility to obtain export licenses or other export authority as
+//may be required before exporting such information to foreign countries or
+//providing access to foreign nationals.
+
 package gov.nasa.pds.tools.config;
 
 /**
@@ -12,7 +24,7 @@ package gov.nasa.pds.tools.config;
  *      vtool.ignoredir<br>
  *      vtool.ignorefile<br>
  *      vtool.includepaths<br>
- *      vtool.logfile<br>
+ *      vtool.log<br>
  *      vtool.progress<br>
  *      vtool.recursive<br>
  *      vtool.regexp<br>
@@ -35,7 +47,7 @@ public interface VToolConfigKeys {
 	public final String IGNOREDIRKEY = "vtool.ignoredir";
 	public final String IGNOREFILEKEY = "vtool.ignorefile";
 	public final String INCLUDESKEY = "vtool.includepaths";
-	public final String LOGKEY = "vtool.logfile";
+	public final String LOGKEY = "vtool.log";
 	public final String PROGRESSKEY = "vtool.progress";
 	public final String RECURSEKEY = "vtool.recursive";
 	public final String REGEXPKEY = "vtool.regexp";
