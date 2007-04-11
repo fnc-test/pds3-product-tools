@@ -81,7 +81,9 @@ import org.apache.commons.io.FilenameUtils;
 
 /**
  * Class to perform automated validation to determine if a given data product
- * is PDS compliant. This replaces LVTool functionality.
+ * is PDS compliant.
+ * <p>
+ * This replaces LVTool functionality.
  *  
  * @author mcayanan
  * @version $Revision$
@@ -131,7 +133,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	private int unkLbls;
 	
 	/** 
-	 * Default constructor
+	 * Default constructor.
 	 */
 	public VTool() {
 		alias = false;
@@ -166,7 +168,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	}
 	
 	/**
-	 * Show the version and disclaimer notice for VTool 
+	 * Show the version and disclaimer notice for VTool. 
 	 *
 	 */	
 	public void showVersion() {
@@ -195,7 +197,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	}
 	
 	/**
-	 * Builds the set of configurable parameters for VTool
+	 * Builds the set of configurable parameters for VTool.
 	 */
 	public void buildOpts() {
 		options.addOption(ALIAS[SHORT], ALIAS[LONG], false, "Enable aliasing");
@@ -349,7 +351,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	}
 	
 	/**
-	 * Parses the VTool command-line
+	 * Parses the VTool command-line.
 	 * @param argv arguments given on the command-line
 	 */
 	public void parseLine(String[] argv) {
@@ -365,7 +367,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	}
 	
 	/** 
-	 * Queries the VTool command-line 
+	 * Queries the VTool command-line.
 	 *
 	 */
 	public void queryCmdLine() {
@@ -478,7 +480,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	}
 	
 	/**
-	 * Get aliasing flag
+	 * Get aliasing flag.
 	 * @return 'true' if aliasing is ON, 'false' otherwise
 	 */
 	public boolean getAlias() {
@@ -486,7 +488,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	}
 	
 	/**
-	 * Set aliasing flag
+	 * Set aliasing flag.
 	 * @param a 'false' if aliasing should be turned off, 
 	 * 'true' otherwise
 	 */
@@ -495,7 +497,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	}
 	
 	/**
-	 * Get data object validation flag
+	 * Get data object validation flag.
 	 */
 /*
 	public boolean getDataObj() {
@@ -503,7 +505,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	}
 */	
 	/**
-	 * Set data object flag
+	 * Set data object flag.
 	 * @param d 'true' if data object validation is to be performed, 
 	 * 'false' otherwise
 	 */
@@ -513,7 +515,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	}
 */
 	/**
-	 * Get a list of dictionary files passed into VTool
+	 * Get a list of dictionary files passed into VTool.
 	 * @return a List object of dictionary file names
 	 */
 	public List getDictionaries() {
@@ -521,7 +523,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	}
 	
 	/**
-	 * Set the dictionary file names passed into VTool 
+	 * Set the dictionary file names passed into VTool .
 	 * @param d a List object of dictionary files
 	 */
 	public void setDictionaries(List d) {
@@ -530,7 +532,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	
 	/**
 	 * Get flag status that determines whether to follow pointers found
-	 * in a label
+	 * in a label.
 	 * @return 'true' to follow, 'false' otherwise
 	 */
 	public boolean getFollowPtrs() {
@@ -539,7 +541,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	
 	/**
 	 * Set the flag that determines whether to follow pointers found in
-	 * a label
+	 * a label.
 	 * @param f 'true' to follow, 'false' otherwise
 	 */
 	public void setFollowPtrs(boolean f) {
@@ -548,7 +550,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	
 	/**
 	 * Get flag status that determines whether standalone label fragment
-	 * validation is enabled
+	 * validation is enabled.
 	 * @return 'true' to enable, 'false' otherwise
 	 */
 	public boolean getForcePartial() {
@@ -556,7 +558,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	}
 	
 	/**
-	 * Set the flag that determines whether to validate standalone label
+	 * Set the flag that determines whether to validate standalone label.
 	 * fragments
 	 * @param f 'true' to enable, 'false' otherwise
 	 */
@@ -565,7 +567,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	}
 	
 	/**
-	 * Get the paths to search for files referenced by pointers in a label
+	 * Get the paths to search for files referenced by pointers in a label.
 	 * @return Start paths
 	 */
 	public List getIncludePaths() {
@@ -573,9 +575,10 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	}
 	
 	/**
-	 * Set the paths to search for files referenced by pointers. Default is
-	 * to always look first in the same directory as the label, then search
-	 * specified directories.
+	 * Set the paths to search for files referenced by pointers. 
+	 * <p>
+	 * Default is to always look first in the same directory
+	 * as the label, then search specified directories.
 	 * @param i List of paths
 	 */
 	public void setIncludePaths(List i) {
@@ -584,7 +587,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	
 	/**
 	 * Get the file name that contains the list of directories and/or
-	 * directory patterns to ignore during validation
+	 * directory patterns to ignore during validation.
 	 * @return a list of directory names/patterns to exclude from validation
 	 */
 	public List getNoDirs() {
@@ -592,7 +595,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	}
 	
 	/**
-	 * Set the flag to ignore specified directories
+	 * Set the flag to ignore specified directories.
 	 * @param f a text file containing a list of directories and/or directory
 	 *  patterns to ignore during validation. The names must be listed one
 	 *  name per line.
@@ -602,7 +605,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	}
 	
 	/**
-	 * Get the file name that contains the list of files and/or file patterns
+	 * Get the file name that contains the list of files and/or file patterns.
 	 * to ignore during validation
 	 * @return a list of files/file patterns to exclude from validation
 	 */
@@ -611,7 +614,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	}
 	
 	/**
-	 * Set the flag to ignore specified files
+	 * Set the flag to ignore specified files.
 	 * @param f a list of files/file patterns to ignore during validation.
 	 */
 	public void setNoFiles(List f) {
@@ -619,7 +622,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	}
 	
 	/**
-	 * Get the machine-readable log file name
+	 * Get the machine-readable log file name.
 	 * @return log file
 	 */
 	public File getLogFile() {
@@ -627,7 +630,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	}
 	
 	/**
-	 * Set the file name for the machine-readable log
+	 * Set the file name for the machine-readable log.
 	 * @param f file name of the log
 	 */
 	public void setLogFile(File f) {
@@ -635,7 +638,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	}
 	
 	/**
-	 * Get the flag that determines whether to write the log to standard out
+	 * Get the flag that determines whether to write the log to standard out.
 	 * @return 'true' to show log, 'false' to not show log
 	 */
 	public boolean getShowLog() {
@@ -643,7 +646,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	}
 	
 	/**
-	 * Set the flag to write the log to standard out
+	 * Set the flag to write the log to standard out.
 	 * @param l 
 	 */
 	public void setShowLog(boolean l) {
@@ -651,7 +654,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	}
 	
 	/**
-	 * Get the report file name for the human-readable report
+	 * Get the report file name for the human-readable report.
 	 * @return Report file name
 	 */
 	public File getRptFile() {
@@ -659,7 +662,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	}
 	
 	/**
-	 * Set the file for the human-readable report
+	 * Set the file for the human-readable report.
 	 * @param f file name
 	 */
 	public void setRptFile(File f) {
@@ -667,7 +670,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	}
 	
 	/**
-	 * Get the output style that was set for the validation report
+	 * Get the output style that was set for the validation report.
 	 * @return 'full' for a full report, 'sum' for a summary report or
 	 *  'min' for minimal detail
 	 */
@@ -676,7 +679,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	}
 	
 	/**
-	 * Set the output style for the report
+	 * Set the output style for the report.
 	 * @param style 'sum' for a summary report, 'min' for a minimal report,
 	 *  and 'full' for a full report
 	 */
@@ -692,7 +695,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	}
 	
 	/**
-	 * Get the progress reporting flag
+	 * Get the progress reporting flag.
 	 * @return 'true' if progress reporting is enabled, 'false' otherwise
 	 */
 	
@@ -701,7 +704,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	}
 	
 	/**
-	 * Set the progress reporting flag
+	 * Set the progress reporting flag.
 	 * @param p
 	 */
 	public void setProgress(boolean p) {
@@ -710,7 +713,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	
 	/**
 	 * Get the patterns to be matched when searching for files to validate in
-	 * a directory
+	 * a directory.
 	 * @return a List object of patterns
 	 */
 	public List getRegexp() {
@@ -718,7 +721,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	}
 	
 	/**
-	 * Set the patterns flag
+	 * Set the patterns flag.
 	 * @param e a List of patterns to be matched when searching for files to
 	 *  validate in a directory
 	 */
@@ -727,7 +730,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	}
 	
 	/**
-	 * Set the recursive flag
+	 * Set the recursive flag.
 	 * @param r 'true' to recursively traverse down a directory and all its
 	 *  sub-directories, 'false' otherwise
 	 */
@@ -744,7 +747,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	}
 	
 	/**
-	 * Set the targets flag
+	 * Set the targets flag.
 	 * @param t a List of files, URLs, and/or directories to be validated
 	 */
 	public void setTargets(List t) {
@@ -752,7 +755,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	}
 	
 	/**
-	 * Get the verbosity level
+	 * Get the verbosity level.
 	 * @return an integer value where '1' for info, '2' for warnings'
 	 * and '3' for errors
 	 */
@@ -761,7 +764,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	}
 	
 	/**
-	 * Set the verbosity level and above to include in the reporting
+	 * Set the verbosity level and above to include in the reporting.
 	 * @param v '1' for info, '2' for warnings, and '3' for errors
 	 */
 	public void setVerbose(short v) {
@@ -782,6 +785,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	
 	/**
 	 * Reads a configuration file to set the default behaviors for VTool.
+	 * <p>
 	 * Flags set on the command-line will override flags set in the 
 	 * configuration file
 	 * 
@@ -873,7 +877,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	
 	/**
 	 * Logs report header information such as version of the tool, 
-	 * execution time, and flag settings
+	 * execution time, and flag settings.
 	 *
 	 */
 	public void logRptHeader() {
@@ -948,11 +952,13 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	}
 	
 	/**
-	 * Configures the logger. If a log file was specified on the 
-	 * command-line, the log will be written to that file. If the
-	 * log flag was specified with no file spec, then the log will
-	 * be written to standard out. Otherwise, the log will be
-	 * written to memory (ByteArrayOutputStream). 
+	 * Configures the logger appropriately.
+	 * <p>
+	 * If a log file was specified on the command-line, the log
+	 * will be written to that file. If the log flag was
+	 * specified with no file spec, then the log will be written
+	 * to standard out. Otherwise, the log will be written to
+	 * memory (ByteArrayOutputStream). 
 	 *
 	 */
 	public void setupLogger() {
@@ -999,7 +1005,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	}
 	
 	/**
-	 * Sets up a handler to an outputstream
+	 * Sets up a handler to an outputstream.
 	 * @param out An outputstream to write the logger to
 	 * @return a stream handler
 	 */
@@ -1011,7 +1017,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	}
 	
 	/**
-	 * Sets up a file handler
+	 * Sets up a file handler.
 	 * @param log The name of the file to write the logger to
 	 * @return a file handler to the input file
 	 */
@@ -1032,7 +1038,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	}
 	
 	/**
-	 * Convert a string to a URL
+	 * Convert a string to a URL.
 	 * @param s The string to convert
 	 * @return A URL of the input string
 	 */
@@ -1105,7 +1111,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	
 	/**
 	 * Sets up the include paths and flag to follow pointers in
-	 * the parser
+	 * the parser.
 	 * @param parser The label parser to set properties for
 	 */
 	private void setParserProps(LabelParser parser) {
@@ -1150,7 +1156,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	
 	/**
 	 * Record the results of a label validation to determine the success
-	 * of the tool run
+	 * of the tool run.
 	 * @param result 'PASS' for a good label, 'FAIL' for a bad label, or
 	 * 'UNKNOWN' for a label that skipped validation
 	 */
@@ -1164,7 +1170,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	}
 	
 	/**
-	 * Returns an exit status code based on the validation results
+	 * Returns an exit status code based on the validation results.
 	 * 
 	 * @return '0' if files "passed" and a '1' if any of the following
 	 * occurs:<br>
@@ -1196,7 +1202,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	}
 	
 	/**
-	 * Processes a target
+	 * Processes a target.
 	 * 
 	 * @param target The file or URL to process
 	 * @param getSubDirs 'True' to look for sub-directories, 'false' otherwise
@@ -1306,7 +1312,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	}
 	
 	/**
-	 * Transforms an XML log to a human-readable report
+	 * Transforms an XML log to a human-readable report.
 	 * 
 	 * @param in inputstream of the XML log
 	 * @param xsl the stylesheet to use in creating the human-readable report
@@ -1329,7 +1335,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
     }
 	
 	/**
-	 * Creates a human-readable report
+	 * Creates a human-readable report.
 	 * 
 	 * @param log Where the xml log is located. If null, then the xml log
 	 *  will be read from memory.
@@ -1374,7 +1380,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	}
 	
 	/**
-	 * Gets the proper XSL stylesheet
+	 * Gets the proper XSL stylesheet.
 	 * 
 	 * @param style 'full' for a full XSL, 'sum' for a summary XSL, or 'min'
 	 *  for a minimal XSL 
@@ -1409,7 +1415,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	}
 	
 	/**
-	 * Returns the appropriate output stream for the final report
+	 * Returns the appropriate output stream for the final report.
 	 * @param rpt The report file name. If null, then the standard out
 	 *  stream is returned.
 	 * 
@@ -1424,7 +1430,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	}
 	  
     /**
-     * Closes the handlers that were set for the logger
+     * Closes the handlers that were set for the logger.
      *
      */
 	public void closehandle() {
@@ -1434,36 +1440,44 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 		}
 	}
 	/**
-	 * The main calls the following methods (in this order):<br><br>
+	 * Implementation to perform automated PDS validation.
 	 * 
+	 * <p>
+	 * The main calls the following methods (in this order):
+	 * <p>
 	 * To setup the flags and parse the command-line options:
 	 * <ul> 
 	 * <li>buildOpts</li>
 	 * <li>parseLine</li>
 	 * <li>queryCmdLine</li>
 	 * </ul>
-	 * <br>
+	 * 
+	 * <p>
 	 * To setup the logger and log the report header information:
 	 * <ul>
 	 * <li>setupLogger</li>
 	 * <li>logRptHeader</li>
 	 * </ul>
-	 * <br>
+	 * 
+	 * <p>
 	 * To perform validation:
 	 * <ul>
 	 * <li>readDictionaries (if the PSDD was passed in)</li>
 	 * <li>validateLabels</li>
 	 * </ul>
-	 * <br>
+	 * 
+	 * <p>
 	 * To create the final report:
 	 * <ul>
 	 * <li>closehandle (to flush the buffers)</li>
 	 * <li>doReporting</li>
 	 * </ul>
-	 * <br>
+	 * 
+	 * <p>
 	 * Reporting is not generated if the log flag was specified with
 	 * no file spec and the report file flag was not specified
-	 * <br><br>
+	 * 
+	 * <p>
 	 * VTool returns an appropriate exit status based on validation results.
 	 * <br>
 	 * In general, the following is returned:
@@ -1472,7 +1486,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	 * <li>'1' upon a valiadation "failure"</li>
 	 * <li>'-1' upon application failure</li>
 	 * </ul>
-	 *  
+	 * 
 	 * @param argv Arguments passed on the command-line
 	 */
 	public static void main(String[] argv) {
