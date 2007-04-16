@@ -87,7 +87,7 @@ or
     </section>
     
     <section name="Modifying Shell Scripts">
-      <p>A batch file, <i>VTool.bat</i>, and shell script, <i>VTool</i>, is included in the product-tools package to provide an easy way of running the Validation Tool without having to setup the CLASSPATH environment variable as documented in the <a href="../user/index.html" target="_blank">Tool Setup</a> section or having to call the java command each time (java gov.nasa.pds.tools.VTool ...).
+      <p>A batch file, <i>VTool.bat</i>, and shell script, <i>VTool</i>, is included in the product-tools package to provide an easy way of running the Validation Tool in the Windows and Unix-based machines, respectively.
       </p>
       
       <p>In both the batch file and shell script, there is a variable called <i>jarpath</i> that needs to be modified before the scripts can be executed. The variable needs to be set to the correct location of the executable product tools jar file.
