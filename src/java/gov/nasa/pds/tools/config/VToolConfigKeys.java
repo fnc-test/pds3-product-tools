@@ -13,7 +13,7 @@
 package gov.nasa.pds.tools.config;
 
 /**
- * Contains the valid keys for a VTool configuration file <br><br>
+ * Contains the valid keys for a VTool configuration file. <br><br>
  * 
  * Current keys are:<br>
  * <ul>
