@@ -102,6 +102,17 @@ public class WildcardOSFilter extends AbstractFileFilter {
 		return false;
 	}
 	
-	
+	/**
+	 * Checks to see if the filename matches one of the wildcards. Matching is 
+	 * case-insensitive for Windows and case-sensitive for Unix.
+	 * 
+	 * @param dir the directory to check
+	 * @param name the file name within the directory to check
+	 * @return true if the filename matches one of the wildcards, false otherwise
+	 * @throws NullPointerException if the file is null
+	 */
+	public boolean accept(File dir, String name) {
+		return accept(new File(dir, name));
+	}
 	
 }
