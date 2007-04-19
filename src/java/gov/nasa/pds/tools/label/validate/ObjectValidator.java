@@ -50,8 +50,8 @@ public class ObjectValidator {
         //First check that required elements are captured in object
         for (Iterator i = definition.getRequiredElements().iterator(); i.hasNext();) {
             String required = (String) i.next();
-            //First check to see if attribute is found by its identifier
-            if (!object.hasAttribute(required)) {
+            //First check to see if attribute is found by its identifier or as a pointer
+            if (!object.hasAttribute(required) && !object.hasPointer(required)) {
                 boolean foundAlias = false;
                 //Next check to see if the attribute is present as an alias
                 //Lookup definition for required element
