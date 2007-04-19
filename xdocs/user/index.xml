@@ -202,7 +202,7 @@ C:\&gt; echo %CLASSPATH%
 C:\&gt; java gov.nasa.pds.tools.VTool &lt;command-line arguments&gt;
         </source>
 
-        <p>Another way of setting the CLASSPATH is through the "Settings/Control Panel/System" method. Documentation on this method can be found <a href="">here</a>.
+        <p>Another way of setting the CLASSPATH is through the "Settings/Control Panel/System" method. Documentation on this method can be found <a href="documents/Windows_GUI_Setup.doc">here</a>.
         </p>
 
         <p><b><i>Specify the CLASSPATH on the Command-Line</i></b></p>
