@@ -92,6 +92,20 @@ public class ObjectStatement extends Statement {
     }
     
     /**
+     * Looks to see if this object contains a pointer with the given identifier
+     * @param identifier of pointer statement to look for
+     * @return flag indicating whether or not the pointer was found
+     */
+    public boolean hasPointer(String identifier) {
+        for (Iterator i = ((List) statements.get(identifier)).iterator(); i.hasNext();) {
+            Statement statement = (Statement) i.next();
+            if (statement instanceof PointerStatement)
+                return true;
+        }
+        return false;
+    }
+    
+    /**
      * Retrieves the named attribute
      * @param identifier
      * @return The named AttributeStatement or null if not found
