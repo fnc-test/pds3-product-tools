@@ -202,7 +202,7 @@ public class FileListGenerator {
 		if( !dir.isDirectory() )
 			throw new IllegalArgumentException("parameter 'dir' is not a directory: " + dir);
 		
-		//Find files only first. Convert resulting list into URLs
+		//Find files only first
 		fileList.addToFileList(FileUtils.listFiles(dir, effFileFilter, null));
 		
 		//Visit sub-directories if the recurse flag is set
@@ -240,7 +240,7 @@ public class FileListGenerator {
 	}
 	
 	/**
-	 * Gets hyperlinks to found in an HTML document of a URL. No duplicate links will be returned.
+	 * Gets hyperlinks found in an HTML document of a URL. No duplicate links will be returned.
 	 * 
 	 * @param url location
 	 * @return A Set of hyperlinks
