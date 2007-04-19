@@ -228,7 +228,8 @@ public class Label implements LabelType, Status {
             if (labelType == UNDEFINED && getObjects("FILE").size() != 0)
                 labelType = COMBINED_DETACHED;
             //If all fails default to attached label
-            labelType = ATTACHED;
+            if (labelType == UNDEFINED)
+                labelType = ATTACHED;
         }
         
         return labelType;
