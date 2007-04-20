@@ -97,10 +97,12 @@ public class ObjectStatement extends Statement {
      * @return flag indicating whether or not the pointer was found
      */
     public boolean hasPointer(String identifier) {
-        for (Iterator i = ((List) statements.get(identifier)).iterator(); i.hasNext();) {
-            Statement statement = (Statement) i.next();
-            if (statement instanceof PointerStatement)
-                return true;
+        if (statements.get(identifier) != null) {
+            for (Iterator i = ((List) statements.get(identifier)).iterator(); i.hasNext();) {
+                Statement statement = (Statement) i.next();
+                if (statement instanceof PointerStatement)
+                    return true;
+            }
         }
         return false;
     }
