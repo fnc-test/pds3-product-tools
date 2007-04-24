@@ -18,6 +18,7 @@ package gov.nasa.pds.tools.logging;
 import java.util.logging.Formatter;
 import java.util.logging.Handler;
 import java.util.logging.LogRecord;
+import java.util.logging.Level;
 
 /**
  * @author pramirez
@@ -33,7 +34,10 @@ public class ToolsLogFormatter extends Formatter {
         StringBuffer buffer = new StringBuffer();
         ToolsLogRecord toolsRecord = (ToolsLogRecord) record;
         buffer.append(" <record>\n");
-        buffer.append("  <level>" + record.getLevel() + "</level>\n");
+        if (record.getLevel() == Level.SEVERE)
+            buffer.append("  <level>ERROR</level>\n");
+        else
+            buffer.append("   <level>" + record.getLevel() + "</level>");
         if (toolsRecord.getFile() != null)
             buffer.append("  <file>" + toolsRecord.getFile() + "</file>\n");
         if (toolsRecord.getLine() != -1)
