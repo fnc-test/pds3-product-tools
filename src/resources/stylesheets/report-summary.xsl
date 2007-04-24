@@ -36,7 +36,7 @@
           <xsl:value-of select="$pad2" />Example: <xsl:if test="$record/line">line <xsl:value-of select="$record/line" /> of </xsl:if><xsl:value-of select="$record/file" /><xsl:text>&#xd;&#xa;</xsl:text>
         </xsl:if>
       
-        <xsl:value-of select="$pad2" /><xsl:value-of select="count(//record[message=$errorMessage and level='SEVERE'])" /><xsl:text> occurrence(s)&#xd;&#xa;&#xd;&#xa;</xsl:text>
+        <xsl:value-of select="$pad2" /><xsl:value-of select="count(//record[message=$errorMessage and level='ERROR'])" /><xsl:text> occurrence(s)&#xd;&#xa;&#xd;&#xa;</xsl:text>
       </xsl:if>
     </xsl:for-each>
   </xsl:if>
