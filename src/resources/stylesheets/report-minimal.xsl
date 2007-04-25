@@ -36,12 +36,12 @@
       <xsl:text>&#xd;&#xa;ERROR<xsl:value-of select="$pad2" />WARN&#xd;&#xa;</xsl:text>
     </xsl:when>
     
-    <xsl:when test="$level='SEVERE'">
+    <xsl:when test="$level='ERROR'">
       <xsl:text>&#xd;&#xa;ERROR&#xd;&#xa;</xsl:text>
     </xsl:when>
   </xsl:choose>
   
-  <xsl:if test="$level='SEVERE' or $level='WARNING' or $level='INFO'">
+  <xsl:if test="$level='ERROR' or $level='WARNING' or $level='INFO'">
     <xsl:value-of select="substring($pad5, string-length($numErrors) + 1)" /><xsl:value-of select="$numErrors" />
   </xsl:if>
   <xsl:if test="$level='WARNING' or $level='INFO'">
@@ -61,14 +61,14 @@
       <xsl:text>&#xd;&#xa;ERROR</xsl:text><xsl:value-of select="$pad2" /><xsl:text>WARN</xsl:text><xsl:value-of select="$pad2" /><xsl:text>FILE&#xd;&#xa;</xsl:text>
     </xsl:when>
     
-    <xsl:when test="$level='SEVERE'">
+    <xsl:when test="$level='ERROR'">
       <xsl:text>&#xd;&#xa;ERROR</xsl:text><xsl:value-of select="$pad2" /><xsl:text>FILE&#xd;&#xa;</xsl:text>
     </xsl:when>
   </xsl:choose>
   
   <xsl:for-each select="log/record[level='NOTIFICATION']">
     <xsl:variable name="file" select="file" />
-    <xsl:if test="$level='SEVERE' or $level='WARNING' or $level='INFO'">
+    <xsl:if test="$level='ERROR' or $level='WARNING' or $level='INFO'">
       <xsl:variable name="numFileErrors" select="count(//record [level='ERROR' and (file=$file or context=$file)])" />
       <xsl:value-of select="substring($pad5, string-length($numFileErrors) + 1)" /><xsl:value-of select="$numFileErrors" />
     </xsl:if>

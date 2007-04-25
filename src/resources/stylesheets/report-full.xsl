@@ -61,7 +61,7 @@
         </xsl:for-each>
       </xsl:when>
       
-      <xsl:when test="$level='SEVERE' or $level='WARNING' or $level='INFO'">
+      <xsl:when test="$level='ERROR' or $level='WARNING' or $level='INFO'">
         <xsl:for-each select="//record[file=$file and level!='NOTIFICATION' and level='ERROR']">
           <xsl:variable name="currentContext" select="context" />
           <xsl:if test="not(preceding-sibling::record[context=$currentContext])">
