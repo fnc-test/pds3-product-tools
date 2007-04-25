@@ -31,11 +31,11 @@
     
       <xsl:when test="$level='INFO'">
         <xsl:for-each select="//record[(file=$file or context=$file) and level!='NOTIFICATION' and (level='INFO' or level='WARNING' or level='ERROR')]">
-          <xsl:variable name="currentContext" select="context" />
-          <xsl:if test="not(preceding-sibling::record[context=$currentContext])">
+          <xsl:variable name="currentContext" select="file" />
+          <xsl:if test="not(preceding-sibling::record[file=$currentContext])">
             <xsl:choose>
               <xsl:when test="context">
-                <xsl:value-of select="$pad4" /><xsl:text>Label Fragment: </xsl:text><xsl:value-of select="context" /><xsl:text>&#xd;&#xa;</xsl:text>
+                <xsl:value-of select="$pad4" /><xsl:text>Label Fragment: </xsl:text><xsl:value-of select="file" /><xsl:text>&#xd;&#xa;</xsl:text>
               </xsl:when>
             </xsl:choose>
           </xsl:if>
@@ -47,11 +47,11 @@
       
       <xsl:when test="$level='WARNING' or $level='INFO'">
         <xsl:for-each select="//record[(file=$file or context=$file) and level!='NOTIFICATION' and (level='WARNING' or level='ERROR')]">
-          <xsl:variable name="currentContext" select="context" />
-          <xsl:if test="not(preceding-sibling::record[context=$currentContext])">
+          <xsl:variable name="currentContext" select="file" />
+          <xsl:if test="not(preceding-sibling::record[file=$currentContext])">
             <xsl:choose>
               <xsl:when test="context">
-                <xsl:value-of select="$pad4" /><xsl:text>Label Fragment: </xsl:text><xsl:value-of select="context" /><xsl:text>&#xd;&#xa;</xsl:text>
+                <xsl:value-of select="$pad4" /><xsl:text>Label Fragment: </xsl:text><xsl:value-of select="file" /><xsl:text>&#xd;&#xa;</xsl:text>
               </xsl:when>
             </xsl:choose>
           </xsl:if>
@@ -63,11 +63,11 @@
       
       <xsl:when test="$level='ERROR' or $level='WARNING' or $level='INFO'">
         <xsl:for-each select="//record[file=$file and level!='NOTIFICATION' and level='ERROR']">
-          <xsl:variable name="currentContext" select="context" />
-          <xsl:if test="not(preceding-sibling::record[context=$currentContext])">
+          <xsl:variable name="currentContext" select="file" />
+          <xsl:if test="not(preceding-sibling::record[file=$currentContext])">
             <xsl:choose>
               <xsl:when test="context">
-                <xsl:value-of select="$pad4" /><xsl:text>Label Fragment: </xsl:text><xsl:value-of select="context" /><xsl:text>&#xd;&#xa;</xsl:text>
+                <xsl:value-of select="$pad4" /><xsl:text>Label Fragment: </xsl:text><xsl:value-of select="file" /><xsl:text>&#xd;&#xa;</xsl:text>
               </xsl:when>
             </xsl:choose>
           </xsl:if>
