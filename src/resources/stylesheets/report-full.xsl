@@ -27,7 +27,8 @@
     <xsl:variable name="file" select="file" /><xsl:text>&#xd;&#xa;</xsl:text>
     <xsl:value-of select="$pad2" /><xsl:value-of select="message" />: <xsl:value-of select="$file" /><xsl:text>&#xd;&#xa;</xsl:text>
     
-    <xsl:if test="message='SKIP'">
+    <xsl:choose>
+      <xsl:when test="message='SKIP'">
       <xsl:choose>
     
         <xsl:when test="$level='INFO'">
@@ -79,7 +80,7 @@
         </xsl:when>
       
       </xsl:choose>
-    </xsl:if>
+    </xsl:when>
     <xsl:otherwise>
       <xsl:choose>
     
@@ -133,6 +134,7 @@
       
       </xsl:choose>
     </xsl:otherwise>
+    </xsl:choose>
   </xsl:for-each>
   
   <xsl:text>&#xd;&#xa;End Of Report&#xd;&#xa;</xsl:text>
