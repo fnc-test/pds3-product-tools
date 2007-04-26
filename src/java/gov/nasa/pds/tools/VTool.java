@@ -1119,12 +1119,26 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 		if (includePaths != null) {
 			for( Iterator i = includePaths.iterator(); i.hasNext(); ) {
 				path = toURL(i.next().toString());
+				checkURL(path);
 				parser.addIncludePath(path);
 			}
 		}
 
 		if (followPtrs == false)
 			parser.getProperties().setProperty("parser.pointers", "false");
+	}
+	
+	/**
+	 * Checks for the existence of a URL.
+	 * @param url the url to check
+	 */
+	private void checkURL(URL url) {
+		try {
+			url.openStream();
+		} catch (IOException i) {
+			System.err.println(i.getMessage());
+			System.exit(TOOLFAILURE);
+		}
 	}
 	
 	/**
