@@ -54,7 +54,7 @@ public class ExternalPointer extends PointerStatement {
         URL resolvedURL = null;
         String filename = "";
         
-        filename = getFilename();
+        filename = getFile();
         
         //Test and warn if filename is mixed case.
         if (!filename.equals(filename.toLowerCase()) && !filename.equals(filename.toUpperCase()))
@@ -109,7 +109,7 @@ public class ExternalPointer extends PointerStatement {
         return resolvedURL;
     }
     
-    public String getFilename() {
+    public String getFile() {
         String filename = "";
         
         //The name of the file will be the first element in the sequence or the value if not 
