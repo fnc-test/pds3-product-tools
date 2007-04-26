@@ -220,7 +220,7 @@ public class DictionaryParser implements ODLTokenTypes, DictionaryTokens, Status
                 List unitList = new ArrayList();
                 Sequence values = (Sequence) i.next();
                 for (Iterator v = values.iterator(); v.hasNext();) {
-                    String unit = v.next().toString().toUpperCase();
+                    String unit = v.next().toString();
                     unitList.add(unit);
                     units.put(unit, unitList);
                 }
