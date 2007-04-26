@@ -193,10 +193,10 @@ public class ElementValidator implements DictionaryTokens {
                     //Look at definition to see if we should check units
                     if (value instanceof Numeric) {
                         Numeric number = (Numeric) value;
-                        if (number.getUnits() != null && !definition.isUnitAllowed(number.getUnits().toUpperCase())) {
+                        if (number.getUnits() != null && !definition.isUnitAllowed(number.getUnits())) {
                             boolean unitsValid = false;
-                            if (number.getUnits().toUpperCase().endsWith("S") && 
-                                    definition.isUnitAllowed(number.getUnits().toUpperCase().substring(0, number.getUnits().length() - 1))) {
+                            if (number.getUnits().endsWith("s") && 
+                                    definition.isUnitAllowed(number.getUnits().substring(0, number.getUnits().length() - 1))) {
                                 unitsValid = true;
                             }
                             if (!unitsValid) {
