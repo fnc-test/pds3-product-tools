@@ -23,6 +23,44 @@ $Id$
     <author email="Sean.Hardman@jpl.nasa.gov">Sean Hardman</author>
   </properties>
   <body>
+    <release version="0.5.0" date="2007-04-30" description="Official release of phase I"> 
+      <action dev="mcayanan" type="update">
+        Implemented new log file behavior to allow logs to be written to memory. This allows generation of reports without the need of explicitly specifying the log file flag option. 
+      </action>
+      
+      <action dev="mcayanan" type="update">
+        Changed the log file flag (-l or --log) option to optionally allow a file specification. See user guide for log generation details.
+      </action>
+          
+      <action dev="mcayanan" type="add">
+        Added the capability to return an appropriate exit status value based on validation results or tool application failure.
+      </action>      
+      
+      <action dev="mcayanan" type="add">
+        Created batch and shell scripts for simpler execution of VTool.
+      </action>
+      
+      <action dev="mcayanan" type="add">
+        Added the capability for targets to be specified implicitly.
+      </action>
+      
+      <action dev="mcayanan" type="add">
+        Implemented the -f or --force flag to perform standalone label fragment validation.
+      </action>
+      
+      <action dev="mcayanan" type="update">
+        Added time and date of tool execution in final reports.
+      </action>
+      
+      <action dev="mcayanan" type="fix">
+        Fixed to support UNC pathnames.
+      </action>
+      
+      <action dev="mcayanan" type="update">
+        Enhanced user guide with more details on command-line flag options, report examples, etc.
+      </action>      
+    </release>
+    
     <release version="0.4.0" date="2007-02-01" description="Binary release for the beta test phase.">
       <action dev="pramirez" type="add">
         Added the following capabilities related to semantic validation:
