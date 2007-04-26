@@ -77,7 +77,7 @@ public class ExternalPointer extends PointerStatement {
                 try {
                     fileURL.openStream();
                     log.log(new ToolsLogRecord(Level.WARNING, "In order to resolve the pointer the filename " +
-                            "had to be forced to upper case.", filename, context, lineNumber));
+                            "had to be forced to upper case.", getFilename(), context, lineNumber));
                     resolvedURL = fileURL;
                 } catch (IOException ioEx) {
                     //Ignore this must not be the path to the pointed file
@@ -90,7 +90,7 @@ public class ExternalPointer extends PointerStatement {
                 try {
                     fileURL.openStream();
                     log.log(new ToolsLogRecord(Level.WARNING, "In order to resolve the pointer the filename " +
-                            "had to be forced lower case.", filename, context, lineNumber));
+                            "had to be forced lower case.", getFilename(), context, lineNumber));
                     resolvedURL = fileURL;
                 } catch (IOException ioEx) {
                     //Ignore this must not be the path to the pointed file
