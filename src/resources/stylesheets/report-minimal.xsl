@@ -69,15 +69,15 @@
   <xsl:for-each select="log/record[level='NOTIFICATION']">
     <xsl:variable name="file" select="file" />
     <xsl:if test="$level='ERROR' or $level='WARNING' or $level='INFO'">
-      <xsl:variable name="numFileErrors" select="count(//record [level='ERROR' and (file=$file or context=$file)])" />
+      <xsl:variable name="numFileErrors" select="count(//record [level='ERROR' and file=$file])" />
       <xsl:value-of select="substring($pad5, string-length($numFileErrors) + 1)" /><xsl:value-of select="$numFileErrors" />
     </xsl:if>
     <xsl:if test="$level='WARNING' or $level='INFO'">
-      <xsl:variable name="numFileWarnings" select="count(//record [level='WARNING' and (file=$file or context=$file)])" />
+      <xsl:variable name="numFileWarnings" select="count(//record [level='WARNING' and file=$file])" />
       <xsl:value-of select="substring($pad6, string-length($numFileWarnings) + 1)" /><xsl:value-of select="$numFileWarnings" />
     </xsl:if>
     <xsl:if test="$level='INFO'">
-      <xsl:variable name="numFileInfo" select="count(//record [level='INFO' and (file=$file or context=$file)])" />
+      <xsl:variable name="numFileInfo" select="count(//record [level='INFO' and file=$file])" />
       <xsl:value-of select="substring($pad6, string-length($numFileInfo) + 1)" /><xsl:value-of select="$numFileInfo" />
     </xsl:if>
     <xsl:value-of select="$pad2" /><xsl:value-of select="$file" /><xsl:text>&#xd;&#xa;</xsl:text>
