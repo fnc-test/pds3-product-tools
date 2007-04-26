@@ -56,6 +56,11 @@ public class ExternalPointer extends PointerStatement {
         
         filename = getFilename();
         
+        //Test and warn if filename is mixed case.
+        if (!filename.equals(filename.toLowerCase()) && !filename.equals(filename.toUpperCase()))
+            log.log(new ToolsLogRecord(Level.WARNING, "A pointer reference should not contain mixed case.", 
+                    getFilename(), context, lineNumber));
+        
         //Go through the list of directories and see if pointed to file can be resolved
         for (Iterator i = includePaths.iterator(); i.hasNext() && resolvedURL == null;) {
             URL baseURL = (URL) i.next();
