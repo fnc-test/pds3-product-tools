@@ -1,0 +1,77 @@
+PDS Validation Tool Report
+  VTool Version             0.5.0
+  Execution Date            Thu, Apr 26 2007 at 14:19:00 PM
+  Dictionary version        
+/* Planetary Science Data Dictionary database dump */
+/* Start of alias definitions */
+/* Version: OPS */
+/* Online Database: pdscat1r65 */
+/* Generated: Thu Feb 22 14:39:35 2007 */
+
+
+Parameter Settings:
+  Target(s)                      [VTT_EN_19-1\target\DATA]
+  Dictionary File(s)             [UTIL\pdsdd.full]
+  Aliasing                       false
+  Directory Recursion            true
+  Follow Pointers                true
+  Validate Standalone Fragments  false
+  Report File                    rpt-sum.txt
+  Report Style                   sum
+  Severity Level                 Warning
+  Include Path(s)                [VTT_EN_19-1\target\LABEL, VTT_EN_19-1\target\DOCUMENT]
+  Progress Reporting             false
+
+Summary:
+  8 of 8 validated, 9 skipped
+  7 of 8 passed
+
+Errors Found:
+
+  ERROR  Undefined Element: CASSINI:ADC_TIMING_SETTINGS
+  Example: line 20 of file:/C:/tool-tests-0.4.0/tests/VTT_EN_19-1/target/DATA/COMBINED_DETACHED.LBL
+  1 occurrence(s)
+
+  ERROR  Undefined Element: CASSINI:BARREL_BAFFLE_TEMPERATURE
+  Example: line 21 of file:/C:/tool-tests-0.4.0/tests/VTT_EN_19-1/target/DATA/COMBINED_DETACHED.LBL
+  1 occurrence(s)
+
+  ERROR  Undefined Element: CASSINI:BINNING
+  Example: line 24 of file:/C:/tool-tests-0.4.0/tests/VTT_EN_19-1/target/DATA/COMBINED_DETACHED.LBL
+  1 occurrence(s)
+
+  ERROR  Undefined Element: CASSINI:CPMM_NUMBER
+  Example: line 22 of file:/C:/tool-tests-0.4.0/tests/VTT_EN_19-1/target/DATA/COMBINED_DETACHED.LBL
+  1 occurrence(s)
+
+  ERROR  Undefined Element: CASSINI:POWERED_CPMM_FLAG
+  Example: line 23 of file:/C:/tool-tests-0.4.0/tests/VTT_EN_19-1/target/DATA/COMBINED_DETACHED.LBL
+  1 occurrence(s)
+
+  ERROR  Undefined Element: MRO:ADC_TIMING_SETTINGS
+  Example: line 26 of file:/C:/tool-tests-0.4.0/tests/VTT_EN_19-1/target/DATA/COMBINED_DETACHED.LBL
+  1 occurrence(s)
+
+  ERROR  Undefined Element: MRO:BARREL_BAFFLE_TEMPERATURE
+  Example: line 27 of file:/C:/tool-tests-0.4.0/tests/VTT_EN_19-1/target/DATA/COMBINED_DETACHED.LBL
+  1 occurrence(s)
+
+  ERROR  Undefined Element: MRO:BINNING
+  Example: line 30 of file:/C:/tool-tests-0.4.0/tests/VTT_EN_19-1/target/DATA/COMBINED_DETACHED.LBL
+  1 occurrence(s)
+
+  ERROR  Undefined Element: MRO:CPMM_NUMBER
+  Example: line 28 of file:/C:/tool-tests-0.4.0/tests/VTT_EN_19-1/target/DATA/COMBINED_DETACHED.LBL
+  1 occurrence(s)
+
+  ERROR  Undefined Element: MRO:POWERED_CPMM_FLAG
+  Example: line 29 of file:/C:/tool-tests-0.4.0/tests/VTT_EN_19-1/target/DATA/COMBINED_DETACHED.LBL
+  1 occurrence(s)
+
+Warnings Found:
+
+  WARNING  Not a label. Could not find the PDS_VERSION_ID in the first line.
+  Example: file:/C:/tool-tests-0.4.0/tests/VTT_EN_19-1/target/DATA/COMP_ARRAY.DAT
+  9 occurrence(s)
+
+End Of Report

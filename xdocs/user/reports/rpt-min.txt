@@ -1,0 +1,55 @@
+PDS Validation Tool Report
+  VTool Version             0.5.0
+  Execution Date            Thu, Apr 26 2007 at 14:18:49 PM
+  Dictionary version        
+/* Planetary Science Data Dictionary database dump */
+/* Start of alias definitions */
+/* Version: OPS */
+/* Online Database: pdscat1r65 */
+/* Generated: Thu Feb 22 14:39:35 2007 */
+
+
+Parameter Settings:
+  Target(s)                      [VTT_EN_19-1\target\DATA]
+  Dictionary File(s)             [UTIL\pdsdd.full]
+  Aliasing                       false
+  Directory Recursion            true
+  Follow Pointers                true
+  Validate Standalone Fragments  false
+  Report File                    rpt-min.txt
+  Report Style                   min
+  Severity Level                 Warning
+  Include Path(s)                [VTT_EN_19-1\target\LABEL, VTT_EN_19-1\target\DOCUMENT]
+  Progress Reporting             false
+
+Summary:
+  8 of 8 validated, 9 skipped
+  7 of 8 passed
+
+Total Messages:
+
+ERROR  WARN
+   10     9
+
+Message Counts by File:
+
+ERROR  WARN  FILE
+   10     0  file:/C:/tool-tests-0.4.0/tests/VTT_EN_19-1/target/DATA/COMBINED_DETACHED.LBL
+    0     0  file:/C:/tool-tests-0.4.0/tests/VTT_EN_19-1/target/DATA/COMP_ARRAY-1.LBL
+    0     1  file:/C:/tool-tests-0.4.0/tests/VTT_EN_19-1/target/DATA/COMP_ARRAY.DAT
+    0     0  file:/C:/tool-tests-0.4.0/tests/VTT_EN_19-1/target/DATA/COMP_HISTORY-1.LBL
+    0     1  file:/C:/tool-tests-0.4.0/tests/VTT_EN_19-1/target/DATA/COMP_IMG-1.IMG
+    0     0  file:/C:/tool-tests-0.4.0/tests/VTT_EN_19-1/target/DATA/COMP_IMG-1.LBL
+    0     0  file:/C:/tool-tests-0.4.0/tests/VTT_EN_19-1/target/DATA/COMP_PALETTE-1.LBL
+    0     1  file:/C:/tool-tests-0.4.0/tests/VTT_EN_19-1/target/DATA/COMP_PALETTE.TAB
+    0     1  file:/C:/tool-tests-0.4.0/tests/VTT_EN_19-1/target/DATA/COMP_SPECTRUM.DAT
+    0     0  file:/C:/tool-tests-0.4.0/tests/VTT_EN_19-1/target/DATA/COMP_SPECTRUM.LBL
+    0     0  file:/C:/tool-tests-0.4.0/tests/VTT_EN_19-1/target/DATA/COMP_SPREADSHEET-1.LBL
+    0     1  file:/C:/tool-tests-0.4.0/tests/VTT_EN_19-1/target/DATA/HISTORY.TXT
+    0     1  file:/C:/tool-tests-0.4.0/tests/VTT_EN_19-1/target/DATA/LEAPSECS.KER
+    0     1  file:/C:/tool-tests-0.4.0/tests/VTT_EN_19-1/target/DATA/MYDATA.CSV
+    0     0  file:/C:/tool-tests-0.4.0/tests/VTT_EN_19-1/target/DATA/NONCOMP_ATTACHED.LBL
+    0     1  file:/C:/tool-tests-0.4.0/tests/VTT_EN_19-1/target/DATA/T92025.TAB
+    0     1  file:/C:/tool-tests-0.4.0/tests/VTT_EN_19-1/target/DATA/W1477654052.IMG
+
+End Of Report

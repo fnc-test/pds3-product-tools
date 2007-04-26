@@ -1,0 +1,84 @@
+PDS Validation Tool Report
+  VTool Version             0.5.0
+  Execution Date            Thu, Apr 26 2007 at 14:19:28 PM
+  Dictionary version        
+/* Planetary Science Data Dictionary database dump */
+/* Start of alias definitions */
+/* Version: OPS */
+/* Online Database: pdscat1r65 */
+/* Generated: Thu Feb 22 14:39:35 2007 */
+
+
+Parameter Settings:
+  Target(s)                      [VTT_EN_19-1\target\DATA]
+  Dictionary File(s)             [UTIL\pdsdd.full]
+  Aliasing                       false
+  Directory Recursion            true
+  Follow Pointers                true
+  Validate Standalone Fragments  false
+  Report File                    rpt-full.txt
+  Report Style                   full
+  Severity Level                 Warning
+  Include Path(s)                [VTT_EN_19-1\target\LABEL, VTT_EN_19-1\target\DOCUMENT]
+  Progress Reporting             false
+
+Summary:
+  8 of 8 validated, 9 skipped
+  7 of 8 passed
+
+Validation Details:
+
+  FAIL: file:/C:/tool-tests-0.4.0/tests/VTT_EN_19-1/target/DATA/COMBINED_DETACHED.LBL
+      ERROR  line 20: Undefined Element: CASSINI:ADC_TIMING_SETTINGS
+      ERROR  line 21: Undefined Element: CASSINI:BARREL_BAFFLE_TEMPERATURE
+      ERROR  line 22: Undefined Element: CASSINI:CPMM_NUMBER
+      ERROR  line 23: Undefined Element: CASSINI:POWERED_CPMM_FLAG
+      ERROR  line 24: Undefined Element: CASSINI:BINNING
+      ERROR  line 26: Undefined Element: MRO:ADC_TIMING_SETTINGS
+      ERROR  line 27: Undefined Element: MRO:BARREL_BAFFLE_TEMPERATURE
+      ERROR  line 28: Undefined Element: MRO:CPMM_NUMBER
+      ERROR  line 29: Undefined Element: MRO:POWERED_CPMM_FLAG
+      ERROR  line 30: Undefined Element: MRO:BINNING
+
+  PASS: file:/C:/tool-tests-0.4.0/tests/VTT_EN_19-1/target/DATA/COMP_ARRAY-1.LBL
+
+  SKIP: file:/C:/tool-tests-0.4.0/tests/VTT_EN_19-1/target/DATA/COMP_ARRAY.DAT
+      WARNING  Not a label. Could not find the PDS_VERSION_ID in the first line.
+
+  PASS: file:/C:/tool-tests-0.4.0/tests/VTT_EN_19-1/target/DATA/COMP_HISTORY-1.LBL
+
+  SKIP: file:/C:/tool-tests-0.4.0/tests/VTT_EN_19-1/target/DATA/COMP_IMG-1.IMG
+      WARNING  Not a label. Could not find the PDS_VERSION_ID in the first line.
+
+  PASS: file:/C:/tool-tests-0.4.0/tests/VTT_EN_19-1/target/DATA/COMP_IMG-1.LBL
+
+  PASS: file:/C:/tool-tests-0.4.0/tests/VTT_EN_19-1/target/DATA/COMP_PALETTE-1.LBL
+
+  SKIP: file:/C:/tool-tests-0.4.0/tests/VTT_EN_19-1/target/DATA/COMP_PALETTE.TAB
+      WARNING  Not a label. Could not find the PDS_VERSION_ID in the first line.
+
+  SKIP: file:/C:/tool-tests-0.4.0/tests/VTT_EN_19-1/target/DATA/COMP_SPECTRUM.DAT
+      WARNING  Not a label. Could not find the PDS_VERSION_ID in the first line.
+
+  PASS: file:/C:/tool-tests-0.4.0/tests/VTT_EN_19-1/target/DATA/COMP_SPECTRUM.LBL
+
+  PASS: file:/C:/tool-tests-0.4.0/tests/VTT_EN_19-1/target/DATA/COMP_SPREADSHEET-1.LBL
+
+  SKIP: file:/C:/tool-tests-0.4.0/tests/VTT_EN_19-1/target/DATA/HISTORY.TXT
+      WARNING  Not a label. Could not find the PDS_VERSION_ID in the first line.
+
+  SKIP: file:/C:/tool-tests-0.4.0/tests/VTT_EN_19-1/target/DATA/LEAPSECS.KER
+      WARNING  Not a label. Could not find the PDS_VERSION_ID in the first line.
+
+  SKIP: file:/C:/tool-tests-0.4.0/tests/VTT_EN_19-1/target/DATA/MYDATA.CSV
+      WARNING  Not a label. Could not find the PDS_VERSION_ID in the first line.
+
+  PASS: file:/C:/tool-tests-0.4.0/tests/VTT_EN_19-1/target/DATA/NONCOMP_ATTACHED.LBL
+
+  SKIP: file:/C:/tool-tests-0.4.0/tests/VTT_EN_19-1/target/DATA/T92025.TAB
+      WARNING  Not a label. Could not find the PDS_VERSION_ID in the first line.
+
+  SKIP: file:/C:/tool-tests-0.4.0/tests/VTT_EN_19-1/target/DATA/W1477654052.IMG
+      WARNING  Not a label. Could not find the PDS_VERSION_ID in the first line.
+
+End Of Report

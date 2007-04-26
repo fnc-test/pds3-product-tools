@@ -824,7 +824,7 @@ vtool.regexp = "*.LBL"
         <p>In a full report, the location, severity, and textual description of each detected anomaly is reported. A 'PASS', 'FAIL', or 'SKIP' keyword is displayed next to each file to indicate when a file has passed, failed, or skipped PDS validation, respectively.
         </p>      
 
-        <p>To see a full report, <a href="" target="_blank">click here</a>.
+        <p>To see a full report, <a href="reports/rpt-full.txt" target="_blank">click here</a>.
         </p>  
       </subsection>
          
@@ -832,7 +832,7 @@ vtool.regexp = "*.LBL"
         <p>In a summary report, the set of detected anomalies are summarized by reporting the number of occurrences for each type of anomaly and providing the location of one example for that anomaly.
         </p>
       
-        <p>To see a summary report, <a href="" target="_blank">click here</a>.
+        <p>To see a summary report, <a href="reports/rpt-sum.txt" target="_blank">click here</a>.
         </p>
       </subsection>
               
@@ -840,7 +840,7 @@ vtool.regexp = "*.LBL"
         <p>In a minimal report, only the number of anomalies detected are reported for each file. The anomalies are grouped by severity level.
         </p>      
 
-        <p>To see a minimal report, <a href="" target="_blank">click here</a>.
+        <p>To see a minimal report, <a href="reports/rpt-min.txt" target="_blank">click here</a>.
         </p>
       </subsection>       
     </section>
