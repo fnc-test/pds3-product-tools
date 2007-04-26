@@ -201,9 +201,9 @@ public class ElementValidator implements DictionaryTokens {
                             }
                             if (!unitsValid) {
                                 valid = false;
-                                log.log(new ToolsLogRecord(Level.SEVERE, "Units do not match those specified for " +  
-                                        attribute.getElementIdentifier() +" by dictionary. Found " + number.getUnits(),
-                                        attribute.getFilename(), attribute.getContext(), attribute.getLineNumber()));
+                                log.log(new ToolsLogRecord(Level.SEVERE, "Units (" + number.getUnits() + ") do not match " +
+                                        " those found in the dictionary.", attribute.getFilename(), attribute.getContext(), 
+                                        attribute.getLineNumber()));
                             }
                         }
                     }
