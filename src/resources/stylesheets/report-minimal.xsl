@@ -33,7 +33,7 @@
     </xsl:when>
     
     <xsl:when test="$level='WARNING'">
-      <xsl:text>&#xd;&#xa;ERROR<xsl:value-of select="$pad2" />WARN&#xd;&#xa;</xsl:text>
+      <xsl:text>&#xd;&#xa;ERROR</xsl:text><xsl:value-of select="$pad2" /><xsl:text>WARN&#xd;&#xa;</xsl:text>
     </xsl:when>
     
     <xsl:when test="$level='ERROR'">
