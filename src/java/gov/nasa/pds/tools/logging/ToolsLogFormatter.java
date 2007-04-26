@@ -37,7 +37,7 @@ public class ToolsLogFormatter extends Formatter {
         if (record.getLevel() == Level.SEVERE)
             buffer.append("  <level>ERROR</level>\n");
         else
-            buffer.append("   <level>" + record.getLevel() + "</level>\n");
+            buffer.append("  <level>" + record.getLevel() + "</level>\n");
         if (toolsRecord.getFile() != null)
             buffer.append("  <file>" + toolsRecord.getFile() + "</file>\n");
         if (toolsRecord.getLine() != -1)
