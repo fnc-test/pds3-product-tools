@@ -19,8 +19,8 @@
   </xsl:for-each>
   
   <xsl:text>&#xd;&#xa;Summary:&#xd;&#xa;</xsl:text>
-  <xsl:value-of select="$pad2" /><xsl:value-of select="count(log/record [level='NOTIFICATION' and message!='SKIP' and message!='UNKNOWN'])" /> of <xsl:value-of select="count(log/record [level='NOTIFICATION' and message!='SKIP'])" /> validated, <xsl:value-of select="count(log/record [level='NOTIFICATION' and message='SKIP'])" /><xsl:text> skipped&#xd;&#xa;</xsl:text>
-  <xsl:value-of select="$pad2" /><xsl:value-of select="count(log/record [level='NOTIFICATION' and message='PASS'])" /> of <xsl:value-of select="count(log/record [level='NOTIFICATION' and (message='PASS' or message='FAIL')])" /> passed<xsl:text>&#xd;&#xa;&#xd;&#xa;</xsl:text>
+  <xsl:value-of select="$pad2" /><xsl:value-of select="count(log/record [level='NOTIFICATION' and message!='SKIP' and message!='UNKNOWN'])" /><xsl:text> of </xsl:text><xsl:value-of select="count(log/record [level='NOTIFICATION' and message!='SKIP'])" /><xsl:text> validated, </xsl:text><xsl:value-of select="count(log/record [level='NOTIFICATION' and message='SKIP'])" /><xsl:text> skipped&#xd;&#xa;</xsl:text>
+  <xsl:value-of select="$pad2" /><xsl:value-of select="count(log/record [level='NOTIFICATION' and message='PASS'])" /><xsl:text> of </xsl:text><xsl:value-of select="count(log/record [level='NOTIFICATION' and (message='PASS' or message='FAIL')])" /><xsl:text> passed&#xd;&#xa;&#xd;&#xa;</xsl:text>
 
   <xsl:if test="$level='ERROR' or $level='WARNING' or $level='INFO'">
     <xsl:text>Errors Found:&#xd;&#xa;&#xd;&#xa;</xsl:text>
@@ -33,7 +33,7 @@
         <xsl:value-of select="$pad2" /><xsl:text>ERROR</xsl:text><xsl:value-of select="$pad2" /><xsl:value-of select="$errorMessage" /><xsl:text>&#xd;&#xa;</xsl:text>
       
         <xsl:if test="$record[file]">
-          <xsl:value-of select="$pad2" />Example: <xsl:if test="$record/line">line <xsl:value-of select="$record/line" /> of </xsl:if><xsl:value-of select="$record/file" /><xsl:text>&#xd;&#xa;</xsl:text>
+          <xsl:value-of select="$pad2" /><xsl:text>Example: </xsl:text><xsl:if test="$record/line"><xsl:text>line </xsl:text><xsl:value-of select="$record/line" /><xsl:text> of </xsl:text></xsl:if><xsl:value-of select="$record/file" /><xsl:text>&#xd;&#xa;</xsl:text>
         </xsl:if>
       
         <xsl:value-of select="$pad2" /><xsl:value-of select="count(//record[message=$errorMessage and level='ERROR'])" /><xsl:text> occurrence(s)&#xd;&#xa;&#xd;&#xa;</xsl:text>
@@ -52,7 +52,7 @@
         <xsl:value-of select="$pad2" /><xsl:text>WARNING</xsl:text><xsl:value-of select="$pad2" /><xsl:value-of select="$warningMessage" /><xsl:text>&#xd;&#xa;</xsl:text>
       
         <xsl:if test="$record[file]">
-          <xsl:value-of select="$pad2" />Example: <xsl:if test="$record/line">line <xsl:value-of select="$record/line" /> of </xsl:if><xsl:value-of select="$record/file" /><xsl:text>&#xd;&#xa;</xsl:text>
+          <xsl:value-of select="$pad2" /><xsl:text>Example: </xsl:text><xsl:if test="$record/line"><xsl:text>line </xsl:text><xsl:value-of select="$record/line" /><xsl:text> of </xsl:text></xsl:if><xsl:value-of select="$record/file" /><xsl:text>&#xd;&#xa;</xsl:text>
         </xsl:if>
       
         <xsl:value-of select="$pad2" /><xsl:value-of select="count(//record[message=$warningMessage and level='WARNING'])" /><xsl:text> occurrence(s)&#xd;&#xa;&#xd;&#xa;</xsl:text>
@@ -71,7 +71,7 @@
         <xsl:value-of select="$pad2" /><xsl:text>INFO</xsl:text><xsl:value-of select="$pad2" /><xsl:value-of select="$infoMessage" /><xsl:text>&#xd;&#xa;</xsl:text>
       
         <xsl:if test="$record[file]">
-          <xsl:value-of select="$pad2" />Example: <xsl:if test="$record/line">line <xsl:value-of select="$record/line" /> of </xsl:if><xsl:value-of select="$record/file" /><xsl:text>&#xd;&#xa;</xsl:text>
+          <xsl:value-of select="$pad2" /><xsl:text>Example: </xsl:text><xsl:if test="$record/line"><xsl:text>line </xsl:text><xsl:value-of select="$record/line" /><xsl:text> of </xsl:text></xsl:if><xsl:value-of select="$record/file" /><xsl:text>&#xd;&#xa;</xsl:text>
         </xsl:if>
       
         <xsl:value-of select="$pad2" /><xsl:value-of select="count(//record[message=$infoMessage and level='INFO'])" /><xsl:text> occurrence(s)&#xd;&#xa;&#xd;&#xa;</xsl:text>
