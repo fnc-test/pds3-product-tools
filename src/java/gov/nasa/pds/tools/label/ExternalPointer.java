@@ -15,10 +15,14 @@
 
 package gov.nasa.pds.tools.label;
 
+import gov.nasa.pds.tools.logging.ToolsLogRecord;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * This class represents a pointer statement that references an external file.
@@ -27,6 +31,7 @@ import java.util.List;
  * 
  */
 public class ExternalPointer extends PointerStatement {
+    private static Logger log = Logger.getLogger(ExternalPointer.class.getName());
     
     /**
      * Constructs a pointer statment that references an external file.
@@ -71,6 +76,8 @@ public class ExternalPointer extends PointerStatement {
                 fileURL = new URL(url + filename.toUpperCase());
                 try {
                     fileURL.openStream();
+                    log.log(new ToolsLogRecord(Level.WARNING, "In order to resolve the pointer the filename " +
+                            "had to be forced to upper case.", filename, context, lineNumber));
                     resolvedURL = fileURL;
                 } catch (IOException ioEx) {
                     //Ignore this must not be the path to the pointed file
@@ -82,6 +89,8 @@ public class ExternalPointer extends PointerStatement {
                 fileURL = new URL(url + filename.toLowerCase());
                 try {
                     fileURL.openStream();
+                    log.log(new ToolsLogRecord(Level.WARNING, "In order to resolve the pointer the filename " +
+                            "had to be forced lower case.", filename, context, lineNumber));
                     resolvedURL = fileURL;
                 } catch (IOException ioEx) {
                     //Ignore this must not be the path to the pointed file
