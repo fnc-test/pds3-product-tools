@@ -314,7 +314,7 @@ public class Dictionary implements Status {
     }
     
     /**
-     * Retrieves map of valid units. All units have been upper cased for leniency
+     * Retrieves map of valid units.
      * @return map of UNIT_ID to list of valid units
      */
     public Map getUnits() {
