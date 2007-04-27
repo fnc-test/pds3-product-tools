@@ -68,7 +68,7 @@ public interface LabelParser {
     
     /**
      * Parses the given partial label.
-     * @para context
+     * @param context
      * @param file
      * @return {@link Label} representation of the file
      * @throws ParseException
