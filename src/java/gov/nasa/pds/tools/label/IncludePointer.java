@@ -18,6 +18,7 @@ package gov.nasa.pds.tools.label;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import gov.nasa.pds.tools.label.parser.LabelParser;
@@ -61,6 +62,8 @@ public class IncludePointer extends ExternalPointer implements PointerType, Stat
         if (!loaded) {
             loaded = true;
             LabelParser parser = LabelParserFactory.getInstance().newLabelParser();
+            for (Iterator i = includePaths.iterator(); i.hasNext();)
+                parser.addIncludePath((URL) i.next());
             String labelContext = context;
             if (labelContext == null)
                 labelContext = filename;
