@@ -38,7 +38,7 @@ import java.util.Iterator;
 /**
  * This class builds definitions from ObjectStatements. The format of the object 
  * statement should be in compliance standard PDS dictionary. These definitions 
- * can then be added to a {@link Dictionary}.
+ * can then be added to a {@link gov.nasa.pds.tools.dict.Dictionary}.
  * 
  * @author pramirez
  * @version $Revision$
@@ -50,7 +50,7 @@ public class DefinitionFactory implements ODLTokenTypes, DictionaryTokens {
      * This method will determine the type of definition and created it. If it can not 
      * determine the type of definition that should be generated an error will be thrown.
      * @param object from which the defintion will be created
-     * @return a {@link Definition} that represents an entry in a PDS data dictionary
+     * @return a {@link gov.nasa.pds.tools.dict.Definition} that represents an entry in a PDS data dictionary
      * @throws UnknownDefinitionException thrown when the type of definition can not be recognized.
      */
     public static Definition createDefinition(ObjectStatement object) throws UnknownDefinitionException {
