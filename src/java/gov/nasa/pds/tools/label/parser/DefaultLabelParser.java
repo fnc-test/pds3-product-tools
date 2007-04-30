@@ -127,8 +127,7 @@ public class DefaultLabelParser implements LabelParser, Status {
         
         if (Boolean.valueOf(properties.getProperty("parser.pointers", "true")).booleanValue()) {
             URL base = new URL(url.toString().substring(0, url.toString().lastIndexOf("/")));
-            if (includePaths.contains(base))
-                includePaths.add(0, base);
+            addIncludePath(base);
             parser.setIncludePaths(includePaths);
         } else {
             log.log(new ToolsLogRecord(Level.INFO, "Pointers disabled. Pointers will not be followed.", url.toString()));
@@ -312,8 +311,7 @@ public class DefaultLabelParser implements LabelParser, Status {
         
         if (Boolean.valueOf(properties.getProperty("parser.pointers", "true")).booleanValue()) {
             URL base = new URL(url.toString().substring(0, url.toString().lastIndexOf("/")));
-            if (!includePaths.contains(base))
-               includePaths.add(0, base);
+            addIncludePath(base);
             parser.setIncludePaths(includePaths);
         } else {
             log.log(new ToolsLogRecord(Level.INFO, "Pointers disabled. Pointers will not be followed.", url.toString(), context));
@@ -425,6 +423,7 @@ public class DefaultLabelParser implements LabelParser, Status {
      * @see gov.nasa.pds.tools.label.parser.LabelParser#addIncludePath(java.net.URL)
      */
 	public void addIncludePath(URL includePath) {
+        System.out.println("ADDING: " + includePath);
         if (!includePaths.contains(includePath))
 		   includePaths.add(includePath);
 	}
