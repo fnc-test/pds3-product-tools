@@ -28,20 +28,24 @@ public class NonDecimalChecker extends LengthChecker implements NumericTypeCheck
     public Object cast(String value) throws InvalidTypeException {
         Long longValue = null;
         
-        //Check to see if there is a base associated with the value
-        if (value.indexOf("#") != -1) {
-            int radix = Integer.parseInt(value.substring(0, value.indexOf("#")));
-            String numericValue = value.substring(value.indexOf("#")+1, value.length()-1);
-            String sign = null;
-            if (numericValue.startsWith("+") || numericValue.startsWith("-")) {
-                sign = numericValue.substring(0,1);
-                numericValue = numericValue.substring(1);
-            }
-            longValue = Long.valueOf(numericValue, radix);
-            if ("-".equals(sign))
-                longValue = new Long((long)-1.0 * longValue.longValue());
-        } else
-            longValue = Long.valueOf(value);
+        try {
+            //Check to see if there is a base associated with the value
+            if (value.indexOf("#") != -1) {
+                int radix = Integer.parseInt(value.substring(0, value.indexOf("#")));
+                String numericValue = value.substring(value.indexOf("#")+1, value.length()-1);
+                String sign = null;
+                if (numericValue.startsWith("+") || numericValue.startsWith("-")) {
+                    sign = numericValue.substring(0,1);
+                    numericValue = numericValue.substring(1);
+                }
+                longValue = Long.valueOf(numericValue, radix);
+                if ("-".equals(sign))
+                    longValue = new Long((long)-1.0 * longValue.longValue());
+            } else
+                longValue = Long.valueOf(value);
+        } catch (NumberFormatException nfe) {
+            throw new InvalidTypeException("Could not create a non decimal value from " + value);
+        }
         return longValue;
     }
 
