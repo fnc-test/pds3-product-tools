@@ -26,15 +26,23 @@ public class NonDecimalChecker extends LengthChecker implements NumericTypeCheck
      * @see gov.nasa.jpl.pds.tools.dict.type.TypeChecker#cast(java.lang.String)
      */
     public Object cast(String value) throws InvalidTypeException {
-        // FIXME: Handle based integers
-        return value;
+        Long longValue = null;
+        
+        //Check to see if there is a base associated with the value
+        if (value.indexOf("#") != -1) {
+            int radix = Integer.parseInt(value.substring(0, value.indexOf("#")));
+            longValue = Long.valueOf(value.substring(value.indexOf("#")+1, value.length()-1), radix);
+        } else
+            longValue = Long.valueOf(value);
+        
+        return longValue;
     }
 
     /* (non-Javadoc)
      * @see gov.nasa.pds.tools.dict.type.NumericTypeChecker#checkMinValue(java.lang.Number, java.lang.Number)
      */
     public void checkMinValue(Number value, Number min) throws OutOfRangeException {
-        if (value.intValue() < min.intValue())
+        if (value.longValue() < min.longValue())
             throw new OutOfRangeException(value.toString() + " is less than the acceptable minimum of " + min.toString());
     }
 
@@ -42,7 +50,7 @@ public class NonDecimalChecker extends LengthChecker implements NumericTypeCheck
      * @see gov.nasa.pds.tools.dict.type.NumericTypeChecker#checkMaxValue(java.lang.Number, java.lang.Number)
      */
     public void checkMaxValue(Number value, Number max) throws OutOfRangeException {
-        if (value.intValue() > max.intValue())
+        if (value.longValue() > max.longValue())
             throw new OutOfRangeException(value.toString() + " exceeds acceptable maximum of " + max.toString());
     }
 
