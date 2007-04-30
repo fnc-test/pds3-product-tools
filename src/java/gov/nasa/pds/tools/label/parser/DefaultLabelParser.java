@@ -423,7 +423,6 @@ public class DefaultLabelParser implements LabelParser, Status {
      * @see gov.nasa.pds.tools.label.parser.LabelParser#addIncludePath(java.net.URL)
      */
 	public void addIncludePath(URL includePath) {
-        System.out.println("ADDING: " + includePath);
         if (!includePaths.contains(includePath))
 		   includePaths.add(includePath);
 	}
