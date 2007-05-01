@@ -29,11 +29,10 @@
       <xsl:variable name="errorMessage" select="message" />
     
       <xsl:if test="not(preceding-sibling::record[message=$errorMessage])">
-        <xsl:variable name="record" select="//record[message=$errorMessage]" />
         <xsl:value-of select="$pad2" /><xsl:text>ERROR</xsl:text><xsl:value-of select="$pad2" /><xsl:value-of select="$errorMessage" /><xsl:text>&#xd;&#xa;</xsl:text>
       
-        <xsl:if test="$record/file and $record/line">
-          <xsl:value-of select="$pad2" /><xsl:text>Example: line </xsl:text><xsl:value-of select="$record/line" /><xsl:text> of </xsl:text><xsl:value-of select="$record/file" /><xsl:text>&#xd;&#xa;</xsl:text>
+        <xsl:if test="file and line">
+          <xsl:value-of select="$pad2" /><xsl:text>Example: line </xsl:text><xsl:value-of select="line" /><xsl:text> of </xsl:text><xsl:value-of select="file" /><xsl:text>&#xd;&#xa;</xsl:text>
         </xsl:if>
       
         <xsl:value-of select="$pad2" /><xsl:value-of select="count(//record[message=$errorMessage and level='ERROR'])" /><xsl:text> occurrence(s)&#xd;&#xa;&#xd;&#xa;</xsl:text>
@@ -48,11 +47,10 @@
       <xsl:variable name="warningMessage" select="message" />
     
       <xsl:if test="not(preceding-sibling::record[message=$warningMessage])">
-        <xsl:variable name="record" select="//record[message=$warningMessage]" />
         <xsl:value-of select="$pad2" /><xsl:text>WARNING</xsl:text><xsl:value-of select="$pad2" /><xsl:value-of select="$warningMessage" /><xsl:text>&#xd;&#xa;</xsl:text>
       
-        <xsl:if test="$record[file]">
-          <xsl:value-of select="$pad2" /><xsl:text>Example: line </xsl:text><xsl:value-of select="$record/line" /><xsl:text> of </xsl:text><xsl:value-of select="$record/file" /><xsl:text>&#xd;&#xa;</xsl:text>
+        <xsl:if test="file and line">
+          <xsl:value-of select="$pad2" /><xsl:text>Example: line </xsl:text><xsl:value-of select="line" /><xsl:text> of </xsl:text><xsl:value-of select="file" /><xsl:text>&#xd;&#xa;</xsl:text>
         </xsl:if>
       
         <xsl:value-of select="$pad2" /><xsl:value-of select="count(//record[message=$warningMessage and level='WARNING'])" /><xsl:text> occurrence(s)&#xd;&#xa;&#xd;&#xa;</xsl:text>
@@ -67,11 +65,10 @@
       <xsl:variable name="infoMessage" select="message" />
     
       <xsl:if test="not(preceding-sibling::record[message=$infoMessage])">
-        <xsl:variable name="record" select="//record[message=$infoMessage]" />
         <xsl:value-of select="$pad2" /><xsl:text>INFO</xsl:text><xsl:value-of select="$pad2" /><xsl:value-of select="$infoMessage" /><xsl:text>&#xd;&#xa;</xsl:text>
       
-        <xsl:if test="$record[file]">
-          <xsl:value-of select="$pad2" /><xsl:text>Example: line </xsl:text><xsl:value-of select="$record/line" /><xsl:text> of </xsl:text><xsl:value-of select="$record/file" /><xsl:text>&#xd;&#xa;</xsl:text>
+        <xsl:if test="file and line">
+          <xsl:value-of select="$pad2" /><xsl:text>Example: line </xsl:text><xsl:value-of select="line" /><xsl:text> of </xsl:text><xsl:value-of select="file" /><xsl:text>&#xd;&#xa;</xsl:text>
         </xsl:if>
       
         <xsl:value-of select="$pad2" /><xsl:value-of select="count(//record[message=$infoMessage and level='INFO'])" /><xsl:text> occurrence(s)&#xd;&#xa;&#xd;&#xa;</xsl:text>
