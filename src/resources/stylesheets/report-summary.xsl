@@ -32,8 +32,8 @@
         <xsl:variable name="record" select="//record[message=$errorMessage]" />
         <xsl:value-of select="$pad2" /><xsl:text>ERROR</xsl:text><xsl:value-of select="$pad2" /><xsl:value-of select="$errorMessage" /><xsl:text>&#xd;&#xa;</xsl:text>
       
-        <xsl:if test="$record[file]">
-          <xsl:value-of select="$pad2" /><xsl:text>Example: </xsl:text><xsl:if test="$record[line]"><xsl:text>line </xsl:text><xsl:value-of select="$record/line" /><xsl:text> of </xsl:text></xsl:if><xsl:value-of select="$record/file" /><xsl:text>&#xd;&#xa;</xsl:text>
+        <xsl:if test="$record/file and $record/line">
+          <xsl:value-of select="$pad2" /><xsl:text>Example: line </xsl:text><xsl:value-of select="$record/line" /><xsl:text> of </xsl:text><xsl:value-of select="$record/file" /><xsl:text>&#xd;&#xa;</xsl:text>
         </xsl:if>
       
         <xsl:value-of select="$pad2" /><xsl:value-of select="count(//record[message=$errorMessage and level='ERROR'])" /><xsl:text> occurrence(s)&#xd;&#xa;&#xd;&#xa;</xsl:text>
@@ -52,7 +52,7 @@
         <xsl:value-of select="$pad2" /><xsl:text>WARNING</xsl:text><xsl:value-of select="$pad2" /><xsl:value-of select="$warningMessage" /><xsl:text>&#xd;&#xa;</xsl:text>
       
         <xsl:if test="$record[file]">
-          <xsl:value-of select="$pad2" /><xsl:text>Example: </xsl:text><xsl:if test="$record[line]"><xsl:text>line </xsl:text><xsl:value-of select="$record/line" /><xsl:text> of </xsl:text></xsl:if><xsl:value-of select="$record/file" /><xsl:text>&#xd;&#xa;</xsl:text>
+          <xsl:value-of select="$pad2" /><xsl:text>Example: line </xsl:text><xsl:value-of select="$record/line" /><xsl:text> of </xsl:text><xsl:value-of select="$record/file" /><xsl:text>&#xd;&#xa;</xsl:text>
         </xsl:if>
       
         <xsl:value-of select="$pad2" /><xsl:value-of select="count(//record[message=$warningMessage and level='WARNING'])" /><xsl:text> occurrence(s)&#xd;&#xa;&#xd;&#xa;</xsl:text>
@@ -71,7 +71,7 @@
         <xsl:value-of select="$pad2" /><xsl:text>INFO</xsl:text><xsl:value-of select="$pad2" /><xsl:value-of select="$infoMessage" /><xsl:text>&#xd;&#xa;</xsl:text>
       
         <xsl:if test="$record[file]">
-          <xsl:value-of select="$pad2" /><xsl:text>Example: </xsl:text><xsl:if test="$record[line]"><xsl:text>line </xsl:text><xsl:value-of select="$record/line" /><xsl:text> of </xsl:text></xsl:if><xsl:value-of select="$record/file" /><xsl:text>&#xd;&#xa;</xsl:text>
+          <xsl:value-of select="$pad2" /><xsl:text>Example: line </xsl:text><xsl:value-of select="$record/line" /><xsl:text> of </xsl:text><xsl:value-of select="$record/file" /><xsl:text>&#xd;&#xa;</xsl:text>
         </xsl:if>
       
         <xsl:value-of select="$pad2" /><xsl:value-of select="count(//record[message=$infoMessage and level='INFO'])" /><xsl:text> occurrence(s)&#xd;&#xa;&#xd;&#xa;</xsl:text>
