@@ -23,7 +23,7 @@ $Id$
     <author email="Sean.Hardman@jpl.nasa.gov">Sean Hardman</author>
   </properties>
   <body>
-    <release version="0.5.0" date="2007-04-30" description="Official release of phase I"> 
+    <release version="1.0.0" date="2007-05-02" description="Official release of phase I"> 
       <action dev="mcayanan" type="update">
         Implemented new log file behavior to allow logs to be written to memory. This allows generation of reports without the need of explicitly specifying the log file flag option. 
       </action>

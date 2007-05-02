@@ -92,7 +92,7 @@ import org.apache.commons.io.FilenameUtils;
  */
 public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus, 
                               Status, StyleSheet {
-	private final String VERSION_ID = "0.5.0";
+	private final String VERSION_ID = "1.0.0";
 	private final String FILE_REP = "*";
 	private final String FRAG_EXT = "FMT";
 	
