@@ -506,7 +506,7 @@ LABEL2.LBL -d pdsdd.full -t LABEL3.LBL $HOME/DIR
 
         <p><b><i>Writing a Human-Readble Report to Standard Out</i></b></p>
 
-        <p>Do not specify the report file flag to write the human-readable report to file.
+        <p>Do not specify the report file flag to write the human-readable report to standard out.
         </p>
         
         <p>The following command demonstrates the validation of a single data product label against the PSDD, where the human-readable, full report is written to standard out:
