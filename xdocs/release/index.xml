@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+Copyright 2007, by the California Institute of Technology.
+ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+Any commercial use must be negotiated with the Office of Technology Transfer
+at the California Institute of Technology.
+
+This software is subject to U. S. export control laws and regulations
+(22 C.F.R. 120-130 and 15 C.F.R. 730-774). To the extent that the software
+is subject to U.S. export control laws and regulations, the recipient has
+the responsibility to obtain export licenses or other export authority as
+may be required before exporting such information to foreign countries or
+providing access to foreign nationals.
+
+$Id$
+-->
+
+<document>
+  <properties>
+    <title>Release Notes</title>
+    <author email="Sean.Hardman@jpl.nasa.gov">Sean Hardman</author>
+  </properties>
+
+  <body>
+    <section name="Release Notes">
+      <p>The purpose of this section is to provide a description of a Validation Tool release including any impact that the new or modified capabilities will have on the Discipline Nodes or the PDS user community. A somewhat itemized list of changes for each release can be found on the <a href="../changes-report.html">Release Changes</a> page.
+      </p>
+    </section>
+
+    <section name="Release 1.0.0">
+      <p>This release of the Validation Tool represents the operational release for the Phase I targeted capabilities. The tool currently supports data product label validation including syntactic validation against the grammar and semantic validation against the PDS data dictionary.
+      </p>
+
+      <p>The major changes for this release are as follows:
+      </p>
+
+      <ul>
+        <li>Sub-objects supported in explicit FILE objects<br/>
+            Although the tool didn't require any changes, SCR 3-1089 was approved and implemented in release 1r66 of the PSDD, enabling this capability. 
+        </li>
+        <li>Report Fine Tuning<br/>
+            The majority of changes for this release involved fine tuning the reporting capability. The parameters related to reporting in this release have been modified to support these changes. Please review the <a href="../user/index.html#Command-Line Options">Command-Line Options</a> section of the <i>Use and Operation</i> guide for the details.
+        </li>
+        <li>Executable Scripts and Exit Status Values<br/>
+            Batch and shell scripts have been provided with this release allowing for simpler execution of the tool. Exit status values are now returned by the tool enabling execution from a script. Please review the <a href="../developer/index.html#Exit Status Values">Exit Status Values</a> section of the <i>Development</i> guide for the details.
+        </li>
+      </ul>
+
+      <p>The liens for this release are as follows:
+      </p>
+
+      <ul>
+        <li>Checking for Label Padding<br/>
+            Validation of proper label padding has not been implemented yet.
+        </li>
+        <li>Summary Report Message Ordering<br/>
+            The summary report still lists the messages in alphabetical order instead of the preferred chronological order.
+        </li>
+        <li>Date/Time Interpretation<br/>
+            When running the tool under Java version 1.5, date/time values are periodically interpreted incorrectly generating an error message in the resulting report. This appears to be a bug in Java version 1.5, but we will research it further to determine a workaround or fix for the next release.
+        </li>
+        <li>Developer Guide<br/>
+            Although a minimal <i>Development</i> guide is available in this release, it still needs content detailing the entry points for the API.
+        </li>
+      </ul>
+
+    </section>
+
+  </body>
+</document>
+
