@@ -45,13 +45,13 @@ $Id$
       </subsection>
       
       <subsection name="Data Dictionary Requirement">
-        <p>With this release of VTool, the requirement of using the provided PDS data dictionary is no longer necessary. Through the efforts of many, the anomalies found in past versions of the data dictionary have been corrected in release <i>1r64</i>. So, this release or later of the data dictionary is required for VTool. The latest version of the PDS data dictionary can be retrieved from the <a href="http://pds.nasa.gov/tools/data_dictionary_lookup.cfm" target="_blank">PDS Data Dictionary Lookup</a> web page.
+        <p>With this release of VTool, the requirement of using the provided PDS data dictionary is no longer necessary. Through the efforts of many, the anomalies found in past versions of the data dictionary have been corrected in release <i>1r64</i>. So, this release or later of the data dictionary is required for VTool. Release <i>1r66</i> of the data dictionary supports the validation of explicit FILE objects. The latest version of the PDS data dictionary can be retrieved from the <a href="http://pds.nasa.gov/tools/data_dictionary_lookup.cfm" target="_blank">PDS Data Dictionary Lookup</a> web page.
         </p>
       </subsection>
     </section>
 
     <section name="Unpacking the Tools Package">
-      <p>Download the <i>product-tools</i> package from the Engineering Node web site as specified in the Release Description Document (RDD). The binary distribution is available in identical zip or tar/gzip packages. Unpack the selected file with one of the following commands (where X.X.X is the current version):
+      <p>Download the <i>product-tools</i> package from the <a href="http://pds.nasa.gov/tools/software_download.cfm" target="_blank">PDS Software Download</a> web page. The binary and source distributions are available in identical zip or tar/gzip packages. Unpack the selected file with one of the following commands (where X.X.X is the current version):
       </p>
 
       <source>
@@ -72,7 +72,7 @@ or
           </p>
         </li>
         <li><b>bin/</b>
-            <p>This directory contains the executable jar file containing the Validation Tool software.
+            <p>This directory contains the executable jar file containing the Validation Tool software along with a batch and shell script for executing the tool.
           </p>
         </li>
         <li><b>docs/</b>
@@ -87,13 +87,13 @@ or
     </section>
     
     <section name="Modifying Shell Scripts">
-      <p>A batch file, <i>VTool.bat</i>, and shell script, <i>VTool</i>, is included in the product-tools package to provide an easy way of running the Validation Tool on Windows and Unix-based environments, respectively.
+      <p>A batch file, <i>VTool.bat</i>, and shell script, <i>VTool</i>, are included in the <i>product-tools</i> package to provide an easy way of running the Validation Tool on Windows and Unix-based environments, respectively.
       </p>
       
-      <p>In both the batch file and shell script, there is a variable called <i>jarpath</i> that needs to be modified before the scripts can be executed. The variable needs to be set to the correct location of the executable product tools jar file.
+      <p>In both the batch file and shell script, there is a variable named <i>jarpath</i> that needs to be modified before the scripts can be executed. The variable needs to be set to the correct location of the executable <i>product-tools</i> jar file.
       </p>
       
-      <p>The following demonstrates the jarpath being set to the product-tools jar file location. The example contains <i>X.X.X</i>, which represents the current version of the <i>product-tools</i> package.
+      <p>The following demonstrates the <i>jarpath</i> being set to the product-tools jar file location. The example contains <i>X.X.X</i>, which should be replaced with the current version of the <i>product-tools</i> package.
       </p>
       
       <p>Note: The example has been broken into multiple lines for readability.
