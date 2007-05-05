@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-Copyright 2007, by the California Institute of 
-Technology. ALL RIGHTS RESERVED. United States Government 
-Sponsorship acknowledged. Any commercial use must be negotiated with 
-the Office of Technology Transfer at the California Institute of 
-Technology.
+Copyright 2007, by the California Institute of Technology.
+ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+Any commercial use must be negotiated with the Office of Technology Transfer
+at the California Institute of Technology.
 
-This software may be subject to U.S. export control laws. By 
-accepting this software, the user agrees to comply with all 
-applicable U.S. export laws and regulations. User has the 
-responsibility to obtain export licenses, or other export authority 
-as may be required before exporting such information to foreign 
-countries or providing access to foreign persons.
+This software is subject to U. S. export control laws and regulations
+(22 C.F.R. 120-130 and 15 C.F.R. 730-774). To the extent that the software
+is subject to U.S. export control laws and regulations, the recipient has
+the responsibility to obtain export licenses or other export authority as
+may be required before exporting such information to foreign countries or
+providing access to foreign nationals.
 
 $Id$
 -->
@@ -24,6 +23,12 @@ $Id$
       <item name="Installation" href="install/index.html"/>
       <item name="Use and Operation" href="user/index.html"/>
       <item name="Development" href="developer/index.html"/>
+      <item name="Appendix A - Using the Windows Control Panel" href="user/index-win.html"/>
+      <item name="Appendix B - Report Examples" href="user/reports/index.html">
+        <item name="Full Report" href="user/reports/index-full.html"/>
+        <item name="Summary Report" href="user/reports/index-sum.html"/>
+        <item name="Minimal Report" href="user/reports/index-min.html"/>
+      </item>
     </menu>
   </body>
 </project>
