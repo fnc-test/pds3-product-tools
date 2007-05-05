@@ -66,7 +66,7 @@ $Id: index.xml 1157 2006-06-16 19:50:08Z shardman $
         
         <source>
 [node:~] setenv PATH ${PATH}:\
-$HOME/product-tools-X.X.X/scripts
+$HOME/product-tools-X.X.X/bin
         </source>        
         
         <p>The tool can now be executed via the shell script as demonstrated in the following example:
@@ -154,7 +154,7 @@ $HOME/product-tools-X.X.X/bin/product-tools-X.X.X-app.jar \
         
         <source>
 C:\&gt; set PATH = %PATH%;\
-C:\product-tools-X.X.X\scripts
+C:\product-tools-X.X.X\bin
         </source>       
         
         <p>The tool can now be executed via the batch file as demonstrated in the following example:
@@ -202,7 +202,7 @@ C:\&gt; echo %CLASSPATH%
 C:\&gt; java gov.nasa.pds.tools.VTool &lt;command-line arguments&gt;
         </source>
 
-        <p>Another way of setting the CLASSPATH is through the "Settings/Control Panel/System" method. Documentation on this method can be found <a href="documents/Windows_GUI_Setup.doc">here</a>.
+        <p>Another way of setting the CLASSPATH is via the <a href="index-win.html">Windows Control Panel</a>. If viewing this document in PDF form, see the appendix for details on this method.
         </p>
 
         <p><b><i>Specify the CLASSPATH on the Command-Line</i></b></p>
@@ -276,7 +276,7 @@ c:\product-tools-X.X.X\bin\product-tools-X.X.X-app.jar \
           <li>Changing Tool Behaviors With The Configuration File</li>
         </ul>
 
-        <p>Note: The command-line examples below are executing VTool via the batch/shell script. Alternatively, the <i>java -jar</i> or <i>java gov.nasa.pds.tools.VTool</i> command can be used to execute the tool as mentioned in the <a href="#Tool Setup">Tool Setup</a> section. Make sure the user environment is configured properly prior to the preferred method of calling the tool.
+        <p>Note: The command-line examples below are executing VTool via the batch/shell script. Alternatively, the <i>java -jar</i> or <i>java gov.nasa.pds.tools.VTool</i> command can be used to execute the tool as mentioned in the <a href="#Tool Setup">Tool Setup</a> section. Make sure the user environment is configured properly prior to calling the tool with your preferred method.
         </p>
         
         <p><b><i>Validating Against a Single Dictionary</i></b></p>
@@ -485,7 +485,7 @@ LABEL2.LBL -d pdsdd.full -t LABEL3.LBL $HOME/DIR
         
         <ul>
           <li>Writing a Human-Readable Report to File</li>
-          <li>Writing a Human-Readble Report to Standard Out</li>
+          <li>Writing a Human-Readable Report to Standard Out</li>
           <li>Validating Files with a Specific File Pattern</li>
           <li>Writing the Machine-Readable Log to Standard Out with No Human-Readable Report</li>
           <li>Writing the Machine-Readable Log to File, Writing the Human-Readable Report to Standard Out</li>
@@ -504,7 +504,7 @@ LABEL2.LBL -d pdsdd.full -t LABEL3.LBL $HOME/DIR
 -d pdsdd.full -r report.txt
         </source>
 
-        <p><b><i>Writing a Human-Readble Report to Standard Out</i></b></p>
+        <p><b><i>Writing a Human-Readable Report to Standard Out</i></b></p>
 
         <p>Do not specify the report file flag to write the human-readable report to standard out.
         </p>
@@ -814,34 +814,25 @@ vtool.regexp = "*.LBL"
     </section>
     
     <section name="Report Formats">
-      <p>This section describes the contents of the validation report formats. The links below are meant to demonstrate how the validation results of the same run can be viewed in each format.
+      <p>This section describes the contents of the validation report formats. The links below detail the validation results of the same run for each format. If viewing this document in PDF form, see the appendix for the actual examples.
       </p>
       
       <p>The tool can represent a validation report in three different formats: a full, a summary , and a minimal format. The report style flag is used to change the formatting. When this flag is not specified on the command-line, the default is to generate a full report.
       </p>
         
-      <subsection name="Full Reports">
-        <p>In a full report, the location, severity, and textual description of each detected anomaly is reported. A 'PASS', 'FAIL', or 'SKIP' keyword is displayed next to each file to indicate when a file has passed, failed, or skipped PDS validation, respectively.
+      <subsection name="Full Report">
+        <p>In a <a href="reports/index-full.html">full</a> report, the location, severity, and textual description of each detected anomaly is reported. A 'PASS', 'FAIL', or 'SKIP' keyword is displayed next to each file to indicate when a file has passed, failed, or skipped PDS validation, respectively.
         </p>      
-
-        <p>To see a full report, <a href="reports/rpt-full.txt" target="_blank">click here</a>.
-        </p>  
       </subsection>
          
-      <subsection name="Summary Reports">
-        <p>In a summary report, the set of detected anomalies are summarized by reporting the number of occurrences for each type of anomaly and providing the location of one example for that anomaly.
-        </p>
-      
-        <p>To see a summary report, <a href="reports/rpt-sum.txt" target="_blank">click here</a>.
+      <subsection name="Summary Report">
+        <p>In a <a href="reports/index-sum.html">summary</a> report, the set of detected anomalies are summarized by reporting the number of occurrences for each type of anomaly and providing the location of one example for that anomaly.
         </p>
       </subsection>
               
-      <subsection name="Minimal Reports">
-        <p>In a minimal report, only the number of anomalies detected are reported for each file. The anomalies are grouped by severity level.
+      <subsection name="Minimal Report">
+        <p>In a <a href="reports/index-min.html">minimal</a> report, only the number of anomalies detected are reported for each file. The anomalies are grouped by severity level.
         </p>      
-
-        <p>To see a minimal report, <a href="reports/rpt-min.txt" target="_blank">click here</a>.
-        </p>
       </subsection>       
     </section>
     
