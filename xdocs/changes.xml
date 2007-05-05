@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-Copyright 2006-2007, by the California Institute of 
-Technology. ALL RIGHTS RESERVED. United States Government 
-Sponsorship acknowledged. Any commercial use must be negotiated with 
-the Office of Technology Transfer at the California Institute of 
-Technology.
+Copyright 2006-2007, by the California Institute of Technology.
+ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+Any commercial use must be negotiated with the Office of Technology Transfer
+at the California Institute of Technology.
 
-This software may be subject to U.S. export control laws. By 
-accepting this software, the user agrees to comply with all 
-applicable U.S. export laws and regulations. User has the 
-responsibility to obtain export licenses, or other export authority 
-as may be required before exporting such information to foreign 
-countries or providing access to foreign persons.
+This software is subject to U. S. export control laws and regulations
+(22 C.F.R. 120-130 and 15 C.F.R. 730-774). To the extent that the software
+is subject to U.S. export control laws and regulations, the recipient has
+the responsibility to obtain export licenses or other export authority as
+may be required before exporting such information to foreign countries or
+providing access to foreign nationals.
 
 $Id$
 -->
@@ -23,7 +22,11 @@ $Id$
     <author email="Sean.Hardman@jpl.nasa.gov">Sean Hardman</author>
   </properties>
   <body>
-    <release version="1.0.0" date="2007-05-02" description="Official release of phase I">         
+    <release version="1.0.0" date="2007-05-04" description="This release of the Validation Tool represents the operational release for the Phase I targeted capabilities.">         
+      <action dev="pramirez" type="add">
+        Added support for validation of label fragments.
+      </action>      
+      
       <action dev="mcayanan" type="add">
         Added the capability to return an appropriate exit status value based on validation results or tool application failure.
       </action>      
@@ -40,12 +43,24 @@ $Id$
         Added -f or --force flag option to perform standalone label fragment validation.
       </action>
       
-      <action dev="mcayanan" type="update">
-        Implemented new log file behavior to allow logs to be written to memory. This allows generation of reports without the need of explicitly specifying the log file flag option. 
+      <action dev="pramirez" type="update">
+        Validation of units is now performed against the master list of unit values. This comparison is case sensitive.
+      </action>
+
+      <action dev="pramirez" type="update">
+        File names referenced by pointers may be in any case and still be discoverable by the tool. File names in mixed case will generate a warning message.
+      </action>
+
+      <action dev="pramirez" type="update">
+        Cleaned up reporting including replacing SEVERE with ERROR in all instances and properly representing fragment messages when they are included in a label validation.
       </action>
       
       <action dev="mcayanan" type="update">
-        Changed the log file flag (-l or --log) option to optionally allow a file specification. See user guide for log generation details.
+        Implemented new log file behavior to allow logs to be written to memory. This allows generation of reports without the need of explicitly specifying the log file flag option. 
+      </action>
+
+      <action dev="mcayanan" type="update">
+        Changed the log file flag (-l or --log) option to optionally allow a file specification. See <i>Use and Operation</i> guide for log generation details.
       </action>
       
       <action dev="mcayanan" type="update">
@@ -53,11 +68,15 @@ $Id$
       </action>
            
       <action dev="mcayanan" type="update">
-        Enhanced user guide with more details on command-line flag options, report examples, etc.
+        Enhanced user guide with more details regarding command-line flag options, report examples, etc.
       </action>      
            
       <action dev="mcayanan" type="fix">
-        Fixed to support UNC pathnames.
+        Fixed support for UNC pathnames.
+      </action>
+
+      <action dev="mcayanan" type="fix">
+        Fixed the minimal report stylesheet to work correctly on the Linux platform.
       </action>
     </release>
     
