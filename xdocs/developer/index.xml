@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-Copyright 2006-2007, by the California Institute of 
-Technology. ALL RIGHTS RESERVED. United States Government 
-Sponsorship acknowledged. Any commercial use must be negotiated with 
-the Office of Technology Transfer at the California Institute of 
-Technology.
+Copyright 2006-2007, by the California Institute of Technology.
+ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+Any commercial use must be negotiated with the Office of Technology Transfer
+at the California Institute of Technology.
 
-This software may be subject to U.S. export control laws. By 
-accepting this software, the user agrees to comply with all 
-applicable U.S. export laws and regulations. User has the 
-responsibility to obtain export licenses, or other export authority 
-as may be required before exporting such information to foreign 
-countries or providing access to foreign persons.
+This software is subject to U. S. export control laws and regulations
+(22 C.F.R. 120-130 and 15 C.F.R. 730-774). To the extent that the software
+is subject to U.S. export control laws and regulations, the recipient has
+the responsibility to obtain export licenses or other export authority as
+may be required before exporting such information to foreign countries or
+providing access to foreign nationals.
 
 $Id$
 -->
@@ -27,13 +26,14 @@ $Id$
 
   <body>
     <section name="Developing Tools">
-       <p>This section describes how a user can utilize the underlying Application Program Interface (API) of the <i>product-tools</i> package to develop their own tool.
+       <p>This section describes how a user can utilize the underlying Application Program Interface (API) of the <i>product-tools</i> package to develop their own tool. This section also covers how to interpret the exit status values returned by the tool if the user calls the <i>VTool</i> class from a script.
        </p>
        
-              
-       <p>Much more to come.
-       </p>
-       
+       <subsection name="API Entry Points">
+         <p>We have not had a chance to document the entry points into the API as of the current release. The best source for this information currently is to view the <i>VTool.java</i> file from the source package.
+         </p>
+       </subsection>
+
        <subsection name="Exit Status Values">
          <p>The Validation Tool returns an exit status based on the PDS validation results or if an application failure has occurred. This section details what exit status values to expect when the tool is validating a single data product label and when it is validating multiple data product labels in a single run.
          </p>
