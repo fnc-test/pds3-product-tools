@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+Copyright 2007, by the California Institute of Technology.
+ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+Any commercial use must be negotiated with the Office of Technology Transfer
+at the California Institute of Technology.
+
+This software is subject to U. S. export control laws and regulations
+(22 C.F.R. 120-130 and 15 C.F.R. 730-774). To the extent that the software
+is subject to U.S. export control laws and regulations, the recipient has
+the responsibility to obtain export licenses or other export authority as
+may be required before exporting such information to foreign countries or
+providing access to foreign nationals.
+
+$Id$
+-->
+
+<document>
+  <properties>
+    <title>Windows Environment Setup</title>
+    <author email="Michael.Cayanan@jpl.nasa.gov">Michael Cayanan</author>
+    <author email="Sean.Hardman@jpl.nasa.gov">Sean Hardman</author>
+  </properties>
+
+  <body>
+    <section name="Windows Environment Setup">
+      <p>For those attempting to run the Validation Tool in a Windows environment, here are the steps for setting the CLASSPATH environment variable via the control panel:
+      </p>
+
+      <ul>
+        <li>Right-click on My Computer on your desktop and select the Properties menu item.
+        </li>
+        <li>Navigate to the Advanced tab and select the Environment Variables button. At this point, you should now see a window like the one below:
+        </li>
+      </ul>
+
+      <img src="../images/windows_panel.jpg"/>
+
+      <ul>
+        <li>Highlight the <i>CLASSPATH</i> variable in the User Variables list and select the Edit button.
+        </li>
+        <li>Append to the current contents of the variable, the path(s) to the jar files that came with the <i>product-tools</i> package. See the <i>Windows Setup</i> section for actual jar file paths for the current release. Separate each path with a semicolon.
+        </li>
+        <li>Select the <i>OK</i> button when you are finished editing the <i>CLASSPATH</i> variable, then select the <i>OK</i> button at the Environment Variables window to apply the changes.
+        </li>
+      </ul>
+
+      <p>Note: If you already have a DOS window open, you will need to close and re-open the window for the CLASSPATH changes to take effect.
+      </p>
+    </section>
+  </body>
+</document>
