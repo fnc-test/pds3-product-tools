@@ -309,7 +309,7 @@ public class Dictionary implements Status {
      * Retrieves the map of definitions
      * @return map of definitions.
      */
-    protected Map getDefinitions() {
+    public Map getDefinitions() {
         return definitions;
     }
     
