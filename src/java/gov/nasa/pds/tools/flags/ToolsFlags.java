@@ -21,24 +21,25 @@ package gov.nasa.pds.tools.flags;
 public interface ToolsFlags {
 	public final int SHORT = 0;
 	public final int LONG = 1;
+	public final int ARGNAME = 2;
 	
 	public final String ALIAS[] = {"a", "alias"};
-	public final String CONFIG[] = {"c", "config"};
-	public final String DATAOBJ[] = {"O", "no-obj"};
-	public final String DICT[] = {"d", "dict"};
+	public final String CONFIG[] = {"c", "config", "file"};
+	/*public final String DATAOBJ[] = {"O", "no-obj", null};*/
+	public final String DICT[] = {"d", "dict", ".full files"};
 	public final String FOLLOW[] = {"F", "no-follow"};
 	public final String HELP[] = {"h", "help"};
-	public final String IGNOREDIR[] = {"D", "ignore-dir"};
-	public final String IGNOREFILE[] = {"X", "ignore-file"};
-	public final String INCLUDES[] = {"I", "include"};
+	public final String IGNOREDIR[] = {"D", "ignore-dir", "patterns"};
+	public final String IGNOREFILE[] = {"X", "ignore-file", "patterns"};
+	public final String INCLUDES[] = {"I", "include", "paths"};
 	public final String LOCAL[] = {"L", "local"};	
-	public final String LOG[] = {"l", "log-file"};
+	public final String LOG[] = {"l", "log-file", "file (optional)"};
 	public final String PARTIAL[] = {"f", "force"};
 	public final String PROGRESS[] = {"p", "progress"};
-	public final String REGEXP[] = {"e", "regexp"};
-	public final String REPORT[] = {"r", "report-file"};
-	public final String RPTSTYLE[] = {"s", "report-style"};
-	public final String TARGET[] = {"t", "target"};
-	public final String VERBOSE[] = {"v", "verbose"};
+	public final String REGEXP[] = {"e", "regexp", "patterns"};
+	public final String REPORT[] = {"r", "report-file", "file"};
+	public final String RPTSTYLE[] = {"s", "report-style", "full|sum|min"};
+	public final String TARGET[] = {"t", "target", "labels,URLs,dirs"};
+	public final String VERBOSE[] = {"v", "verbose", "1|2|3"};
 	public final String VERSION[] = {"V", "version"};
 }
