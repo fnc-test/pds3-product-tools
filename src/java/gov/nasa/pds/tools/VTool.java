@@ -21,6 +21,7 @@ import gov.nasa.pds.tools.dict.parser.DictionaryParser;
 import gov.nasa.pds.tools.file.FileList;
 import gov.nasa.pds.tools.file.FileListGenerator;
 import gov.nasa.pds.tools.flags.ToolsFlags;
+import gov.nasa.pds.tools.flags.ToolsFlagsDescriptions;
 import gov.nasa.pds.tools.label.Label;
 import gov.nasa.pds.tools.label.parser.LabelParser;
 import gov.nasa.pds.tools.label.parser.LabelParserFactory;
@@ -28,6 +29,7 @@ import gov.nasa.pds.tools.label.validate.Status;
 import gov.nasa.pds.tools.logging.ToolsLevel;
 import gov.nasa.pds.tools.logging.ToolsLogFormatter;
 import gov.nasa.pds.tools.logging.ToolsLogRecord;
+import gov.nasa.pds.tools.options.ToolsOption;
 import gov.nasa.pds.tools.status.ExitStatus;
 import gov.nasa.pds.tools.time.ToolsTime;
 import gov.nasa.pds.tools.xsl.StyleSheet;
@@ -68,7 +70,6 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.MissingOptionException;
-import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.UnrecognizedOptionException;
@@ -91,7 +92,7 @@ import org.apache.commons.io.FilenameUtils;
  *
  */
 public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus, 
-                              Status, StyleSheet {
+                              Status, StyleSheet, ToolsFlagsDescriptions {
 	private final String VERSION_ID = "1.0.0";
 	private final String FILE_REP = "*";
 	private final String FRAG_EXT = "FMT";
@@ -200,154 +201,74 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	 * Builds the set of configurable parameters for VTool.
 	 */
 	public void buildOpts() {
-		options.addOption(ALIAS[SHORT], ALIAS[LONG], false, "Enable aliasing");
-		options.addOption(FOLLOW[SHORT], FOLLOW[LONG], false, 
-				"Do not follow or check for the existence of files referenced "
-				+ "by pointer statements in a label");
-		options.addOption(HELP[SHORT], HELP[LONG], false, "Display usage");
-//		options.addOption("O", "no-obj", false, "Do not perform data object validation");
-		options.addOption(PARTIAL[SHORT], PARTIAL[LONG], false, 
-				"Force VTool to validate a label fragment");
-		options.addOption(LOCAL[SHORT], LOCAL[LONG], false, 
-				"Validate files only in the target directory rather than "
-				+ "recursively traversing down the subdirectories.");
-		options.addOption(PROGRESS[SHORT], PROGRESS[LONG], false, 
-				"Enable progress reporting");
-		options.addOption(VERSION[SHORT], VERSION[LONG], false, 
-				"Display VTool version");
+		ToolsOption opt = null;
+		char separator = ' ';
 		
+		options.addOption(new ToolsOption(ALIAS[SHORT], ALIAS[LONG], WHATIS_ALIAS));
+		options.addOption(new ToolsOption(FOLLOW[SHORT], FOLLOW[LONG],WHATIS_FOLLOW));
+		options.addOption(new ToolsOption(HELP[SHORT], HELP[LONG], WHATIS_HELP));
+		options.addOption(new ToolsOption(PARTIAL[SHORT], PARTIAL[LONG], WHATIS_PARTIAL)); 
+		options.addOption(new ToolsOption(LOCAL[SHORT], LOCAL[LONG], WHATIS_LOCAL)); 
+		options.addOption(new ToolsOption(PROGRESS[SHORT], PROGRESS[LONG], WHATIS_PROGRESS)); 
+		options.addOption(new ToolsOption(VERSION[SHORT], VERSION[LONG], WHATIS_VERSION)); 	
 		
 		// These are options that require an argument
-
+		
 		// Option to specify a configuration file
-		OptionBuilder.withLongOpt(CONFIG[LONG]);
-		OptionBuilder.withDescription(
-		  "Specify a configuration file to set the default values for VTool");
-		OptionBuilder.hasArg();
-		OptionBuilder.withArgName("file");
-		OptionBuilder.withType(String.class);
-		options.addOption(OptionBuilder.create(CONFIG[SHORT]));
+		opt = new ToolsOption(CONFIG[SHORT], CONFIG[LONG], WHATIS_CONFIG);
+		opt.hasArg(CONFIG[ARGNAME], String.class);
+		options.addOption(opt);
 		
 		// Option to specify the PSDD and any local dictionaries
-		OptionBuilder.withLongOpt(DICT[LONG]);
-		OptionBuilder.withDescription(
-		  "Specify the Planetary Science Data Dictionary full file name/URL "
-		  + "and any local dictionaries to include for validation. Separate "
-		  + "each file name with a space");
-		OptionBuilder.hasArgs();
-		OptionBuilder.withArgName(".full files");
-		OptionBuilder.withValueSeparator(' ');
-		OptionBuilder.withType(String.class);
-		options.addOption(OptionBuilder.create(DICT[SHORT]));
+		opt = new ToolsOption(DICT[SHORT], DICT[LONG], WHATIS_DICT);
+		opt.hasArgs(DICT[ARGNAME], String.class, separator);
+		options.addOption(opt);
 		
 		// Option to specify a file containing a list of file extensions to ignore
-		OptionBuilder.withLongOpt(IGNOREFILE[LONG]);
-		OptionBuilder.withDescription(
-		  "Specify file patterns to ignore from validation. Separate each "
-		  + "with a space. Patterns should be surrounded by quotes "
-		  + "(i.e. -X \"*TAB\" \"*IMG\" or -X \"*TAB *IMG\")");
-		OptionBuilder.hasArgs();
-		OptionBuilder.withArgName("patterns");
-		OptionBuilder.withValueSeparator(' ');
-		OptionBuilder.withType(String.class);
-		options.addOption(OptionBuilder.create(IGNOREFILE[SHORT]));
+		opt = new ToolsOption(IGNOREFILE[SHORT], IGNOREFILE[LONG],WHATIS_IGNOREFILE);
+		opt.hasArgs(IGNOREFILE[ARGNAME], String.class, separator);
+		options.addOption(opt);
 		
 		// Option to specify the label(s) to validate
-
-		OptionBuilder.withLongOpt(TARGET[LONG]);
-		OptionBuilder.withDescription(
-		  "Explicitly specify the targets (label files, URLs and directories) "
-		  + "to validate. Targets can be specified implicitly as well. "
-		  + "(example: VTool label.lbl)");
-		OptionBuilder.hasArgs();
-		OptionBuilder.withArgName("labels,URLs,dirs");
-		OptionBuilder.withType(String.class);
-		OptionBuilder.withValueSeparator(' ');
-		options.addOption(OptionBuilder.create(TARGET[SHORT]));
+		opt = new ToolsOption(TARGET[SHORT], TARGET[LONG], WHATIS_TARGET);
+		opt.hasArgs(TARGET[ARGNAME], String.class, separator);
+		options.addOption(opt);
 		
 		// Option to specify a pattern to match against the input directory to be validated
-		OptionBuilder.withLongOpt(REGEXP[LONG]);
-		OptionBuilder.withDescription(
-		  "Specify file patterns to look for when validating a directory. "
-		  + "Separate each with a space. Patterns should be surrounded by "
-		  + "quotes (i.e. -e \"*.LBL\" \"*.FMT\" or -e \"*.LBL *.FMT\")");
-		OptionBuilder.hasArgs();
-		OptionBuilder.withArgName("patterns");
-		OptionBuilder.withValueSeparator(' ');
-		OptionBuilder.withType(String.class);
-		options.addOption(OptionBuilder.create(REGEXP[SHORT]));
+		opt = new ToolsOption(REGEXP[SHORT], REGEXP[LONG], WHATIS_REGEXP);
+		opt.hasArgs(REGEXP[ARGNAME], String.class, separator);
+		options.addOption(opt);
 		
-		// Option to specify a path to the Pointer files		
-		OptionBuilder.withLongOpt(INCLUDES[LONG]);
-		OptionBuilder.withDescription(
-		  "Specify the paths to look for files referenced by pointers in a "
-		  + "label. Separate each with a space. Default is to always look "
-		  + "at the same directory as the label");
-		OptionBuilder.hasArgs();
-		OptionBuilder.withArgName("paths");
-		OptionBuilder.withType(String.class);
-		OptionBuilder.withValueSeparator(' ');
-		options.addOption(OptionBuilder.create(INCLUDES[SHORT]));
+		
+		// Option to specify a path to the Pointer files	
+		opt = new ToolsOption(INCLUDES[SHORT], INCLUDES[LONG], WHATIS_INCLUDES);
+		opt.hasArgs(INCLUDES[ARGNAME], String.class, separator);
+		options.addOption(opt);
 
 		//Option to specify a file containing a list of directories to ignore
-		OptionBuilder.withLongOpt(IGNOREDIR[LONG]);
-		OptionBuilder.withDescription(
-		  "Specify directory patterns to ignore. Separate each with a space. "
-		  + "Patterns should be surrounded by quotes "
-		  + "(i.e. -D \"EXTRAS\" \"LABEL\" or -D \"EXTRAS LABEL\")");
-		OptionBuilder.hasArgs();
-		OptionBuilder.withArgName("patterns");
-		OptionBuilder.withValueSeparator(' ');
-		OptionBuilder.withType(String.class);
-		options.addOption(OptionBuilder.create(IGNOREDIR[SHORT]));
+		opt = new ToolsOption(IGNOREDIR[SHORT], IGNOREDIR[LONG], WHATIS_IGNOREDIR);
+		opt.hasArgs(IGNOREDIR[ARGNAME], String.class, separator);
+		options.addOption(opt);
 		
 		// Option to specify the log file name
-		OptionBuilder.withLongOpt(LOG[LONG]);
-		OptionBuilder.withDescription(
-		  "Specify the file name for the machine-readable log. A file "
-		  + "specification is optional. If no file name is given, then "
-		  + "the log will be written to standard out");
-		OptionBuilder.hasOptionalArg();
-		OptionBuilder.withArgName("file (optional)");
-		OptionBuilder.withType(String.class);
-		options.addOption(OptionBuilder.create(LOG[SHORT]));
-
+		opt = new ToolsOption(LOG[SHORT], LOG[LONG], WHATIS_LOG);
+		opt.hasArg(LOG[ARGNAME], String.class, true);
+		options.addOption(opt);
 		
 		//Option to specify the report file name
-		OptionBuilder.withLongOpt(REPORT[LONG]);
-		OptionBuilder.withDescription(
-		  "Specify the file name for the human-readable report. Default is "
-		  + "to write to standard out if this flag is not specified. This "
-		  + "report, however, will not print to standard out if this flag is "
-		  + "missing AND the log file flag is specified with no file name");
-		OptionBuilder.hasArg();
-		OptionBuilder.withArgName("file");
-		OptionBuilder.withType(String.class);
-		options.addOption(OptionBuilder.create(REPORT[SHORT]));
-		
+		opt = new ToolsOption(REPORT[SHORT], REPORT[LONG], WHATIS_REPORT);
+		opt.hasArg(REPORT[ARGNAME], String.class);
+		options.addOption(opt);
+				
 		// Option to specify how detail the reporting should be
-		OptionBuilder.withLongOpt(RPTSTYLE[LONG]);
-		OptionBuilder.withDescription(
-		  "Specify the level of detail for the reporting. Valid values are "
-		  + "'full' for a full view, 'min' for a minimal view and 'sum' for "
-		  + "a summary view. Default is to see a full report if this flag is "
-		  + "not specified");
-		OptionBuilder.hasArg();
-		OptionBuilder.withArgName("full|sum|min");
-		OptionBuilder.withType(String.class);
-		options.addOption(OptionBuilder.create(RPTSTYLE[SHORT]));
+		opt = new ToolsOption(RPTSTYLE[SHORT], RPTSTYLE[LONG], WHATIS_RPTSTYLE);
+		opt.hasArg(RPTSTYLE[ARGNAME], String.class);
+		options.addOption(opt);
 		
 		// Option to specify the severity level and above
-		OptionBuilder.withLongOpt(VERBOSE[LONG]);
-		OptionBuilder.withDescription(
-		  "Specify the severity level and above to include in the "
-		  + "human-readable report: (1=Info, 2=Warning, 3=Error). "
-		  + "Default is Warning and above (level 2)");
-		OptionBuilder.hasArg();
-		OptionBuilder.withArgName("1|2|3");
-		OptionBuilder.withType(short.class);
-		options.addOption(OptionBuilder.create(VERBOSE[SHORT]));
-		
+		opt = new ToolsOption(VERBOSE[SHORT], VERBOSE[LONG], WHATIS_VERBOSE);
+		opt.hasArg(VERBOSE[ARGNAME], short.class);
+		options.addOption(opt);	
 	}
 	
 	/**
@@ -1255,8 +1176,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	 * @return 'PASS' if the label passed the PDS validation step, 
 	 *         'FAIL' if the label failed the PDS validation step, or
 	 *         'UNKOWN' if the label skipped the PDS validation step
-	 */
-	
+	 */	
 	public String validateLabel(URL file, Dictionary dict) {		
 		LabelParserFactory factory = LabelParserFactory.getInstance();
 		LabelParser parser = factory.newLabelParser();
