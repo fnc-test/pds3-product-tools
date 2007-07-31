@@ -20,12 +20,12 @@ import gov.nasa.pds.tools.dict.Dictionary;
 import gov.nasa.pds.tools.dict.parser.DictionaryParser;
 import gov.nasa.pds.tools.file.FileList;
 import gov.nasa.pds.tools.file.FileListGenerator;
-import gov.nasa.pds.tools.flags.ToolsFlags;
-import gov.nasa.pds.tools.flags.ToolsFlagsDescriptions;
+import gov.nasa.pds.tools.flags.VToolFlags;
 import gov.nasa.pds.tools.label.Label;
 import gov.nasa.pds.tools.label.parser.LabelParser;
 import gov.nasa.pds.tools.label.parser.LabelParserFactory;
 import gov.nasa.pds.tools.label.validate.Status;
+import gov.nasa.pds.tools.license.ToolsLicense;
 import gov.nasa.pds.tools.logging.ToolsLevel;
 import gov.nasa.pds.tools.logging.ToolsLogFormatter;
 import gov.nasa.pds.tools.logging.ToolsLogRecord;
@@ -91,8 +91,8 @@ import org.apache.commons.io.FilenameUtils;
  *
  *
  */
-public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus, 
-                              Status, StyleSheet, ToolsFlagsDescriptions {
+public class VTool implements VToolConfigKeys, VToolFlags, ExitStatus, 
+                              Status, StyleSheet, ToolsLicense {
 	private final String VERSION_ID = "1.0.0";
 	private final String FILE_REP = "*";
 	private final String FRAG_EXT = "FMT";
@@ -174,16 +174,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 	 */	
 	public void showVersion() {
 		System.out.println("\nPDS Validation Tool (VTool) " + VERSION_ID);
-		System.out.println("\nCopyright 2006-2007, by the California Institute of Technology. ALL\n"
-				           + "RIGHTS RESERVED. United States Government Sponsorship acknowledged.\n"
-				           + "Any commercial use must be negotiated with the Office of Technology\n"
-				           + "Transfer at the California Institute of Technology. This software\n"
-				           + "may be subject to U.S. export control laws. By accepting this\n"
-				           + "software, the user agrees to comply with all applicable U.S. export\n"
-				           + "laws and regulations. User has the responsibility to obtain export\n"
-				           + "licenses, or other export authority as may be required before\n"
-				           + "exporting such information to foreign countries or providing access\n"
-				           + "to foreign persons.");
+		System.out.println(LICENSE);
 		System.exit(GOODRUN);
 	}
 	
@@ -237,8 +228,7 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 		// Option to specify a pattern to match against the input directory to be validated
 		opt = new ToolsOption(REGEXP[SHORT], REGEXP[LONG], WHATIS_REGEXP);
 		opt.hasArgs(REGEXP[ARGNAME], String.class, separator);
-		options.addOption(opt);
-		
+		options.addOption(opt);		
 		
 		// Option to specify a path to the Pointer files	
 		opt = new ToolsOption(INCLUDES[SHORT], INCLUDES[LONG], WHATIS_INCLUDES);
@@ -417,19 +407,12 @@ public class VTool implements VToolConfigKeys, ToolsFlags, ExitStatus,
 		this.alias = a;
 	}
 	
-	/**
-	 * Get data object validation flag.
-	 */
 /*
 	public boolean getDataObj() {
 		return this.dataObj;
 	}
 */	
-	/**
-	 * Set data object flag.
-	 * @param d 'true' if data object validation is to be performed, 
-	 * 'false' otherwise
-	 */
+
 /*
 	public void setDataObj(boolean d) {
 		this.dataObj = d;
