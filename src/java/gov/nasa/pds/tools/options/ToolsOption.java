@@ -14,6 +14,8 @@ import org.apache.commons.cli.Option;
  */
 public class ToolsOption extends Option {
 	
+	private final char argSeparator = ' ';
+	
 	/**
 	 * Contstructor.
 	 * 
@@ -26,8 +28,7 @@ public class ToolsOption extends Option {
 	}
 			
 	/**
-	 * Allows a single argument to be passed into the option. Assumes that the argument
-	 * is required for the option.
+	 * Requires a single argument to follow the option.
 	 * 
 	 * @param name Sets the display name of the argument value.
 	 * @param type Sets the data type allowed for this argument.
@@ -49,27 +50,44 @@ public class ToolsOption extends Option {
 	}
 	
 	/**
-	 * Allows multiple arguments to be passed in to the option. Does not define a maximum
+	 * Requires an argument to follow the option. This method allows the option
+	 * to take in multiple arguments. Does not define a maximum
 	 * number of allowable arguments. 
 	 * 
-	 * This method automatically makes the argument required.
+	 * The separator value is set to the space character ' '. 
+	 *  
+	 * @param name Sets the display name of the argument value.
+	 * @param type Sets the data type allowed for this argument.
+	 */
+	public void hasArgs(String name, Object type) {
+		hasArgs(name, type, argSeparator, false);
+	}
+	
+	/**
+	 * Requires an argument to follow the option. Allows multiple arguments
+	 * to be passed in to the option. Does not define a maximum number of
+	 * allowable arguments. 
+	 * 
 	 * 
 	 * @param name Sets the display name of the argument value.
 	 * @param type Sets the data type allowed for this argument.
-	 * @param separator Sets the separator value allowed in between the argument values being passed in.
+	 * @param separator Sets the separator value allowed in between the
+	 * argument values being passed in.
 	 */
 	public void hasArgs(String name, Object type, char separator) {
 		hasArgs(name, type, separator, false);
 	}
 	
 	/**
-	 * Allows multiple arguments to be passed in to the option. Does not define a maximum
-	 * number of allowable arguments.
+	 * Allows multiple arguments to be passed in to the option. Does not
+	 * define a maximum number of allowable arguments.
 	 * 
 	 * @param name Sets the display name of the argument value.
 	 * @param type Sets the data type allowed for this argument.
-	 * @param separator Sets the separator value allowed in between the argument values being passed in.
-	 * @param isOptional Set to 'true' if an argument is optional, 'false' otherwise.
+	 * @param separator Sets the separator value allowed in between the
+	 * argument values being passed in.
+	 * @param isOptional Set to 'true' if an argument is optional, 
+	 * 'false' otherwise.
 	 */
 	public void hasArgs(String name, Object type, char separator, boolean isOptional) {
 		hasArgs(Option.UNLIMITED_VALUES, name, type, separator, isOptional);
@@ -81,8 +99,10 @@ public class ToolsOption extends Option {
 	 * @param numArgs Max number of arguments allowed.
 	 * @param name Sets the display name of the argument value.
 	 * @param type Sets the data type allowed for this argument.
-	 * @param separator Sets the separator value allowed in between the argument values being passed in.
-	 * @param isOptional Set to 'true' if an argument is optional, 'false' otherwise.
+	 * @param separator Sets the separator value allowed in between the
+	 * argument values being passed in.
+	 * @param isOptional Set to 'true' if an argument is optional, 'false'
+	 * otherwise.
 	 */
 	public void hasArgs(int numArgs, String name, Object type, char separator, boolean isOptional) {
 		setArgs(numArgs);
