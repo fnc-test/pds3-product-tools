@@ -17,9 +17,12 @@
 # without the need to set the CLASSAPTH or having to type in that long java
 # command (java gov.nasa.pds.tools.VTool ...)
 
+# prevents filename expansion due to wildcard arguments
+set noglob
+
 # Set to the location of the product-tools jar file
 
-set jarpath = "/home/user/product-tools-0.5.0/bin/product-tools-0.5.0-app.jar"
+set jarpath = "/home/user/product-tools-X.X.X/bin/product-tools-X.X.X-app.jar"
 
 # Executes VTool via the executable jar file
 # Arguments are passed in to the tool via 'argv'

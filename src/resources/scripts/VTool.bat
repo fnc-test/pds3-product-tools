@@ -21,7 +21,7 @@
 :: The equals symbol '=' should not be surrounded by blank spaces or the batch
 :: file will not work
 
-SET jarpath=c:\product-tools-0.5.0\bin\product-tools-0.5.0-app.jar
+SET jarpath=c:\product-tools-X.X.X\bin\product-tools-X.X.X-app.jar
 
 :: Executes the JVM to run VTool. Arguments are passed to VTool via
 :: the '%*' symbol
