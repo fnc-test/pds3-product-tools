@@ -1,3 +1,17 @@
+// Copyright 2006-2007, by the California Institute of Technology.
+// ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+// Any commercial use must be negotiated with the Office of Technology Transfer
+// at the California Institute of Technology.
+//
+// This software is subject to U. S. export control laws and regulations
+// (22 C.F.R. 120-130 and 15 C.F.R. 730-774). To the extent that the software
+// is subject to U.S. export control laws and regulations, the recipient has
+// the responsibility to obtain export licenses or other export authority as
+// may be required before exporting such information to foreign countries or
+// providing access to foreign nationals.
+//
+// $Id$ 
+
 package gov.nasa.pds.tools.license;
 
 /**
@@ -8,14 +22,15 @@ package gov.nasa.pds.tools.license;
  */
 public interface ToolsLicense {
 	
-	public final String LICENSE = "\nCopyright 2006-2007, by the California Institute of Technology. ALL\n"
-								+ "RIGHTS RESERVED. United States Government Sponsorship acknowledged.\n"
-								+ "Any commercial use must be negotiated with the Office of Technology\n"
-								+ "Transfer at the California Institute of Technology. This software\n"
-								+ "may be subject to U.S. export control laws. By accepting this\n"
-								+ "software, the user agrees to comply with all applicable U.S. export\n"
-								+ "laws and regulations. User has the responsibility to obtain export\n"
-								+ "licenses, or other export authority as may be required before\n"
-								+ "exporting such information to foreign countries or providing access\n"
-								+ "to foreign persons.";
+    public final String LICENSE = "\n"
+        + "Copyright 2006-2007, by the California Institute of Technology.\n"
+        + "ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.\n"
+	+ "Any commercial use must be negotiated with the Office of Technology Transfer\n"
+	+ "at the California Institute of Technology.\n\n"
+        + "This software is subject to U. S. export control laws and regulations\n"
+        + "(22 C.F.R. 120-130 and 15 C.F.R. 730-774). To the extent that the software\n"
+        + "is subject to U.S. export control laws and regulations, the recipient has\n"
+        + "the responsibility to obtain export licenses or other export authority as\n"
+        + "may be required before exporting such information to foreign countries or\n"
+        + "providing access to foreign nationals.";
 }
