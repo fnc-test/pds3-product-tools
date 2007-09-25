@@ -20,14 +20,12 @@ $Id$
   <body>
     <menu name="Product Tools Guide">
       <item name="Overview" href="index.html"/>
+      <item name="Release Notes" href="release/index.html"/>
       <item name="Installation" href="install/index.html"/>
-      <item name="Use and Operation" href="user/index.html"/>
       <item name="Development" href="developer/index.html"/>
-      <item name="Appendix A - Using the Windows Control Panel" href="user/index-win.html"/>
-      <item name="Appendix B - Report Examples" href="user/reports/index.html">
-        <item name="Full Report" href="user/reports/index-full.html"/>
-        <item name="Summary Report" href="user/reports/index-sum.html"/>
-        <item name="Minimal Report" href="user/reports/index-min.html"/>
+      <item name="Appendix A - ODL Grammar" href="grammar/index.html">
+        <item name="ODLParser" href="grammar/index-parser.html"/>
+        <item name="ODLLexer" href="grammar/index-lexer.html"/>
       </item>
     </menu>
   </body>

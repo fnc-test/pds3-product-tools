@@ -42,12 +42,20 @@ $Id$
     <attainGoal name="pdf"/>
   </postGoal>
 
-  <!-- Include the dependencies and scripts in the binary distribution. -->
+  <!-- Include the dependencies and README file in the binary distribution. -->
   <postGoal name="dist:prepare-bin-filesystem">
+    <ant:copy tofile="${maven.dist.bin.assembly.dir}/README.txt"
+              file="${basedir}/README-BINARY.txt"/>
     <ant:mkdir dir="${maven.dist.bin.assembly.dir}/lib"/>
     <deploy:copy-deps todir="${maven.dist.bin.assembly.dir}/lib"/>
     <ant:move todir="${maven.dist.bin.assembly.dir}/lib"
               file="${maven.dist.bin.assembly.dir}/${maven.final.name}.jar"/>
+  </postGoal>
+
+  <!-- Include the README file in the source distribution. -->
+  <postGoal name="dist:prepare-src-filesystem">
+    <ant:copy tofile="${maven.dist.src.assembly.dir}/README.txt"
+              file="${basedir}/README-SOURCE.txt"/>
   </postGoal>
 
   <!-- Clean up the navigation file that was generated from its template. -->

@@ -1,0 +1,1 @@
+For documentation regarding installation of and development with the Product Tools software, either point your favorite browser to the ./docs/index.html file or view the PDF file located at ./docs/product-tools-X.X.X.pdf (where X.X.X is the current version).

@@ -24,12 +24,32 @@ $Id$
 
   <body>
     <section name="Release Notes">
-      <p>The purpose of this section is to provide a description of a Validation Tool release including any impact that the new or modified capabilities will have on the Discipline Nodes or the PDS user community. A somewhat itemized list of changes for each release can be found on the <a href="../changes-report.html">Release Changes</a> page.
+      <p>The purpose of this section is to provide a description of a Product Tools release including any impact that the new or modified capabilities will have on the Discipline Nodes or the PDS user community. A somewhat itemized list of changes for each release can be found on the <a href="../changes-report.html">Release Changes</a> page.
       </p>
     </section>
 
+    <section name="Release 1.1.0">
+      <p>This is a maintenance release of the Product Tools software including fixes and changes requested by the early adopters of the application.
+      </p>
+
+      <p>The major changes for this release are as follows:
+      </p>
+
+      <ul>
+        <li>Moved the Validation Tool application to the <i>vtool</i> project.<br/>
+            The Validation Tool application has been split out from the <i>product-tools</i> project in order to provide more specific documentation and to turn the <i>product-tools</i> project into a library of classes that can be included by other projects.
+        </li>
+      </ul>
+
+      <p>The liens for this release are as follows:
+      </p>
+
+      <ul>
+      </ul>
+    </section>
+
     <section name="Release 1.0.0">
-      <p>This release of the Validation Tool represents the operational release for the Phase I targeted capabilities. The tool currently supports data product label validation including syntactic validation against the grammar and semantic validation against the PDS data dictionary.
+      <p>This release of the Product Tools software, including the Validation Tool, represents the operational release for the Phase I targeted capabilities. The tool currently supports data product label validation including syntactic validation against the grammar and semantic validation against the PDS data dictionary.
       </p>
 
       <p>The major changes for this release are as follows:
@@ -40,10 +60,10 @@ $Id$
             Although the tool didn't require any changes, SCR 3-1089 was approved and implemented in release 1r66 of the PSDD, enabling this capability. 
         </li>
         <li>Report Fine Tuning<br/>
-            The majority of changes for this release involved fine tuning the reporting capability. The parameters related to reporting in this release have been modified to support these changes. Please review the <a href="../user/index.html#Command-Line Options">Command-Line Options</a> section of the <i>Use and Operation</i> guide for the details.
+            The majority of changes for this release involved fine tuning the reporting capability. The parameters related to reporting in this release have been modified to support these changes.
         </li>
         <li>Executable Scripts and Exit Status Values<br/>
-            Batch and shell scripts have been provided with this release allowing for simpler execution of the tool. Exit status values are now returned by the tool enabling execution from a script. Please review the <a href="../developer/index.html#Exit Status Values">Exit Status Values</a> section of the <i>Development</i> guide for the details.
+            Batch and shell scripts have been provided with this release allowing for simpler execution of the tool. Exit status values are now returned by the tool enabling execution from a script.
         </li>
       </ul>
 

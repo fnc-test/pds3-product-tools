@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright 2007, by the California Institute of Technology.
+ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+Any commercial use must be negotiated with the Office of Technology Transfer
+at the California Institute of Technology.
+
+This software is subject to U. S. export control laws and regulations
+(22 C.F.R. 120-130 and 15 C.F.R. 730-774). To the extent that the software
+is subject to U.S. export control laws and regulations, the recipient has
+the responsibility to obtain export licenses or other export authority as
+may be required before exporting such information to foreign countries or
+providing access to foreign nationals.
+
+$Id$
+-->
+
+<document>
+  <properties>
+    <title>ODLLexer Grammar</title>
+    <author email="Sean.Hardman@jpl.nasa.gov">Sean Hardman</author>
+  </properties>
+
+  <body>
+    <section name="ODLLexer Grammar">
+      <p>The following represents the grammar for the <i>ODLLexer</i> class:
+      </p>
+
+      <source>
+Definition of lexer ODLLexer, which is a subclass of CharScanner.
+
+/** Lexer nextToken rule:
+ *  The lexer nextToken rule is synthesized from all of the user-defined
+ *  lexer rules.  It logically consists of one big alternative block with
+ *  each user-defined rule being an alternative.
+ */
+<a href="ODLLexer.html#mSET_OPENING">mSET_OPENING</a> 
+|	<a href="ODLLexer.html#mSET_CLOSING">mSET_CLOSING</a> 
+|	<a href="ODLLexer.html#mSEQUENCE_OPENING">mSEQUENCE_OPENING</a> 
+|	<a href="ODLLexer.html#mSEQUENCE_CLOSING">mSEQUENCE_CLOSING</a> 
+|	<a href="ODLLexer.html#mLIST_SEPARATOR">mLIST_SEPARATOR</a> 
+|	<a href="ODLLexer.html#mPOINT_OPERATOR">mPOINT_OPERATOR</a> 
+|	<a href="ODLLexer.html#mEQUALS">mEQUALS</a> 
+|	<a href="ODLLexer.html#mCOMMENT">mCOMMENT</a> 
+|	<a href="ODLLexer.html#mEOL">mEOL</a> 
+|	<a href="ODLLexer.html#mWS">mWS</a> 
+|	<a href="ODLLexer.html#mELEMENT_IDENT">mELEMENT_IDENT</a> 
+|	<a href="ODLLexer.html#mUNITS">mUNITS</a> 
+|	<a href="ODLLexer.html#mNUMBER_OR_DATETIME">mNUMBER_OR_DATETIME</a> 
+|	<a href="ODLLexer.html#mQUOTED">mQUOTED</a> 
+|	<a href="ODLLexer.html#mSYMBOL">mSYMBOL</a> 
+<a name="mSET_OPENING">mSET_OPENING</a>
+	:	&#039;{&#039; 
+	;
+
+<a name="mSET_CLOSING">mSET_CLOSING</a>
+	:	&#039;}&#039; 
+	;
+
+<a name="mSEQUENCE_OPENING">mSEQUENCE_OPENING</a>
+	:	&#039;(&#039; 
+	;
+
+<a name="mSEQUENCE_CLOSING">mSEQUENCE_CLOSING</a>
+	:	&#039;)&#039; 
+	;
+
+<a name="mLIST_SEPARATOR">mLIST_SEPARATOR</a>
+	:	&#039;,&#039; 
+	;
+
+<a name="mPOINT_OPERATOR">mPOINT_OPERATOR</a>
+	:	&#039;^&#039; 
+	;
+
+<a name="mEQUALS">mEQUALS</a>
+	:	&#039;=&#039; 
+	;
+
+<a name="mCOMMENT">mCOMMENT</a>
+	:	&quot;/*&quot; 
+		(	&#039;*&#039; 
+		|	<a href="ODLLexer.html#mEOL">mEOL</a> 
+		|	(	&#039;*&#039; 
+			|	&#039;\n&#039; 
+			|	&#039;\r&#039; 
+			) 
+		)* 
+		&quot;*/&quot; 
+	;
+
+<a name="mEOL">mEOL</a>
+	:	(	&#039;\r&#039; 
+			(	&#039;\n&#039; 
+			|	
+			) 
+		|	&#039;\n&#039; 
+		) 
+		
+	;
+
+<a name="mWS">mWS</a>
+	:	(	&#039; &#039; 
+		|	&#039;\t&#039; 
+		|	&#039;\f&#039; 
+		) 
+		
+	;
+
+protected <a name="mIDENTIFIER">mIDENTIFIER</a>
+	:	<a href="ODLLexer.html#mLETTER">mLETTER</a> 
+		(	<a href="ODLLexer.html#mLETTER">mLETTER</a> 
+		|	<a href="ODLLexer.html#mDIGIT">mDIGIT</a> 
+		|	&#039;_&#039; 
+		)* 
+	;
+
+protected <a name="mLETTER">mLETTER</a>
+	:	(				'a'..'z' 
+		|				'A'..'Z' 
+		) 
+	;
+
+protected <a name="mDIGIT">mDIGIT</a>
+	:	( 			'0'..'9' ) 
+	;
+
+<a name="mELEMENT_IDENT">mELEMENT_IDENT</a>
+	:	<a href="ODLLexer.html#mIDENTIFIER">mIDENTIFIER</a> &#039;:&#039; <a href="ODLLexer.html#mIDENTIFIER">mIDENTIFIER</a> 
+	|	<a href="ODLLexer.html#mIDENTIFIER">mIDENTIFIER</a> 
+	;
+
+<a name="mUNITS">mUNITS</a>
+	:	&#039;&lt;&#039; 
+		(	<a href="ODLLexer.html#mWS">mWS</a> 
+		|	
+		) 
+		<a href="ODLLexer.html#mLETTER">mLETTER</a> 
+		(	<a href="ODLLexer.html#mLETTER">mLETTER</a> 
+		|	<a href="ODLLexer.html#mDIGIT">mDIGIT</a> 
+		|	<a href="ODLLexer.html#mSPECIALCHAR">mSPECIALCHAR</a> 
+		|	&#039;(&#039; 
+		|	&#039;)&#039; 
+		|	&#039;/&#039; 
+		|	<a href="ODLLexer.html#mWS">mWS</a> 
+		)* 
+		&#039;&gt;&#039; 
+	;
+
+protected <a name="mSPECIALCHAR">mSPECIALCHAR</a>
+	:	(	&#039;_&#039; 
+		|	&#039;$&#039; 
+		|	&#039;#&#039; 
+		|	&#039;.&#039; 
+		|	&#039;-&#039; 
+		|	&#039;:&#039; 
+		|	&#039;+&#039; 
+		|	&#039;*&#039; 
+		) 
+	;
+
+protected <a name="mUNITS_FACTOR">mUNITS_FACTOR</a>
+	:	<a href="ODLLexer.html#mIDENTIFIER">mIDENTIFIER</a> 
+		(	<a href="ODLLexer.html#mEXP_OP">mEXP_OP</a> <a href="ODLLexer.html#mINTEGER">mINTEGER</a> 
+		|	
+		) 
+	;
+
+protected <a name="mEXP_OP">mEXP_OP</a>
+	:	&quot;**&quot; 
+	;
+
+protected <a name="mINTEGER">mINTEGER</a>
+	:	(	<a href="ODLLexer.html#mSIGN">mSIGN</a> 
+		|	
+		) 
+		<a href="ODLLexer.html#mDIGITS">mDIGITS</a> 
+	;
+
+protected <a name="mMULT_OP">mMULT_OP</a>
+	:	(	&#039;*&#039; 
+		|	&#039;/&#039; 
+		) 
+	;
+
+<a name="mNUMBER_OR_DATETIME">mNUMBER_OR_DATETIME</a>
+	:	<a href="ODLLexer.html#mBASED_INTEGER">mBASED_INTEGER</a> 
+	|	<a href="ODLLexer.html#mDATETIME">mDATETIME</a> 
+	|	<a href="ODLLexer.html#mTIME">mTIME</a> 
+	|	<a href="ODLLexer.html#mREAL">mREAL</a> 
+	|	<a href="ODLLexer.html#mREAL">mREAL</a> 
+	|	<a href="ODLLexer.html#mREAL">mREAL</a> 
+	|	<a href="ODLLexer.html#mREAL">mREAL</a> 
+	|	<a href="ODLLexer.html#mINTEGER">mINTEGER</a> 
+	;
+
+protected <a name="mDIGITS">mDIGITS</a>
+	:	( <a href="ODLLexer.html#mDIGIT">mDIGIT</a> )+ 
+	;
+
+protected <a name="mBASED_INTEGER">mBASED_INTEGER</a>
+	:	<a href="ODLLexer.html#mDIGITS">mDIGITS</a> &#039;#&#039; 
+		(	&#039;+&#039; 
+		|	&#039;-&#039; 
+		|	
+		) 
+		( <a href="ODLLexer.html#mEXTENDED_DIGIT">mEXTENDED_DIGIT</a> )+ &#039;#&#039; 
+	;
+
+protected <a name="mDATETIME">mDATETIME</a>
+	:	<a href="ODLLexer.html#mYEAR">mYEAR</a> &#039;-&#039; <a href="ODLLexer.html#mMONTH">mMONTH</a> &#039;-&#039; <a href="ODLLexer.html#mDAY">mDAY</a> &#039;T&#039; <a href="ODLLexer.html#mTIME">mTIME</a> 
+	|	<a href="ODLLexer.html#mYEAR">mYEAR</a> &#039;-&#039; <a href="ODLLexer.html#mDOY">mDOY</a> &#039;T&#039; <a href="ODLLexer.html#mTIME">mTIME</a> 
+	|	<a href="ODLLexer.html#mDATE">mDATE</a> 
+	;
+
+protected <a name="mTIME">mTIME</a>
+	:	<a href="ODLLexer.html#mHOUR">mHOUR</a> 
+		(	&#039;:&#039; <a href="ODLLexer.html#mMINUTE">mMINUTE</a> 
+			(	&#039;:&#039; <a href="ODLLexer.html#mSECOND">mSECOND</a> 
+				(	&#039;.&#039; <a href="ODLLexer.html#mFRACTION">mFRACTION</a> 
+				|	
+				) 
+			|	
+			) 
+		|	
+		) 
+		(	&#039;Z&#039; 
+		|	
+		) 
+	;
+
+protected <a name="mSIGN">mSIGN</a>
+	:	&#039;+&#039; 
+	|	&#039;-&#039; 
+	;
+
+protected <a name="mREAL">mREAL</a>
+	:	(	<a href="ODLLexer.html#mSIGN">mSIGN</a> 
+		|	
+		) 
+		(	<a href="ODLLexer.html#mDIGITS">mDIGITS</a> 
+		|	
+		) 
+		&#039;.&#039; 
+		(	<a href="ODLLexer.html#mDIGITS">mDIGITS</a> 
+		|	
+		) 
+		(	(	&#039;E&#039; 
+			|	&#039;e&#039; 
+			) 
+			<a href="ODLLexer.html#mINTEGER">mINTEGER</a> 
+		|	
+		) 
+	;
+
+protected <a name="mEXTENDED_DIGIT">mEXTENDED_DIGIT</a>
+	:	<a href="ODLLexer.html#mDIGIT">mDIGIT</a> 
+	|	<a href="ODLLexer.html#mLETTER">mLETTER</a> 
+	;
+
+protected <a name="mYEAR">mYEAR</a>
+	:	<a href="ODLLexer.html#mDIGIT">mDIGIT</a> <a href="ODLLexer.html#mDIGIT">mDIGIT</a> <a href="ODLLexer.html#mDIGIT">mDIGIT</a> <a href="ODLLexer.html#mDIGIT">mDIGIT</a> 
+	;
+
+protected <a name="mMONTH">mMONTH</a>
+	:	<a href="ODLLexer.html#mDIGIT">mDIGIT</a> <a href="ODLLexer.html#mDIGIT">mDIGIT</a> 
+	;
+
+protected <a name="mDAY">mDAY</a>
+	:	<a href="ODLLexer.html#mDIGIT">mDIGIT</a> <a href="ODLLexer.html#mDIGIT">mDIGIT</a> 
+	;
+
+protected <a name="mDOY">mDOY</a>
+	:	<a href="ODLLexer.html#mDIGIT">mDIGIT</a> <a href="ODLLexer.html#mDIGIT">mDIGIT</a> <a href="ODLLexer.html#mDIGIT">mDIGIT</a> 
+	;
+
+protected <a name="mDATE">mDATE</a>
+	:	<a href="ODLLexer.html#mYEAR">mYEAR</a> &#039;-&#039; <a href="ODLLexer.html#mDOY">mDOY</a> 
+	|	<a href="ODLLexer.html#mYEAR">mYEAR</a> 
+		(	&#039;-&#039; <a href="ODLLexer.html#mMONTH">mMONTH</a> 
+			(	&#039;-&#039; <a href="ODLLexer.html#mDAY">mDAY</a> 
+			|	
+			) 
+		|	
+		) 
+		
+	;
+
+protected <a name="mHOUR">mHOUR</a>
+	:	<a href="ODLLexer.html#mDIGIT">mDIGIT</a> <a href="ODLLexer.html#mDIGIT">mDIGIT</a> 
+	;
+
+protected <a name="mMINUTE">mMINUTE</a>
+	:	<a href="ODLLexer.html#mDIGIT">mDIGIT</a> <a href="ODLLexer.html#mDIGIT">mDIGIT</a> 
+	;
+
+protected <a name="mSECOND">mSECOND</a>
+	:	<a href="ODLLexer.html#mDIGIT">mDIGIT</a> <a href="ODLLexer.html#mDIGIT">mDIGIT</a> 
+	;
+
+protected <a name="mFRACTION">mFRACTION</a>
+	:	<a href="ODLLexer.html#mDIGIT">mDIGIT</a> 
+		(	<a href="ODLLexer.html#mDIGIT">mDIGIT</a> 
+			(	<a href="ODLLexer.html#mDIGIT">mDIGIT</a> 
+			|	
+			) 
+		|	
+		) 
+	;
+
+<a name="mQUOTED">mQUOTED</a>
+	:	&#039;&quot;&#039; 
+		(	<a href="ODLLexer.html#mEOL">mEOL</a> 
+		|	( (	&#039;&quot;&#039; 
+				|	&#039;\r&#039; 
+				|	&#039;\n&#039; 
+				) ) 
+		)* 
+		&#039;&quot;&#039; 
+	;
+
+<a name="mSYMBOL">mSYMBOL</a>
+	:	&#039;\&#039;&#039; ( (	&#039;\&#039;&#039; 
+			|	&#039;\\&#039; 
+			|	&#039;\r&#039; 
+			|	&#039;\n&#039; 
+			) )* &#039;\&#039;&#039; 
+	;
+
+protected <a name="mIGNORE">mIGNORE</a>
+	:	. 
+	;
+      </source>
+    </section>
+  </body>
+</document>

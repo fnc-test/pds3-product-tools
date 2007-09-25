@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!--
 Copyright 2007, by the California Institute of Technology.
 ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
@@ -18,13 +17,13 @@ $Id$
 
 <document>
   <properties>
-    <title>Report Examples</title>
+    <title>ODL Grammar</title>
     <author email="Sean.Hardman@jpl.nasa.gov">Sean Hardman</author>
   </properties>
 
   <body>
-    <section name="Report Examples">
-      <p>This section details the various report formats available from the Validation Tool.
+    <section name="ODL Grammar">
+      <p>This section details the grammar for both the parser and the lexer, which were generated from the <i>src/resources/grammar/odl.g</i> source file.
       </p>
     </section>
   </body>

@@ -22,31 +22,22 @@ $Id$
     <author email="Sean.Hardman@jpl.nasa.gov">Sean Hardman</author>
   </properties>
   <body>
-    <release version="1.0.5" date="2007-09-28" description="This represents the maintenance release of the Validation Tool 1.0.0 release.">
-      <action dev="mcayanan" type="update">
-        Updated VTool to return the following exit values:
-        
-        <table>
-          <tr><td>0</td><td>The data product label(s) passed the PDS validation step with no errors or warnings.</td></tr>
-          <tr><td>1</td><td>An Application Error has occurred.</td></tr>
-          <tr><td>2</td><td>A System Error has occurred.</td></tr>
-          <tr><td>32</td><td>One or more files skipped during the validation run.</td></tr>
-          <tr><td>64</td><td>One or more validation warnings encountered during the validation run.</td></tr>
-          <tr><td>96</td><td>One or more files skipped and validation warnings encountered during the validation run.</td></tr>
-          <tr><td>128</td><td>One or more validation errors encountered during the validation run.</td></tr>
-          <tr><td>160</td><td>One or more files skipped and validation errors encountered during the validation run.</td></tr>
-          <tr><td>192</td><td>One or more validation warnings and errors encountered during the validation run.</td></tr>
-          <tr><td>224</td><td>One or more files skipped, validation warnings and errors encountered during the validation run.</td></tr>
-        </table>
-      </action>
-      <action dev="mcayanan" type="update">
-        Refactored the VTool class.
-      </action>
-      <action dev="mcayanan" type="fix">
-        Changed the jarpath settings in the shell scripts to a more generic value ('product-tools-X.X.X' instead of 'product-tools-1.0.0').
+    <release version="1.1.0" date="2007-09-28" description="This is a maintenance release of the Product Tools software including fixes and changes requested by the early adopters of the software.">
+      <action dev="shardman" type="update">
+        The Validation Tool application has been split out from the <i>product-tools</i> project in order to provide more specific documentation and to turn the <i>product-tools</i> project into a library of classes that can be included by other projects. The following files or directories were moved:
+        <ul>
+          <li>src/java/gov/nasa/pds/tools/VTool.java</li>
+          <li>src/java/gov/nasa/pds/tools/flags/VToolFlags.java</li>
+          <li>src/java/gov/nasa/pds/tools/config/</li>
+          <li>src/java/gov/nasa/pds/tools/status/</li>
+          <li>src/resources/scripts/</li>
+          <li>xdocs/install/</li>
+          <li>xdocs/user/</li>
+        </ul>
       </action>
     </release>
-    <release version="1.0.0" date="2007-05-04" description="This release of the Validation Tool represents the operational release for the Phase I targeted capabilities.">         
+
+    <release version="1.0.0" date="2007-05-04" description="This release of the Product Tools software, including the Validation Tool, represents the operational release for the Phase I targeted capabilities.">         
       <action dev="pramirez" type="add">
         Added support for validation of label fragments.
       </action>      

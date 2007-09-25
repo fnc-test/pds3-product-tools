@@ -27,7 +27,6 @@ $Id$
     </menu>
     <menu name="Product Tools Guide">
       <item name="Installation" href="install/index.html"/>
-      <item name="Use and Operation" href="user/index.html"/>
       <item name="Development" href="developer/index.html"/>
     </menu>
     <menu name="Download">
