@@ -152,7 +152,7 @@ $Id$
     <resources>
       <resource>
         <directory>${basedir}/src/resources/stylesheets</directory>
-        <targetPath>gov/nasa/pds/tools</targetPath>
+        <targetPath>gov/nasa/pds/tools/report</targetPath>
         <includes>
           <include>*.xsl</include>
         </includes>
