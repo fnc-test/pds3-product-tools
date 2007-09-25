@@ -15,6 +15,10 @@
 
 package gov.nasa.pds.tools.util;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 /**
  * @author pramirez
  * @version $Revision$
@@ -59,4 +63,19 @@ public class Utility {
         
         return trimmedString;
     }
+    
+	/**
+	 * Convert a string to a URL.
+	 * @param s The string to convert
+	 * @return A URL of the input string
+	 */
+	public static URL toURL(String s) throws MalformedURLException {
+		URL url = null;		
+		try {
+			url = new URL(s);
+		} catch (MalformedURLException ex) {
+			url = new File(s).toURI().toURL();
+		}
+		return url;
+	}
 }
