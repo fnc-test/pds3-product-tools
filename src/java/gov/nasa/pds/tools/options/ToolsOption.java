@@ -3,11 +3,9 @@ package gov.nasa.pds.tools.options;
 import org.apache.commons.cli.Option;
 
 /**
- * Class that extends Apache's Option class. Provides a simpler interface to describe a command-line
- * option.
+ * Class that extends Apache's Option class. Provides a simpler interface to build command-line
+ * option flags.
  * 
- * Like its superclass, the ToolsOption is not created independantly, but through an
- * instance of the Options class.
  * 
  * @author mcayanan
  *
