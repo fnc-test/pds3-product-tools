@@ -99,6 +99,11 @@ public class DefinitionFactory implements ODLTokenTypes, DictionaryTokens {
             if (attribute != null)
                 definition.setStatusType(attribute.getValue().toString());
             
+            //Find and set the object type
+            attribute = object.getAttribute(OBJECT_TYPE);
+            if (attribute != null)
+                definition.setObjectType(attribute.getValue().toString());
+            
             //Find and set the names of the required objects
             attribute = object.getAttribute(REQUIRED_OBJECTS);
             if (attribute != null) {
@@ -174,6 +179,12 @@ public class DefinitionFactory implements ODLTokenTypes, DictionaryTokens {
             attribute = object.getAttribute(STATUS_TYPE);
             if (attribute != null)
                 definition.setStatusType(attribute.getValue().toString());
+            
+            //Find and set the object type
+            attribute = object.getAttribute(OBJECT_TYPE);
+            if (attribute != null)
+                definition.setObjectType(attribute.getValue().toString());
+            
             //Find and set the names of the required elements
             attribute = object.getAttribute(REQUIRED_ELEMENTS);
             if (attribute != null) {
