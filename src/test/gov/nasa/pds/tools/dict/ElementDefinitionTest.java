@@ -38,8 +38,8 @@ public class ElementDefinitionTest extends TestCase {
       
         assertEquals("TEST", definition.getIdentifier());
         assertEquals(null, definition.getDataType());
-        assertEquals(null, definition.getUnitId());
-        assertEquals(null, definition.getValueType());
+        assertEquals("NONE", definition.getUnitId());
+        assertEquals("NONE", definition.getValueType());
         assertEquals(0, definition.getMinLength());
         assertEquals(Integer.MAX_VALUE, definition.getMaxLength());
         assertEquals(0, definition.getValues().size());
