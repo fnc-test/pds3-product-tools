@@ -26,7 +26,7 @@ import java.util.ArrayList;
  * @version $Revision$
  * 
  */
-public class ObjectDefinition extends Definition {
+public class ObjectDefinition extends Definition implements DictionaryTokens {
     private List requiredElements;
     private List optionalElements;
     private List requiredObjects;
@@ -39,6 +39,7 @@ public class ObjectDefinition extends Definition {
         optionalElements = new ArrayList();
         requiredObjects = new ArrayList();
         optionalObjects = new ArrayList();
+        objectType = OBJECT_TYPE_GENERIC;
     }
     
     /**
