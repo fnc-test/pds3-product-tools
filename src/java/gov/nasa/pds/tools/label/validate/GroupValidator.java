@@ -38,6 +38,11 @@ public class GroupValidator {
     
     public static boolean isValid(Dictionary dictionary, GroupStatement group) 
        throws DefinitionNotFoundException {
+        return isValid(dictionary, group, new DefaultValidationListener());
+    }
+    
+    public static boolean isValid(Dictionary dictionary, GroupStatement group, ValidationListener listener) 
+       throws DefinitionNotFoundException {
         boolean valid = true;
         
         //Lookup group definition, can't do anything without it
@@ -50,6 +55,8 @@ public class GroupValidator {
             String required = (String) i.next();
             if (!group.hasAttribute(required)) {
                 valid = false;
+                listener.reportError("Group " + group.getIdentifier() + 
+                        " does not contain required element " + required);
                 log.log(new ToolsLogRecord(Level.SEVERE, "Group " + group.getIdentifier() + 
                         " does not contain required element " + required,
                         group.getFilename(), group.getContext(), group.getLineNumber()));
@@ -65,6 +72,9 @@ public class GroupValidator {
                 AttributeStatement attribute = (AttributeStatement) i.next();
                 if (!definition.canHaveElement(attribute.getIdentifier())) {
                     valid = false;
+                    listener.reportError("Group " + group.getIdentifier() +  
+                            " contains the element " + attribute.getIdentifier() + 
+                            " which is neither required nor optional.");
                     log.log(new ToolsLogRecord(Level.SEVERE, "Group " + group.getIdentifier() +  
                             " contains the element " + attribute.getIdentifier() + 
                             " which is neither required nor optional.",
@@ -80,11 +90,13 @@ public class GroupValidator {
             AttributeStatement attribute = (AttributeStatement) i.next();
             boolean elementValid = false;
             try {
-                elementValid = ElementValidator.isValid(dictionary, attribute);
+                elementValid = ElementValidator.isValid(dictionary, attribute, listener);
             } catch (UnsupportedTypeException ute) {
+                listener.reportError(ute.getMessage());
                 log.log(new ToolsLogRecord(Level.SEVERE, ute.getMessage(), attribute.getFilename(), 
                         attribute.getContext(), attribute.getLineNumber()));
             } catch (DefinitionNotFoundException dnfe) {
+                listener.reportError(dnfe.getMessage());
                 log.log(new ToolsLogRecord(Level.SEVERE, dnfe.getMessage(), attribute.getFilename(), 
                         attribute.getContext(), attribute.getLineNumber()));
             }
