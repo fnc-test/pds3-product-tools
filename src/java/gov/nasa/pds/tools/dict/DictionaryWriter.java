@@ -56,8 +56,6 @@ public class DictionaryWriter implements DictionaryTokens {
         writer.write(")\n");
         writer.write("END_OBJECT = ALIAS_LIST\n");
         writer.write("END\n");
-        writer.write("/* End of alias definitions */\n");
-        writer.write("/* Start of unit definitions */\n");
         writer.write("OBJECT = UNIT_LIST\n");
         writer.write("  UNIT_SEQUENCE = (");
         Map units = dictionary.getUnits();
@@ -74,7 +72,6 @@ public class DictionaryWriter implements DictionaryTokens {
         writer.write(")\n");
         writer.write("END_OBJECT = UNIT_LIST\n");
         writer.write("END\n");
-        writer.write("/* End of unit definitions */\n");
         
         writeObjectDefinitions(dictionary, writer);
         writeGroupDefinitions(dictionary, writer);
@@ -84,7 +81,6 @@ public class DictionaryWriter implements DictionaryTokens {
     }
     
     private static void writeObjectDefinitions(Dictionary dictionary, BufferedWriter writer) throws IOException {
-        writer.write("/* Start of object definitions */\n");
         for (Iterator i = dictionary.getDefinitions().values().iterator(); i.hasNext();) {
             Definition definition = (Definition) i.next();
             if (definition instanceof ObjectDefinition) {
@@ -145,11 +141,9 @@ public class DictionaryWriter implements DictionaryTokens {
                 writer.write("END\n");
             }
         }
-        writer.write("/* End of object definitions */\n");
     }
     
     private static void writeGroupDefinitions(Dictionary dictionary, BufferedWriter writer) throws IOException {
-        writer.write("/* Start of group definitions */\n");
         for (Iterator i = dictionary.getDefinitions().values().iterator(); i.hasNext();) {
             Definition definition = (Definition) i.next();
             if (definition instanceof GroupDefinition) {
@@ -192,11 +186,9 @@ public class DictionaryWriter implements DictionaryTokens {
                 writer.write("END\n");
             }
         }
-        writer.write("/* End of group definitions */\n");
     }
     
     private static void writeElementDefinitions(Dictionary dictionary, BufferedWriter writer) throws IOException {
-        writer.write("/* Start of element definitions */\n");
         for (Iterator i = dictionary.getDefinitions().values().iterator(); i.hasNext();) {
             Definition definition = (Definition) i.next();
             if (definition instanceof ElementDefinition) {
@@ -232,7 +224,6 @@ public class DictionaryWriter implements DictionaryTokens {
                 writer.write("END\n");
             }
         }
-        writer.write("/* End of element definitions */\n");
     }
     
     public static void main(String [] args) throws Exception {
