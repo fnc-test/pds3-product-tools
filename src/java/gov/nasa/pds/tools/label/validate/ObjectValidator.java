@@ -155,9 +155,9 @@ public class ObjectValidator {
                 ObjectDefinition objectDefinition = dictionary.getObjectDefinition(obj.getIdentifier());
                 if (objectDefinition == null || !definition.isObjectPossible(objectDefinition.getIdentifier())) {
                     valid = false;
-                    listener.reportError("Object " + object.getIdentifier() +  " contains the element " +
+                    listener.reportError("Object " + object.getIdentifier() +  " contains the object " +
                             obj.getIdentifier() + " which is neither required nor optional.");
-                    log.log(new ToolsLogRecord(Level.SEVERE, "Object " + object.getIdentifier() +  " contains the element " +
+                    log.log(new ToolsLogRecord(Level.SEVERE, "Object " + object.getIdentifier() +  " contains the object " +
                             obj.getIdentifier() + " which is neither required nor optional.", obj.getFilename(), 
                             obj.getContext(), obj.getLineNumber()));
                 }
