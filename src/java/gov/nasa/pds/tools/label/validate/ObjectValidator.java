@@ -39,6 +39,11 @@ public class ObjectValidator {
     
     public static boolean isValid(Dictionary dictionary, ObjectStatement object) throws 
        DefinitionNotFoundException {
+        return isValid(dictionary, object, new DefaultValidationListener());
+    }
+    
+    public static boolean isValid(Dictionary dictionary, ObjectStatement object, ValidationListener listener) throws 
+       DefinitionNotFoundException {
         boolean valid = true;
         
         //Find definition then validate
@@ -66,6 +71,8 @@ public class ObjectValidator {
                 //Didn't find anything time to log
                 if (!foundAlias) {
                     valid = false;
+                    listener.reportError("Object " + object.getIdentifier() + 
+                            " does not contain required element " + required);
                     log.log(new ToolsLogRecord(Level.SEVERE, "Object " + object.getIdentifier() + 
                             " does not contain required element " + required, object.getFilename(), 
                             object.getContext(), object.getLineNumber()));
@@ -85,6 +92,8 @@ public class ObjectValidator {
                 ElementDefinition elementDefinition = dictionary.getElementDefinition(attribute.getIdentifier());
                 if (elementDefinition == null || !definition.isElementPossible(elementDefinition.getIdentifier())) {
                     valid = false;
+                    listener.reportError("Object " + object.getIdentifier() +  " contains the element " +
+                            attribute.getIdentifier() + " which is neither required nor optional.");
                     log.log(new ToolsLogRecord(Level.SEVERE, "Object " + object.getIdentifier() +  " contains the element " +
                             attribute.getIdentifier() + " which is neither required nor optional.", attribute.getFilename(),
                             attribute.getContext(), attribute.getLineNumber()));
@@ -93,11 +102,13 @@ public class ObjectValidator {
             //Validate attribute
             boolean elementValid = false;
             try {
-                elementValid = ElementValidator.isValid(dictionary, definition.getIdentifier(), attribute);
+                elementValid = ElementValidator.isValid(dictionary, definition.getIdentifier(), attribute, listener);
             } catch (UnsupportedTypeException ute) {
+                listener.reportError(ute.getMessage());
                 log.log(new ToolsLogRecord(Level.SEVERE, ute.getMessage(), attribute.getFilename(), 
                         attribute.getContext(), attribute.getLineNumber()));
             } catch (DefinitionNotFoundException dnfe) {
+                listener.reportError(dnfe.getMessage());
                 log.log(new ToolsLogRecord(Level.SEVERE, dnfe.getMessage(), attribute.getFilename(), 
                         attribute.getContext(), attribute.getLineNumber()));
             }
@@ -123,6 +134,8 @@ public class ObjectValidator {
                 //Didn't find anything time to log
                 if (!foundAlias) {
                     valid = false;
+                    listener.reportError("Object " + object.getIdentifier() + 
+                            " does not contain required object " + required);
                     log.log(new ToolsLogRecord(Level.SEVERE, "Object " + object.getIdentifier() + 
                             " does not contain required object " + required, object.getFilename(), 
                             object.getContext(), object.getLineNumber()));
@@ -142,6 +155,8 @@ public class ObjectValidator {
                 ObjectDefinition objectDefinition = dictionary.getObjectDefinition(obj.getIdentifier());
                 if (objectDefinition == null || !definition.isObjectPossible(objectDefinition.getIdentifier())) {
                     valid = false;
+                    listener.reportError("Object " + object.getIdentifier() +  " contains the element " +
+                            obj.getIdentifier() + " which is neither required nor optional.");
                     log.log(new ToolsLogRecord(Level.SEVERE, "Object " + object.getIdentifier() +  " contains the element " +
                             obj.getIdentifier() + " which is neither required nor optional.", obj.getFilename(), 
                             obj.getContext(), obj.getLineNumber()));
@@ -150,8 +165,9 @@ public class ObjectValidator {
             //Validate nested object
             boolean objValid = false;
             try {
-                objValid = ObjectValidator.isValid(dictionary, obj);
+                objValid = ObjectValidator.isValid(dictionary, obj, listener);
             } catch (DefinitionNotFoundException dnfe) {
+                listener.reportError(dnfe.getMessage());
                 log.log(new ToolsLogRecord(Level.SEVERE, dnfe.getMessage(), obj.getFilename(), 
                         obj.getContext(), obj.getLineNumber()));
             }
