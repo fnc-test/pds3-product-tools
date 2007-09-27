@@ -32,6 +32,7 @@ import java.util.Map;
  */
 public class Dictionary implements Status {
     private Map definitions;
+    private Map aliases;
     private String information;
     private Map units;
     private List unitList;
@@ -39,6 +40,7 @@ public class Dictionary implements Status {
     
     public Dictionary() {
         definitions = new HashMap();
+        aliases = new HashMap();
         units = new HashMap();
         unitList = new ArrayList();
         information = "";
@@ -59,12 +61,16 @@ public class Dictionary implements Status {
      * @param overwrite flag
      */
     public void merge(Dictionary dictionary, boolean overwrite) {
-        if (overwrite)
+        if (overwrite) {
             definitions.putAll(dictionary.definitions);
-        else {
+            aliases.putAll(dictionary.aliases);
+        } else {
             Map d = new HashMap(dictionary.definitions);
             d.putAll(definitions);
             definitions = d;
+            Map a = new HashMap(dictionary.aliases);
+            a.putAll(aliases);
+            aliases = a;
         }
     }
     
@@ -74,7 +80,9 @@ public class Dictionary implements Status {
      * @return flag indicating existence
      */
     public boolean containsDefinition(String identifier) {
-        return definitions.containsKey(identifier); 
+        if (definitions.containsKey(identifier) || aliases.containsKey(identifier))
+            return true;
+        return false;
     }
     
     /**
@@ -84,6 +92,8 @@ public class Dictionary implements Status {
      */
     public boolean containsObjectDefinition(String identifier) {
         Definition definition = (Definition) definitions.get(identifier);
+        if (definition == null)
+            definition = (Definition) aliases.get(identifier);
         if (definition != null && definition instanceof ObjectDefinition)
             return true;
         return false;
@@ -96,6 +106,8 @@ public class Dictionary implements Status {
      */
     public boolean containsGroupDefinition(String identifier) {
         Definition definition = (Definition) definitions.get(identifier);
+        if (definition == null)
+            definition = (Definition) aliases.get(identifier);
         if (definition != null && definition instanceof GroupDefinition)
             return true;
         return false;
@@ -114,7 +126,7 @@ public class Dictionary implements Status {
         Definition definition = null;
         
         if (objectContext != null) {
-            definition = (Definition) definitions.get(objectContext + "." + identifier);
+            definition = (Definition) aliases.get(objectContext + "." + identifier);
             if (definition != null && definition instanceof ElementDefinition)
                 return true;
         }
@@ -132,7 +144,10 @@ public class Dictionary implements Status {
      * @return the definition
      */
     public Definition getDefinition(String identifier) {
-        return (Definition) definitions.get(identifier);
+        Definition definition = (Definition) definitions.get(identifier);
+        if (definition == null)
+            definition = (Definition) aliases.get(identifier);
+        return definition;
     }
     
     /**
@@ -142,6 +157,8 @@ public class Dictionary implements Status {
      */
     public ObjectDefinition getObjectDefinition(String identifier) {
         Definition definition = (Definition) definitions.get(identifier);
+        if (definition == null)
+            definition = (Definition) aliases.get(identifier);
         if (definition != null && definition instanceof ObjectDefinition)
             return (ObjectDefinition) definition;
         return null;
@@ -154,6 +171,8 @@ public class Dictionary implements Status {
      */
     public GroupDefinition getGroupDefinition(String identifier) {
         Definition definition = (Definition) definitions.get(identifier);
+        if (definition == null)
+            definition = (Definition) aliases.get(identifier);
         if (definition != null && definition instanceof GroupDefinition)
             return (GroupDefinition) definition;
         return null;
@@ -172,7 +191,7 @@ public class Dictionary implements Status {
         Definition definition = null;
         
         if (objectContext != null) {
-            definition = (Definition) definitions.get(objectContext + "." + identifier);
+            definition = (Definition) aliases.get(objectContext + "." + identifier);
             if (definition != null && definition instanceof ElementDefinition)
                 return (ElementDefinition) definition;
         }
@@ -206,8 +225,9 @@ public class Dictionary implements Status {
                 elementDefinition.setUnitList(unitList);
             }
             for (Iterator i = definition.getAliases().iterator(); i.hasNext();) {
-                String alias = (String) i.next();
-                definitions.put(alias, definition);
+                String alias = i.next().toString();
+                if (overwrite || (!overwrite && !aliases.containsKey(alias)))
+                   aliases.put(alias, definition);
             }
         }
     }
@@ -265,9 +285,9 @@ public class Dictionary implements Status {
         boolean done = false;
         
         while (definition == null && !done) {
-            if (containsObjectDefinition(className))
-                definition = (ObjectDefinition) definitions.get(className);
-            else {
+            if (containsObjectDefinition(className)) {
+                definition = getObjectDefinition(className);
+            } else {
                 if (className.indexOf("_") == -1 || className.indexOf("_") == className.length()-1)
                     done = true;
                 else
@@ -293,7 +313,7 @@ public class Dictionary implements Status {
         
         while (definition == null && !done) {
             if (containsGroupDefinition(className))
-                definition = (GroupDefinition) definitions.get(className);
+                definition = getGroupDefinition(className);
             else {
                 if (className.indexOf("_") == -1 || className.indexOf("_") == className.length()-1)
                     done = true;
