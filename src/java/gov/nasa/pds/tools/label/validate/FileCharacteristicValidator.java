@@ -38,18 +38,20 @@ public class FileCharacteristicValidator implements LabelValidator, LabelType, R
     private final static String FILE_RECORDS = "FILE_RECORDS";
     private final static String LABEL_RECORDS = "LABEL_RECORDS";
 
-    /** (non-Javadoc)
-     * @see gov.nasa.pds.tools.label.validate.LabelValidator#isValid(gov.nasa.pds.tools.label.Label)
+    /* (non-Javadoc)
+     * @see gov.nasa.pds.tools.label.validate.LabelValidator#isValid(gov.nasa.pds.tools.label.Label, gov.nasa.pds.tools.label.validate.ValidationListener)
      */
-    public boolean isValid(Label label) {
+    public boolean isValid(Label label, ValidationListener listener) {
         if (label.getLabelType() == LabelType.UNDEFINED) {
+            listener.reportWarning("File characteristics will not be checked as the type of label is UNDEFINED.");
             log.log(new ToolsLogRecord(Level.WARNING, "File characteristics will not be checked as the type of label is UNDEFINED.", label.getFilename()));
             return true;
         }
         else if (label.getLabelType() == COMBINED_DETACHED)
-            return checkCombinedDetached(label);
+            return checkCombinedDetached(label, listener);
         else if (label.getLabelType() == ATTACHED || label.getLabelType() == DETACHED){
             if (label.getAttribute(RECORD_TYPE) == null) {
+                listener.reportError("Label does not contain the required RECORD_TYPE element.");
                 log.log(new ToolsLogRecord(Level.SEVERE, "Label does not contain the required RECORD_TYPE element.", label.getFilename()));
                 return false;
             }
@@ -57,6 +59,7 @@ public class FileCharacteristicValidator implements LabelValidator, LabelType, R
             String recordType = label.getAttribute(RECORD_TYPE).getValue().toString();
             if (!FIXED_LENGTH.equals(recordType) && !VARIABLE_LENGTH.equals(recordType) && 
                     !STREAM.equals(recordType) && !RecordType.UNDEFINED.equals(recordType)) {
+                listener.reportWarning("Could not determine RECORD_TYPE file characteristics will not be checked");
                 log.log(new ToolsLogRecord(Level.WARNING, "Could not determine RECORD_TYPE file characteristics will not be checked", label.getFilename()));
                 return false;
             }
@@ -66,28 +69,33 @@ public class FileCharacteristicValidator implements LabelValidator, LabelType, R
             }
             
             if (label.getLabelType() == ATTACHED)
-                return checkAttached(label);
+                return checkAttached(label, listener);
             else if (label.getLabelType() == DETACHED)
-                return checkDetached(label);
-        } else
+                return checkDetached(label, listener);
+        } else {
+            listener.reportWarning("Could not check file characteristics as the type of label could not be determined.");
             log.log(new ToolsLogRecord(Level.WARNING, "Could not check file characteristics as the type of label could not be determined.", label.getFilename()));
+        }
         
         return false;
     }
 
-    private boolean checkAttached(Label label) {
+    private boolean checkAttached(Label label, ValidationListener listener) {
         boolean pass = true;
         String recordType = label.getAttribute(RECORD_TYPE).getValue().toString();
         if (FIXED_LENGTH.equals(recordType) || VARIABLE_LENGTH.equals(recordType)) {
             if (label.getAttribute(RECORD_BYTES) == null) {
+                listener.reportError("Label does not contain required element " + RECORD_BYTES);
                 log.log(new ToolsLogRecord(Level.SEVERE, "Label does not contain required element " + RECORD_BYTES, label.getFilename()));
                 pass = false;
             }
             if (label.getAttribute(FILE_RECORDS) == null) {
+                listener.reportError("Label does not contain required element " + FILE_RECORDS);
                 log.log(new ToolsLogRecord(Level.SEVERE, "Label does not contain required element " + FILE_RECORDS, label.getFilename()));
                 pass = false;
             }
             if (label.getAttribute(LABEL_RECORDS) == null) {
+                listener.reportError("Label does not contain required element " + LABEL_RECORDS);
                 log.log(new ToolsLogRecord(Level.SEVERE, "Label does not contain required element " + LABEL_RECORDS, label.getFilename()));
                 pass = false;
             }
@@ -96,15 +104,17 @@ public class FileCharacteristicValidator implements LabelValidator, LabelType, R
         return pass;
     }
     
-    private boolean checkDetached(Label label) {
+    private boolean checkDetached(Label label, ValidationListener listener) {
         boolean pass = true;
         String recordType = label.getAttribute(RECORD_TYPE).getValue().toString();
         if (FIXED_LENGTH.equals(recordType) || VARIABLE_LENGTH.equals(recordType)) {
             if (label.getAttribute(RECORD_BYTES) == null) {
+                listener.reportError("Label does not contain required element " + RECORD_BYTES);
                 log.log(new ToolsLogRecord(Level.SEVERE, "Label does not contain required element " + RECORD_BYTES, label.getFilename()));
                 pass = false;
             }
             if (label.getAttribute(FILE_RECORDS) == null) {
+                listener.reportError("Label does not contain required element " + FILE_RECORDS);
                 log.log(new ToolsLogRecord(Level.SEVERE, "Label does not contain required element " + FILE_RECORDS, label.getFilename()));
                 pass = false;
             }
@@ -112,21 +122,22 @@ public class FileCharacteristicValidator implements LabelValidator, LabelType, R
         return pass;
     }
     
-    private boolean checkCombinedDetached(Label label) {
+    private boolean checkCombinedDetached(Label label, ValidationListener listener) {
         boolean pass = true;
         
         for (Iterator i = label.getObjects("FILE").iterator(); i.hasNext();) {
             ObjectStatement fileObject = (ObjectStatement) i.next();
-            pass = checkFileObject(fileObject);
+            pass = checkFileObject(fileObject, listener);
         }
         
         return pass;
     }
     
-    private boolean checkFileObject(ObjectStatement object) {
+    private boolean checkFileObject(ObjectStatement object, ValidationListener listener) {
         boolean pass = true;
         
         if (object.getAttribute(RECORD_TYPE) == null) {
+            listener.reportError("File object does not contain the required RECORD_TYPE element.");
             log.log(new ToolsLogRecord(Level.SEVERE, "File object does not contain the required RECORD_TYPE element.", 
                     object.getFilename(), object.getContext(), object.getLineNumber()));
             return false;
@@ -135,6 +146,7 @@ public class FileCharacteristicValidator implements LabelValidator, LabelType, R
         String recordType = object.getAttribute(RECORD_TYPE).getValue().toString();
         if (!FIXED_LENGTH.equals(recordType) && !VARIABLE_LENGTH.equals(recordType) && 
                 !STREAM.equals(recordType) && !RecordType.UNDEFINED.equals(recordType)) {
+            listener.reportWarning("Could not determine RECORD_TYPE file characteristics will not be checked");
             log.log(new ToolsLogRecord(Level.WARNING, "Could not determine RECORD_TYPE file characteristics will not be checked", 
                     object.getFilename(), object.getContext(), object.getLineNumber()));
             return false;
@@ -142,16 +154,25 @@ public class FileCharacteristicValidator implements LabelValidator, LabelType, R
         
         if (FIXED_LENGTH.equals(recordType) || VARIABLE_LENGTH.equals(recordType)) {
             if (object.getAttribute(RECORD_BYTES) == null) {
+                listener.reportError("File object does not contain required element " + RECORD_BYTES);
                 log.log(new ToolsLogRecord(Level.SEVERE, "File object does not contain required element " + RECORD_BYTES, 
                         object.getFilename(), object.getContext(), object.getLineNumber()));
                 pass = false;
             }
             if (object.getAttribute(FILE_RECORDS) == null) {
+                listener.reportError("File object does not contain required element " + FILE_RECORDS);
                 log.log(new ToolsLogRecord(Level.SEVERE, "File object does not contain required element " + FILE_RECORDS, 
                         object.getFilename(), object.getContext(), object.getLineNumber()));
                 pass = false;
             }
         } 
         return pass;
+    }
+
+    /** (non-Javadoc)
+     * @see gov.nasa.pds.tools.label.validate.LabelValidator#isValid(gov.nasa.pds.tools.label.Label)
+     */
+    public boolean isValid(Label label) {
+        return isValid(label, new DefaultValidationListener());
     }
 }
