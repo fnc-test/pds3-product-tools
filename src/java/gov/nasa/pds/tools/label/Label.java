@@ -34,6 +34,8 @@ public class Label implements LabelType, Status {
     private Map statements;
     private String filename;
     private String status;
+    private int numErrors;
+    private int numWarnings;
     
     /**
      * Constructs an object representation of a PDS label.
@@ -44,6 +46,8 @@ public class Label implements LabelType, Status {
         labelType = UNDEFINED;
         filename = null;
         status = Status.UNKNOWN;
+        numErrors = 0;
+        numWarnings = 0;
     }
 
     /**
@@ -267,4 +271,23 @@ public class Label implements LabelType, Status {
               this.status = FAIL;
         }
     }
+    
+    public void incrementErrors() {
+        numErrors++;
+    }
+    
+    public void incrementWarnings() {
+        numWarnings++;
+    }
+    
+    public void incrementErrors(int numErrors) {
+        this.numErrors += numErrors;
+    }
+    
+    public void incrementWarnings(int numWarnings) {
+        this.numWarnings += numWarnings;
+    }
+    
+    public int getNumErrors() {return numErrors;}
+    public int getNumWarnings() {return numWarnings;}
 }
