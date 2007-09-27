@@ -29,12 +29,12 @@ public abstract class Definition {
     private String statusType;
     private String description;
     private List aliases;
-    private String objectType;
+    protected String objectType;
     
     public Definition(String identifier) {
         this.identifier = identifier;
         description = "";
-        statusType = "";
+        statusType = "PROPOSED";
         objectType = null;
         aliases = new ArrayList();
     }
