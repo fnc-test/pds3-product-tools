@@ -26,7 +26,7 @@ import java.util.ArrayList;
  * @version $Revision$
  * 
  */
-public class GroupDefinition extends Definition {
+public class GroupDefinition extends Definition implements DictionaryTokens {
     private List requiredElements;
     private List optionalElements;
     
@@ -34,6 +34,7 @@ public class GroupDefinition extends Definition {
         super(identifier);
         requiredElements = new ArrayList();
         optionalElements = new ArrayList();
+        objectType = OBJECT_TYPE_GENERIC_GROUP;
     }
     
     /**
