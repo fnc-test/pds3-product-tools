@@ -10,7 +10,7 @@
 // may be required before exporting such information to foreign countries or
 // providing access to foreign nationals.
 //
-// $Id$ 
+// $Id: DefaultLabelParser.java 2652 2007-04-30 15:18:41Z mcayanan $ 
 //
 
 package gov.nasa.pds.tools.label.parser;
@@ -27,6 +27,7 @@ import gov.nasa.pds.tools.label.SFDULabel;
 import gov.nasa.pds.tools.label.Statement;
 import gov.nasa.pds.tools.label.antlr.ODLLexer;
 import gov.nasa.pds.tools.label.antlr.ODLParser;
+import gov.nasa.pds.tools.label.validate.CountListener;
 import gov.nasa.pds.tools.label.validate.DefinitionNotFoundException;
 import gov.nasa.pds.tools.label.validate.ElementValidator;
 import gov.nasa.pds.tools.label.validate.GroupValidator;
@@ -57,7 +58,7 @@ import antlr.ANTLRException;
 /**
  * Default implementation
  * @author pramirez
- * @version $Revision$
+ * @version $Revision: 2652 $
  * 
  */
 public class DefaultLabelParser implements LabelParser, Status {
@@ -137,21 +138,29 @@ public class DefaultLabelParser implements LabelParser, Status {
             label = parser.label();
             label.setStatus(PASS);
             label.setStatus(lexer.getStatus());
+            label.incrementErrors(lexer.getNumErrors());
+            label.incrementWarnings(lexer.getNumWarnings());
             label.setStatus(parser.getStatus());
+            label.incrementErrors(parser.getNumErrors());
+            label.incrementWarnings(parser.getNumWarnings());
         } catch (ANTLRException ex) {
             label.setStatus(FAIL);
+            label.incrementErrors();
             log.log(new ToolsLogRecord(Level.SEVERE, ex.getMessage(), url.toString()));
             throw new ParseException(ex.getMessage());
         }
         
         log.log(new ToolsLogRecord(Level.INFO, "Finished parsing", url.toString()));
         
+        CountListener listener = new CountListener();
         for (Iterator i = validators.iterator(); i.hasNext();) {
             LabelValidator validator = (LabelValidator) i.next();
-            boolean valid = validator.isValid(label);
+            boolean valid = validator.isValid(label, listener);
             if (!valid)
                 label.setStatus(FAIL);
         }
+        label.incrementErrors(listener.getNumErrors());
+        label.incrementWarnings(listener.getNumWarnings());
 
         return label;
     }
@@ -192,41 +201,48 @@ public class DefaultLabelParser implements LabelParser, Status {
         //Check all the statements
         List statements = label.getStatements();
         Collections.sort(statements);
+        CountListener listener = new CountListener();
         for (Iterator i = statements.iterator(); i.hasNext();) {
             Statement statement = (Statement) i.next();
             if (statement instanceof AttributeStatement) {
                 try {
-                    boolean valid = ElementValidator.isValid(dictionary, (AttributeStatement) statement);
-                    if (!valid)
+                    boolean valid = ElementValidator.isValid(dictionary, (AttributeStatement) statement, listener);
+                    if (!valid) {
                         label.setStatus(FAIL);
+                    }
                 } catch (DefinitionNotFoundException dnfe) {
                     label.setStatus(FAIL);
+                    label.incrementErrors();
                     log.log(new ToolsLogRecord(Level.SEVERE, dnfe.getMessage(), url.toString(), statement.getLineNumber()));
                 } catch (UnsupportedTypeException ute) {
                     label.setStatus(FAIL);
+                    label.incrementErrors();
                     log.log(new ToolsLogRecord(Level.SEVERE, ute.getMessage(), url.toString(), statement.getLineNumber()));
                 }
             } else if (statement instanceof ObjectStatement) {
                 try {
-                    boolean valid = ObjectValidator.isValid(dictionary, (ObjectStatement) statement);
+                    boolean valid = ObjectValidator.isValid(dictionary, (ObjectStatement) statement, listener);
                     if (!valid)
                         label.setStatus(FAIL);
                 } catch (DefinitionNotFoundException dnfe) {
                     label.setStatus(FAIL);
+                    label.incrementErrors();
                     log.log(new ToolsLogRecord(Level.SEVERE, dnfe.getMessage(), url.toString(), statement.getLineNumber()));
                 }
             } else if (statement instanceof GroupStatement) {
                 try {
-                    boolean valid = GroupValidator.isValid(dictionary, (GroupStatement) statement);
+                    boolean valid = GroupValidator.isValid(dictionary, (GroupStatement) statement, listener);
                     if (!valid)
                         label.setStatus(FAIL);
                 } catch (DefinitionNotFoundException dnfe) {
                     label.setStatus(FAIL);
+                    label.incrementErrors();
                     log.log(new ToolsLogRecord(Level.SEVERE, dnfe.getMessage(), url.toString(), statement.getLineNumber()));
                 }
             }
         }
-        
+        label.incrementErrors(listener.getNumErrors());
+        label.incrementWarnings(listener.getNumWarnings());
         log.log(new ToolsLogRecord(Level.INFO, "Finished semantic validation.", url.toString()));
         
         return label;
@@ -275,6 +291,7 @@ public class DefaultLabelParser implements LabelParser, Status {
         return parsePartial(null, url);
     }
     
+    
     /**
      * @see gov.nasa.pds.tools.label.parser.LabelParser#parsePartial(String,java.net.URL)
      */
@@ -321,14 +338,20 @@ public class DefaultLabelParser implements LabelParser, Status {
             label = parser.label();
             label.setStatus(PASS);
             label.setStatus(lexer.getStatus());
+            label.incrementErrors(lexer.getNumErrors());
+            label.incrementWarnings(lexer.getNumWarnings());
             label.setStatus(parser.getStatus());
+            label.incrementErrors(parser.getNumErrors());
+            label.incrementWarnings(parser.getNumWarnings());
         } catch (ANTLRException ex) {
             label.setStatus(FAIL);
+            label.incrementErrors();
             log.log(new ToolsLogRecord(Level.SEVERE, ex.getMessage(), url.toString(), context));
             throw new ParseException(ex.getMessage());
         }
         
         if (label.getStatement("PDS_VERSION_ID") != null) {
+            label.incrementWarnings();
             log.log(new ToolsLogRecord(Level.WARNING, "Fragment contains PDS_VERSION_ID which should not be present in a label fragment.", url.toString(), context));
         }
 
@@ -407,10 +430,14 @@ public class DefaultLabelParser implements LabelParser, Status {
         Logger logFile = Logger.getLogger(DefaultLabelParser.class.getName());
         if (dictionaryURL == null) {
             label = parser.parse(labelURL);
+            System.out.println("Errors: " + label.getNumErrors());
+            System.out.println("Warnings: " + label.getNumWarnings());
             logFile.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, label.getStatus(), labelURL.toString()));
         } else {
             Dictionary dictionary = DictionaryParser.parse(dictionaryURL, aliasing.booleanValue());
             label = parser.parse(labelURL, dictionary);
+            System.out.println("Errors: " + label.getNumErrors());
+            System.out.println("Warnings: " + label.getNumWarnings());
             logFile.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, label.getStatus(), labelURL.toString()));
             logFile.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, dictionary.getStatus(), dictionaryURL.toString()));
         }
