@@ -35,7 +35,7 @@ public class ElementDefinitionTest extends TestCase {
     
     public void testCtor() {
         ElementDefinition definition = new ElementDefinition("TEST");
-      
+        
         assertEquals("TEST", definition.getIdentifier());
         assertEquals(null, definition.getDataType());
         assertEquals("NONE", definition.getUnitId());
@@ -56,11 +56,11 @@ public class ElementDefinitionTest extends TestCase {
         definition.setDataType("DATA_TYPE");
         assertEquals("DATA_TYPE", definition.getDataType());
         
-        assertEquals(null, definition.getUnitId());
+        assertEquals("NONE", definition.getUnitId());
         definition.setUnitId("m**2");
         assertEquals("m**2", definition.getUnitId());
         
-        assertEquals(null, definition.getValueType());
+        assertEquals("NONE", definition.getValueType());
         definition.setValueType("INTEGER");
         assertEquals("INTEGER", definition.getValueType());
         
