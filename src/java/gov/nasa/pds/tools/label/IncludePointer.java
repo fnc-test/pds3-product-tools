@@ -37,6 +37,8 @@ public class IncludePointer extends ExternalPointer implements PointerType, Stat
     private List statements;
     private boolean loaded = false;
     private String loadStatus = null;
+    private int numErrors;
+    private int numWarnings;
 
     /**
      * Constructs a pointer that can be resolved to a set of statements.
@@ -47,6 +49,8 @@ public class IncludePointer extends ExternalPointer implements PointerType, Stat
     public IncludePointer(int lineNumber, String identifier, Value value) {
         super(INCLUDE, lineNumber, identifier, value);
         statements = new ArrayList();
+        numWarnings = 0;
+        numErrors = 0;
         loadStatus = UNKNOWN;
     }
     
@@ -70,6 +74,8 @@ public class IncludePointer extends ExternalPointer implements PointerType, Stat
             Label label = parser.parsePartial(labelContext, labelURL);
             loadStatus = label.getStatus();
             statements = label.getStatements();
+            numErrors = label.getNumErrors();
+            numWarnings = label.getNumWarnings();
         }
     }
     
@@ -92,5 +98,8 @@ public class IncludePointer extends ExternalPointer implements PointerType, Stat
     public String getLoadStatus() {
         return loadStatus;
     }
+    
+    public int getNumErrors() {return numErrors;}
+    public int getNumWarnings() {return numWarnings;}
 
 }
