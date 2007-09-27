@@ -93,8 +93,8 @@ public class ObjectDefinitionTest extends TestCase {
         ObjectDefinition definition = new ObjectDefinition("IMAGE");
         
         assertEquals(0, definition.getAliases().size());
-        definition.addAlias("XYZ_IMAGE");
-        assertEquals("XYZ_IMAGE", definition.getAliases().get(0));
+        definition.addAlias(new Alias("XYZ_IMAGE"));
+        assertEquals("XYZ_IMAGE", definition.getAliases().get(0).toString());
         
         assertEquals(0, definition.getRequiredElements().size());
         List required = new ArrayList();
