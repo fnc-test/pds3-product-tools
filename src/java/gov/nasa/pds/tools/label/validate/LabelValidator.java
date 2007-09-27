@@ -33,4 +33,6 @@ public interface LabelValidator {
      * @return flag indicating whether or not the step in validation was passed.
      */
     public boolean isValid(Label label);
+    
+    public boolean isValid(Label label, ValidationListener listener);
 }
