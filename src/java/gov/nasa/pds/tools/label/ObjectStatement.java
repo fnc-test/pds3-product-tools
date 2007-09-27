@@ -191,5 +191,13 @@ public class ObjectStatement extends Statement {
     public void attachComment(CommentStatement comment) {
         comments.add(comment);
     }
+    
+    public List getStatements() {
+        List statementList = new ArrayList();
+        for (Iterator i = statements.values().iterator(); i.hasNext();) {
+            statementList.addAll((List) i.next());
+        }
+        return statementList;
+    }
 
 }
