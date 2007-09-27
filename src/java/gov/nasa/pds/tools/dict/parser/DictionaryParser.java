@@ -15,6 +15,7 @@
 
 package gov.nasa.pds.tools.dict.parser;
 
+import gov.nasa.pds.tools.dict.Alias;
 import gov.nasa.pds.tools.dict.Definition;
 import gov.nasa.pds.tools.dict.Dictionary;
 import gov.nasa.pds.tools.dict.DictionaryTokens;
@@ -154,9 +155,9 @@ public class DictionaryParser implements ODLTokenTypes, DictionaryTokens, Status
                 if (aliasing) {
                     //Go through the aliases and add to appropriate deifnitions
                     for (Iterator i = aliases.keySet().iterator(); i.hasNext();) {
-                        String alias = i.next().toString();
-                        Definition d = (Definition) definitions.get(aliases.get(alias));
-                        d.addAlias(alias);
+                        String identifier = i.next().toString();
+                        Definition d = (Definition) definitions.get(identifier);
+                        d.addAliases((List) aliases.get(identifier));
                     }
                 }
                 
@@ -185,9 +186,13 @@ public class DictionaryParser implements ODLTokenTypes, DictionaryTokens, Status
             for (Iterator i = ((Sequence) objectAliases.getValue()).iterator(); i.hasNext();) {
                 Sequence values = (Sequence) i.next();
                 if (values.size() == 2) {
-                    String alias = values.get(0).toString();
+                    Alias alias = new Alias(values.get(0).toString());
                     String identifier = values.get(1).toString();
-                    aliases.put(alias, identifier);
+                    List as = (List) aliases.get(identifier);
+                    if (as == null)
+                        as = new ArrayList();
+                    as.add(alias);
+                    aliases.put(identifier, as);
                 }
             }
         }
@@ -199,10 +204,13 @@ public class DictionaryParser implements ODLTokenTypes, DictionaryTokens, Status
             for (Iterator i = ((Sequence) elementAliases.getValue()).iterator(); i.hasNext();) {
                 Sequence values = (Sequence) i.next();
                 if (values.size() == 3) {
-                    String alias = values.get(0).toString();
-                    String objectContext = values.get(1).toString();
+                    Alias alias = new Alias(values.get(1).toString(), values.get(0).toString());
                     String identifier = values.get(2).toString();
-                    aliases.put(objectContext + "." + alias, identifier);
+                    List as = (List) aliases.get(identifier);
+                    if (as == null)
+                        as = new ArrayList();
+                    as.add(alias);
+                    aliases.put(identifier, as);
                 }
             }
         }
