@@ -58,7 +58,7 @@ public class ObjectDefinitionTest extends TestCase {
         definition.setDescription("description");
         assertEquals("description", definition.getDescription());
         
-        assertEquals("", definition.getStatusType());
+        assertEquals("PROPOSED", definition.getStatusType());
         definition.setStatusType("APPROVED");
         assertEquals("APPROVED", definition.getStatusType());
         
