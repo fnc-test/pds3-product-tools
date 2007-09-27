@@ -35,6 +35,33 @@ $Id$
           <li>xdocs/user/</li>
         </ul>
       </action>
+      <action dev="pramirez" type="add">
+        Added support for aliases in the dictionary. They are now handled more uniformly and there is an explicit class for dealing with them.
+      </action>
+      <action dev="pramirez" type="update">
+        Added support for namespaces in identifiers. There is now a class that handles parsing out of the namespace in an identifier. This was being done in multiple places in the code before so was a way to clean things up.
+      </action>
+      <action dev="pramirez" type="fix">
+        Times can no longer reside on the right hand side of an attribute statement without being proceeded by a date. This was being allowed by the grammar but is not part of the standard.
+      </action>
+      <action dev="pramirez" type="fix">
+        The map of definitions returned from the dictionary class contained redundant definitions and used a naming convention that was not explicitly called out. This was cleaned up and now the map returns only a single copy of the definitions. In additioned the weird naming convention has been tossed.
+      </action>
+      <action dev="pramirez" type="fix">
+        Aliases in the dictionary were not be correctly read in or handled all the time. There was some errant information found in the dictionary. This has been removed and fixed.
+      </action>
+      <action dev="pramirez" type="update">
+        Updated fields in definitions to support all that was found in the dictionary. There were some missing fields before now everything read in is perserved.
+      </action>
+      <action dev="pramirez" type="add">
+        Capability to write a dictionary to a file is now supported using the DictionaryWriter class.
+      </action>
+      <action dev="pramirez" type="add">
+        Label class now persists numbers of errors and warnings found during validation. This was added to support some of the return value information that will now be provided.
+      </action>
+      <action dev="pramirez" type="fix">
+        Validation layer now ensures that there is not duplicate attribute identifiers within the same block. For instance, will report an error when multiple "TARGET_NAME"s are found.
+      </action>
     </release>
 
     <release version="1.0.0" date="2007-05-04" description="This release of the Product Tools software, including the Validation Tool, represents the operational release for the Phase I targeted capabilities.">         
