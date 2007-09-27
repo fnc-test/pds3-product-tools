@@ -39,8 +39,8 @@ public class ElementDefinition extends Definition {
         super(identifier);
         dataType = null;
         unitList = new ArrayList();
-        unitId = null;
-        valueType = null;
+        unitId = "NONE";
+        valueType = "NONE";
         minLength = 0;
         maxLength = Integer.MAX_VALUE;
         values = new ArrayList();
