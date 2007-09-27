@@ -37,7 +37,7 @@ public class ElementDefinition extends Definition {
     
     public ElementDefinition(String identifier) {
         super(identifier);
-        dataType = null;
+        dataType = "NULL";
         unitList = new ArrayList();
         unitId = "NONE";
         valueType = "NONE";
