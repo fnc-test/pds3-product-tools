@@ -52,7 +52,11 @@ public interface DictionaryTokens {
     public static final String VALUE_TYPE_SUGGESTED = "SUGGESTED";
     public static final String VALUE_TYPE_STATIC = "STATIC";
     public static final String OBJECT_TYPE_GENERIC_GROUP = "GENERIC_GROUP";
+    public static final String OBJECT_TYPE_SPECIFIC_GROUP = "SPECIFIC_GROUP";
+    public static final String OBJECT_TYPE_SPECIFIC = "SPECIFIC";
+    public static final String OBJECT_TYPE_GENERIC = "GENERIC";
     public static final String OBJECT_TYPE = "OBJECT_TYPE";
+    public static final String NOT_APPLICABLE = "N/A";
     public static final int ELEMENT_IDENT_LENGTH = 30;
     public static final int NAMESPACE_LENGTH = 30;
 }
