@@ -69,6 +69,8 @@ tokens {
     private String filename = null;
     private String context = null;
     private String status = Status.UNKNOWN;
+    private int numErrors = 0;
+    private int numWarnings = 0;
     
     public void setFilename(String filename) {
        this.filename = filename;
@@ -103,22 +105,45 @@ tokens {
         }
     }
     
+    public void incrementErrors() {
+       numErrors++;
+    }
+    
+    public void incrementWarnings() {
+       numWarnings++;
+    }
+    
+    public void incrementErrors(int numErrors) {
+       this.numErrors += numErrors;
+    }
+    
+    public void incrementWarnings(int numWarnings) {
+       this.numWarnings += numWarnings;
+    }
+    
+    public int getNumErrors() {return numErrors;}
+    public int getNumWarnings() {return numWarnings;}
+    
     public void reportError(RecognitionException re) {
         setStatus(Status.FAIL);
+        incrementErrors();
         log.log(new ToolsLogRecord(Level.SEVERE, re.toString(), filename, context, re.getLine()));
     }
     
     public void reportError(RecognitionException re, String s) {
         setStatus(Status.FAIL);
+        incrementErrors();
         log.log(new ToolsLogRecord(Level.SEVERE, re.toString(), filename, context, re.getLine()));
     }
     
     public void reportError(String message, int line) {
         setStatus(Status.FAIL);
+        incrementErrors();
         log.log(new ToolsLogRecord(Level.SEVERE, message, filename, context, line));
     }
     
     public void reportWarning(String message, int line) {
+        incrementWarnings();
         log.log(new ToolsLogRecord(Level.WARNING, message, filename, context, line));
     }
     
@@ -319,6 +344,7 @@ pointer_statement returns [PointerStatement result = null]
             } catch (MalformedURLException mue) {
                result = null;
                setStatus(Status.FAIL);
+               incrementErrors();
                log.log(new ToolsLogRecord(Level.SEVERE, mue.getMessage(), filename, context, a.getLineNumber()));
             }
             if (followPointers && result != null && result instanceof IncludePointer) {
@@ -326,11 +352,15 @@ pointer_statement returns [PointerStatement result = null]
                try {
                   ip.loadReferencedStatements(includePaths);
                   setStatus(ip.getLoadStatus());
+                  incrementErrors(ip.getNumErrors());
+                  incrementWarnings(ip.getNumWarnings());
                } catch (gov.nasa.pds.tools.label.parser.ParseException pe) {
                   setStatus(Status.FAIL);
+                  incrementErrors();
                   log.log(new ToolsLogRecord(Level.SEVERE, pe.getMessage(), filename, context, a.getLineNumber()));
                } catch (IOException ioe) {
                   setStatus(Status.FAIL);
+                  incrementErrors();
                   log.log(new ToolsLogRecord(Level.SEVERE, ioe.getMessage(), filename, context, a.getLineNumber()));
                } 
             } else if (followPointers && result != null && result instanceof ExternalPointer) {
@@ -339,6 +369,7 @@ pointer_statement returns [PointerStatement result = null]
                   ep.resolveURL(includePaths);
                } catch (IOException ioe) {
                   setStatus(Status.FAIL);
+                  incrementErrors();
                   log.log(new ToolsLogRecord(Level.SEVERE, ioe.getMessage(), filename, context, a.getLineNumber()));
                }
             }
@@ -423,24 +454,27 @@ date_time_value returns [DateTime result = null]
               result = new DateTime(d.getText());
            } catch (ParseException pe) {
               setStatus(Status.FAIL);
+              incrementErrors();
               log.log(new ToolsLogRecord(Level.SEVERE, pe.getMessage(), filename, context, d.getLine()));
            }
         }
-    | t:TIME
-        {
-           try {
-              result = new DateTime(t.getText());
-           } catch (ParseException pe) {
-              setStatus(Status.FAIL);
-              log.log(new ToolsLogRecord(Level.SEVERE, pe.getMessage(), filename, context, t.getLine()));
-           }
-        }
+//    | t:TIME
+//        {
+//           try {
+//              result = new DateTime(t.getText());
+//           } catch (ParseException pe) {
+//              setStatus(Status.FAIL);
+//              incrementErrors();
+//              log.log(new ToolsLogRecord(Level.SEVERE, pe.getMessage(), filename, context, t.getLine()));
+//           }
+//        }
     | dt:DATETIME
         {
            try {
               result = new DateTime(dt.getText());
            } catch (ParseException pe) {
               setStatus(Status.FAIL);
+              incrementErrors();
               log.log(new ToolsLogRecord(Level.SEVERE, pe.getMessage(), filename, context, dt.getLine()));
            }
         }
@@ -531,6 +565,8 @@ options {
     private String filename = null;
     private String context = null;
     private String status = Status.UNKNOWN;
+    private int numErrors = 0;
+    private int numWarnings = 0;
     
     public void setFilename(String filename) {
        this.filename = filename;
@@ -565,22 +601,45 @@ options {
         }
     }
     
+    public void incrementErrors() {
+       numErrors++;
+    }
+    
+    public void incrementWarnings() {
+       numWarnings++;
+    }
+    
+    public void incrementErrors(int numErrors) {
+       this.numErrors += numErrors;
+    }
+    
+    public void incrementWarnings(int numWarnings) {
+       this.numWarnings += numWarnings;
+    }
+    
+    public int getNumErrors() {return numErrors;}
+    public int getNumWarnings() {return numWarnings;}
+    
     public void reportError(RecognitionException re) {
         setStatus(Status.FAIL);
+        incrementErrors();
         log.log(new ToolsLogRecord(Level.SEVERE, re.toString(), filename, context, re.getLine()));
     }
     
     public void reportError(RecognitionException re, String s) {
         setStatus(Status.FAIL);
+        incrementErrors();
         log.log(new ToolsLogRecord(Level.SEVERE, re.toString(), filename, context, re.getLine()));
     }
     
     public void reportError(String message, int line) {
         setStatus(Status.FAIL);
+        incrementErrors();
         log.log(new ToolsLogRecord(Level.SEVERE, message, filename, context, line));
     }
     
     public void reportWarning(String message, int line) {
+        incrementWarnings();
         log.log(new ToolsLogRecord(Level.WARNING, message, filename, context, line));
     }
 }
@@ -691,7 +750,7 @@ SPECIALCHAR
 NUMBER_OR_DATETIME
     : (DIGITS '#') => BASED_INTEGER {$setType(BASED_INTEGER);}
     | (DIGITS '-') => DATETIME {$setType(DATETIME);}
-    | (DIGITS ':') => TIME {$setType(TIME);}
+//    | (DIGITS ':') => TIME {$setType(TIME);}
     | (SIGN DIGITS '.') => REAL {$setType(REAL);}
     | (DIGITS '.') => REAL {$setType(REAL);}
     | (SIGN '.') => REAL {$setType(REAL);}
