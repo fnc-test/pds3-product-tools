@@ -16,6 +16,7 @@
 package gov.nasa.pds.tools.label.parser;
 
 import gov.nasa.pds.tools.label.validate.FileCharacteristicValidator;
+import gov.nasa.pds.tools.label.validate.DuplicateIdentifierValidator;
 
 /**
  * This class will be used to generate label parsers.
@@ -51,6 +52,7 @@ public class LabelParserFactory {
         // TODO: Change to dynamic class loading based upon configuration
         LabelParser parser = new DefaultLabelParser();
         parser.addValidator(new FileCharacteristicValidator());
+        parser.addValidator(new DuplicateIdentifierValidator());
         return parser;
     }
 
