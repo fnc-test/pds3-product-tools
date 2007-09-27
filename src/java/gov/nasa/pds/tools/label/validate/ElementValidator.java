@@ -50,6 +50,11 @@ public class ElementValidator implements DictionaryTokens {
     
     public static boolean isValid(ElementDefinition definition, AttributeStatement attribute) 
             throws UnsupportedTypeException {
+        return isValid(definition, attribute, new DefaultValidationListener());
+    }
+    
+    public static boolean isValid(ElementDefinition definition, AttributeStatement attribute, ValidationListener listener) 
+            throws UnsupportedTypeException {
         boolean valid = true;
         Value value = attribute.getValue();
         
@@ -57,6 +62,8 @@ public class ElementValidator implements DictionaryTokens {
         if (attribute.hasNamespace()) {
             if (attribute.getNamespace().length() > NAMESPACE_LENGTH) {
                 valid = false;
+                listener.reportError("Namespace exceeds max length of " + 
+                    ELEMENT_IDENT_LENGTH + " characters.");
                 log.log(new ToolsLogRecord(Level.SEVERE, "Namespace exceeds max length of " + 
                     ELEMENT_IDENT_LENGTH + " characters.", attribute.getFilename(), attribute.getContext(), attribute.getLineNumber()));
             }
@@ -65,6 +72,8 @@ public class ElementValidator implements DictionaryTokens {
         //Check length of identifier
         if (attribute.getElementIdentifier().length() > ELEMENT_IDENT_LENGTH) {
             valid = false;
+            listener.reportError("Identifier exceeds max length of " + 
+                    ELEMENT_IDENT_LENGTH + " characters.");
             log.log(new ToolsLogRecord(Level.SEVERE, "Identifier exceeds max length of " + 
                     ELEMENT_IDENT_LENGTH + " characters.", attribute.getFilename(), attribute.getContext(), attribute.getLineNumber()));
         }
@@ -72,7 +81,7 @@ public class ElementValidator implements DictionaryTokens {
         //Load the type checker
         TypeChecker checker = TypeCheckerFactory.getInstance().newInstance(definition.getDataType());
         //Validate the value
-        boolean valueValid = validate(definition, attribute, checker, value);
+        boolean valueValid = validate(definition, attribute, checker, value, listener);
         //Don't want to set to true if has already been set to false
         if (!valueValid)
             valid = false;
@@ -80,17 +89,18 @@ public class ElementValidator implements DictionaryTokens {
         return valid;
     }
     
-    private static boolean validate(ElementDefinition definition, AttributeStatement attribute, TypeChecker checker, Value value) 
+    private static boolean validate(ElementDefinition definition, AttributeStatement attribute, TypeChecker checker, Value value, ValidationListener listener) 
             throws UnsupportedTypeException {
         boolean valid = true;
         if (value == null) {
+            listener.reportWarning("Found no value for " + attribute.getIdentifier());
             log.log(new ToolsLogRecord(Level.WARNING, "Found no value for " + attribute.getIdentifier(), 
                     attribute.getFilename(), attribute.getContext(), attribute.getLineNumber()));
         } else if (value instanceof Set || value instanceof Sequence) {
             boolean validValues = true;
             for (Iterator i = ((Collection) value).iterator(); i.hasNext();) {
                 Value v = (Value) i.next();
-                validValues = validate(definition, attribute, checker, v);
+                validValues = validate(definition, attribute, checker, v, listener);
                 //Don't want to set to true if has already been set to false
                 if (!validValues)
                     valid = false;
@@ -123,11 +133,15 @@ public class ElementValidator implements DictionaryTokens {
                         if (!foundValue) {
                             //Only produce a warning if the standard value list is anything other than static
                             if (!VALUE_TYPE_STATIC.equals(definition.getValueType())) {
+                                listener.reportWarning(value.toString() + 
+                                        " is not in the suggested list of valid values for " + attribute.getIdentifier());
                                 log.log(new ToolsLogRecord(Level.WARNING, value.toString() + 
                                         " is not in the suggested list of valid values for " + attribute.getIdentifier(), 
                                         attribute.getFilename(), attribute.getContext(), attribute.getLineNumber()));
                             } else {
                                 valid = false;
+                                listener.reportError(value.toString() + 
+                                         " is not in the list of valid values for " + attribute.getIdentifier());
                                 log.log(new ToolsLogRecord(Level.SEVERE, value.toString() + 
                                          " is not in the list of valid values for " + attribute.getIdentifier(),
                                          attribute.getFilename(), attribute.getContext(), attribute.getLineNumber()));
@@ -146,6 +160,7 @@ public class ElementValidator implements DictionaryTokens {
                     castedValue = checker.cast(value.toString());
                 } catch (InvalidTypeException ite) {
                     valid = false;
+                    listener.reportError(ite.getMessage());
                     log.log(new ToolsLogRecord(Level.SEVERE, ite.getMessage(), attribute.getFilename(), attribute.getContext(), attribute.getLineNumber()));
                 }
                 
@@ -154,6 +169,7 @@ public class ElementValidator implements DictionaryTokens {
                     checker.checkMinLength(value.toString(), definition.getMinLength());
                 } catch (InvalidLengthException ile) {
                     valid = false;
+                    listener.reportError(ile.getMessage());
                     log.log(new ToolsLogRecord(Level.SEVERE, ile.getMessage(), attribute.getFilename(), attribute.getContext(), attribute.getLineNumber()));
                 }
                 
@@ -162,6 +178,7 @@ public class ElementValidator implements DictionaryTokens {
                     checker.checkMaxLength(value.toString(), definition.getMaxLength());
                 } catch (InvalidLengthException ile) {
                     valid = false;
+                    listener.reportError(ile.getMessage());
                     log.log(new ToolsLogRecord(Level.SEVERE, ile.getMessage(), attribute.getFilename(), attribute.getContext(), attribute.getLineNumber()));
                 }
                 
@@ -175,6 +192,7 @@ public class ElementValidator implements DictionaryTokens {
                             numericChecker.checkMinValue((Number) castedValue, definition.getMinimum());
                         } catch (OutOfRangeException oor) {
                             valid = false;
+                            listener.reportError(oor.getMessage());
                             log.log(new ToolsLogRecord(Level.SEVERE, oor.getMessage(), attribute.getFilename(), attribute.getContext(), attribute.getLineNumber()));
                         }
                     }
@@ -185,6 +203,7 @@ public class ElementValidator implements DictionaryTokens {
                             numericChecker.checkMaxValue((Number) castedValue, definition.getMaximum());
                         } catch (OutOfRangeException oor) {
                             valid = false;
+                            listener.reportError(oor.getMessage());
                             log.log(new ToolsLogRecord(Level.SEVERE, oor.getMessage(), attribute.getFilename(), attribute.getContext(), attribute.getLineNumber()));
                         }
                     }
@@ -201,8 +220,10 @@ public class ElementValidator implements DictionaryTokens {
                             }
                             if (!unitsValid) {
                                 valid = false;
+                                listener.reportError("Units (" + number.getUnits() + ") do not match " +
+                                        " those found in the dictionary.");
                                 log.log(new ToolsLogRecord(Level.SEVERE, "Units (" + number.getUnits() + ") do not match " +
-                                        "those found in the dictionary.", attribute.getFilename(), attribute.getContext(), 
+                                        " those found in the dictionary.", attribute.getFilename(), attribute.getContext(), 
                                         attribute.getLineNumber()));
                             }
                         }
@@ -234,17 +255,28 @@ public class ElementValidator implements DictionaryTokens {
      */
     public static boolean isValid(Dictionary dictionary, String objectContext, AttributeStatement attribute) 
             throws DefinitionNotFoundException, UnsupportedTypeException {
+        return isValid(dictionary, objectContext, attribute, new DefaultValidationListener());
+    }
+
+    
+    public static boolean isValid(Dictionary dictionary, String objectContext, AttributeStatement attribute, ValidationListener listener) 
+            throws DefinitionNotFoundException, UnsupportedTypeException {
         ElementDefinition definition = dictionary.getElementDefinition(objectContext, attribute.getIdentifier()); 
         
         if (definition == null)
             throw new DefinitionNotFoundException("Undefined Element: " + attribute.getIdentifier());
    
-        return isValid(definition, attribute);
+        return isValid(definition, attribute, listener);
     }
     
     public static boolean isValid(Dictionary dictionary, AttributeStatement attribute) 
             throws DefinitionNotFoundException, UnsupportedTypeException {
-        return isValid(dictionary, null, attribute);
+        return isValid(dictionary, attribute, new DefaultValidationListener());
+    }
+    
+    public static boolean isValid(Dictionary dictionary, AttributeStatement attribute, ValidationListener listener) 
+            throws DefinitionNotFoundException, UnsupportedTypeException {
+        return isValid(dictionary, null, attribute, listener);
     }
 
 }
