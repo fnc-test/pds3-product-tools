@@ -39,7 +39,7 @@ public class ObjectDefinitionTest extends TestCase {
         
         assertEquals("TABLE", definition.getIdentifier());
         assertEquals("", definition.getDescription());
-        assertEquals("", definition.getStatusType());
+        assertEquals("PROPOSED", definition.getStatusType());
         assertEquals(0, definition.getAliases().size());
         assertEquals(0, definition.getRequiredElements().size());
         assertEquals(0, definition.getOptionalElements().size());
