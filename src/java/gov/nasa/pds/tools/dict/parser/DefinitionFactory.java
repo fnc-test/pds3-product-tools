@@ -57,12 +57,12 @@ public class DefinitionFactory implements ODLTokenTypes, DictionaryTokens {
         Definition definition = null;
         
         if (object.getIdentifier().endsWith(DEFINITION)) {
-            if (object.getIdentifier().equals(GENERIC_OBJECT) || 
-                    object.getIdentifier().equals(SPECIFIC_OBJECT)) {
-                if (!OBJECT_TYPE_GENERIC_GROUP.equals(object.getAttribute(OBJECT_TYPE).getValue().toString()))
-                    definition = createObjectDefinition(object);
-                else
+            if (object.getIdentifier().equals(GENERIC_OBJECT) || object.getIdentifier().equals(SPECIFIC_OBJECT)) {
+                if (OBJECT_TYPE_GENERIC_GROUP.equals(object.getAttribute(OBJECT_TYPE).getValue().toString()) ||
+                    OBJECT_TYPE_SPECIFIC_GROUP.equals(object.getAttribute(OBJECT_TYPE).getValue().toString()))
                     definition = createGroupDefinition(object);
+                else
+                    definition = createObjectDefinition(object);
             } else if (object.getIdentifier().equals(ELEMENT_DEFINITION)) {
                 definition = createElementDefinition(object);
             } 
@@ -84,9 +84,9 @@ public class DefinitionFactory implements ODLTokenTypes, DictionaryTokens {
     public static ObjectDefinition createObjectDefinition(ObjectStatement object) throws UnknownDefinitionException {
         ObjectDefinition definition = null;
         
-        if (object.getIdentifier().equals(GENERIC_OBJECT) || 
-                object.getIdentifier().equals(SPECIFIC_OBJECT) &&
-                !OBJECT_TYPE_GENERIC_GROUP.equals(object.getAttribute(OBJECT_TYPE).getValue().toString())) {
+        if ((object.getIdentifier().equals(GENERIC_OBJECT) || object.getIdentifier().equals(SPECIFIC_OBJECT)) &&
+                (OBJECT_TYPE_GENERIC.equals(object.getAttribute(OBJECT_TYPE).getValue().toString()) ||
+                 OBJECT_TYPE_SPECIFIC.equals(object.getAttribute(OBJECT_TYPE).getValue().toString()))) {
             definition = new ObjectDefinition(object.getAttribute(NAME).getValue().toString());
            
             //Find and set the description
@@ -165,9 +165,9 @@ public class DefinitionFactory implements ODLTokenTypes, DictionaryTokens {
     public static GroupDefinition createGroupDefinition(ObjectStatement object) throws UnknownDefinitionException {
         GroupDefinition definition = null;
         
-        if (object.getIdentifier().equals(GENERIC_OBJECT) || 
-                object.getIdentifier().equals(SPECIFIC_OBJECT) &&
-                OBJECT_TYPE_GENERIC_GROUP.equals(object.getAttribute(OBJECT_TYPE).getValue().toString())) {
+        if ((object.getIdentifier().equals(GENERIC_OBJECT) || object.getIdentifier().equals(SPECIFIC_OBJECT)) &&
+                (OBJECT_TYPE_GENERIC_GROUP.equals(object.getAttribute(OBJECT_TYPE).getValue().toString()) ||
+                 OBJECT_TYPE_SPECIFIC_GROUP.equals(object.getAttribute(OBJECT_TYPE).getValue().toString()))) {
             definition = new GroupDefinition(object.getAttribute(NAME).getValue().toString());
             
             //Find and set the description
