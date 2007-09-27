@@ -37,7 +37,7 @@ public class ElementDefinitionTest extends TestCase {
         ElementDefinition definition = new ElementDefinition("TEST");
         
         assertEquals("TEST", definition.getIdentifier());
-        assertEquals(null, definition.getDataType());
+        assertEquals("NULL", definition.getDataType());
         assertEquals("NONE", definition.getUnitId());
         assertEquals("NONE", definition.getValueType());
         assertEquals(0, definition.getMinLength());
@@ -52,7 +52,7 @@ public class ElementDefinitionTest extends TestCase {
         definition.setIdentifier("TEST_NEW");
         assertEquals("TEST_NEW", definition.getIdentifier());
         
-        assertEquals(null, definition.getDataType());
+        assertEquals("NULL", definition.getDataType());
         definition.setDataType("DATA_TYPE");
         assertEquals("DATA_TYPE", definition.getDataType());
         
