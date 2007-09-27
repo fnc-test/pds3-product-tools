@@ -29,11 +29,13 @@ public abstract class Definition {
     private String statusType;
     private String description;
     private List aliases;
+    private String objectType;
     
     public Definition(String identifier) {
         this.identifier = identifier;
         description = "";
         statusType = "";
+        objectType = null;
         aliases = new ArrayList();
     }
 
@@ -49,8 +51,8 @@ public abstract class Definition {
      * Add an alias for this Definition
      * @param alias The alias to add
      */
-    public void addAlias(String alias) {
-        if (!aliases.contains(alias) && !identifier.equals(alias))
+    public void addAlias(Alias alias) {
+        if (!aliases.contains(alias) && !identifier.equals(alias.getIdentifier()))
             aliases.add(alias);
     }
 
@@ -62,11 +64,7 @@ public abstract class Definition {
     }
     
     public void addAliases(List aliases) {
-        for (Iterator i = aliases.iterator(); i.hasNext();) {
-            String alias = i.next().toString();
-            if (!this.aliases.contains(alias) && !identifier.equals(alias))
-                this.aliases.add(alias);
-        }
+        this.aliases.addAll(aliases);
     }
 
     /**
@@ -109,6 +107,14 @@ public abstract class Definition {
      */
     public void setIdentifier(String identifier) {
         this.identifier = identifier;
+    }
+    
+    public void setObjectType(String objectType) {
+        this.objectType = objectType;
+    }
+    
+    public String getObjectType() {
+        return objectType;
     }
 
 }
