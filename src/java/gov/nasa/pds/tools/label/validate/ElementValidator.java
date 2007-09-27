@@ -219,7 +219,6 @@ public class ElementValidator implements DictionaryTokens {
                                 unitsValid = true;
                             }
                             if (!unitsValid) {
-                                valid = false;
                                 listener.reportWarning("Units (" + number.getUnits() + ") do not match " +
                                         " those found in the dictionary.");
                                 log.log(new ToolsLogRecord(Level.WARNING, "Units (" + number.getUnits() + ") do not match " +
