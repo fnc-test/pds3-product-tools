@@ -36,16 +36,25 @@ $Id$
       </p>
 
       <ul>
-        <li>Moved the Validation Tool application to the <i>vtool</i> project.<br/>
-            The Validation Tool application has been split out from the <i>product-tools</i> project in order to provide more specific documentation and to turn the <i>product-tools</i> project into a library of classes that can be included by other projects.
+        <li>Moved the Validation Tool main class to the <i>vtool</i> project<br/>
+            The Validation Tool main class has been split out from the <i>product-tools</i> project in order to provide more specific documentation and to turn the <i>product-tools</i> project into a library of classes that can be included by other projects.
+        </li>
+        <li>Improved data dictionary handling<br/>
+            Many improvements and fixes were applied to the data dictionary classes. Many of these were initiated in order to support the Label Template Design Tool. They include better handling of aliases, support for namespaces in identifiers, access to all element definition fields, support for SPECIFIC_OBJECT_DEFINITION in GROUP definitions and the ability to write out a dictionary file.
+        </li>
+        <li>Elements may not be duplicated<br/>
+            An element may not be duplicated within a given block of a label. An error message will be generated stating that multiple elements of the same name were found.
+        </li>
+        <li>Unit handling<br/>
+            Messages regarding unknown unit values will now have a severity of WARNING instead of ERROR.
+        </li>
+        <li>Documentation Updates<br/>
+            Added the release notes to the PDF version of the Product Tools Guide and included README files in the binary and source distributions. Also added documentation detailing the grammar to the Development section.
         </li>
       </ul>
 
-      <p>The liens for this release are as follows:
+      <p>The liens for this release are the same as they were for release 1.0.0. 
       </p>
-
-      <ul>
-      </ul>
     </section>
 
     <section name="Release 1.0.0">

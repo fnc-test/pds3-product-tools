@@ -23,7 +23,7 @@ $Id$
   </properties>
   <body>
     <release version="1.1.0" date="2007-09-28" description="This is a maintenance release of the Product Tools software including fixes and changes requested by the early adopters of the software.">
-      <action dev="shardman" type="update">
+      <action dev="shardman" type="remove">
         The Validation Tool application has been split out from the <i>product-tools</i> project in order to provide more specific documentation and to turn the <i>product-tools</i> project into a library of classes that can be included by other projects. The following files or directories were moved:
         <ul>
           <li>src/java/gov/nasa/pds/tools/VTool.java</li>
@@ -38,8 +38,23 @@ $Id$
       <action dev="pramirez" type="add">
         Added support for aliases in the dictionary. They are now handled more uniformly and there is an explicit class for dealing with them.
       </action>
+      <action dev="pramirez" type="add">
+        Capability to write a dictionary to a file is now supported using the DictionaryWriter class.
+      </action>
+      <action dev="pramirez" type="add">
+        Label class now persists numbers of errors and warnings found during validation. This was added to support some of the return value information that will now be provided.
+      </action>
+      <action dev="shardman" type="add">
+        Added README files to be included with the binary and source distribution packages. The binary version points the user to the documentation provided with the package. The source version informs the user that they are on their own with regard to building the source in their own environment.
+      </action>
+      <action dev="shardman" type="add">
+        Added the somewhat human-readable representation of the grammer utilized to parse PDS labels to the Development section of the documentation. This is currently a manual process that is documented in the DEPLOY.txt file, which can be found in the root directory of this project.
+      </action>
       <action dev="pramirez" type="update">
         Added support for namespaces in identifiers. There is now a class that handles parsing out of the namespace in an identifier. This was being done in multiple places in the code before so was a way to clean things up.
+      </action>
+      <action dev="pramirez" type="update">
+        Updated fields in definitions to support all that was found in the dictionary. There were some missing fields before now everything read in is preserved.
       </action>
       <action dev="pramirez" type="fix">
         Times can no longer reside on the right hand side of an attribute statement without being proceeded by a date. This was being allowed by the grammar but is not part of the standard.
@@ -50,17 +65,14 @@ $Id$
       <action dev="pramirez" type="fix">
         Aliases in the dictionary were not be correctly read in or handled all the time. There was some errant information found in the dictionary. This has been removed and fixed.
       </action>
-      <action dev="pramirez" type="update">
-        Updated fields in definitions to support all that was found in the dictionary. There were some missing fields before now everything read in is perserved.
-      </action>
-      <action dev="pramirez" type="add">
-        Capability to write a dictionary to a file is now supported using the DictionaryWriter class.
-      </action>
-      <action dev="pramirez" type="add">
-        Label class now persists numbers of errors and warnings found during validation. This was added to support some of the return value information that will now be provided.
-      </action>
       <action dev="pramirez" type="fix">
         Validation layer now ensures that there is not duplicate attribute identifiers within the same block. For instance, will report an error when multiple "TARGET_NAME"s are found.
+      </action>
+      <action dev="pramirez" type="fix">
+        GROUP definitions in the data dictionary can now be specified as a SPECIFIC_OBJECT_DEFINITION as well as a GENERIC_OBJECT_DEFINITION.
+      </action>
+      <action dev="pramirez" type="fix">
+        Messages regarding unknown unit values will now have a severity of WARNING instead of ERROR.
       </action>
     </release>
 
