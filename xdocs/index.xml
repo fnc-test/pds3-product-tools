@@ -23,7 +23,7 @@ $Id$
 
   <body>
     <section name="About Product Tools">
-      <p>The next generation of Planetary Data System (PDS) Product Tools will support design/generation, validation and submission of archival products to the PDS. These tools are intended to replace the current generation of tools (e.g., lvtool, kwvtool, tbtool, etc.) used by the Discpline Nodes, Engineering Node and the PDS user community as a whole.
+      <p>The next generation of Planetary Data System (PDS) Product Tools will support design/generation, validation and submission of archival products to the PDS. These tools are intended to replace the current generation of tools (e.g., lvtool, kwvtool, tbtool, etc.) used by the Discpline Nodes, Engineering Node and the PDS user community as a whole. This project consists of a library of software classes to support the development of the next generation tools.
       </p>
     </section>
   </body>

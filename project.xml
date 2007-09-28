@@ -20,13 +20,13 @@ $Id$
   <extend>${defaults.xml}</extend>
   <id>product-tools</id>
   <name>Product Tools</name>
-  <currentVersion>1.0.1</currentVersion>
+  <currentVersion>1.1.0</currentVersion>
   <package>gov.nasa.pds.tools</package>
   <shortDescription>
     Next generation of PDS product tools.
   </shortDescription>
   <description>
-    The next generation of Planetary Data System (PDS) Product Tools will support design/generation, validation and submission of archival products to the PDS. These tools are intended to replace the current generation of tools (e.g., lvtool, kwvtool, tbtool, etc.) used by the Discpline Nodes, Engineering Node and the PDS user community as a whole.
+    The next generation of Planetary Data System (PDS) Product Tools will support design/generation, validation and submission of archival products to the PDS. These tools are intended to replace the current generation of tools (e.g., lvtool, kwvtool, tbtool, etc.) used by the Discpline Nodes, Engineering Node and the PDS user community as a whole. This project consists of a library of software classes to support the development of the next generation tools.
   </description>
 
   <developers>
