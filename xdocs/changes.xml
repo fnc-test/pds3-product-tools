@@ -22,6 +22,12 @@ $Id$
     <author email="Sean.Hardman@jpl.nasa.gov">Sean Hardman</author>
   </properties>
   <body>
+    <release version="1.1.1" date="2007-11-08" description="This is a maintenance release of the Product Tools software to support release 0.3.0 of the Label Template Design Tool.">
+      <action dev="mcayanan" type="add">
+        Added handler classes for the tools logging capability.
+      </action>
+    </release>
+
     <release version="1.1.0" date="2007-09-28" description="This is a maintenance release of the Product Tools software including fixes and changes requested by the early adopters of the software.">
       <action dev="shardman" type="remove">
         The Validation Tool application has been split out from the <i>product-tools</i> project in order to provide more specific documentation and to turn the <i>product-tools</i> project into a library of classes that can be included by other projects. The following files or directories were moved:

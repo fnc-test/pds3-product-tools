@@ -28,6 +28,14 @@ $Id$
       </p>
     </section>
 
+    <section name="Release 1.1.1">
+      <p>This is a maintenance release of the Product Tools software to support release 0.3.0 of the Label Template Design Tool.
+      </p>
+
+      <p>The only change for this release was to add handler classes for the tools logging capability. This change supports both VTool and LTDTool.
+      </p>
+    </section>
+
     <section name="Release 1.1.0">
       <p>This is a maintenance release of the Product Tools software including fixes and changes requested by the early adopters of the application.
       </p>
