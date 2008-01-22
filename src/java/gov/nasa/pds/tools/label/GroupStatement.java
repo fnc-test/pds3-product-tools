@@ -31,13 +31,24 @@ public class GroupStatement extends Statement {
     private List comments;
     
     /**
-     * @param lineNumber
-     * @param identifier
+     * Constructs an empty group statement
+     * @param lineNumber at which this statement occurs
+     * @param identifier of the statement
      */
     public GroupStatement(int lineNumber, String identifier) {
-        super(lineNumber, identifier);
-        statements = new HashMap();
-        comments = new ArrayList();
+    	this(lineNumber, identifier, new HashMap());
+    }
+    
+    /**
+     * Constructs a group statement that contains the given statements
+     * @param lineNumber at which this statement occurs
+     * @param indentifier of the statement
+     * @param statements contained within this group statement
+     */
+    public GroupStatement(int lineNumber, String identifier, Map statements) {
+    	super(lineNumber, identifier);
+    	this.statements = statements;
+    	comments = new ArrayList();
     }
     
     /**
