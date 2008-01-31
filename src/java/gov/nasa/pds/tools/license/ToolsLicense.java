@@ -23,10 +23,10 @@ package gov.nasa.pds.tools.license;
 public interface ToolsLicense {
 	
     public final String LICENSE = "\n"
-        + "Copyright 2006-2007, by the California Institute of Technology.\n"
+        + "Copyright 2007-2008, by the California Institute of Technology.\n"
         + "ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.\n"
-	+ "Any commercial use must be negotiated with the Office of Technology Transfer\n"
-	+ "at the California Institute of Technology.\n\n"
+	    + "Any commercial use must be negotiated with the Office of Technology Transfer\n"
+	    + "at the California Institute of Technology.\n\n"
         + "This software is subject to U. S. export control laws and regulations\n"
         + "(22 C.F.R. 120-130 and 15 C.F.R. 730-774). To the extent that the software\n"
         + "is subject to U.S. export control laws and regulations, the recipient has\n"
