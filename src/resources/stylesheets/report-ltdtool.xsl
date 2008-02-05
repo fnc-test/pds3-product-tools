@@ -9,6 +9,10 @@
 
 <xsl:template match="/">
   
+  <xsl:for-each select="log/record [level='CONFIG']">
+    <xsl:value-of select="message"/><xsl:text>&#xd;&#xa;</xsl:text>
+  </xsl:for-each>
+  
   <xsl:for-each select="log/record[level!='NOTIFICATION' and (level='INFO' or level='WARNING' or level='ERROR')]">
     <xsl:if test="$level='INFO'">
       <xsl:value-of select="level" /><xsl:value-of select="$pad2" />
