@@ -194,7 +194,10 @@ public class DictionaryWriter implements DictionaryTokens {
             if (definition instanceof ElementDefinition) {
                 ElementDefinition element = (ElementDefinition) definition;
                 writer.write("OBJECT = ELEMENT_DEFINITION\n");
-                writer.write("  NAME = " + element.getIdentifier() + "\n");
+                if (element.getIdentifier().indexOf(":") == -1)
+                    writer.write("  NAME = " + element.getIdentifier() + "\n");
+                else
+                	writer.write("  NAME = \"" + element.getIdentifier() + "\"\n");
                 writer.write("  STATUS_TYPE = " + element.getStatusType() + "\n");
                 writer.write("  GENERAL_DATA_TYPE = " + element.getDataType() + "\n");
                 writer.write("  UNIT_ID = '" + element.getUnitId() + "'\n");
