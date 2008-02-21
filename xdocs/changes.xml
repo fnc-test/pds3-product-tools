@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-Copyright 2006-2007, by the California Institute of Technology.
+Copyright 2006-2008, by the California Institute of Technology.
 ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
 Any commercial use must be negotiated with the Office of Technology Transfer
 at the California Institute of Technology.
@@ -28,6 +28,9 @@ $Id$
       </action>
       <action dev="mcayanan" type="update">
         Updated the command-line default value separator to be a comma instead of a space in the ToolsOption class.
+      </action>
+      <action dev="pramirez" type="fix">
+        When writing data dictionaries out to file, made sure that objects, groups and elements with namespaces are quoted.
       </action>
     </release>
     
