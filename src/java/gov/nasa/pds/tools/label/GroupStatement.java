@@ -42,7 +42,7 @@ public class GroupStatement extends Statement {
     /**
      * Constructs a group statement that contains the given statements
      * @param lineNumber at which this statement occurs
-     * @param indentifier of the statement
+     * @param identifier of the statement
      * @param statements contained within this group statement
      */
     public GroupStatement(int lineNumber, String identifier, Map statements) {
