@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- 
-Copyright 2006-2007, by the California Institute of Technology.
+Copyright 2006-2008, by the California Institute of Technology.
 ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
 Any commercial use must be negotiated with the Office of Technology Transfer
 at the California Institute of Technology.
@@ -81,7 +81,7 @@ $Id$
     </contributor>
     <contributor>
       <name>Mark Rose</name>
-      <email>mrose@email.arc.nasa.gov</email>
+      <email>Mark.Rose@nasa.gov</email>
       <organization>NASA Ames Research Center</organization>
       <roles>
         <role>Consultant</role>
