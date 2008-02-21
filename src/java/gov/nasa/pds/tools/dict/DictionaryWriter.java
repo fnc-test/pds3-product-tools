@@ -91,7 +91,10 @@ public class DictionaryWriter implements DictionaryTokens {
                     writer.write("OBJECT = GENERIC_OBJECT_DEFINITION\n");
                 }
                 
-                writer.write("  NAME = " + object.getIdentifier() + "\n");
+                if (object.getIdentifier().indexOf(":") == -1)
+                    writer.write("  NAME = " + object.getIdentifier() + "\n");
+                else
+                	writer.write("  NAME = \"" + object.getIdentifier() + "\"\n");
                 writer.write("  STATUS_TYPE = " + object.getStatusType() + "\n");
                 writer.write("  DESCRIPTION = \"" + object.getDescription() + "\"\n");
                 if (object.getRequiredElements().size() > 0) {
@@ -154,7 +157,10 @@ public class DictionaryWriter implements DictionaryTokens {
                     writer.write("OBJECT = GENERIC_OBJECT_DEFINITION\n");
                 }
                 
-                writer.write("  NAME = " + group.getIdentifier() + "\n");
+                if (group.getIdentifier().indexOf(":") == -1)
+                    writer.write("  NAME = " + group.getIdentifier() + "\n");
+                else
+                	writer.write("  NAME = \"" + group.getIdentifier() + "\"\n");
                 writer.write("  STATUS_TYPE = " + group.getStatusType() + "\n");
                 writer.write("  DESCRIPTION = \"" + group.getDescription() + "\"\n");
                 if (group.getRequiredElements().size() > 0) {
