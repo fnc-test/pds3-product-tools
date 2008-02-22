@@ -20,7 +20,7 @@ $Id$
   <extend>${defaults.xml}</extend>
   <id>product-tools</id>
   <name>Product Tools</name>
-  <currentVersion>1.1.2</currentVersion>
+  <currentVersion>1.1.3</currentVersion>
   <package>gov.nasa.pds.tools</package>
   <shortDescription>
     Next generation of PDS product tools.
