@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- 
-Copyright 2006-2007, by the California Institute of Technology.
+Copyright 2006-2008, by the California Institute of Technology.
 ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
 Any commercial use must be negotiated with the Office of Technology Transfer
 at the California Institute of Technology.
@@ -18,23 +18,14 @@ $Id$
 
 <project default="jar" xmlns:ant="jelly:ant" xmlns:j="jelly:core" xmlns:deploy="deploy" xmlns:velocity="jelly:org.apache.commons.jelly.tags.velocity.VelocityTagLibrary">
 
-  <!-- Process the navigation file template. -->
+  <!-- Process the xdoc templates. -->
   <preGoal name="site">
     <attainGoal name="site-template"/>
   </preGoal>
 
   <goal name="site-template">
-    <fileScanner var="templates">
-      <fileset dir="${basedir}/templates">
-        <include name="*.xml"/>
-      </fileset>
-    </fileScanner>
-
-    <j:forEach var="template" items="${templates.iterator()}">
-      <j:set var="templateName" value="${template.name}"/>
-      <echo>Processing template ${templateName} ...</echo> 
-      <velocity:merge name="${basedir}/xdocs/${templateName}" basedir="${basedir}/templates" template="${templateName}"/>
-    </j:forEach>
+    <velocity:merge name="${basedir}/xdocs/navigation.xml" basedir="${basedir}/templates" template="navigation.xml"/>
+    <velocity:merge name="${basedir}/xdocs/install/index.xml" basedir="${basedir}/templates" template="index-install.xml"/>
   </goal>
 
   <!-- Generate a PDF of the online documentation. -->
@@ -58,9 +49,10 @@ $Id$
               file="${basedir}/README-SOURCE.txt"/>
   </postGoal>
 
-  <!-- Clean up the navigation file that was generated from its template. -->
+  <!-- Clean up the files that were generated from templates. -->
   <postGoal name='clean:clean'>
     <delete file='${maven.docs.src}/navigation.xml' failonerror='false'/>
+    <delete file='${maven.docs.src}/install/index.xml' failonerror='false'/>
   </postGoal>
 </project>
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-Copyright 2006-2007, by the California Institute of Technology.
+Copyright 2006-2008, by the California Institute of Technology.
 ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
 Any commercial use must be negotiated with the Office of Technology Transfer
 at the California Institute of Technology.
@@ -25,7 +25,7 @@ $Id$
 
   <body>
     <section name="Installation">
-      <p>This section describes how to install the tools contained in the <i>product-tools</i> package. The following topics can be found in this section:
+      <p>This section describes how to install the tools contained in the <i>${pom.artifactId}</i> package. The following topics can be found in this section:
       </p>
 
       <ul>
@@ -36,7 +36,7 @@ $Id$
 
     <section name="System Requirements">
       <subsection name="Java Requirement">
-        <p>The tools contained in the <i>product-tools</i> package were developed using Java and will run on any platform with a supported Java Runtime Environment (JRE). The tools were specifically developed under Sun Java version 1.4, so the tool will execute correctly under versions 1.4 or 1.5.
+        <p>The tools contained in the <i>${pom.artifactId}</i> package were developed using Java and will run on any platform with a supported Java Runtime Environment (JRE). The tools were specifically developed under Sun Java version 1.4, so the tool will execute correctly under versions 1.4 or 1.5.
         </p>
 
         <p>Since the tools are developed using Sun's Java, this is the preferred Java environment for operation. The Sun Java package can be obtained from the <a href="http://java.sun.com/" target="_blank"> Sun Java</a> web site. Other Java environments are relatively compatible with Sun's Java. Testing has been performed with GNU's Java environment. The result is that release 4.1.1 at a minimum is required for nominal operations.
@@ -50,29 +50,29 @@ $Id$
     </section>
 
     <section name="Unpacking the Tools Package">
-      <p>Download the <i>product-tools</i> package from the <a href="http://pds.nasa.gov/tools/software_download.cfm" target="_blank">PDS Software Download</a> web page. The binary and source distributions are available in identical zip or tar/gzip packages. Unpack the selected binary distribution file with one of the following commands (where X.X.X is the current version):
+      <p>Download the <i>${pom.artifactId}</i> package from the <a href="http://pds.nasa.gov/tools/software_download.cfm" target="_blank">PDS Software Download</a> web page. The binary and source distributions are available in identical zip or tar/gzip packages. Unpack the selected binary distribution file with one of the following commands:
       </p>
 
       <source>
-[node: ~] unzip product-tools-X.X.X.zip
+[node: ~] unzip ${pom.artifactId}-${pom.currentVersion}.zip
 or
-[node: ~] tar -xzvf product-tools-X.X.X.tar.gz
+[node: ~] tar -xzvf ${pom.artifactId}-${pom.currentVersion}.tar.gz
       </source>
 
-      <p>Unpack the selected source distribution file with one of the following commands (where X.X.X is the current version):
+      <p>Unpack the selected source distribution file with one of the following commands:
       </p>
 
       <source>
-[node: ~] unzip product-tools-X.X.X-src.zip
+[node: ~] unzip ${pom.artifactId}-${pom.currentVersion}-src.zip
 or
-[node: ~] tar -xzvf product-tools-X.X.X-src.tar.gz
+[node: ~] tar -xzvf ${pom.artifactId}-${pom.currentVersion}-src.tar.gz
       </source>
 
       <p><b>Note:</b> Depending on the platform, the native version of <i>tar</i> may produce an error when attempting to unpack the distribution file because many of the file paths are greater than 100 characters. If available, the GNU version of tar will resolve this problem. If that is not available or cannot be installed, the zipped package will work just fine in a UNIX environment.
       </p>
 
       <subsection name="Binary Distribution">
-        <p>The binary distribution related commands above result in the creation of the <i>product-tools-X.X.X</i> directory with the following directory structure:
+        <p>The binary distribution related commands above result in the creation of the <i>${pom.artifactId}-${pom.currentVersion}</i> directory with the following directory structure:
         </p>
 
         <ul>
@@ -89,14 +89,14 @@ or
             </p>
           </li>
           <li><b>lib/</b>
-            <p>This directory contains the dependent jar files for the tool along with the jar file (product-tools-X.X.X.jar) containing the product tools software.
+            <p>This directory contains the dependent jar files for the tool along with the jar file (${pom.artifactId}-${pom.currentVersion}.jar) containing the product tools software.
             </p>
           </li>
         </ul>
       </subsection>
 
       <subsection name="Source Distribution">
-        <p>The source distribution related commands above result in the creation of the <i>product-tools-X.X.X</i> directory with the following directory structure:
+        <p>The source distribution related commands above result in the creation of the <i>${pom.artifactId}-${pom.currentVersion}</i> directory with the following directory structure:
         </p>
 
         <ul>
