@@ -55,7 +55,7 @@ public class FullLogFormatter extends Formatter {
 			records.add(toolsRecord);
 		}
 		
-		return null;
+		return "";
 	}
 	
 	private String processRecords(ToolsLogRecord record) {
