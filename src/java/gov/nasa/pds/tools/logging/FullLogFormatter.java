@@ -48,9 +48,9 @@ public class FullLogFormatter extends Formatter {
 		ToolsLogRecord toolsRecord = (ToolsLogRecord) record;
 		
 		if (toolsRecord.getLevel() == ToolsLevel.CONFIGURATION) {
-			config.append("  " + toolsRecord.getMessage() + doubleLineFeed);
+			config.append("  " + toolsRecord.getMessage() + lineFeed);
 		} else if (toolsRecord.getLevel() == ToolsLevel.PARAMETER) {
-			parameters.append("  " + toolsRecord.getMessage() + doubleLineFeed);
+			parameters.append("  " + toolsRecord.getMessage() + lineFeed);
 		} else if (toolsRecord.getLevel() == ToolsLevel.NOTIFICATION) {
 			return processRecords(toolsRecord);
 		} else {
@@ -80,21 +80,21 @@ public class FullLogFormatter extends Formatter {
 		else
 			numSkipped++;
 		
-		report.append("  " + record.getMessage() + ": " + record.getFile() + doubleLineFeed);
+		report.append("  " + record.getMessage() + ": " + record.getFile() + lineFeed);
 		
 		for (Iterator i = records.iterator(); i.hasNext();) {
 			ToolsLogRecord tlr = (ToolsLogRecord) i.next();
 			if (tlr.getFile() != null && (record.getFile().equals(tlr.getFile()) || record.getFile().equals(tlr.getContext()))) {
 				if (tlr.getContext() != null && tlr.getMessage().equals("Parsing label fragment."))
-					report.append("    Begin Fragment: " + tlr.getFile() + doubleLineFeed);
+					report.append("    Begin Fragment: " + tlr.getFile() + lineFeed);
 				
 				if (tlr.getLevel() != ToolsLevel.SEVERE)
-					report.append("      " + tlr.getLevel().getName() + "  " + tlr.getMessage() + doubleLineFeed);
+					report.append("      " + tlr.getLevel().getName() + "  " + tlr.getMessage() + lineFeed);
 				else
-					report.append("      ERROR  " + tlr.getMessage() + doubleLineFeed);
+					report.append("      ERROR  " + tlr.getMessage() + lineFeed);
 				
 				if (tlr.getContext() != null && tlr.getMessage().equals("Finished parsing label fragment."))
-					report.append("    End Fragment: " + tlr.getFile() + doubleLineFeed);
+					report.append("    End Fragment: " + tlr.getFile() + lineFeed);
 			}
 		}
 		
@@ -106,7 +106,7 @@ public class FullLogFormatter extends Formatter {
 		StringBuffer report = new StringBuffer(doubleLineFeed + "Summary:" + doubleLineFeed);
 		int totalFiles = numPassed + numFailed + numSkipped;
 		int totalValidated = numPassed + numFailed;
-		report.append("  " + totalValidated + " of " + totalFiles + " validated, " + numSkipped + " skipped" + doubleLineFeed);
+		report.append("  " + totalValidated + " of " + totalFiles + " validated, " + numSkipped + " skipped" + lineFeed);
 		report.append("  " + numPassed + " of " + totalValidated + " passed" + doubleLineFeed);
 		report.append("End of Report" + lineFeed);
 		return report.toString();
