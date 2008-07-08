@@ -114,8 +114,8 @@ public class AttributeStatement extends Statement {
     
     public boolean hasNamespace() {
         if ("".equals(namespace))
-            return true;
-        return false;
+            return false;
+        return true;
     }
 
 }
