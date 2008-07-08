@@ -70,7 +70,7 @@ public class FullLogFormatter extends Formatter {
 			report.append(lineFeed);
 			report.append(parameters);
 			report.append(lineFeed);
-			report.append("Validation Details:" + doubleLineFeed);
+			report.append("Validation Details:" + lineFeed);
 		}
 		
 		if (record.getMessage().equals("PASS"))
@@ -80,7 +80,7 @@ public class FullLogFormatter extends Formatter {
 		else
 			numSkipped++;
 		
-		report.append("  " + record.getMessage() + ": " + record.getFile() + lineFeed);
+		report.append(lineFeed + "  " + record.getMessage() + ": " + record.getFile() + lineFeed);
 		
 		for (Iterator i = records.iterator(); i.hasNext();) {
 			ToolsLogRecord tlr = (ToolsLogRecord) i.next();
