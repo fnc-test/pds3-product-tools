@@ -28,6 +28,8 @@ public class FullLogFormatter extends Formatter {
 	private StringBuffer config;
 	private StringBuffer parameters;
 	private boolean headerPrinted;
+	private static String lineFeed = System.getProperty("line.separator", "\n");
+	private static String doubleLineFeed = System.getProperty("line.separator", "\n") + System.getProperty("line.separator", "\n");
 	
 	public FullLogFormatter() {
 		numPassed = 0;
@@ -36,7 +38,7 @@ public class FullLogFormatter extends Formatter {
 		headerPrinted = false;
 		records = new ArrayList();
 		config = new StringBuffer();
-		parameters = new StringBuffer("Parameter Settings:\n\r\n\r");
+		parameters = new StringBuffer("Parameter Settings:" + doubleLineFeed);
 	}
 
 	/* (non-Javadoc)
@@ -46,9 +48,9 @@ public class FullLogFormatter extends Formatter {
 		ToolsLogRecord toolsRecord = (ToolsLogRecord) record;
 		
 		if (toolsRecord.getLevel() == ToolsLevel.CONFIGURATION) {
-			config.append("  " + toolsRecord.getMessage() + "\n\r\n\r");
+			config.append("  " + toolsRecord.getMessage() + doubleLineFeed);
 		} else if (toolsRecord.getLevel() == ToolsLevel.PARAMETER) {
-			parameters.append("  " + toolsRecord.getMessage() + "\n\r\n\r");
+			parameters.append("  " + toolsRecord.getMessage() + doubleLineFeed);
 		} else if (toolsRecord.getLevel() == ToolsLevel.NOTIFICATION) {
 			return processRecords(toolsRecord);
 		} else {
@@ -63,12 +65,12 @@ public class FullLogFormatter extends Formatter {
 		
 		if (!headerPrinted) {
 			headerPrinted = true;
-			report.append("PDS Validation Tool Report\n\r\n\r");
+			report.append("PDS Validation Tool Report" + doubleLineFeed);
 			report.append(config);
-			report.append("\n\r");
+			report.append(lineFeed);
 			report.append(parameters);
-			report.append("\n\r");
-			report.append("Validation Details:\n\r\n\r");
+			report.append(lineFeed);
+			report.append("Validation Details:" + doubleLineFeed);
 		}
 		
 		if (record.getMessage().equals("PASS"))
@@ -78,21 +80,21 @@ public class FullLogFormatter extends Formatter {
 		else
 			numSkipped++;
 		
-		report.append("  " + record.getMessage() + ": " + record.getFile() + "\n\r\n\r");
+		report.append("  " + record.getMessage() + ": " + record.getFile() + doubleLineFeed);
 		
 		for (Iterator i = records.iterator(); i.hasNext();) {
 			ToolsLogRecord tlr = (ToolsLogRecord) i.next();
 			if (tlr.getFile() != null && (record.getFile().equals(tlr.getFile()) || record.getFile().equals(tlr.getContext()))) {
 				if (tlr.getContext() != null && tlr.getMessage().equals("Parsing label fragment."))
-					report.append("    Begin Fragment: " + tlr.getFile() + "\n\r\n\r");
+					report.append("    Begin Fragment: " + tlr.getFile() + doubleLineFeed);
 				
 				if (tlr.getLevel() != ToolsLevel.SEVERE)
-					report.append("      " + tlr.getLevel().getName() + "  " + tlr.getMessage() + "\n\r\n\r");
+					report.append("      " + tlr.getLevel().getName() + "  " + tlr.getMessage() + doubleLineFeed);
 				else
-					report.append("      ERROR  " + tlr.getMessage() + "\n\r\n\r");
+					report.append("      ERROR  " + tlr.getMessage() + doubleLineFeed);
 				
 				if (tlr.getContext() != null && tlr.getMessage().equals("Finished parsing label fragment."))
-					report.append("    End Fragment: " + tlr.getFile() + "\n\r\n\r");
+					report.append("    End Fragment: " + tlr.getFile() + doubleLineFeed);
 			}
 		}
 		
@@ -101,12 +103,12 @@ public class FullLogFormatter extends Formatter {
 	}
 	
 	public String getTail(Handler handler) {
-		StringBuffer report = new StringBuffer("\n\r\n\rSummary:\n\r\n\r");
+		StringBuffer report = new StringBuffer(doubleLineFeed + "Summary:" + doubleLineFeed);
 		int totalFiles = numPassed + numFailed + numSkipped;
 		int totalValidated = numPassed + numFailed;
-		report.append("  " + totalValidated + " of " + totalFiles + " validated, " + numSkipped + " skipped\n\r\n\r");
-		report.append("  " + numPassed + " of " + totalValidated + " passed\n\r\n\r");
-		report.append("End of Report\n\r");
+		report.append("  " + totalValidated + " of " + totalFiles + " validated, " + numSkipped + " skipped" + doubleLineFeed);
+		report.append("  " + numPassed + " of " + totalValidated + " passed" + doubleLineFeed);
+		report.append("End of Report" + lineFeed);
 		return report.toString();
 	}
 
