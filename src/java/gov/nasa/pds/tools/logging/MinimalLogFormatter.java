@@ -55,9 +55,9 @@ public class MinimalLogFormatter extends Formatter {
 		ToolsLogRecord toolsRecord = (ToolsLogRecord) record;
 		
 		if (toolsRecord.getLevel() == ToolsLevel.CONFIGURATION) {
-			config.append("  " + toolsRecord.getMessage() + doubleLineFeed);
+			config.append("  " + toolsRecord.getMessage() + lineFeed);
 		} else if (toolsRecord.getLevel() == ToolsLevel.PARAMETER) {
-			parameters.append("  " + toolsRecord.getMessage() + doubleLineFeed);
+			parameters.append("  " + toolsRecord.getMessage() + lineFeed);
 		} else if (toolsRecord.getLevel() == ToolsLevel.NOTIFICATION) {
 			return processRecords(toolsRecord);
 		} else {
@@ -134,8 +134,8 @@ public class MinimalLogFormatter extends Formatter {
 		report.append(padding.substring(warnings.length()) + warnings + "  ");
 		report.append(padding.substring(infos.length()) + infos + doubleLineFeed);
 		
-		report.append("doubleLineFeedSummary:" + doubleLineFeed);
-		report.append("  " + totalValidated + " of " + totalFiles + " validated, " + numSkipped + " skipped" + doubleLineFeed);
+		report.append(doubleLineFeed + "Summary:" + doubleLineFeed);
+		report.append("  " + totalValidated + " of " + totalFiles + " validated, " + numSkipped + " skipped" + lineFeed);
 		report.append("  " + numPassed + " of " + totalValidated + " passed" + doubleLineFeed);
 		report.append("End of Report" + lineFeed);
 		return report.toString();
