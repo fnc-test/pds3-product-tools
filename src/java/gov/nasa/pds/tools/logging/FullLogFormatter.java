@@ -36,7 +36,7 @@ public class FullLogFormatter extends Formatter {
 		headerPrinted = false;
 		records = new ArrayList();
 		config = new StringBuffer();
-		parameters = new StringBuffer("Parameter Settings:\n\n");
+		parameters = new StringBuffer("Parameter Settings:\n\r\n\r");
 	}
 
 	/* (non-Javadoc)
@@ -46,9 +46,9 @@ public class FullLogFormatter extends Formatter {
 		ToolsLogRecord toolsRecord = (ToolsLogRecord) record;
 		
 		if (toolsRecord.getLevel() == ToolsLevel.CONFIG) {
-			config.append("  " + toolsRecord.getMessage() + "\n\n");
+			config.append("  " + toolsRecord.getMessage() + "\n\r\n\r");
 		} else if (toolsRecord.getLevel() == ToolsLevel.PARAMETER) {
-			parameters.append("  " + toolsRecord.getMessage() + "\n\n");
+			parameters.append("  " + toolsRecord.getMessage() + "\n\r\n\r");
 		} else if (toolsRecord.getLevel() == ToolsLevel.NOTIFICATION) {
 			return processRecords(toolsRecord);
 		} else {
@@ -63,12 +63,12 @@ public class FullLogFormatter extends Formatter {
 		
 		if (!headerPrinted) {
 			headerPrinted = true;
-			report.append("PDS Validation Tool Report\n\n");
+			report.append("PDS Validation Tool Report\n\r\n\r");
 			report.append(config);
-			report.append("\n");
+			report.append("\n\r");
 			report.append(parameters);
-			report.append("\n");
-			report.append("Validation Details:\n\n");
+			report.append("\n\r");
+			report.append("Validation Details:\n\r\n\r");
 		}
 		
 		if (record.getMessage().equals("PASS"))
@@ -78,21 +78,21 @@ public class FullLogFormatter extends Formatter {
 		else
 			numSkipped++;
 		
-		report.append("  " + record.getMessage() + ": " + record.getFile() + "\n\n");
+		report.append("  " + record.getMessage() + ": " + record.getFile() + "\n\r\n\r");
 		
 		for (Iterator i = records.iterator(); i.hasNext();) {
 			ToolsLogRecord tlr = (ToolsLogRecord) i.next();
 			if (tlr.getFile() != null && (record.getFile().equals(tlr.getFile()) || record.getFile().equals(tlr.getContext()))) {
 				if (tlr.getContext() != null && tlr.getMessage().equals("Parsing label fragment."))
-					report.append("    Begin Fragment: " + tlr.getFile() + "\n\n");
+					report.append("    Begin Fragment: " + tlr.getFile() + "\n\r\n\r");
 				
 				if (tlr.getLevel() != ToolsLevel.SEVERE)
-					report.append("      " + tlr.getLevel().getName() + "  " + tlr.getMessage() + "\n\n");
+					report.append("      " + tlr.getLevel().getName() + "  " + tlr.getMessage() + "\n\r\n\r");
 				else
-					report.append("      ERROR  " + tlr.getMessage() + "\n\n");
+					report.append("      ERROR  " + tlr.getMessage() + "\n\r\n\r");
 				
 				if (tlr.getContext() != null && tlr.getMessage().equals("Finished parsing label fragment."))
-					report.append("    End Fragment: " + tlr.getFile() + "\n\n");
+					report.append("    End Fragment: " + tlr.getFile() + "\n\r\n\r");
 			}
 		}
 		
@@ -101,12 +101,12 @@ public class FullLogFormatter extends Formatter {
 	}
 	
 	public String getTail(Handler handler) {
-		StringBuffer report = new StringBuffer("\n\nSummary:\n\n");
+		StringBuffer report = new StringBuffer("\n\r\n\rSummary:\n\r\n\r");
 		int totalFiles = numPassed + numFailed + numSkipped;
 		int totalValidated = numPassed + numFailed;
-		report.append("  " + totalValidated + " of " + totalFiles + " validated, " + numSkipped + " skipped\n\n");
-		report.append("  " + numPassed + " of " + totalValidated + " passed\n\n");
-		report.append("End of Report\n");
+		report.append("  " + totalValidated + " of " + totalFiles + " validated, " + numSkipped + " skipped\n\r\n\r");
+		report.append("  " + numPassed + " of " + totalValidated + " passed\n\r\n\r");
+		report.append("End of Report\n\r");
 		return report.toString();
 	}
 
