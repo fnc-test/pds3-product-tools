@@ -32,6 +32,8 @@ public class MinimalLogFormatter extends Formatter {
 	private StringBuffer parameters;
 	private boolean headerPrinted;
 	private static String padding = "      ";
+	private static String lineFeed = System.getProperty("line.separator", "\n");
+	private static String doubleLineFeed = System.getProperty("line.separator", "\n") + System.getProperty("line.separator", "\n");
 	
 	public MinimalLogFormatter() {
 		numPassed = 0;
@@ -43,7 +45,7 @@ public class MinimalLogFormatter extends Formatter {
 		headerPrinted = false;
 		records = new ArrayList();
 		config = new StringBuffer();
-		parameters = new StringBuffer("Parameter Settings:\n\r\n\r");
+		parameters = new StringBuffer("Parameter Settings:" + doubleLineFeed);
 	}
 
 	/* (non-Javadoc)
@@ -53,9 +55,9 @@ public class MinimalLogFormatter extends Formatter {
 		ToolsLogRecord toolsRecord = (ToolsLogRecord) record;
 		
 		if (toolsRecord.getLevel() == ToolsLevel.CONFIGURATION) {
-			config.append("  " + toolsRecord.getMessage() + "\n\r\n\r");
+			config.append("  " + toolsRecord.getMessage() + doubleLineFeed);
 		} else if (toolsRecord.getLevel() == ToolsLevel.PARAMETER) {
-			parameters.append("  " + toolsRecord.getMessage() + "\n\r\n\r");
+			parameters.append("  " + toolsRecord.getMessage() + doubleLineFeed);
 		} else if (toolsRecord.getLevel() == ToolsLevel.NOTIFICATION) {
 			return processRecords(toolsRecord);
 		} else {
@@ -73,13 +75,13 @@ public class MinimalLogFormatter extends Formatter {
 
 		if (!headerPrinted) {
 			headerPrinted = true;
-			report.append("PDS Validation Tool Report\n\r\n\r");
+			report.append("PDS Validation Tool Report" + doubleLineFeed);
 			report.append(config);
-			report.append("\n\r");
+			report.append(lineFeed);
 			report.append(parameters);
-			report.append("\n\r");
-			report.append("Message Counts:\n\r\n\r");
-			report.append(" ERROR    WARN    INFO    FILE\n\r");
+			report.append(lineFeed);
+			report.append("Message Counts:" + doubleLineFeed);
+			report.append(" ERROR    WARN    INFO    FILE" + lineFeed);
 		}
 		
 		if (record.getMessage().equals("PASS"))
@@ -112,7 +114,7 @@ public class MinimalLogFormatter extends Formatter {
 		report.append(padding.substring(errors.length()) + errors + "  ");
 		report.append(padding.substring(warnings.length()) + warnings + "  ");
 		report.append(padding.substring(infos.length()) + infos + "    ");
-		report.append(record.getFile() + "\n\r");
+		report.append(record.getFile() + lineFeed);
 		
 		records = new ArrayList();
 		return report.toString();
@@ -123,19 +125,19 @@ public class MinimalLogFormatter extends Formatter {
 		int totalFiles = numPassed + numFailed + numSkipped;
 		int totalValidated = numPassed + numFailed;
 		
-		report.append("----------------------\n\r");
+		report.append("----------------------" + lineFeed);
 		String errors = "" + totalErrors;
 		String warnings = "" + totalWarnings;
 		String infos = "" + totalInfos;
 		
 		report.append(padding.substring(errors.length()) + errors + "  ");
 		report.append(padding.substring(warnings.length()) + warnings + "  ");
-		report.append(padding.substring(infos.length()) + infos + "\n\r\n\r");
+		report.append(padding.substring(infos.length()) + infos + doubleLineFeed);
 		
-		report.append("\n\r\n\rSummary:\n\r\n\r");
-		report.append("  " + totalValidated + " of " + totalFiles + " validated, " + numSkipped + " skipped\n\r\n\r");
-		report.append("  " + numPassed + " of " + totalValidated + " passed\n\r\n\r");
-		report.append("End of Report\n\r");
+		report.append("doubleLineFeedSummary:" + doubleLineFeed);
+		report.append("  " + totalValidated + " of " + totalFiles + " validated, " + numSkipped + " skipped" + doubleLineFeed);
+		report.append("  " + numPassed + " of " + totalValidated + " passed" + doubleLineFeed);
+		report.append("End of Report" + lineFeed);
 		return report.toString();
 	}
 }
