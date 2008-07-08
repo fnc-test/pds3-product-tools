@@ -52,7 +52,7 @@ public class MinimalLogFormatter extends Formatter {
 	public String format(LogRecord record) {
 		ToolsLogRecord toolsRecord = (ToolsLogRecord) record;
 		
-		if (toolsRecord.getLevel() == ToolsLevel.CONFIG) {
+		if (toolsRecord.getLevel() == ToolsLevel.CONFIGURATION) {
 			config.append("  " + toolsRecord.getMessage() + "\n\r\n\r");
 		} else if (toolsRecord.getLevel() == ToolsLevel.PARAMETER) {
 			parameters.append("  " + toolsRecord.getMessage() + "\n\r\n\r");
