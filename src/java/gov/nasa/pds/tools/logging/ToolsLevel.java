@@ -23,8 +23,10 @@ import java.util.logging.Level;
  * 
  */
 public class ToolsLevel extends Level {
-    public static final Level NOTIFICATION = new ToolsLevel("NOTIFICATION", Level.SEVERE.intValue() + 2);
+    public static final Level NOTIFICATION = new ToolsLevel("NOTIFICATION", Level.SEVERE.intValue() + 3);
+    public static final Level CONFIGURATION = new ToolsLevel("CONFIGURATION", Level.SEVERE.intValue() + 2);
     public static final Level PARAMETER = new ToolsLevel("PARAMETER", Level.SEVERE.intValue() + 1);
+    
     
     protected ToolsLevel(String name, int value) {
         super(name, value);
