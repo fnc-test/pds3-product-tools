@@ -29,158 +29,119 @@ import java.util.GregorianCalendar;
  */
 public class DateTimeFormatter {
     private static SimpleDateFormat year = new SimpleDateFormat("yyyy");
-    private static SimpleDateFormat month = new SimpleDateFormat("-MM");
-    private static SimpleDateFormat doy = new SimpleDateFormat("-DDD");
-    private static SimpleDateFormat day = new SimpleDateFormat("-dd");
-    private static SimpleDateFormat hour = new SimpleDateFormat("'T'HH");
+    private static SimpleDateFormat ym = new SimpleDateFormat("yyyy-MM");
+    private static SimpleDateFormat ymd = new SimpleDateFormat("yyyy-MM-dd");
+    private static SimpleDateFormat doy = new SimpleDateFormat("yyyy-DDD");
+    private static SimpleDateFormat hour = new SimpleDateFormat("HH");
     private static SimpleDateFormat minute = new SimpleDateFormat(":mm");
     private static SimpleDateFormat second = new SimpleDateFormat(":ss");
     private static SimpleDateFormat millisecond = new SimpleDateFormat(".SSS");
-    private static SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
     
     static {
-        month.setLenient(false);
-        day.setLenient(false);
+    	year.setLenient(false);
+    	ym.setLenient(false);
+    	ymd.setLenient(false);
         doy.setLenient(false);
         hour.setLenient(false);
         minute.setLenient(false);
         second.setLenient(false);
         millisecond.setLenient(false);
-        formatter.setLenient(false);
     }
     
     public static Date parse(String datetime) throws ParseException {
     	int previousPosition = 0;
-    	int years = -1;
-    	int months = -1;
-    	int days = -1;
-    	int hours = -1;
-    	int minutes = -1;
-    	int seconds = -1;
-    	int milli = -1;
+    	long time = 0;
         ParsePosition position = new ParsePosition(0);
-        Date date = null;
+        Date workingDate = null;
         Calendar workingCalendar = Calendar.getInstance();
+        SimpleDateFormat dateFormatter = null;
         
-        //Parse year first
-        date = year.parse(datetime, position);
-        if (date == null || position.getIndex() - previousPosition != 4)
-            throw new ParseException("Could not create a date from " + datetime, previousPosition);
+        String[] date = datetime.split("T");
+        String currentDate = date[0];
+        String currentTime = null;
+        if (date.length == 2)
+        	currentTime = date[1];
+        
+        if (currentDate.length() == 4)
+        	dateFormatter = year;
+        else if (currentDate.length() == 7)
+        	dateFormatter = ym;
+        else if (currentDate.length() == 10)
+        	dateFormatter = ymd;
+        else if (currentDate.length() == 8)
+        	dateFormatter = doy;
+        else
+        	throw new ParseException("Could not create a date from " + datetime, previousPosition);
+        
+        workingDate = dateFormatter.parse(currentDate, position);
+        if (workingDate == null)
+        	throw new ParseException("Could not create a date from " + datetime, previousPosition);
         else {
-        	workingCalendar.setTime(date);
-        	years = workingCalendar.get(Calendar.YEAR);
-        	previousPosition = position.getIndex();
-        }
-
-        //Check to see if there is more of a date string to process
-        if (position.getIndex() < datetime.length()) {
-            date = month.parse(datetime, position);
-            
-            //If it was not parseable check to see if it is doy format other
-            if (date == null || position.getIndex() - previousPosition != 3) {
-            	position.setIndex(previousPosition);
-                date = doy.parse(datetime, position);
-                if (date == null || position.getIndex() - previousPosition != 4)
-                    throw new ParseException("Could not create a date from " + datetime, previousPosition);
-                else {
-                    //Date was doy format. Set day of year and move on.
-                    workingCalendar.setTime(date);
-                    months = workingCalendar.get(Calendar.MONTH) + 1;
-                    days = workingCalendar.get(Calendar.DAY_OF_MONTH);
-                    previousPosition = position.getIndex();
-                }
-            } else {
-                //Date was month based format. Set month.
-                workingCalendar.setTime(date);
-                months = workingCalendar.get(Calendar.MONTH) + 1;
-                previousPosition = position.getIndex();
-                //Check to see if there is a day of the month present
-                if (position.getIndex() < datetime.length()) {
-                    date = day.parse(datetime, position);
-                    if (date == null || position.getIndex() - previousPosition != 3)
-                        throw new ParseException("Could not create a date from "  + datetime, previousPosition);
-                    else {
-                        //Date had a day of month. Set day of month and move on.
-                        workingCalendar.setTime(date);
-                        days = workingCalendar.get(Calendar.DAY_OF_MONTH);
-                        previousPosition = position.getIndex();
-                    }
-                }
-            }
+            workingCalendar.setTime(workingDate);
+            time += workingCalendar.getTimeInMillis();
         }
         
+        position.setIndex(0);
         //Now we should be at the time string if there is any
-        //First will come the hours
-        if (position.getIndex() < datetime.length()) {
-            date = hour.parse(datetime, position);
-            if (date == null || position.getIndex() - previousPosition != 3)
-                throw new ParseException("Could not create a date from " + datetime, previousPosition);
-            else {
-                //Date had an hour. Set and move on
-                workingCalendar.setTime(date);
-                hours = workingCalendar.get(Calendar.HOUR_OF_DAY);  
-                previousPosition = position.getIndex();
-            }
-        }
-        
-        //Check for minutes
-        if (position.getIndex() < datetime.length() && datetime.charAt(position.getIndex()) != 'Z') {
-            date = minute.parse(datetime, position);
-            if (date == null || position.getIndex() - previousPosition != 3)
-                throw new ParseException("Could not create a date from " + datetime, previousPosition);
-            else {
-                //Date had minutes. Set and move on
-                workingCalendar.setTime(date);
-                minutes = workingCalendar.get(Calendar.MINUTE);
-                previousPosition = position.getIndex();
-            }
-        }
-        
-        //Check for seconds
-        if (position.getIndex() < datetime.length() && datetime.charAt(position.getIndex()) != 'Z') {
-            date = second.parse(datetime, position);
-            if (date == null || position.getIndex() - previousPosition != 3)
-                throw new ParseException("Could not create a date from " + datetime, previousPosition);
-            else {
-                //Date had seconds. Set and move on
-                workingCalendar.setTime(date);
-                seconds = workingCalendar.get(Calendar.SECOND);
-                previousPosition = position.getIndex();
-            }
-        }
-            
-        //Check for milliseconds
-        if (position.getIndex() < datetime.length() && datetime.charAt(position.getIndex()) != 'Z') {
-            date = millisecond.parse(datetime, position);
-            if (date == null || position.getIndex() - previousPosition != 4)
-                throw new ParseException("Could not create a date from " + datetime, previousPosition);
-            else {
-                //Date had milliseconds. Set and move on
-                workingCalendar.setTime(date);
-                milli = workingCalendar.get(Calendar.MILLISECOND);
-                previousPosition = position.getIndex();
-            }
-        }
-        
-        //Have we parsed the full date? If not throw an error
-        if (position.getIndex() < (datetime.length() - 2) || (position.getIndex() == (datetime.length() - 1) && datetime.charAt(position.getIndex()) != 'Z')) {
-            throw new ParseException("Could not create a date from " + datetime, position.getIndex());
+        if (currentTime != null) {
+	        //First will come the hours
+	        if (position.getIndex() < currentTime.length()) {
+	            workingDate = hour.parse(currentTime, position);
+	            if (workingDate == null || position.getIndex() - previousPosition != 2)
+	                throw new ParseException("Could not create a date from " + datetime, previousPosition);
+	            else {
+	                //Date had an hour. Set and move on
+	                workingCalendar.setTime(workingDate);
+	                time += workingCalendar.get(Calendar.HOUR_OF_DAY)*60*60*1000;
+	                previousPosition = position.getIndex();
+	            }
+	        }
+
+	        //Check for minutes
+	        if (position.getIndex() < currentTime.length() && currentTime.charAt(position.getIndex()) != 'Z') {
+	            workingDate = minute.parse(currentTime, position);
+	            if (workingDate == null || position.getIndex() - previousPosition != 3)
+	                throw new ParseException("Could not create a date from " + datetime, previousPosition);
+	            else {
+	                //Date had minutes. Set and move on
+	                workingCalendar.setTime(workingDate);
+	                time += workingCalendar.get(Calendar.MINUTE)*60*1000;
+	                previousPosition = position.getIndex();
+	            }
+	        }
+
+	        //Check for seconds
+	        if (position.getIndex() < currentTime.length() && currentTime.charAt(position.getIndex()) != 'Z') {
+	            workingDate = second.parse(currentTime, position);
+	            if (workingDate == null || position.getIndex() - previousPosition != 3)
+	                throw new ParseException("Could not create a date from " + datetime, previousPosition);
+	            else {
+	                //Date had seconds. Set and move on
+	                workingCalendar.setTime(workingDate);
+	                time += workingCalendar.get(Calendar.SECOND)*1000;
+	                previousPosition = position.getIndex();
+	            }
+	        }
+
+	        //Check for milliseconds
+	        if (position.getIndex() < currentTime.length() && currentTime.charAt(position.getIndex()) != 'Z') {
+	            workingDate = millisecond.parse(currentTime, position);
+	            if (workingDate == null || position.getIndex() - previousPosition != 4)
+	                throw new ParseException("Could not create a date from " + datetime, previousPosition);
+	            else {
+	                //Date had milliseconds. Set and move on
+	                workingCalendar.setTime(workingDate);
+	                time += workingCalendar.get(Calendar.MILLISECOND);
+	                previousPosition = position.getIndex();
+	            }
+	        }
         }
         
         //Date is not actually calculated in a calendar until you make a call to getTime.
         //Must check that date is fine.
-        Date returnDate = null;
-        GregorianCalendar calendar = new GregorianCalendar(years, months, days, hours, minutes, seconds);
-        try {
-        	if (milli != -1)
-        		calendar.set(Calendar.MILLISECOND, milli);
-        	if (days != 0)
-        		formatter.parse(years + "/" + months + "/" + days);
-            returnDate = calendar.getTime();
-        } catch (ParseException pe) {
-            throw new ParseException("Could not create a date from " + datetime, position.getIndex());
-        }
+        GregorianCalendar calendar = new GregorianCalendar();
+        calendar.setTimeInMillis(time);
         
-        return returnDate;
+        return calendar.getTime();
     }
 }
