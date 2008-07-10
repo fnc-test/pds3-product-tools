@@ -35,7 +35,6 @@ public class DateTimeFormatter {
     private static SimpleDateFormat hour = new SimpleDateFormat("HH");
     private static SimpleDateFormat minute = new SimpleDateFormat(":mm");
     private static SimpleDateFormat second = new SimpleDateFormat(":ss");
-    private static SimpleDateFormat millisecond = new SimpleDateFormat(".SSS");
     
     static {
     	year.setLenient(false);
@@ -45,7 +44,6 @@ public class DateTimeFormatter {
         hour.setLenient(false);
         minute.setLenient(false);
         second.setLenient(false);
-        millisecond.setLenient(false);
     }
     
     public static Date parse(String datetime) throws ParseException {
@@ -123,17 +121,21 @@ public class DateTimeFormatter {
 	            }
 	        }
 
-	        //Check for milliseconds
+	        //Check for fractional seconds
 	        if (position.getIndex() < currentTime.length() && currentTime.charAt(position.getIndex()) != 'Z') {
-	            workingDate = millisecond.parse(currentTime, position);
-	            if (workingDate == null || position.getIndex() - previousPosition != 4)
-	                throw new ParseException("Could not create a date from " + datetime, previousPosition);
-	            else {
-	                //Date had milliseconds. Set and move on
-	                workingCalendar.setTime(workingDate);
-	                time += workingCalendar.get(Calendar.MILLISECOND);
-	                previousPosition = position.getIndex();
-	            }
+	        	String fractional = currentTime.substring(position.getIndex() + 1);
+	        	if (fractional.charAt(fractional.length() - 1) == 'Z')
+	        		fractional = fractional.substring(0, fractional.length() -2);
+	        	
+	        	if (fractional.length() > 6)
+	        		throw new ParseException("Could not create a date from " + datetime, previousPosition);
+	        	
+	        	//TODO: Update to add milliseconds into time
+	        	try {
+	        		Integer.parseInt(fractional);
+	        	} catch (NumberFormatException nfe) {
+	        		throw new ParseException("Could not create a date from " + datetime, previousPosition);
+	        	}
 	        }
         }
         
