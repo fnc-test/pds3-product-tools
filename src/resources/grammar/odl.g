@@ -862,7 +862,7 @@ SECOND
     
 protected
 FRACTION
-    : DIGIT (DIGIT (DIGIT)?)?
+    : DIGIT (DIGIT (DIGIT (DIGIT (DIGIT (DIGIT)?)?)?)?)?
     ;
     
 // string literals
