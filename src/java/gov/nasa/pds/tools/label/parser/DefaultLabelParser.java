@@ -100,10 +100,14 @@ public class DefaultLabelParser implements LabelParser, Status {
         //Now look for PDS_VERSION_ID to ensure that this is a file we want to validate
         BufferedReader reader = new BufferedReader(new InputStreamReader(pdsCheck));
         reader.skip(skip);
-        String version = reader.readLine().trim();
-        String[] line = version.split("=");  
+        String version = reader.readLine();
+        String[] line = null;
+        if (version != null) {
+            version = version.trim();
+            line = version.split("=");  
+        }
         
-        if (line.length != 2) {
+        if (version == null || line == null || line.length != 2) {
             log.log(new ToolsLogRecord(Level.WARNING, "Not a label. Could not find the PDS_VERSION_ID in the first line.", url.toString()));
             throw new ParseException("Not a label. Could not find the PDS_VERSION_ID in the first line.");
         }
@@ -117,6 +121,8 @@ public class DefaultLabelParser implements LabelParser, Status {
         }
         
         pdsCheck.close();
+        log.log(new ToolsLogRecord(Level.INFO, "Parsing label with PDS_VERSION_ID = " + value, url.toString()));
+        
         InputStream input = url.openStream();
         input.skip(skip);
         ODLLexer lexer = new ODLLexer(input);
@@ -124,7 +130,6 @@ public class DefaultLabelParser implements LabelParser, Status {
         ODLParser parser = new ODLParser(lexer);
         parser.setFilename(url.toString());
         parser.setFollowPointers(Boolean.valueOf(properties.getProperty("parser.pointers", "true")).booleanValue());
-        log.log(new ToolsLogRecord(Level.INFO, "Parsing label with PDS_VERSION_ID = " + value, url.toString()));
         
         if (Boolean.valueOf(properties.getProperty("parser.pointers", "true")).booleanValue()) {
             URL base = new URL(url.toString().substring(0, url.toString().lastIndexOf("/")));
@@ -198,7 +203,14 @@ public class DefaultLabelParser implements LabelParser, Status {
         label = parse(url);
         
         log.log(new ToolsLogRecord(Level.INFO, "Starting semantic validation.", url.toString()));
-        //Check all the statements
+        label = semanticCheck(url, dictionary, label);
+        log.log(new ToolsLogRecord(Level.INFO, "Finished semantic validation.", url.toString()));
+        
+        return label;
+    }
+    
+    private Label semanticCheck(URL url, Dictionary dictionary, Label label) {
+    	//Check all the statements
         List statements = label.getStatements();
         Collections.sort(statements);
         CountListener listener = new CountListener();
@@ -243,16 +255,14 @@ public class DefaultLabelParser implements LabelParser, Status {
         }
         label.incrementErrors(listener.getNumErrors());
         label.incrementWarnings(listener.getNumWarnings());
-        log.log(new ToolsLogRecord(Level.INFO, "Finished semantic validation.", url.toString()));
         
-        return label;
+    	return label;
     }
 
     /* (non-Javadoc)
      * @see gov.nasa.jpl.pds.tools.label.parser.LabelParser#parse(java.net.URL, gov.nasa.jpl.pds.tools.dict.Dictionary, boolean)
      */
     public Label parse(URL file, Dictionary dictionary, boolean dataObjectValidation)  throws ParseException, IOException {
-        // TODO Auto-generated method stub
         return parse(file, dictionary);
     }
 
@@ -288,7 +298,19 @@ public class DefaultLabelParser implements LabelParser, Status {
      * @see gov.nasa.pds.tools.label.parser.LabelParser#parsePartial(java.net.URL)
      */
     public Label parsePartial(URL url) throws ParseException, IOException {
-        return parsePartial(null, url);
+        Label label =  parsePartial(null, url);
+        
+        CountListener listener = new CountListener();
+        for (Iterator i = validators.iterator(); i.hasNext();) {
+            LabelValidator validator = (LabelValidator) i.next();
+            boolean valid = validator.isValid(label, listener);
+            if (!valid)
+                label.setStatus(FAIL);
+        }
+        label.incrementErrors(listener.getNumErrors());
+        label.incrementWarnings(listener.getNumWarnings());
+        
+        return label;
     }
     
     
@@ -363,17 +385,20 @@ public class DefaultLabelParser implements LabelParser, Status {
     /* (non-Javadoc)
      * @see gov.nasa.pds.tools.label.parser.LabelParser#parsePartial(java.net.URL, gov.nasa.pds.tools.dict.Dictionary)
      */
-    public Label parsePartial(URL file, Dictionary dictionary) throws ParseException, IOException {
-        // TODO Auto-generated method stub
-        return null;
+    public Label parsePartial(URL url, Dictionary dictionary) throws ParseException, IOException {
+    	Label label = parsePartial(url);
+    	log.log(new ToolsLogRecord(Level.INFO, "Starting semantic validation.", url.toString()));
+        label = semanticCheck(url, dictionary, label);
+        log.log(new ToolsLogRecord(Level.INFO, "Finished semantic validation.", url.toString()));
+    	
+    	return label;
     }
 
     /* (non-Javadoc)
      * @see gov.nasa.pds.tools.label.parser.LabelParser#parsePartial(java.net.URL, gov.nasa.pds.tools.dict.Dictionary, boolean)
      */
-    public Label parsePartial(URL file, Dictionary dictionary, boolean dataObjectValidation) throws ParseException, IOException {
-        // TODO Auto-generated method stub
-        return null;
+    public Label parsePartial(URL url, Dictionary dictionary, boolean dataObjectValidation) throws ParseException, IOException {
+    	return parsePartial(url, dictionary);
     }
     
     /**
