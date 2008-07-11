@@ -30,7 +30,7 @@ public class RealChecker extends LengthChecker implements NumericTypeChecker {
         try {
             doubleValue = Double.valueOf(value);
         } catch(NumberFormatException nfe) {
-            throw new InvalidTypeException(nfe.getMessage());
+            throw new InvalidTypeException(value + " is not a real");
         }
         return doubleValue;
     }

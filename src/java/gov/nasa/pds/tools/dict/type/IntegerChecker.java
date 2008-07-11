@@ -34,7 +34,7 @@ public class IntegerChecker extends LengthChecker implements NumericTypeChecker 
                 testValue = testValue.substring(1);
             intValue = Integer.valueOf(testValue);
         } catch(NumberFormatException nfe) {
-            throw new InvalidTypeException(nfe.getMessage());
+            throw new InvalidTypeException(value + " is not an integer");
         }
         return intValue;
     }
