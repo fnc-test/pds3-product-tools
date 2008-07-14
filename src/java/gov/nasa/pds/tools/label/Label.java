@@ -267,10 +267,10 @@ public class Label implements LabelType, Status {
            //Drop everything else
            if (PASS.equals(status) && UNKNOWN.equals(this.status))
               this.status = PASS;
-           else if (FAIL.equals(status) && UNKNOWN.equals(this.status))
-              this.status = FAIL;
-           else if (SKIP.equals(status))
-        	  this.status = SKIP;
+           else if (SKIP.equals(status) && UNKNOWN.equals(this.status))
+              this.status = SKIP;
+           else if (FAIL.equals(status))
+        	  this.status = FAIL;
         }
     }
     
