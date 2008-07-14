@@ -72,6 +72,7 @@ public class DefaultLabelParser implements LabelParser, Status {
         properties = new Properties();
         includePaths = new ArrayList();
         labelValidators = new ArrayList();
+        fragmentValidators = new ArrayList();
     }
 
     /* (non-Javadoc)
