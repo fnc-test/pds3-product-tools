@@ -94,7 +94,7 @@ public class DefaultLabelParser implements LabelParser, Status {
         
         if (label == null) {
         	label = new Label();
-        	label.setStatus(Label.FAIL);
+        	label.setStatus(Label.SKIP);
         }
         
         log.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, label.getStatus(), url.toString()));
@@ -241,12 +241,12 @@ public class DefaultLabelParser implements LabelParser, Status {
         
         if (label == null) {
         	label = new Label();
-        	label.setStatus(Label.FAIL);
-        }
+        	label.setStatus(Label.SKIP);
         
-        log.log(new ToolsLogRecord(Level.INFO, "Starting semantic validation.", url.toString()));
-        label = semanticCheck(url, dictionary, label);
-        log.log(new ToolsLogRecord(Level.INFO, "Finished semantic validation.", url.toString()));
+	        log.log(new ToolsLogRecord(Level.INFO, "Starting semantic validation.", url.toString()));
+	        label = semanticCheck(url, dictionary, label);
+	        log.log(new ToolsLogRecord(Level.INFO, "Finished semantic validation.", url.toString()));
+        }
         
         log.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, label.getStatus(), url.toString()));
         
@@ -539,7 +539,6 @@ public class DefaultLabelParser implements LabelParser, Status {
             label = parser.parse(labelURL);
             System.out.println("Errors: " + label.getNumErrors());
             System.out.println("Warnings: " + label.getNumWarnings());
-            logFile.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, label.getStatus(), labelURL.toString()));
         } else {
             Dictionary dictionary = DictionaryParser.parse(dictionaryURL, aliasing.booleanValue());
             label = parser.parse(labelURL, dictionary);
