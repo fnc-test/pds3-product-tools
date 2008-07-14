@@ -13,10 +13,9 @@
 
 package gov.nasa.pds.tools.handler;
 
-import gov.nasa.pds.tools.logging.ToolsLogFormatter;
-
 import java.io.IOException;
 import java.util.logging.FileHandler;
+import java.util.logging.Formatter;
 import java.util.logging.Level;
 
 /**
@@ -28,31 +27,50 @@ import java.util.logging.Level;
 public class ToolsFileHandler extends FileHandler {
 	
 	/**
-	 * Constructor. Automatically sets the log level to 'ALL'.
+	 * Constructor that does not append to a file and automatically
+	 * sets the log level to 'ALL'.
 	 * 
 	 * @param file A file name to store the logging messages. If the file 
 	 * exists, it will overwrite the existing contents.
+	 * @param formatter Formatter to be used to format the log messages.
 	 * 
 	 * @throws SecurityException
 	 * @throws IOException
 	 */
-	public ToolsFileHandler(String file) throws SecurityException, IOException {
-		this(file, false);
+	public ToolsFileHandler(String file, Formatter formatter) throws SecurityException, IOException {
+		this(file, false, Level.ALL, formatter);
 	}
 	
 	/**
-	 * Constructor. Automatically sets the log level to 'ALL'.
+	 * Constructor that does not append to a file.
+	 * 
+	 * @param file A file name to store the logging messages.
+	 * @param level Sets the logging level.
+	 * @param formatter Formatter to be used to format the log messages.
+	 * 
+	 * @throws SecurityException
+	 * @throws IOException
+	 */
+	public ToolsFileHandler(String file, Level level, Formatter formatter) throws SecurityException, IOException {
+		this(file, false, level, formatter);
+	}
+	
+	/**
+	 * Constructor.
 	 * 
 	 * @param file A file name to store the logging messages.
 	 * @param append A flag to tell the handler to append to the file or
 	 * to overwrite the existing contents.
+	 * @param level Sets the logging level.
+	 * @param formatter Formatter to be used to format the log messages.
 	 * 
 	 * @throws SecurityException
 	 * @throws IOException
 	 */
-	public ToolsFileHandler(String file, boolean append) throws SecurityException, IOException {
+	public ToolsFileHandler(String file, boolean append, Level level, Formatter formatter) throws SecurityException, IOException {
 		super(file, append);
-		setLevel(Level.ALL);
-		setFormatter(new ToolsLogFormatter());
+		setLevel(level);
+		setFormatter(formatter);
 	}
+
 }

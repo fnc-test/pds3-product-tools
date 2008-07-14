@@ -13,9 +13,8 @@
 
 package gov.nasa.pds.tools.handler;
 
-import gov.nasa.pds.tools.logging.ToolsLogFormatter;
-
 import java.io.OutputStream;
+import java.util.logging.Formatter;
 import java.util.logging.Level;
 import java.util.logging.StreamHandler;
 
@@ -31,9 +30,10 @@ public class ToolsStreamHandler extends StreamHandler {
 	 * Constructor. Automatically sets the log level to 'ALL'.
 	 * 
 	 * @param out An output stream.
+	 * @param formatter Formatter to be used to format the log messages.
 	 */
-	public ToolsStreamHandler(OutputStream out) {
-		this(out, Level.ALL);
+	public ToolsStreamHandler(OutputStream out, Formatter formatter) {
+		this(out, Level.ALL, formatter);
 	}
 	
 	/**
@@ -41,9 +41,10 @@ public class ToolsStreamHandler extends StreamHandler {
 	 * @param out An output stream.
 	 * @param level Sets the log level, specifying which message levels will
 	 * be logged by this handler.
+	 * @param formatter Formatter to be used to format the log messages.
 	 */
-	public ToolsStreamHandler(OutputStream out, Level level) {
-		super(out, new ToolsLogFormatter());
+	public ToolsStreamHandler(OutputStream out, Level level, Formatter formatter) {
+		super(out, formatter);
 		setLevel(level);
 	}
 }
