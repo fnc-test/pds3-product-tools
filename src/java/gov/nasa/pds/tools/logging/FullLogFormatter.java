@@ -88,10 +88,17 @@ public class FullLogFormatter extends Formatter {
 				if (tlr.getContext() != null && tlr.getMessage().equals("Parsing label fragment."))
 					report.append("    Begin Fragment: " + tlr.getFile() + lineFeed);
 				
-				if (tlr.getLevel() != ToolsLevel.SEVERE)
-					report.append("      " + tlr.getLevel().getName() + "  " + tlr.getMessage() + lineFeed);
-				else
-					report.append("      ERROR  " + tlr.getMessage() + lineFeed);
+				if (tlr.getLevel() != ToolsLevel.SEVERE) {
+					report.append("      " + tlr.getLevel().getName() + "  ");
+					if (tlr.getLine() != -1)
+						report.append("line " + tlr.getLine() + ": ");
+					report.append(tlr.getMessage() + lineFeed);
+				} else {
+					report.append("      ERROR  ");
+					if (tlr.getLine() != -1)
+						report.append("line " + tlr.getLine() + ": ");
+					report.append(tlr.getMessage() + lineFeed);
+				}
 				
 				if (tlr.getContext() != null && tlr.getMessage().equals("Finished parsing label fragment."))
 					report.append("    End Fragment: " + tlr.getFile() + lineFeed);
