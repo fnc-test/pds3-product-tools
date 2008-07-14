@@ -92,11 +92,6 @@ public class DefaultLabelParser implements LabelParser, Status {
         	throw ioe;
         }
         
-        if (label == null) {
-        	label = new Label();
-        	label.setStatus(Label.SKIP);
-        }
-        
         log.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, label.getStatus(), url.toString()));
         
         return label;
@@ -135,7 +130,10 @@ public class DefaultLabelParser implements LabelParser, Status {
         
         if (version == null || line == null || line.length != 2) {
             log.log(new ToolsLogRecord(Level.WARNING, "Not a label. Could not find the PDS_VERSION_ID in the first line.", url.toString()));
-            return null;
+            label = new Label();
+            label.setStatus(Label.SKIP);
+            label.incrementWarnings();
+            return label;
         }
         
         String name = line[0].trim();
@@ -143,7 +141,10 @@ public class DefaultLabelParser implements LabelParser, Status {
           
         if (!"PDS_VERSION_ID".equals(name)) {
             log.log(new ToolsLogRecord(Level.WARNING, "Not a label. Could not find the PDS_VERSION_ID in the first line.", url.toString()));
-            return null;
+            label = new Label();
+            label.setStatus(Label.SKIP);
+            label.incrementWarnings();
+            return label;
         }
         
         pdsCheck.close();
@@ -238,10 +239,7 @@ public class DefaultLabelParser implements LabelParser, Status {
         	throw ioe;
         }
         
-        if (label == null) {
-        	label = new Label();
-        	label.setStatus(Label.SKIP);
-        } else {
+        if (label != null && !label.getStatus().equals(Label.SKIP)) {
 	        log.log(new ToolsLogRecord(Level.INFO, "Starting semantic validation.", url.toString()));
 	        label = semanticCheck(url, dictionary, label);
 	        log.log(new ToolsLogRecord(Level.INFO, "Finished semantic validation.", url.toString()));
