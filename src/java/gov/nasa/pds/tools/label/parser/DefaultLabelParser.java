@@ -92,7 +92,13 @@ public class DefaultLabelParser implements LabelParser, Status {
         	throw ioe;
         }
         
+        if (label == null) {
+        	label = new Label();
+        	label.setStatus(Label.FAIL);
+        }
+        
         log.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, label.getStatus(), url.toString()));
+        
         
         return label;
     }
@@ -233,13 +239,16 @@ public class DefaultLabelParser implements LabelParser, Status {
         	throw ioe;
         }
         
-        if (label != null) {
-	        log.log(new ToolsLogRecord(Level.INFO, "Starting semantic validation.", url.toString()));
-	        label = semanticCheck(url, dictionary, label);
-	        log.log(new ToolsLogRecord(Level.INFO, "Finished semantic validation.", url.toString()));
-	        
-	        log.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, label.getStatus(), url.toString()));
+        if (label == null) {
+        	label = new Label();
+        	label.setStatus(Label.FAIL);
         }
+        
+        log.log(new ToolsLogRecord(Level.INFO, "Starting semantic validation.", url.toString()));
+        label = semanticCheck(url, dictionary, label);
+        log.log(new ToolsLogRecord(Level.INFO, "Finished semantic validation.", url.toString()));
+        
+        log.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, label.getStatus(), url.toString()));
         
         return label;
     }
