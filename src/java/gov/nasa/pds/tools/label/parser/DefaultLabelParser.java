@@ -80,6 +80,25 @@ public class DefaultLabelParser implements LabelParser, Status {
      */
     public Label parse(URL url) throws ParseException, IOException {
         Label label = null;
+        try {
+            label = parseLabel(url);
+        } catch (ParseException pe) {
+        	log.log(new ToolsLogRecord(ToolsLevel.SEVERE, pe.getMessage(), url.toString()));
+        	log.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, Label.FAIL, url.toString()));
+        	throw pe;
+        } catch (IOException ioe) {
+        	log.log(new ToolsLogRecord(ToolsLevel.WARNING, ioe.getMessage(), url.toString()));
+        	log.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, Label.SKIP, url.toString()));
+        	throw ioe;
+        }
+        
+        log.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, label.getStatus(), url.toString()));
+        
+        return label;
+    }
+    
+    private Label parseLabel(URL url) throws ParseException, IOException {
+    	Label label = null;
         
         //Not all streams can support marking so stream will be open multiple times to look for header
         //First time to process the SFDUs
@@ -201,13 +220,24 @@ public class DefaultLabelParser implements LabelParser, Status {
     public Label parse(URL url, Dictionary dictionary) throws ParseException, IOException {
         Label label = null;
         
-        //First parse the file and get back the label object
-        label = parse(url);
+        try {
+	        //First parse the file and get back the label object
+	        label = parseLabel(url);
+        } catch (ParseException pe) {
+        	log.log(new ToolsLogRecord(ToolsLevel.SEVERE, pe.getMessage(), url.toString()));
+        	log.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, Label.FAIL, url.toString()));
+        	throw pe;
+        } catch (IOException ioe) {
+        	log.log(new ToolsLogRecord(ToolsLevel.WARNING, ioe.getMessage(), url.toString()));
+        	log.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, Label.SKIP, url.toString()));
+        	throw ioe;
+        }
         
         log.log(new ToolsLogRecord(Level.INFO, "Starting semantic validation.", url.toString()));
         label = semanticCheck(url, dictionary, label);
         log.log(new ToolsLogRecord(Level.INFO, "Finished semantic validation.", url.toString()));
         
+        log.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, label.getStatus(), url.toString()));
         return label;
     }
     
@@ -300,7 +330,19 @@ public class DefaultLabelParser implements LabelParser, Status {
      * @see gov.nasa.pds.tools.label.parser.LabelParser#parsePartial(java.net.URL)
      */
     public Label parsePartial(URL url) throws ParseException, IOException {
-        Label label =  parsePartial(null, url);
+        Label label =  null;
+        
+        try {
+        	label = parsePartial(null, url);
+        } catch (ParseException pe) {
+        	log.log(new ToolsLogRecord(ToolsLevel.SEVERE, pe.getMessage(), url.toString()));
+        	log.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, Label.FAIL, url.toString()));
+        	throw pe;
+        } catch (IOException ioe) {
+        	log.log(new ToolsLogRecord(ToolsLevel.WARNING, ioe.getMessage(), url.toString()));
+        	log.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, Label.SKIP, url.toString()));
+        	throw ioe;
+        }
         
         CountListener listener = new CountListener();
         for (Iterator i = fragmentValidators.iterator(); i.hasNext();) {
@@ -312,9 +354,10 @@ public class DefaultLabelParser implements LabelParser, Status {
         label.incrementErrors(listener.getNumErrors());
         label.incrementWarnings(listener.getNumWarnings());
         
+        log.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, label.getStatus(), url.toString()));
+        
         return label;
     }
-    
     
     /**
      * @see gov.nasa.pds.tools.label.parser.LabelParser#parsePartial(String,java.net.URL)
@@ -388,10 +431,35 @@ public class DefaultLabelParser implements LabelParser, Status {
      * @see gov.nasa.pds.tools.label.parser.LabelParser#parsePartial(java.net.URL, gov.nasa.pds.tools.dict.Dictionary)
      */
     public Label parsePartial(URL url, Dictionary dictionary) throws ParseException, IOException {
-    	Label label = parsePartial(url);
+    	Label label =  null;
+        
+        try {
+        	label = parsePartial(null, url);
+        } catch (ParseException pe) {
+        	log.log(new ToolsLogRecord(ToolsLevel.SEVERE, pe.getMessage(), url.toString()));
+        	log.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, Label.FAIL, url.toString()));
+        	throw pe;
+        } catch (IOException ioe) {
+        	log.log(new ToolsLogRecord(ToolsLevel.WARNING, ioe.getMessage(), url.toString()));
+        	log.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, Label.SKIP, url.toString()));
+        	throw ioe;
+        }
+        
+        CountListener listener = new CountListener();
+        for (Iterator i = fragmentValidators.iterator(); i.hasNext();) {
+            LabelValidator validator = (LabelValidator) i.next();
+            boolean valid = validator.isValid(label, listener);
+            if (!valid)
+                label.setStatus(FAIL);
+        }
+        label.incrementErrors(listener.getNumErrors());
+        label.incrementWarnings(listener.getNumWarnings());
+        
     	log.log(new ToolsLogRecord(Level.INFO, "Starting semantic validation.", url.toString()));
         label = semanticCheck(url, dictionary, label);
         log.log(new ToolsLogRecord(Level.INFO, "Finished semantic validation.", url.toString()));
+
+        log.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, label.getStatus(), url.toString()));
     	
     	return label;
     }
