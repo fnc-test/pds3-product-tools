@@ -51,8 +51,9 @@ public class LabelParserFactory {
     public LabelParser newLabelParser() {
         // TODO: Change to dynamic class loading based upon configuration
         LabelParser parser = new DefaultLabelParser();
-        parser.addValidator(new FileCharacteristicValidator());
-        parser.addValidator(new DuplicateIdentifierValidator());
+        parser.addLabelValidator(new FileCharacteristicValidator());
+        parser.addLabelValidator(new DuplicateIdentifierValidator());
+        parser.addFragmentValidator(new DuplicateIdentifierValidator());
         return parser;
     }
 

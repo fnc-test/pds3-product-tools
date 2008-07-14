@@ -116,7 +116,7 @@ public interface LabelParser {
     public String getPDSVersion();
     
     /**
-     * Returns the version of ODL that this parser is compliant with.
+     * Returns the version of ODL that this parser is complient with.
      * @return The ODL version string
      */
     public String getODLVersion();
@@ -128,8 +128,15 @@ public interface LabelParser {
     public void addIncludePath(URL includePath);
     
     /**
-     * Adds a {@link LabelValidator} that will perform some extravalidation.
+     * Adds a {@link LabelValidator} that will perform some extra validation.
      * @param validator which will be run as a step in the validation pipeline
      */
-    public void addValidator(LabelValidator validator);
+    public void addLabelValidator(LabelValidator validator);
+    
+    /**
+     * Adds a {@link LabelValidator} that will perform some extra validation when 
+     * validating a label fragment.
+     * @param validator which will be run as a step in the validation pipeline
+     */
+    public void addFragmentValidator(LabelValidator validator);
 }

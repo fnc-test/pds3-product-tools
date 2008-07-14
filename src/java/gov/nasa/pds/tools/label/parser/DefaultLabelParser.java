@@ -65,12 +65,13 @@ public class DefaultLabelParser implements LabelParser, Status {
     private static Logger log = Logger.getLogger(DefaultLabelParser.class.getName());
     private Properties properties;
     private List includePaths;
-    private List validators;
+    private List labelValidators;
+    private List fragmentValidators;
     
     public DefaultLabelParser() {
         properties = new Properties();
         includePaths = new ArrayList();
-        validators = new ArrayList();
+        labelValidators = new ArrayList();
     }
 
     /* (non-Javadoc)
@@ -158,7 +159,7 @@ public class DefaultLabelParser implements LabelParser, Status {
         log.log(new ToolsLogRecord(Level.INFO, "Finished parsing", url.toString()));
         
         CountListener listener = new CountListener();
-        for (Iterator i = validators.iterator(); i.hasNext();) {
+        for (Iterator i = labelValidators.iterator(); i.hasNext();) {
             LabelValidator validator = (LabelValidator) i.next();
             boolean valid = validator.isValid(label, listener);
             if (!valid)
@@ -301,7 +302,7 @@ public class DefaultLabelParser implements LabelParser, Status {
         Label label =  parsePartial(null, url);
         
         CountListener listener = new CountListener();
-        for (Iterator i = validators.iterator(); i.hasNext();) {
+        for (Iterator i = fragmentValidators.iterator(); i.hasNext();) {
             LabelValidator validator = (LabelValidator) i.next();
             boolean valid = validator.isValid(label, listener);
             if (!valid)
@@ -482,8 +483,12 @@ public class DefaultLabelParser implements LabelParser, Status {
     /* (non-Javadoc)
      * @see gov.nasa.pds.tools.label.parser.LabelParser#addValidator(gov.nasa.pds.tools.label.validate.LabelValidator)
      */
-    public void addValidator(LabelValidator validator) {
-        validators.add(validator);
+    public void addLabelValidator(LabelValidator validator) {
+        labelValidators.add(validator);
+    }
+    
+    public void addFragmentValidator(LabelValidator validator) {
+    	fragmentValidators.add(validator);
     }
 
 }
