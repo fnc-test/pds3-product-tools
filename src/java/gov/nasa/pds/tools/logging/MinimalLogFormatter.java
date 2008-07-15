@@ -13,6 +13,8 @@
 
 package gov.nasa.pds.tools.logging;
 
+import gov.nasa.pds.tools.label.Label;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -58,7 +60,8 @@ public class MinimalLogFormatter extends Formatter {
 			config.append("  " + toolsRecord.getMessage() + lineFeed);
 		} else if (toolsRecord.getLevel() == ToolsLevel.PARAMETER) {
 			parameters.append("  " + toolsRecord.getMessage() + lineFeed);
-		} else if (toolsRecord.getLevel() == ToolsLevel.NOTIFICATION) {
+		} else if (toolsRecord.getLevel() == ToolsLevel.NOTIFICATION && (Label.PASS.equals(toolsRecord.getMessage()) || 
+				Label.SKIP.equals(toolsRecord.getMessage()) || Label.FAIL.equals(toolsRecord.getMessage()))) {
 			return processRecords(toolsRecord);
 		} else {
 			records.add(toolsRecord);

@@ -19,6 +19,7 @@ import java.util.Iterator;
 import java.util.logging.Formatter;
 import java.util.logging.Handler;
 import java.util.logging.LogRecord;
+import gov.nasa.pds.tools.label.Label;
 
 public class FullLogFormatter extends Formatter {
 	private int numPassed;
@@ -51,7 +52,8 @@ public class FullLogFormatter extends Formatter {
 			config.append("  " + toolsRecord.getMessage() + lineFeed);
 		} else if (toolsRecord.getLevel() == ToolsLevel.PARAMETER) {
 			parameters.append("  " + toolsRecord.getMessage() + lineFeed);
-		} else if (toolsRecord.getLevel() == ToolsLevel.NOTIFICATION) {
+		} else if (toolsRecord.getLevel() == ToolsLevel.NOTIFICATION && (Label.PASS.equals(toolsRecord.getMessage()) || 
+				Label.SKIP.equals(toolsRecord.getMessage()) || Label.FAIL.equals(toolsRecord.getMessage()))) {
 			return processRecords(toolsRecord);
 		} else {
 			records.add(toolsRecord);
@@ -85,10 +87,14 @@ public class FullLogFormatter extends Formatter {
 		for (Iterator i = records.iterator(); i.hasNext();) {
 			ToolsLogRecord tlr = (ToolsLogRecord) i.next();
 			if (tlr.getFile() != null && (record.getFile().equals(tlr.getFile()) || record.getFile().equals(tlr.getContext()))) {
-				if (tlr.getContext() != null && tlr.getMessage().equals("Parsing label fragment."))
-					report.append("    Begin Fragment: " + tlr.getFile() + lineFeed);
-				
-				if (tlr.getLevel() != ToolsLevel.SEVERE) {
+				if (tlr.getLevel() == ToolsLevel.NOTIFICATION) {
+					if (tlr.getContext() != null) {
+						if ("BEGIN".equals(tlr.getMessage()))
+							report.append("    Begin Fragment: " + tlr.getFile() + lineFeed);
+						else if ("END".equals(tlr.getMessage()))
+							report.append("    End Fragment: " + tlr.getFile() + lineFeed);		
+					}
+				} else if (tlr.getLevel() != ToolsLevel.SEVERE) {
 					report.append("      " + tlr.getLevel().getName() + "  ");
 					if (tlr.getLine() != -1)
 						report.append("line " + tlr.getLine() + ": ");
@@ -99,9 +105,6 @@ public class FullLogFormatter extends Formatter {
 						report.append("line " + tlr.getLine() + ": ");
 					report.append(tlr.getMessage() + lineFeed);
 				}
-				
-				if (tlr.getContext() != null && tlr.getMessage().equals("Finished parsing label fragment."))
-					report.append("    End Fragment: " + tlr.getFile() + lineFeed);
 			}
 		}
 		
