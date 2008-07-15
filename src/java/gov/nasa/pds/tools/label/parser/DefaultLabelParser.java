@@ -80,6 +80,7 @@ public class DefaultLabelParser implements LabelParser, Status {
      */
     public Label parse(URL url) throws ParseException, IOException {
         Label label = null;
+        log.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, "BEGIN", url.toString()));
         try {
             label = parseLabel(url);
         } catch (ParseException pe) {
@@ -225,7 +226,8 @@ public class DefaultLabelParser implements LabelParser, Status {
      */
     public Label parse(URL url, Dictionary dictionary) throws ParseException, IOException {
         Label label = null;
-        
+
+        log.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, "BEGIN", url.toString()));
         try {
 	        //First parse the file and get back the label object
 	        label = parseLabel(url);
@@ -374,7 +376,8 @@ public class DefaultLabelParser implements LabelParser, Status {
     public Label parsePartial(String context, URL url) throws ParseException, IOException {
         Label label = null;
         
-        log.log(new ToolsLogRecord(Level.INFO, "Parsing label fragment.", url.toString(), context));
+        log.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, "BEGIN", url.toString(), context));
+        log.log(new ToolsLogRecord(ToolsLevel.INFO, "Parsing label fragment", url.toString(), context));
         
         //Not all streams can support marking so stream will be open multiple times to look for header
         //First time to process the SFDUs
@@ -431,7 +434,8 @@ public class DefaultLabelParser implements LabelParser, Status {
             log.log(new ToolsLogRecord(Level.WARNING, "Fragment contains PDS_VERSION_ID which should not be present in a label fragment.", url.toString(), context));
         }
 
-        log.log(new ToolsLogRecord(Level.INFO, "Finished parsing label fragment.", url.toString(), context));
+        log.log(new ToolsLogRecord(ToolsLevel.INFO, "Finished parsing label fragment", url.toString(), context));
+        log.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, "END", url.toString(), context));
         
         return label;
     }
@@ -536,14 +540,12 @@ public class DefaultLabelParser implements LabelParser, Status {
             label = parser.parse(labelURL);
             System.out.println("Errors: " + label.getNumErrors());
             System.out.println("Warnings: " + label.getNumWarnings());
-            //System.out.println("Status: " + label.getStatus());
         } else {
             Dictionary dictionary = DictionaryParser.parse(dictionaryURL, aliasing.booleanValue());
+            logFile.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, dictionary.getStatus(), dictionaryURL.toString()));
             label = parser.parse(labelURL, dictionary);
             System.out.println("Errors: " + label.getNumErrors());
             System.out.println("Warnings: " + label.getNumWarnings());
-            logFile.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, label.getStatus(), labelURL.toString()));
-            logFile.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, dictionary.getStatus(), dictionaryURL.toString()));
         }
         
         stream.flush();
