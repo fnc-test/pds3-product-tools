@@ -37,56 +37,57 @@ import java.util.logging.Logger;
 public class ObjectValidator {
     private static Logger log = Logger.getLogger(ObjectValidator.class.getName());
     
-    public static boolean isValid(Dictionary dictionary, ObjectStatement object) throws 
-       DefinitionNotFoundException {
+    public static boolean isValid(Dictionary dictionary, ObjectStatement object) {
         return isValid(dictionary, object, new DefaultValidationListener());
     }
     
-    public static boolean isValid(Dictionary dictionary, ObjectStatement object, ValidationListener listener) throws 
-       DefinitionNotFoundException {
+    public static boolean isValid(Dictionary dictionary, ObjectStatement object, ValidationListener listener) {
         boolean valid = true;
         
         //Find definition then validate
         ObjectDefinition definition = dictionary.findObjectClassDefinition(object.getIdentifier());
-        if (definition == null)
-            throw new DefinitionNotFoundException("Could not find object definition for " +
-                    object.getIdentifier());
-        
-        //First check that required elements are captured in object
-        for (Iterator i = definition.getRequiredElements().iterator(); i.hasNext();) {
-            String required = (String) i.next();
-            //First check to see if attribute is found by its identifier or as a pointer
-            if (!object.hasAttribute(required) && !object.hasPointer(required)) {
-                boolean foundAlias = false;
-                //Next check to see if the attribute is present as an alias
-                //Lookup definition for required element
-                ElementDefinition elementDefinition = dictionary.getElementDefinition(required);
-                //Now loop through aliases to see if the element appears
-                for (Iterator a = elementDefinition.getAliases().iterator(); a.hasNext() && !foundAlias;) {
-                    //All element aliases take the form <object_identifier>.<element_identifier>
-                    String [] identifier = a.next().toString().split("\\.");
-                    if (identifier[0].equals(definition.getIdentifier()) && object.hasAttribute(identifier[1]))
-                        foundAlias = true;
-                }
-                //Didn't find anything time to log
-                if (!foundAlias) {
-                    valid = false;
-                    listener.reportError("Object " + object.getIdentifier() + 
-                            " does not contain required element " + required);
-                    log.log(new ToolsLogRecord(Level.SEVERE, "Object " + object.getIdentifier() + 
-                            " does not contain required element " + required, object.getFilename(), 
-                            object.getContext(), object.getLineNumber()));
-                }
-            }
+        if (definition == null) {
+        	listener.reportError("Undefined Object: " + object.getIdentifier());
+        	log.log(new ToolsLogRecord(Level.SEVERE, "Undefined Object: " + object.getIdentifier(), object.getFilename(), object.getContext(), object.getLineNumber()));
+        	valid = false;
         }
-        
+        if (definition != null) {
+	        //First check that required elements are captured in object
+	        for (Iterator i = definition.getRequiredElements().iterator(); i.hasNext();) {
+	            String required = (String) i.next();
+	            //First check to see if attribute is found by its identifier or as a pointer
+	            if (!object.hasAttribute(required) && !object.hasPointer(required)) {
+	                boolean foundAlias = false;
+	                //Next check to see if the attribute is present as an alias
+	                //Lookup definition for required element
+	                ElementDefinition elementDefinition = dictionary.getElementDefinition(required);
+	                //Now loop through aliases to see if the element appears
+	                for (Iterator a = elementDefinition.getAliases().iterator(); a.hasNext() && !foundAlias;) {
+	                    //All element aliases take the form <object_identifier>.<element_identifier>
+	                    String [] identifier = a.next().toString().split("\\.");
+	                    if (identifier[0].equals(definition.getIdentifier()) && object.hasAttribute(identifier[1]))
+	                        foundAlias = true;
+	                }
+	                //Didn't find anything time to log
+	                if (!foundAlias) {
+	                    valid = false;
+	                    listener.reportError("Object " + object.getIdentifier() + 
+	                            " does not contain required element " + required);
+	                    log.log(new ToolsLogRecord(Level.SEVERE, "Object " + object.getIdentifier() + 
+	                            " does not contain required element " + required, object.getFilename(), 
+	                            object.getContext(), object.getLineNumber()));
+	                }
+	            }
+	        }
+        }
+	        
         //Run through and validate all attributes
         List attributes = object.getAttributes();
         Collections.sort(attributes);
         for (Iterator i = object.getAttributes().iterator(); i.hasNext();) {
             AttributeStatement attribute = (AttributeStatement) i.next();
             //Check to make sure element is allowed within this definition
-            if (!definition.isElementPossible(attribute.getIdentifier())) {
+            if (definition != null && !definition.isElementPossible(attribute.getIdentifier())) {
                 //Next check to see if the attribute is allowed as an alias
                 //Lookup definition for element by its alias
                 ElementDefinition elementDefinition = dictionary.getElementDefinition(attribute.getIdentifier());
@@ -100,47 +101,37 @@ public class ObjectValidator {
                 }
             }
             //Validate attribute
-            boolean elementValid = false;
-            try {
-                elementValid = ElementValidator.isValid(dictionary, definition.getIdentifier(), attribute, listener);
-            } catch (UnsupportedTypeException ute) {
-                listener.reportError(ute.getMessage());
-                log.log(new ToolsLogRecord(Level.SEVERE, ute.getMessage(), attribute.getFilename(), 
-                        attribute.getContext(), attribute.getLineNumber()));
-            } catch (DefinitionNotFoundException dnfe) {
-                listener.reportError(dnfe.getMessage());
-                log.log(new ToolsLogRecord(Level.SEVERE, dnfe.getMessage(), attribute.getFilename(), 
-                        attribute.getContext(), attribute.getLineNumber()));
-            }
-            if (!elementValid)
+            if (!ElementValidator.isValid(dictionary, object.getIdentifier(), attribute, listener))
                 valid = false;
         }
-        
-        //Check to make sure that all required objects are present
-        for (Iterator i = definition.getRequiredObjects().iterator(); i.hasNext();) {
-            String required = (String) i.next();
-            //First see if object is present
-            if (!object.hasObject(required)) {
-                boolean foundAlias = false;
-                //Next check to see if the object is present as an alias
-                //Lookup definition for required object
-                ObjectDefinition objectDefinition = dictionary.getObjectDefinition(required);
-                //Now loop through aliases to see if the object appears
-                for (Iterator a = objectDefinition.getAliases().iterator(); a.hasNext() && !foundAlias;) {
-                    String alias = a.next().toString();
-                    if (object.hasObject(alias))
-                        foundAlias = true;
-                }
-                //Didn't find anything time to log
-                if (!foundAlias) {
-                    valid = false;
-                    listener.reportError("Object " + object.getIdentifier() + 
-                            " does not contain required object " + required);
-                    log.log(new ToolsLogRecord(Level.SEVERE, "Object " + object.getIdentifier() + 
-                            " does not contain required object " + required, object.getFilename(), 
-                            object.getContext(), object.getLineNumber()));
-                }
-            }
+	        
+	    if (definition != null) {
+	        //Check to make sure that all required objects are present
+	        for (Iterator i = definition.getRequiredObjects().iterator(); i.hasNext();) {
+	            String required = (String) i.next();
+	            //First see if object is present
+	            if (!object.hasObject(required)) {
+	                boolean foundAlias = false;
+	                //Next check to see if the object is present as an alias
+	                //Lookup definition for required object
+	                ObjectDefinition objectDefinition = dictionary.getObjectDefinition(required);
+	                //Now loop through aliases to see if the object appears
+	                for (Iterator a = objectDefinition.getAliases().iterator(); a.hasNext() && !foundAlias;) {
+	                    String alias = a.next().toString();
+	                    if (object.hasObject(alias))
+	                        foundAlias = true;
+	                }
+	                //Didn't find anything time to log
+	                if (!foundAlias) {
+	                    valid = false;
+	                    listener.reportError("Object " + object.getIdentifier() + 
+	                            " does not contain required object " + required);
+	                    log.log(new ToolsLogRecord(Level.SEVERE, "Object " + object.getIdentifier() + 
+	                            " does not contain required object " + required, object.getFilename(), 
+	                            object.getContext(), object.getLineNumber()));
+	                }
+	            }
+	        }
         }
         
         //Run through nested objects and check them
@@ -149,7 +140,7 @@ public class ObjectValidator {
         for (Iterator i = objects.iterator(); i.hasNext();) {
             ObjectStatement obj = (ObjectStatement) i.next();
             //Check to make sure object is allowed within this definition
-            if (!definition.isObjectPossible(obj.getIdentifier())) {
+            if (definition != null && !definition.isObjectPossible(obj.getIdentifier())) {
                 //Next check to see if the object is allowed as an alias
                 //Lookup definition object by its alias
                 ObjectDefinition objectDefinition = dictionary.getObjectDefinition(obj.getIdentifier());
@@ -163,15 +154,7 @@ public class ObjectValidator {
                 }
             }
             //Validate nested object
-            boolean objValid = false;
-            try {
-                objValid = ObjectValidator.isValid(dictionary, obj, listener);
-            } catch (DefinitionNotFoundException dnfe) {
-                listener.reportError(dnfe.getMessage());
-                log.log(new ToolsLogRecord(Level.SEVERE, dnfe.getMessage(), obj.getFilename(), 
-                        obj.getContext(), obj.getLineNumber()));
-            }
-            if (!objValid)
+            if (!ObjectValidator.isValid(dictionary, obj, listener))
                 valid = false;
         }
         

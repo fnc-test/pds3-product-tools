@@ -260,40 +260,15 @@ public class DefaultLabelParser implements LabelParser, Status {
         for (Iterator i = statements.iterator(); i.hasNext();) {
             Statement statement = (Statement) i.next();
             if (statement instanceof AttributeStatement) {
-                try {
-                    boolean valid = ElementValidator.isValid(dictionary, (AttributeStatement) statement, listener);
-                    if (!valid) {
-                        label.setStatus(FAIL);
-                    }
-                } catch (DefinitionNotFoundException dnfe) {
+                if (!ElementValidator.isValid(dictionary, (AttributeStatement) statement, listener)) {
                     label.setStatus(FAIL);
-                    label.incrementErrors();
-                    log.log(new ToolsLogRecord(Level.SEVERE, dnfe.getMessage(), url.toString(), statement.getLineNumber()));
-                } catch (UnsupportedTypeException ute) {
-                    label.setStatus(FAIL);
-                    label.incrementErrors();
-                    log.log(new ToolsLogRecord(Level.SEVERE, ute.getMessage(), url.toString(), statement.getLineNumber()));
                 }
             } else if (statement instanceof ObjectStatement) {
-                try {
-                    boolean valid = ObjectValidator.isValid(dictionary, (ObjectStatement) statement, listener);
-                    if (!valid)
-                        label.setStatus(FAIL);
-                } catch (DefinitionNotFoundException dnfe) {
+                if (!ObjectValidator.isValid(dictionary, (ObjectStatement) statement, listener))
                     label.setStatus(FAIL);
-                    label.incrementErrors();
-                    log.log(new ToolsLogRecord(Level.SEVERE, dnfe.getMessage(), url.toString(), statement.getLineNumber()));
-                }
             } else if (statement instanceof GroupStatement) {
-                try {
-                    boolean valid = GroupValidator.isValid(dictionary, (GroupStatement) statement, listener);
-                    if (!valid)
-                        label.setStatus(FAIL);
-                } catch (DefinitionNotFoundException dnfe) {
+                if (!GroupValidator.isValid(dictionary, (GroupStatement) statement, listener))
                     label.setStatus(FAIL);
-                    label.incrementErrors();
-                    log.log(new ToolsLogRecord(Level.SEVERE, dnfe.getMessage(), url.toString(), statement.getLineNumber()));
-                }
             }
         }
         label.incrementErrors(listener.getNumErrors());

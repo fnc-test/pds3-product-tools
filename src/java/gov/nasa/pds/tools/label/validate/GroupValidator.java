@@ -36,71 +36,60 @@ import gov.nasa.pds.tools.logging.ToolsLogRecord;
 public class GroupValidator {
     private static Logger log = Logger.getLogger(GroupValidator.class.getName());
     
-    public static boolean isValid(Dictionary dictionary, GroupStatement group) 
-       throws DefinitionNotFoundException {
+    public static boolean isValid(Dictionary dictionary, GroupStatement group) {
         return isValid(dictionary, group, new DefaultValidationListener());
     }
     
-    public static boolean isValid(Dictionary dictionary, GroupStatement group, ValidationListener listener) 
-       throws DefinitionNotFoundException {
+    public static boolean isValid(Dictionary dictionary, GroupStatement group, ValidationListener listener) {
         boolean valid = true;
         
         //Lookup group definition, can't do anything without it
         GroupDefinition definition = dictionary.findGroupClassDefinition(group.getIdentifier());
-        if (definition == null)
-            throw new DefinitionNotFoundException("Could not find group definition for " + group.getIdentifier());
-  
-        //First check that required elements are captured in object
-        for (Iterator i = definition.getRequiredElements().iterator(); i.hasNext();) {
-            String required = (String) i.next();
-            if (!group.hasAttribute(required)) {
-                valid = false;
-                listener.reportError("Group " + group.getIdentifier() + 
-                        " does not contain required element " + required);
-                log.log(new ToolsLogRecord(Level.SEVERE, "Group " + group.getIdentifier() + 
-                        " does not contain required element " + required,
-                        group.getFilename(), group.getContext(), group.getLineNumber()));
-            }
+        if (definition == null) {
+        	listener.reportError("Undefined Group: " + group.getIdentifier());
+        	log.log(new ToolsLogRecord(Level.SEVERE, "Undefined Group: " + group.getIdentifier(), group.getFilename(), group.getContext(), group.getLineNumber()));
+        	valid = false;
+        } else {
+	        //First check that required elements are captured in object
+	        for (Iterator i = definition.getRequiredElements().iterator(); i.hasNext();) {
+	            String required = (String) i.next();
+	            if (!group.hasAttribute(required)) {
+	                valid = false;
+	                listener.reportError("Group " + group.getIdentifier() + 
+	                        " does not contain required element " + required);
+	                log.log(new ToolsLogRecord(Level.SEVERE, "Group " + group.getIdentifier() + 
+	                        " does not contain required element " + required,
+	                        group.getFilename(), group.getContext(), group.getLineNumber()));
+	            }
+	        }
+	        
+	        //Check to make sure all attributes are allowed within this definition
+	        //If the definition contains the element PSDD then anything is allowed
+	        //and this check can be skipped
+	        //TODO: put magic string PSDD in an interface as a static final String
+	        if (!definition.hasElement("PSDD")) {
+	            for (Iterator i = group.getAttributes().iterator(); i.hasNext();) {
+	                AttributeStatement attribute = (AttributeStatement) i.next();
+	                if (!definition.canHaveElement(attribute.getIdentifier())) {
+	                    valid = false;
+	                    listener.reportError("Group " + group.getIdentifier() +  
+	                            " contains the element " + attribute.getIdentifier() + 
+	                            " which is neither required nor optional.");
+	                    log.log(new ToolsLogRecord(Level.SEVERE, "Group " + group.getIdentifier() +  
+	                            " contains the element " + attribute.getIdentifier() + 
+	                            " which is neither required nor optional.",
+	                            attribute.getFilename(), attribute.getContext(), attribute.getLineNumber()));
+	                }
+	            }
+	        }
         }
-        
-        //Check to make sure all attributes are allowed within this definition
-        //If the definition contains the element PSDD then anything is allowed
-        //and this check can be skipped
-        //TODO: put magic string PSDD in an interface as a static final String
-        if (!definition.hasElement("PSDD")) {
-            for (Iterator i = group.getAttributes().iterator(); i.hasNext();) {
-                AttributeStatement attribute = (AttributeStatement) i.next();
-                if (!definition.canHaveElement(attribute.getIdentifier())) {
-                    valid = false;
-                    listener.reportError("Group " + group.getIdentifier() +  
-                            " contains the element " + attribute.getIdentifier() + 
-                            " which is neither required nor optional.");
-                    log.log(new ToolsLogRecord(Level.SEVERE, "Group " + group.getIdentifier() +  
-                            " contains the element " + attribute.getIdentifier() + 
-                            " which is neither required nor optional.",
-                            attribute.getFilename(), attribute.getContext(), attribute.getLineNumber()));
-                }
-            }
-        }
-        
+	        
         //Validate all attributes
         List attributes = group.getAttributes();
         Collections.sort(attributes);
         for (Iterator i = group.getAttributes().iterator(); i.hasNext();) {
             AttributeStatement attribute = (AttributeStatement) i.next();
-            boolean elementValid = false;
-            try {
-                elementValid = ElementValidator.isValid(dictionary, attribute, listener);
-            } catch (UnsupportedTypeException ute) {
-                listener.reportError(ute.getMessage());
-                log.log(new ToolsLogRecord(Level.SEVERE, ute.getMessage(), attribute.getFilename(), 
-                        attribute.getContext(), attribute.getLineNumber()));
-            } catch (DefinitionNotFoundException dnfe) {
-                listener.reportError(dnfe.getMessage());
-                log.log(new ToolsLogRecord(Level.SEVERE, dnfe.getMessage(), attribute.getFilename(), 
-                        attribute.getContext(), attribute.getLineNumber()));
-            }
-            if (!elementValid)
+            if (!ElementValidator.isValid(dictionary, attribute, listener))
                 valid = false;
         }
         

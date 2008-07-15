@@ -53,8 +53,7 @@ public class ElementValidator implements DictionaryTokens {
         return isValid(definition, attribute, new DefaultValidationListener());
     }
     
-    public static boolean isValid(ElementDefinition definition, AttributeStatement attribute, ValidationListener listener) 
-            throws UnsupportedTypeException {
+    public static boolean isValid(ElementDefinition definition, AttributeStatement attribute, ValidationListener listener) {
         boolean valid = true;
         Value value = attribute.getValue();
         
@@ -79,18 +78,22 @@ public class ElementValidator implements DictionaryTokens {
         }
 
         //Load the type checker
-        TypeChecker checker = TypeCheckerFactory.getInstance().newInstance(definition.getDataType());
-        //Validate the value
-        boolean valueValid = validate(definition, attribute, checker, value, listener);
-        //Don't want to set to true if has already been set to false
-        if (!valueValid)
-            valid = false;
+        TypeChecker checker;
+		try {
+			checker = TypeCheckerFactory.getInstance().newInstance(definition.getDataType());
+			//Validate the value don't want to set to true if has already been set to false
+	        if (!validate(definition, attribute, checker, value, listener))
+	            valid = false;
+		} catch (UnsupportedTypeException ute) {
+			listener.reportError(ute.getMessage());
+			log.log(new ToolsLogRecord(Level.SEVERE, ute.getMessage(), attribute.getFilename(), attribute.getContext(), attribute.getLineNumber()));
+			valid = false;
+		}
         
         return valid;
     }
     
-    private static boolean validate(ElementDefinition definition, AttributeStatement attribute, TypeChecker checker, Value value, ValidationListener listener) 
-            throws UnsupportedTypeException {
+    private static boolean validate(ElementDefinition definition, AttributeStatement attribute, TypeChecker checker, Value value, ValidationListener listener) {
         boolean valid = true;
         if (value == null) {
             listener.reportWarning("Found no value for " + attribute.getIdentifier());
@@ -248,33 +251,33 @@ public class ElementValidator implements DictionaryTokens {
      * @param dictionary where to look up the element
      * @param objectContext enclosing the element to be looked up
      * @param attribute statement to be validated
-     * @return flag indicting whether or not the statement was valid against the definition found
+     * @return flag indicating whether or not the statement was valid against the definition found
      * @throws DefinitionNotFoundException if definition for element is not found
      * @throws UnsupportedTypeException if type of element is not supported
      */
-    public static boolean isValid(Dictionary dictionary, String objectContext, AttributeStatement attribute) 
-            throws DefinitionNotFoundException, UnsupportedTypeException {
+    public static boolean isValid(Dictionary dictionary, String objectContext, AttributeStatement attribute) {
         return isValid(dictionary, objectContext, attribute, new DefaultValidationListener());
     }
 
     
-    public static boolean isValid(Dictionary dictionary, String objectContext, AttributeStatement attribute, ValidationListener listener) 
-            throws DefinitionNotFoundException, UnsupportedTypeException {
+    public static boolean isValid(Dictionary dictionary, String objectContext, AttributeStatement attribute, ValidationListener listener) {
         ElementDefinition definition = dictionary.getElementDefinition(objectContext, attribute.getIdentifier()); 
         
         if (definition == null)
-            throw new DefinitionNotFoundException("Undefined Element: " + attribute.getIdentifier());
+        {
+        	listener.reportError("Undefined Element: " + attribute.getIdentifier());
+        	log.log(new ToolsLogRecord(Level.SEVERE, "Undefined Element: " + attribute.getIdentifier(), attribute.getFilename(), attribute.getContext(), attribute.getLineNumber()));
+            return false;
+        }
    
         return isValid(definition, attribute, listener);
     }
     
-    public static boolean isValid(Dictionary dictionary, AttributeStatement attribute) 
-            throws DefinitionNotFoundException, UnsupportedTypeException {
+    public static boolean isValid(Dictionary dictionary, AttributeStatement attribute) {
         return isValid(dictionary, attribute, new DefaultValidationListener());
     }
     
-    public static boolean isValid(Dictionary dictionary, AttributeStatement attribute, ValidationListener listener) 
-            throws DefinitionNotFoundException, UnsupportedTypeException {
+    public static boolean isValid(Dictionary dictionary, AttributeStatement attribute, ValidationListener listener) {
         return isValid(dictionary, null, attribute, listener);
     }
 
