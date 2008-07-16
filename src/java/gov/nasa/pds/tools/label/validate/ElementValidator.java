@@ -111,136 +111,138 @@ public class ElementValidator implements DictionaryTokens {
             }
         } else {
             if (!skipValue(value.toString())) {
-                //Check against valid values if there are any
-                if (definition.hasValidValues()) {
-                    if (!definition.getValues().contains(value.toString())) {
-                        boolean foundValue = false;
-                        boolean manipulated = false;
-                        
-                        //Perform whitespace stripping
-                        String filteredValue = Utility.stripNewLines(value.toString());
-                        
-                        if (definition.getValues().contains(filteredValue)) {
-                            foundValue = true;
-                        } else if (definition.getValues().contains(filteredValue.toUpperCase())) {
-                            //Matches if value match can be made by simply switching case.
-                            manipulated = true;
-                            foundValue = true;
-                        } else {
-                            //Continue with whitespace striping
-                            filteredValue = Utility.filterString(filteredValue.toUpperCase());
-                            manipulated = true;
-                            if (definition.getValues().contains(filteredValue))
-                                foundValue = true;
-                        }
-                       
-                        if (!foundValue) {
-                            //Only produce a warning if the standard value list is anything other than static
-                            if (!VALUE_TYPE_STATIC.equals(definition.getValueType())) {
-                                listener.reportWarning(value.toString() + 
-                                        " is not in the suggested list of valid values for " + attribute.getIdentifier());
-                                log.log(new ToolsLogRecord(Level.WARNING, value.toString() + 
-                                        " is not in the suggested list of valid values for " + attribute.getIdentifier(), 
-                                        attribute.getFilename(), attribute.getContext(), attribute.getLineNumber()));
-                            } else {
-                                valid = false;
-                                listener.reportError(value.toString() + 
-                                         " is not in the list of valid values for " + attribute.getIdentifier());
-                                log.log(new ToolsLogRecord(Level.SEVERE, value.toString() + 
-                                         " is not in the list of valid values for " + attribute.getIdentifier(),
-                                         attribute.getFilename(), attribute.getContext(), attribute.getLineNumber()));
-                            }
-                        } else if (manipulated) {
-                            //Value had to be manipulated to make a match
-                            log.log(new ToolsLogRecord(Level.INFO, "Element value was manipulated for " + attribute.getIdentifier() +
-                                       " in order to match value list.", attribute.getFilename(), attribute.getContext(), attribute.getLineNumber()));
-                        }
-                    }
-                }
-                
+            	 
                 //Check to see if type defined in dictionary matches that found by the parser
                 Scalar scalar = (Scalar) value;
                 if (!scalar.isSupportedPDSType(definition.getDataType())) {
                 	valid = false;
-                	listener.reportError("Type Mismatch: " + attribute.getIdentifier() + " definied as " + definition.getDataType() + " found " + 
+                	listener.reportError("Type Mismatch: " + attribute.getIdentifier() + " defined as " + definition.getDataType() + " found " + 
                 			scalar.getClass().getName().substring(scalar.getClass().getName().lastIndexOf(".") + 1));
-                	log.log(new ToolsLogRecord(Level.SEVERE, "Type Mismatch: " + attribute.getIdentifier() + " definied as " + definition.getDataType() + " found " + 
+                	log.log(new ToolsLogRecord(Level.SEVERE, "Type Mismatch: " + attribute.getIdentifier() + " defined as " + definition.getDataType() + " found " + 
                 			scalar.getClass().getName().substring(scalar.getClass().getName().lastIndexOf(".") + 1), attribute.getFilename(), attribute.getContext(), attribute.getLineNumber()));
-                }
+                } else {
                 
-                Object castedValue = null;
-                //Try to cast to an instance of the type
-                try {
-                    castedValue = checker.cast(value.toString());
-                } catch (InvalidTypeException ite) {
-                    valid = false;
-                    listener.reportError(ite.getMessage());
-                    log.log(new ToolsLogRecord(Level.SEVERE, ite.getMessage(), attribute.getFilename(), attribute.getContext(), attribute.getLineNumber()));
-                }
-                
-                //Check min length
-                try {
-                    checker.checkMinLength(value.toString(), definition.getMinLength());
-                } catch (InvalidLengthException ile) {
-                    valid = false;
-                    listener.reportError(ile.getMessage());
-                    log.log(new ToolsLogRecord(Level.SEVERE, ile.getMessage(), attribute.getFilename(), attribute.getContext(), attribute.getLineNumber()));
-                }
-                
-                //Check max length
-                try {
-                    checker.checkMaxLength(value.toString(), definition.getMaxLength());
-                } catch (InvalidLengthException ile) {
-                    valid = false;
-                    listener.reportError(ile.getMessage());
-                    log.log(new ToolsLogRecord(Level.SEVERE, ile.getMessage(), attribute.getFilename(), attribute.getContext(), attribute.getLineNumber()));
-                }
-                
-                //Check to see if this is a numeric type checker if so then do further checking
-                if (checker instanceof NumericTypeChecker && castedValue instanceof Number && castedValue != null) {
-                    NumericTypeChecker numericChecker = (NumericTypeChecker) checker;
-                    
-                    //Check min value
-                    if (definition.hasMinimum()) {
-                        try {
-                            numericChecker.checkMinValue((Number) castedValue, definition.getMinimum());
-                        } catch (OutOfRangeException oor) {
-                            valid = false;
-                            listener.reportError(oor.getMessage());
-                            log.log(new ToolsLogRecord(Level.SEVERE, oor.getMessage(), attribute.getFilename(), attribute.getContext(), attribute.getLineNumber()));
-                        }
-                    }
-                    
-                    //Check max value
-                    if (definition.hasMaximum()) {
-                        try {
-                            numericChecker.checkMaxValue((Number) castedValue, definition.getMaximum());
-                        } catch (OutOfRangeException oor) {
-                            valid = false;
-                            listener.reportError(oor.getMessage());
-                            log.log(new ToolsLogRecord(Level.SEVERE, oor.getMessage(), attribute.getFilename(), attribute.getContext(), attribute.getLineNumber()));
-                        }
-                    }
-                    
-                    //Check units if found and definition required.
-                    //Look at definition to see if we should check units
-                    if (value instanceof Numeric) {
-                        Numeric number = (Numeric) value;
-                        if (number.getUnits() != null && !definition.isUnitAllowed(number.getUnits())) {
-                            boolean unitsValid = false;
-                            if (number.getUnits().endsWith("s") && 
-                                    definition.isUnitAllowed(number.getUnits().substring(0, number.getUnits().length() - 1))) {
-                                unitsValid = true;
-                            }
-                            if (!unitsValid) {
-                                listener.reportWarning("Units (" + number.getUnits() + ") do not match " +
-                                        " those found in the dictionary.");
-                                log.log(new ToolsLogRecord(Level.WARNING, "Units (" + number.getUnits() + ") do not match " +
-                                        " those found in the dictionary.", attribute.getFilename(), attribute.getContext(), 
-                                        attribute.getLineNumber()));
-                            }
-                        }
-                    }
+		            //Check against valid values if there are any
+		            if (definition.hasValidValues()) {
+		                if (!definition.getValues().contains(value.toString())) {
+		                    boolean foundValue = false;
+		                    boolean manipulated = false;
+		                    
+		                    //Perform whitespace stripping
+		                    String filteredValue = Utility.stripNewLines(value.toString());
+		                    
+		                    if (definition.getValues().contains(filteredValue)) {
+		                        foundValue = true;
+		                    } else if (definition.getValues().contains(filteredValue.toUpperCase())) {
+		                        //Matches if value match can be made by simply switching case.
+		                        manipulated = true;
+		                        foundValue = true;
+		                    } else {
+		                        //Continue with whitespace striping
+		                        filteredValue = Utility.filterString(filteredValue.toUpperCase());
+		                        manipulated = true;
+		                        if (definition.getValues().contains(filteredValue))
+		                            foundValue = true;
+		                    }
+		                   
+		                    if (!foundValue) {
+		                        //Only produce a warning if the standard value list is anything other than static
+		                        if (!VALUE_TYPE_STATIC.equals(definition.getValueType())) {
+		                            listener.reportWarning(value.toString() + 
+		                                    " is not in the suggested list of valid values for " + attribute.getIdentifier());
+		                            log.log(new ToolsLogRecord(Level.WARNING, value.toString() + 
+		                                    " is not in the suggested list of valid values for " + attribute.getIdentifier(), 
+		                                    attribute.getFilename(), attribute.getContext(), attribute.getLineNumber()));
+		                        } else {
+		                            valid = false;
+		                            listener.reportError(value.toString() + 
+		                                     " is not in the list of valid values for " + attribute.getIdentifier());
+		                            log.log(new ToolsLogRecord(Level.SEVERE, value.toString() + 
+		                                     " is not in the list of valid values for " + attribute.getIdentifier(),
+		                                     attribute.getFilename(), attribute.getContext(), attribute.getLineNumber()));
+		                        }
+		                    } else if (manipulated) {
+		                        //Value had to be manipulated to make a match
+		                        log.log(new ToolsLogRecord(Level.INFO, "Element value was manipulated for " + attribute.getIdentifier() +
+		                                   " in order to match value list.", attribute.getFilename(), attribute.getContext(), attribute.getLineNumber()));
+		                    }
+		                }
+		            }
+		            
+		            Object castedValue = null;
+		            //Try to cast to an instance of the type
+		            try {
+		                castedValue = checker.cast(value.toString());
+		            } catch (InvalidTypeException ite) {
+		                valid = false;
+		                listener.reportError(ite.getMessage());
+		                log.log(new ToolsLogRecord(Level.SEVERE, ite.getMessage(), attribute.getFilename(), attribute.getContext(), attribute.getLineNumber()));
+		            }
+		            
+		            //Check min length
+		            try {
+		                checker.checkMinLength(value.toString(), definition.getMinLength());
+		            } catch (InvalidLengthException ile) {
+		                valid = false;
+		                listener.reportError(ile.getMessage());
+		                log.log(new ToolsLogRecord(Level.SEVERE, ile.getMessage(), attribute.getFilename(), attribute.getContext(), attribute.getLineNumber()));
+		            }
+		            
+		            //Check max length
+		            try {
+		                checker.checkMaxLength(value.toString(), definition.getMaxLength());
+		            } catch (InvalidLengthException ile) {
+		                valid = false;
+		                listener.reportError(ile.getMessage());
+		                log.log(new ToolsLogRecord(Level.SEVERE, ile.getMessage(), attribute.getFilename(), attribute.getContext(), attribute.getLineNumber()));
+		            }
+		            
+		            //Check to see if this is a numeric type checker if so then do further checking
+		            if (checker instanceof NumericTypeChecker && castedValue instanceof Number && castedValue != null) {
+		                NumericTypeChecker numericChecker = (NumericTypeChecker) checker;
+		                
+		                //Check min value
+		                if (definition.hasMinimum()) {
+		                    try {
+		                        numericChecker.checkMinValue((Number) castedValue, definition.getMinimum());
+		                    } catch (OutOfRangeException oor) {
+		                        valid = false;
+		                        listener.reportError(oor.getMessage());
+		                        log.log(new ToolsLogRecord(Level.SEVERE, oor.getMessage(), attribute.getFilename(), attribute.getContext(), attribute.getLineNumber()));
+		                    }
+		                }
+		                
+		                //Check max value
+		                if (definition.hasMaximum()) {
+		                    try {
+		                        numericChecker.checkMaxValue((Number) castedValue, definition.getMaximum());
+		                    } catch (OutOfRangeException oor) {
+		                        valid = false;
+		                        listener.reportError(oor.getMessage());
+		                        log.log(new ToolsLogRecord(Level.SEVERE, oor.getMessage(), attribute.getFilename(), attribute.getContext(), attribute.getLineNumber()));
+		                    }
+		                }
+		                
+		                //Check units if found and definition required.
+		                //Look at definition to see if we should check units
+		                if (value instanceof Numeric) {
+		                    Numeric number = (Numeric) value;
+		                    if (number.getUnits() != null && !definition.isUnitAllowed(number.getUnits())) {
+		                        boolean unitsValid = false;
+		                        if (number.getUnits().endsWith("s") && 
+		                                definition.isUnitAllowed(number.getUnits().substring(0, number.getUnits().length() - 1))) {
+		                            unitsValid = true;
+		                        }
+		                        if (!unitsValid) {
+		                            listener.reportWarning("Units (" + number.getUnits() + ") do not match " +
+		                                    " those found in the dictionary.");
+		                            log.log(new ToolsLogRecord(Level.WARNING, "Units (" + number.getUnits() + ") do not match " +
+		                                    " those found in the dictionary.", attribute.getFilename(), attribute.getContext(), 
+		                                    attribute.getLineNumber()));
+		                        }
+		                    }
+		                }
+		            }
                 }
             }
         }
