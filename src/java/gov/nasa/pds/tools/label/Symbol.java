@@ -15,12 +15,14 @@
 
 package gov.nasa.pds.tools.label;
 
+import gov.nasa.pds.tools.dict.type.Types;
+
 /**
  * @author pramirez
  * @version $Revision$
  * 
  */
-public class Symbol extends Scalar {
+public class Symbol extends Scalar implements Types {
 
     /**
      * @param value
@@ -28,5 +30,13 @@ public class Symbol extends Scalar {
     public Symbol(String value) {
         super(value.replaceAll("'",""));
     }
+
+	public boolean isSupportedPDSType(String type) {
+		if (Types.IDENTIFIER.equals(type) || Types.CHARACTER.equals(type) || Types.DATA_SET.equals(type) ||
+				Types.ALPHABET.equals(type) || Types.ALPHANUMERIC.equals(type) || Types.CONTEXT_DEPENDENT.equals(type) ||
+				Types.CONTEXTDEPENDENT.equals(type))
+			return true;
+		return false;
+	}
 
 }

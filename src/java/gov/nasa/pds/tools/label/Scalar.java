@@ -44,4 +44,6 @@ public abstract class Scalar implements Value {
     public String toString() {
         return value;
     }
+    
+    public abstract boolean isSupportedPDSType(String type);
 }

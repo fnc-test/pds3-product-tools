@@ -100,4 +100,8 @@ public class Numeric extends Scalar {
         return radix;
     }
 
+	public boolean isSupportedPDSType(String type) {
+		return true;
+	}
+
 }

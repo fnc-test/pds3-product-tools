@@ -28,5 +28,9 @@ public class TextString extends Scalar {
     public TextString(String value) {
         super(value.replaceAll("\"", ""));
     }
+
+	public boolean isSupportedPDSType(String type) {
+		return true;
+	}
     
 }

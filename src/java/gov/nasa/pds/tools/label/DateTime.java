@@ -15,6 +15,8 @@
 
 package gov.nasa.pds.tools.label;
 
+import gov.nasa.pds.tools.dict.type.Types;
+
 import java.text.ParseException;
 import java.util.Date;
 
@@ -23,7 +25,7 @@ import java.util.Date;
  * @version $Revision$
  * 
  */
-public class DateTime extends Scalar {
+public class DateTime extends Scalar implements Types {
     private Date date;
     
     /**
@@ -40,5 +42,11 @@ public class DateTime extends Scalar {
     }
     
     public Date getDate() {return date;}
+
+	public boolean isSupportedPDSType(String type) {
+		if (Types.DATE.equals(type) || Types.TIME.equals(type))
+			return true;
+		return false;
+	}
 
 }

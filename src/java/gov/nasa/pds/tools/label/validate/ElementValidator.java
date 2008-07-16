@@ -27,6 +27,7 @@ import gov.nasa.pds.tools.label.Numeric;
 import gov.nasa.pds.tools.label.Sequence;
 import gov.nasa.pds.tools.label.Set;
 import gov.nasa.pds.tools.label.Value;
+import gov.nasa.pds.tools.label.Scalar;
 import gov.nasa.pds.tools.logging.ToolsLogRecord;
 import gov.nasa.pds.tools.util.Utility;
 import gov.nasa.pds.tools.dict.type.InvalidLengthException;
@@ -155,6 +156,16 @@ public class ElementValidator implements DictionaryTokens {
                                        " in order to match value list.", attribute.getFilename(), attribute.getContext(), attribute.getLineNumber()));
                         }
                     }
+                }
+                
+                //Check to see if type defined in dictionary matches that found by the parser
+                Scalar scalar = (Scalar) value;
+                if (!scalar.isSupportedPDSType(definition.getDataType())) {
+                	valid = false;
+                	listener.reportError("Type Mismatch: " + attribute.getIdentifier() + " definied as " + definition.getDataType() + " found " + 
+                			scalar.getClass().getName().substring(scalar.getClass().getName().lastIndexOf(".") + 1));
+                	log.log(new ToolsLogRecord(Level.SEVERE, "Type Mismatch: " + attribute.getIdentifier() + " definied as " + definition.getDataType() + " found " + 
+                			scalar.getClass().getName().substring(scalar.getClass().getName().lastIndexOf(".") + 1), attribute.getFilename(), attribute.getContext(), attribute.getLineNumber()));
                 }
                 
                 Object castedValue = null;
