@@ -51,6 +51,7 @@ public class ObjectValidator {
         	log.log(new ToolsLogRecord(Level.SEVERE, "Undefined Object: " + object.getIdentifier(), object.getFilename(), object.getContext(), object.getLineNumber()));
         	valid = false;
         }
+        
         if (definition != null) {
 	        //First check that required elements are captured in object
 	        for (Iterator i = definition.getRequiredElements().iterator(); i.hasNext();) {
@@ -101,7 +102,8 @@ public class ObjectValidator {
                 }
             }
             //Validate attribute
-            if (!ElementValidator.isValid(dictionary, object.getIdentifier(), attribute, listener))
+            String context = (definition == null) ? object.getIdentifier() : definition.getIdentifier();
+            if (!ElementValidator.isValid(dictionary, context, attribute, listener))
                 valid = false;
         }
 	        
