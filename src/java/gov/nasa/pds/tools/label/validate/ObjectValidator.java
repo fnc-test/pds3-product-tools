@@ -109,14 +109,11 @@ public class ObjectValidator {
 	        
 	    if (definition != null) {
 	        //Check to make sure that all required objects are present
-	    	System.out.println("Identifier: " + object.getIdentifier());
 	    	for (Iterator i = object.getObjects().iterator(); i.hasNext(); ) {
 	    		ObjectStatement obj = (ObjectStatement) i.next();
-	    		System.out.println("found: " + obj.getIdentifier());
 	    	}
 	        for (Iterator i = definition.getRequiredObjects().iterator(); i.hasNext();) {
 	            String required = (String) i.next();
-	            System.out.println("Checking for: " + required);
 	            //First see if object is present
 	            if (!object.hasObject(required)) {
 	                boolean foundAlias = false;
