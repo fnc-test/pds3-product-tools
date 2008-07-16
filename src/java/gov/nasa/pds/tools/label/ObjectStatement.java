@@ -147,8 +147,6 @@ public class ObjectStatement extends Statement {
      */
     public List getObjects(String identifier) {
         List objects = new ArrayList();
-        System.out.println("Object: " + this.getIdentifier() + " looking for " + identifier);
-        System.out.println("Keys: " + statements.keySet());
         if (statements.get(identifier) != null) {
             for (Iterator i = ((List) statements.get(identifier)).iterator(); i.hasNext();) {
                 Statement statement = (Statement) i.next();
