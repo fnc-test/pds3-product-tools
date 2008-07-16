@@ -206,8 +206,15 @@ public class Label implements LabelType, Status {
             stmnts.add(statement);
             IncludePointer ip = (IncludePointer) statement;
             setStatus(ip.getLoadStatus());
-            for (Iterator i = ip.getStatements().iterator(); i.hasNext();)
-                addStatement((Statement) i.next());
+            for (Iterator i = ip.getStatements().iterator(); i.hasNext();) {
+            	Statement stmnt = (Statement) i.next();
+            	List subStmnts = (List) statements.get(statement.getIdentifier());
+                if (subStmnts == null) {
+                    subStmnts = new ArrayList();
+                    statements.put(stmnt.getIdentifier(), subStmnts);
+                }
+                subStmnts.add(stmnt);
+            }
         }
         else 
             stmnts.add(statement);
