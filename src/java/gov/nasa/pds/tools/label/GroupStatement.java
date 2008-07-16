@@ -91,9 +91,17 @@ public class GroupStatement extends Statement {
             statements.put(statement.getIdentifier(), stmnts);
         }
         if (statement instanceof IncludePointer) {
-            stmnts.add(statement);
-            for (Iterator i = ((IncludePointer) statement).getStatements().iterator(); i.hasNext();)
-                addStatement((Statement) i.next());
+        	stmnts.add(statement);
+            IncludePointer ip = (IncludePointer) statement;
+            for (Iterator i = ip.getStatements().iterator(); i.hasNext();) {
+            	Statement stmnt = (Statement) i.next();
+            	List subStmnts = (List) statements.get(statement.getIdentifier());
+                if (subStmnts == null) {
+                    subStmnts = new ArrayList();
+                    statements.put(stmnt.getIdentifier(), subStmnts);
+                }
+                subStmnts.add(stmnt);
+            }
         }
         else if (statement instanceof PointerStatement || statement instanceof AttributeStatement)
             stmnts.add(statement);
