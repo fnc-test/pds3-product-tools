@@ -95,7 +95,7 @@ public class GroupStatement extends Statement {
             IncludePointer ip = (IncludePointer) statement;
             for (Iterator i = ip.getStatements().iterator(); i.hasNext();) {
             	Statement stmnt = (Statement) i.next();
-            	List subStmnts = (List) statements.get(statement.getIdentifier());
+            	List subStmnts = (List) statements.get(stmnt.getIdentifier());
                 if (subStmnts == null) {
                     subStmnts = new ArrayList();
                     statements.put(stmnt.getIdentifier(), subStmnts);
