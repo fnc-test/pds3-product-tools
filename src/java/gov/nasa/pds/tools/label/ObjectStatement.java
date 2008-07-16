@@ -147,6 +147,8 @@ public class ObjectStatement extends Statement {
      */
     public List getObjects(String identifier) {
         List objects = new ArrayList();
+        System.out.println("Object: " + this.getIdentifier() + " looking for " + identifier);
+        System.out.println("Keys: " + statements.keySet());
         if (statements.get(identifier) != null) {
             for (Iterator i = ((List) statements.get(identifier)).iterator(); i.hasNext();) {
                 Statement statement = (Statement) i.next();
@@ -172,7 +174,7 @@ public class ObjectStatement extends Statement {
             IncludePointer ip = (IncludePointer) statement;
             for (Iterator i = ip.getStatements().iterator(); i.hasNext();) {
             	Statement stmnt = (Statement) i.next();
-            	List subStmnts = (List) statements.get(statement.getIdentifier());
+            	List subStmnts = (List) statements.get(stmnt.getIdentifier());
                 if (subStmnts == null) {
                     subStmnts = new ArrayList();
                     statements.put(stmnt.getIdentifier(), subStmnts);
