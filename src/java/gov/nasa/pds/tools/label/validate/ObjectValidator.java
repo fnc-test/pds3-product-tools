@@ -109,9 +109,6 @@ public class ObjectValidator {
 	        
 	    if (definition != null) {
 	        //Check to make sure that all required objects are present
-	    	for (Iterator i = object.getObjects().iterator(); i.hasNext(); ) {
-	    		ObjectStatement obj = (ObjectStatement) i.next();
-	    	}
 	        for (Iterator i = definition.getRequiredObjects().iterator(); i.hasNext();) {
 	            String required = (String) i.next();
 	            //First see if object is present
