@@ -63,11 +63,13 @@ public class ObjectValidator {
 	                //Lookup definition for required element
 	                ElementDefinition elementDefinition = dictionary.getElementDefinition(required);
 	                //Now loop through aliases to see if the element appears
-	                for (Iterator a = elementDefinition.getAliases().iterator(); a.hasNext() && !foundAlias;) {
-	                    //All element aliases take the form <object_identifier>.<element_identifier>
-	                    String [] identifier = a.next().toString().split("\\.");
-	                    if (identifier[0].equals(definition.getIdentifier()) && object.hasAttribute(identifier[1]))
-	                        foundAlias = true;
+	                if (elementDefinition != null) {
+		                for (Iterator a = elementDefinition.getAliases().iterator(); a.hasNext() && !foundAlias;) {
+		                    //All element aliases take the form <object_identifier>.<element_identifier>
+		                    String [] identifier = a.next().toString().split("\\.");
+		                    if (identifier[0].equals(definition.getIdentifier()) && object.hasAttribute(identifier[1]))
+		                        foundAlias = true;
+		                }
 	                }
 	                //Didn't find anything time to log
 	                if (!foundAlias) {
@@ -118,10 +120,12 @@ public class ObjectValidator {
 	                //Lookup definition for required object
 	                ObjectDefinition objectDefinition = dictionary.getObjectDefinition(required);
 	                //Now loop through aliases to see if the object appears
-	                for (Iterator a = objectDefinition.getAliases().iterator(); a.hasNext() && !foundAlias;) {
-	                    String alias = a.next().toString();
-	                    if (object.hasObject(alias))
-	                        foundAlias = true;
+	                if (objectDefinition != null) {
+		                for (Iterator a = objectDefinition.getAliases().iterator(); a.hasNext() && !foundAlias;) {
+		                    String alias = a.next().toString();
+		                    if (object.hasObject(alias))
+		                        foundAlias = true;
+		                }
 	                }
 	                //Didn't find anything time to log
 	                if (!foundAlias) {
