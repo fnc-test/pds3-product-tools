@@ -18,6 +18,7 @@ package gov.nasa.pds.tools.label.validate;
 import gov.nasa.pds.tools.dict.Definition;
 import gov.nasa.pds.tools.dict.Dictionary;
 import gov.nasa.pds.tools.dict.ElementDefinition;
+import gov.nasa.pds.tools.dict.GroupDefinition;
 import gov.nasa.pds.tools.dict.ObjectDefinition;
 import gov.nasa.pds.tools.label.AttributeStatement;
 import gov.nasa.pds.tools.label.ObjectStatement;
@@ -132,11 +133,19 @@ public class ObjectValidator {
 	                //Didn't find anything time to log
 	                if (!foundAlias) {
 	                    valid = false;
-	                    listener.reportError("Object " + object.getIdentifier() + 
-	                            " does not contain required object " + required);
-	                    log.log(new ToolsLogRecord(Level.SEVERE, "Object " + object.getIdentifier() + 
-	                            " does not contain required object " + required, object.getFilename(), 
-	                            object.getContext(), object.getLineNumber()));
+	                    if (def != null && def instanceof GroupDefinition) {
+		                    listener.reportError("Object " + object.getIdentifier() + 
+		                            " does not contain required group " + required);
+		                    log.log(new ToolsLogRecord(Level.SEVERE, "Object " + object.getIdentifier() + 
+		                            " does not contain required group " + required, object.getFilename(), 
+		                            object.getContext(), object.getLineNumber()));
+	                    } else {
+	                    	listener.reportError("Object " + object.getIdentifier() + 
+		                            " does not contain required object " + required);
+		                    log.log(new ToolsLogRecord(Level.SEVERE, "Object " + object.getIdentifier() + 
+		                            " does not contain required object " + required, object.getFilename(), 
+		                            object.getContext(), object.getLineNumber()));
+	                    }
 	                }
 	            }
 	        }
