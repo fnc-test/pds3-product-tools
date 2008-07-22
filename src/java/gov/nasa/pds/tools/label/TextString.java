@@ -15,12 +15,14 @@
 
 package gov.nasa.pds.tools.label;
 
+import gov.nasa.pds.tools.dict.type.Types;
+
 /**
  * @author pramirez
  * @version $Revision$
  * 
  */
-public class TextString extends Scalar {
+public class TextString extends Scalar implements Types {
 
     /**
      * @param value
@@ -30,6 +32,9 @@ public class TextString extends Scalar {
     }
 
 	public boolean isSupportedPDSType(String type) {
+		if (Types.DATE.equals(type) || Types.DOUBLE.equals(type) || Types.INTEGER.equals(type) ||
+				Types.REAL.equals(type) || Types.TIME.equals(type) || Types.EXPONENTIAL.equals(type))
+			return false;
 		return true;
 	}
     
