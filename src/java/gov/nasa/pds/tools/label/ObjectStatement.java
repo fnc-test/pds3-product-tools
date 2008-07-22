@@ -92,6 +92,22 @@ public class ObjectStatement extends Statement {
     }
     
     /**
+     * Retrieves groups associated with this object
+     * @return list of {@link GroupStatement}
+     */
+    public List getGroups() {
+        List groups = new ArrayList();
+        for (Iterator i = statements.values().iterator(); i.hasNext();) {
+            for (Iterator s = ((List) i.next()).iterator(); s.hasNext();) {
+                Statement statement = (Statement) s.next();
+                if (statement instanceof GroupStatement)
+                    groups.add(statement);
+            }
+        }
+        return groups;
+    }
+    
+    /**
      * Looks to see if this object contains a pointer with the given identifier
      * @param identifier of pointer statement to look for
      * @return flag indicating whether or not the pointer was found
