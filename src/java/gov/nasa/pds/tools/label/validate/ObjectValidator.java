@@ -21,6 +21,7 @@ import gov.nasa.pds.tools.dict.ElementDefinition;
 import gov.nasa.pds.tools.dict.GroupDefinition;
 import gov.nasa.pds.tools.dict.ObjectDefinition;
 import gov.nasa.pds.tools.label.AttributeStatement;
+import gov.nasa.pds.tools.label.GroupStatement;
 import gov.nasa.pds.tools.label.ObjectStatement;
 import gov.nasa.pds.tools.logging.ToolsLogRecord;
 
@@ -83,31 +84,6 @@ public class ObjectValidator {
 	                }
 	            }
 	        }
-        }
-	        
-        //Run through and validate all attributes
-        List attributes = object.getAttributes();
-        Collections.sort(attributes);
-        for (Iterator i = object.getAttributes().iterator(); i.hasNext();) {
-            AttributeStatement attribute = (AttributeStatement) i.next();
-            //Check to make sure element is allowed within this definition
-            if (definition != null && !definition.isElementPossible(attribute.getIdentifier())) {
-                //Next check to see if the attribute is allowed as an alias
-                //Lookup definition for element by its alias
-                ElementDefinition elementDefinition = dictionary.getElementDefinition(attribute.getIdentifier());
-                if (elementDefinition == null || !definition.isElementPossible(elementDefinition.getIdentifier())) {
-                    valid = false;
-                    listener.reportError("Object " + object.getIdentifier() +  " contains the element " +
-                            attribute.getIdentifier() + " which is neither required nor optional.");
-                    log.log(new ToolsLogRecord(Level.SEVERE, "Object " + object.getIdentifier() +  " contains the element " +
-                            attribute.getIdentifier() + " which is neither required nor optional.", attribute.getFilename(),
-                            attribute.getContext(), attribute.getLineNumber()));
-                }
-            }
-            //Validate attribute
-            String context = (definition == null) ? object.getIdentifier() : definition.getIdentifier();
-            if (!ElementValidator.isValid(dictionary, context, attribute, listener))
-                valid = false;
         }
 	        
 	    if (definition != null) {
@@ -175,6 +151,53 @@ public class ObjectValidator {
                 valid = false;
         }
         
+        List groups = object.getGroups();
+        Collections.sort(groups);
+        for (Iterator i = groups.iterator(); i.hasNext();) {
+            GroupStatement group = (GroupStatement) i.next();
+            //Check to make sure object is allowed within this definition
+            if (definition != null && !definition.isObjectPossible(group.getIdentifier())) {
+                //Next check to see if the object is allowed as an alias
+                //Lookup definition object by its alias
+                GroupDefinition groupDefinition = dictionary.getGroupDefinition(group.getIdentifier());
+                if (groupDefinition == null || !definition.isObjectPossible(groupDefinition.getIdentifier())) {
+                    valid = false;
+                    listener.reportError("Object " + object.getIdentifier() +  " contains the group " +
+                            group.getIdentifier() + " which is neither required nor optional.");
+                    log.log(new ToolsLogRecord(Level.SEVERE, "Object " + object.getIdentifier() +  " contains the group " +
+                            group.getIdentifier() + " which is neither required nor optional.", group.getFilename(), 
+                            group.getContext(), group.getLineNumber()));
+                }
+            }
+            //Validate nested object
+            if (!GroupValidator.isValid(dictionary, group, listener))
+                valid = false;
+        }
+        
+        //Run through and validate all attributes
+        List attributes = object.getAttributes();
+        Collections.sort(attributes);
+        for (Iterator i = object.getAttributes().iterator(); i.hasNext();) {
+            AttributeStatement attribute = (AttributeStatement) i.next();
+            //Check to make sure element is allowed within this definition
+            if (definition != null && !definition.isElementPossible(attribute.getIdentifier())) {
+                //Next check to see if the attribute is allowed as an alias
+                //Lookup definition for element by its alias
+                ElementDefinition elementDefinition = dictionary.getElementDefinition(attribute.getIdentifier());
+                if (elementDefinition == null || !definition.isElementPossible(elementDefinition.getIdentifier())) {
+                    valid = false;
+                    listener.reportError("Object " + object.getIdentifier() +  " contains the element " +
+                            attribute.getIdentifier() + " which is neither required nor optional.");
+                    log.log(new ToolsLogRecord(Level.SEVERE, "Object " + object.getIdentifier() +  " contains the element " +
+                            attribute.getIdentifier() + " which is neither required nor optional.", attribute.getFilename(),
+                            attribute.getContext(), attribute.getLineNumber()));
+                }
+            }
+            //Validate attribute
+            String context = (definition == null) ? object.getIdentifier() : definition.getIdentifier();
+            if (!ElementValidator.isValid(dictionary, context, attribute, listener))
+                valid = false;
+        }
         return valid;
     }
     
