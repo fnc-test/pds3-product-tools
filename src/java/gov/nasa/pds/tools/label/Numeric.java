@@ -15,6 +15,8 @@
 
 package gov.nasa.pds.tools.label;
 
+import gov.nasa.pds.tools.dict.type.Types;
+
 /**
  * This class represents a numeric scalar. It is not type 
  * specific so everything is represented as a String. 
@@ -22,7 +24,7 @@ package gov.nasa.pds.tools.label;
  * @version $Revision$
  * 
  */
-public class Numeric extends Scalar {
+public class Numeric extends Scalar implements Types {
     private String units;
     private int radix;
     
@@ -101,6 +103,8 @@ public class Numeric extends Scalar {
     }
 
 	public boolean isSupportedPDSType(String type) {
+		if (Types.CHARACTER.equals(type))
+			return false;
 		return true;
 	}
 
