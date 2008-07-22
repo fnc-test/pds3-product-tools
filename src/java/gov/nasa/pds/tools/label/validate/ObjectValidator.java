@@ -19,7 +19,6 @@ import gov.nasa.pds.tools.dict.Definition;
 import gov.nasa.pds.tools.dict.Dictionary;
 import gov.nasa.pds.tools.dict.ElementDefinition;
 import gov.nasa.pds.tools.dict.ObjectDefinition;
-import gov.nasa.pds.tools.dict.type.UnsupportedTypeException;
 import gov.nasa.pds.tools.label.AttributeStatement;
 import gov.nasa.pds.tools.label.ObjectStatement;
 import gov.nasa.pds.tools.logging.ToolsLogRecord;
