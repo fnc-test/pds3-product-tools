@@ -158,6 +158,23 @@ public class ObjectStatement extends Statement {
     }
     
     /**
+     * Retrieves the named group
+     * @param identifier of the group
+     * @return the {@link List} of named groups
+     */
+    public List getGroups(String identifier) {
+    	List groups = new ArrayList();
+    	if (statements.get(identifier) != null) {
+    		for (Iterator i = ((List) statements.get(identifier)).iterator(); i.hasNext();) {
+    			Statement statement = (Statement) i.next();
+    			if (statement instanceof GroupStatement)
+    				groups.add(statement);
+    		}
+    	}
+    	return groups;
+    }
+    
+    /**
      * Associates a statement with this object
      * @param statement to be added to object
      */
@@ -185,15 +202,15 @@ public class ObjectStatement extends Statement {
     }
     
     public boolean hasAttribute(String identifier) {
-        if (getAttribute(identifier) == null)
-            return false;
-        return true;
+        return (getAttribute(identifier) == null) ? false : true;
     }
     
     public boolean hasObject(String identifier) {
-        if (getObjects(identifier).size() == 0)
-            return false;
-        return true;
+        return (getObjects(identifier).size() == 0) ? false : true;
+    }
+    
+    public boolean hasGroup(String identifier) {
+    	return (getGroups(identifier).size() == 0) ? false : true;
     }
 
     public void attachComment(CommentStatement comment) {
