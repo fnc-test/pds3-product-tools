@@ -15,6 +15,7 @@
 
 package gov.nasa.pds.tools.label.validate;
 
+import gov.nasa.pds.tools.dict.Definition;
 import gov.nasa.pds.tools.dict.Dictionary;
 import gov.nasa.pds.tools.dict.ElementDefinition;
 import gov.nasa.pds.tools.dict.ObjectDefinition;
@@ -114,16 +115,18 @@ public class ObjectValidator {
 	        for (Iterator i = definition.getRequiredObjects().iterator(); i.hasNext();) {
 	            String required = (String) i.next();
 	            //First see if object is present
-	            if (!object.hasObject(required)) {
+	            if (!object.hasObject(required) && !object.hasGroup(required)) {
 	                boolean foundAlias = false;
 	                //Next check to see if the object is present as an alias
 	                //Lookup definition for required object
-	                ObjectDefinition objectDefinition = dictionary.getObjectDefinition(required);
+	                Definition def = dictionary.getObjectDefinition(required);
+	                if (def == null)
+	                	def = dictionary.getGroupDefinition(required);
 	                //Now loop through aliases to see if the object appears
-	                if (objectDefinition != null) {
-		                for (Iterator a = objectDefinition.getAliases().iterator(); a.hasNext() && !foundAlias;) {
+	                if (def != null) {
+		                for (Iterator a = def.getAliases().iterator(); a.hasNext() && !foundAlias;) {
 		                    String alias = a.next().toString();
-		                    if (object.hasObject(alias))
+		                    if (object.hasObject(alias) || object.hasGroup(alias))
 		                        foundAlias = true;
 		                }
 	                }
