@@ -34,7 +34,6 @@ $Id$
       <name>Sean Hardman</name>
       <id>shardman</id>
       <email>Sean.Hardman@jpl.nasa.gov</email>
-      <url>http://instrumentsystems.jpl.nasa.gov/people/Hardman/</url>
       <organization>NASA Jet Propulsion Laboratory</organization>
       <timezone>0</timezone>
       <roles>
@@ -45,7 +44,6 @@ $Id$
       <name>Paul Ramirez</name>
       <id>pramirez</id>
       <email>Paul.Ramirez@jpl.nasa.gov</email>
-      <url>http://instrumentsystems.jpl.nasa.gov/people/Ramirez/</url>
       <organization>NASA Jet Propulsion Laboratory</organization>
       <timezone>0</timezone>
       <roles>
@@ -56,7 +54,6 @@ $Id$
       <name>Michael Cayanan</name>
       <id>mcayanan</id>
       <email>Michael.Cayanan@jpl.nasa.gov</email>
-      <url>http://instrumentsystems.jpl.nasa.gov/people/Cayanan/</url>
       <organization>NASA Jet Propulsion Laboratory</organization>
       <timezone>0</timezone>
       <roles>
