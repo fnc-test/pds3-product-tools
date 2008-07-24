@@ -28,6 +28,24 @@ $Id$
       </p>
     </section>
 
+    <section name="Release 1.2.0">
+      <p>This is a maintenance release of the Product Tools software to support release 2.0.0 of the Label Template Design Tool and release 1.2.0 of the Validation Tool.
+      </p>
+
+      <p>The major changes for this release are as follows:
+      </p>
+
+      <ul>
+        <li>Corrected the problem where VTool was taking an extremely long time generating a report or was just crashing when validating a large number of files. There are two impacts from this change. The first is that the XML log does not need to be written to disk anymore and the second is that the summary of errors in the summary report format can now be found at the end of the report instead of at the beginning. This has also had the nice side affect of increasing the performance of the tool.</li>
+        <li>Fixed a problem where VTool was exiting prematurely when it encountered an empty file.</li>
+        <li>Resolved several issues regarding validation of date/time strings including day-of-year values with leading zeros, leap year recognition, date/time string values for character type elements and support for microsecond precision.</li>
+        <li>Added support for required groups that are defined as required objects.</li>
+        <li>Resolved a problem where elements within an undefined object/group were not being validated.</li>
+        <li>A number of new constraints for type checking have been implemented. This is mostly an attempt to make sure the value matches the element's data type.</li>
+        <li>A number of messages were improved.</li>
+      </ul>
+    </section>
+
     <section name="Release 1.1.2">
       <p>This is a maintenance release of the Product Tools software to support release 0.4.0 of the Label Template Design Tool.
       </p>

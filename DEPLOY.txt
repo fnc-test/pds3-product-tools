@@ -3,7 +3,7 @@ Although this document may contain more information in the future it currently o
 [node: ~] java -classpath antlr-2.7.6.jar antlr.Tool -html ./product-tools
 /src/resources/grammar/odl.g
 
-The above command will produce two HTML files:
+The antlr-2.7.6.jar file can be downloaded from http://www.ibiblio.org/maven/antlr/. The above command will produce two HTML files:
 
 ODLLexer.html
 ODLParser.html

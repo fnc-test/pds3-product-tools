@@ -22,7 +22,7 @@ $Id$
     <author email="Sean.Hardman@jpl.nasa.gov">Sean Hardman</author>
   </properties>
   <body>
-    <release version="1.2.0" date="2008-07-23" description="This is a maintenance release of the Product Tools software to support release 2.0.0 of the Label Template Design Tool and release 1.2.0 of the Validation Tool.">
+    <release version="1.2.0" date="2008-07-24" description="This is a maintenance release of the Product Tools software to support release 2.0.0 of the Label Template Design Tool and release 1.2.0 of the Validation Tool.">
       <action dev="pramariez" type="add">
         <b>PDSEN-146</b> - VTool needs to support microsecond precision in date/time values according to SCR 3-1104.
       </action>
