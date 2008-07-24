@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-Copyright 2007, by the California Institute of Technology.
+Copyright 2007-2008, by the California Institute of Technology.
 ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
 Any commercial use must be negotiated with the Office of Technology Transfer
 at the California Institute of Technology.
@@ -186,7 +186,6 @@ protected <a name="mMULT_OP">mMULT_OP</a>
 <a name="mNUMBER_OR_DATETIME">mNUMBER_OR_DATETIME</a>
 	:	<a href="ODLLexer.html#mBASED_INTEGER">mBASED_INTEGER</a> 
 	|	<a href="ODLLexer.html#mDATETIME">mDATETIME</a> 
-	|	<a href="ODLLexer.html#mTIME">mTIME</a> 
 	|	<a href="ODLLexer.html#mREAL">mREAL</a> 
 	|	<a href="ODLLexer.html#mREAL">mREAL</a> 
 	|	<a href="ODLLexer.html#mREAL">mREAL</a> 
@@ -211,22 +210,6 @@ protected <a name="mDATETIME">mDATETIME</a>
 	:	<a href="ODLLexer.html#mYEAR">mYEAR</a> &#039;-&#039; <a href="ODLLexer.html#mMONTH">mMONTH</a> &#039;-&#039; <a href="ODLLexer.html#mDAY">mDAY</a> &#039;T&#039; <a href="ODLLexer.html#mTIME">mTIME</a> 
 	|	<a href="ODLLexer.html#mYEAR">mYEAR</a> &#039;-&#039; <a href="ODLLexer.html#mDOY">mDOY</a> &#039;T&#039; <a href="ODLLexer.html#mTIME">mTIME</a> 
 	|	<a href="ODLLexer.html#mDATE">mDATE</a> 
-	;
-
-protected <a name="mTIME">mTIME</a>
-	:	<a href="ODLLexer.html#mHOUR">mHOUR</a> 
-		(	&#039;:&#039; <a href="ODLLexer.html#mMINUTE">mMINUTE</a> 
-			(	&#039;:&#039; <a href="ODLLexer.html#mSECOND">mSECOND</a> 
-				(	&#039;.&#039; <a href="ODLLexer.html#mFRACTION">mFRACTION</a> 
-				|	
-				) 
-			|	
-			) 
-		|	
-		) 
-		(	&#039;Z&#039; 
-		|	
-		) 
 	;
 
 protected <a name="mSIGN">mSIGN</a>
@@ -270,6 +253,22 @@ protected <a name="mDAY">mDAY</a>
 	:	<a href="ODLLexer.html#mDIGIT">mDIGIT</a> <a href="ODLLexer.html#mDIGIT">mDIGIT</a> 
 	;
 
+protected <a name="mTIME">mTIME</a>
+	:	<a href="ODLLexer.html#mHOUR">mHOUR</a> 
+		(	&#039;:&#039; <a href="ODLLexer.html#mMINUTE">mMINUTE</a> 
+			(	&#039;:&#039; <a href="ODLLexer.html#mSECOND">mSECOND</a> 
+				(	&#039;.&#039; <a href="ODLLexer.html#mFRACTION">mFRACTION</a> 
+				|	
+				) 
+			|	
+			) 
+		|	
+		) 
+		(	&#039;Z&#039; 
+		|	
+		) 
+	;
+
 protected <a name="mDOY">mDOY</a>
 	:	<a href="ODLLexer.html#mDIGIT">mDIGIT</a> <a href="ODLLexer.html#mDIGIT">mDIGIT</a> <a href="ODLLexer.html#mDIGIT">mDIGIT</a> 
 	;
@@ -302,6 +301,15 @@ protected <a name="mFRACTION">mFRACTION</a>
 	:	<a href="ODLLexer.html#mDIGIT">mDIGIT</a> 
 		(	<a href="ODLLexer.html#mDIGIT">mDIGIT</a> 
 			(	<a href="ODLLexer.html#mDIGIT">mDIGIT</a> 
+				(	<a href="ODLLexer.html#mDIGIT">mDIGIT</a> 
+					(	<a href="ODLLexer.html#mDIGIT">mDIGIT</a> 
+						(	<a href="ODLLexer.html#mDIGIT">mDIGIT</a> 
+						|	
+						) 
+					|	
+					) 
+				|	
+				) 
 			|	
 			) 
 		|	

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-Copyright 2007, by the California Institute of Technology.
+Copyright 2007-2008, by the California Institute of Technology.
 ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
 Any commercial use must be negotiated with the Office of Technology Transfer
 at the California Institute of Technology.
@@ -170,7 +170,6 @@ Definition of parser ODLParser, which is a subclass of LLkParser.
 
 <a name="date_time_value">date_time_value</a>
 	:	DATE 
-	|	TIME 
 	|	DATETIME 
 	;
 
