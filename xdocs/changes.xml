@@ -24,35 +24,47 @@ $Id$
   <body>
     <release version="1.2.0" date="2008-07-23" description="This is a maintenance release of the Product Tools software to support release 2.0.0 of the Label Template Design Tool and release 1.2.0 of the Validation Tool.">
       <action dev="pramariez" type="add">
-        <table>
-          <tr><td>PDSEN-146</td><td>VTool needs to support microsecond precision in date/time values according to SCR 3-1104.</td></tr>
-          <tr><td>PDSEN-155</td><td>Add support to allow required groups to be defined as required objects (via the REQUIRED_OBJECT_SET attribute) within an object definition in the data dictionary. This is a result of the implementation of SCR 3-1037 in the PSDD.</td></tr>
-        </table>
+        <b>PDSEN-146</b> - VTool needs to support microsecond precision in date/time values according to SCR 3-1104.
+      </action>
+      <action dev="pramariez" type="add">      
+        <b>PDSEN-155</b> - Add support to allow required groups to be defined as required objects (via the REQUIRED_OBJECT_SET attribute) within an object definition in the data dictionary. This is a result of the implementation of SCR 3-1037 in the PSDD.
       </action>
       <action dev="pramariez" type="update">
-        <table>
-          <tr><td>PDSEN-100</td><td>Reporting needs to be revisited as using XSLT becomes too time consuming on large files.</td></tr>
-          <tr><td>PDSEN-102</td><td>Error message not descriptive for numeric elements that contain string values.</td></tr>
-          <tr><td>PDSEN-135</td><td>VTool should improve its reporting of values of incorrect data type.</td></tr>
-        </table>
+        <b>PDSEN-100</b> - Reporting needs to be revisited as using XSLT becomes too time consuming on large files.
+      </action>
+      <action dev="pramariez" type="update">
+        <b>PDSEN-102</b> - Error message not descriptive for numeric elements that contain string values.
+      </action>
+      <action dev="pramariez" type="update">
+        <b>PDSEN-135</b> - VTool should improve its reporting of values of incorrect data type.
       </action>
       <action dev="pramirez" type="fix">
-        <table>
-          <tr><td>PDSEN-101</td><td>There is an issue validating date/time strings that contain a DOY with leading 0's.</td></tr>
-          <tr><td>PDSEN-109</td><td>There is an issue regarding validation of date/time strings for elements that have a general data type of CHARACTER.</td></tr>
-          <tr><td>PDSEN-114</td><td>An error occurs when encountering files without full names (e.g., .lbl) in the target directory.</td></tr>
-          <tr><td>PDSEN-124</td><td>Need a way to distinguish specific vs. generic object type.</td></tr>
-          <tr><td>PDSEN-134</td><td>VTool does not check keywords in undefined GROUPs/OBJECTs.</td></tr>
-          <tr><td>PDSEN-151</td><td>VTool does not support leap year dates properly.</td></tr>
-          <tr><td>PDSEN-154</td><td>VTool does not throw errors for certain values that don't match the element's data type.</td></tr>
-        </table>
+        <b>PDSEN-101</b> - There is an issue validating date/time strings that contain a DOY with leading 0's.
+      </action>
+      <action dev="pramirez" type="fix">
+        <b>PDSEN-109</b> - There is an issue regarding validation of date/time strings for elements that have a general data type of CHARACTER.
+      </action>
+      <action dev="pramirez" type="fix">
+        <b>PDSEN-114</b> - An error occurs when encountering files without full names (e.g., .lbl) in the target directory.
       </action>
       <action dev="mcayanan" type="fix">
-        <table>
-          <tr><td>PDSEN-115</td><td>Lines in generated report files appear to not be terminated with &lt;CR&gt;&lt;LF&gt;.</td></tr>
-          <tr><td>PDSEN-136</td><td>Improve messaging when a bad character is found in a label.</td></tr>
-        </table>
-      </action>      
+        <b>PDSEN-115</b> - Lines in generated report files appear to not be terminated with &lt;CR&gt;&lt;LF&gt;.
+      </action> 
+      <action dev="pramirez" type="fix">
+        <b>PDSEN-124</b> - Need a way to distinguish specific vs. generic object type.
+      </action>
+      <action dev="pramirez" type="fix">
+        <b>PDSEN-134</b> - VTool does not check keywords in undefined GROUPs/OBJECTs.
+      </action>
+      <action dev="mcayanan" type="fix">
+        <b>PDSEN-136</b> - Improve messaging when a bad character is found in a label.
+      </action> 
+      <action dev="pramirez" type="fix">
+        <b>PDSEN-151</b> - VTool does not support leap year dates properly.
+      </action>
+      <action dev="pramirez" type="fix">
+        <b>PDSEN-154</b> - VTool does not throw errors for certain values that don't match the element's data type.
+      </action>  
     </release>
     <release version="1.1.2" date="2008-02-21" description="This is a maintenance release of the Product Tools software to support release 0.4.0 of the Label Template Design Tool.">
       <action dev="mcayanan" type="add">
