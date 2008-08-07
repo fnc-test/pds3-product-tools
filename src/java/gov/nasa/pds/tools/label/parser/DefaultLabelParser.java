@@ -10,7 +10,7 @@
 // may be required before exporting such information to foreign countries or
 // providing access to foreign nationals.
 //
-// $Id: DefaultLabelParser.java 2652 2007-04-30 15:18:41Z mcayanan $ 
+// $Id$ 
 //
 
 package gov.nasa.pds.tools.label.parser;
@@ -58,7 +58,7 @@ import antlr.ANTLRException;
 /**
  * Default implementation
  * @author pramirez
- * @version $Revision: 2652 $
+ * @version $Revision$
  * 
  */
 public class DefaultLabelParser implements LabelParser, Status {

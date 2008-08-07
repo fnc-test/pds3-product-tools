@@ -10,7 +10,7 @@
 //may be required before exporting such information to foreign countries or
 //providing access to foreign nationals.
 //
-//	 $Id: WildcardOSFilter.java 1429 2006-07-14 22:25:54Z mcayanan $ 
+//	 $Id$ 
 //
 
 package gov.nasa.pds.tools.file.filefilter;

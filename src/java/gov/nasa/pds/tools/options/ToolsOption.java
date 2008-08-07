@@ -9,6 +9,9 @@
 //the responsibility to obtain export licenses or other export authority as
 //may be required before exporting such information to foreign countries or
 //providing access to foreign nationals.
+//
+// $Id$
+
 package gov.nasa.pds.tools.options;
 
 import org.apache.commons.cli.Option;
@@ -26,7 +29,7 @@ public class ToolsOption extends Option {
 	private final char argSeparator = ',';
 	
 	/**
-	 * Contstructor.
+	 * Constructor.
 	 * 
 	 * @param opt Short name of the option.
 	 * @param longOpt Long name of the option. Can be set to 'null'.

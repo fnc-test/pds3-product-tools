@@ -17,7 +17,7 @@ package gov.nasa.pds.tools.label.parser;
 
 /**
  * @author pramirez
- * @version $Revision: 1232 $
+ * @version $Revision$
  * 
  */
 public class UnsupportedDataObjectException extends Exception {
