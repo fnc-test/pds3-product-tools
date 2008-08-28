@@ -379,6 +379,7 @@ public class DefaultLabelParser implements LabelParser, Status {
         ODLParser parser = new ODLParser(lexer);
         parser.setFilename(url.toString());
         parser.setContext(context);
+        parser.setFollowPointers(Boolean.valueOf(properties.getProperty("parser.pointers", "true")).booleanValue());
         
         if (Boolean.valueOf(properties.getProperty("parser.pointers", "true")).booleanValue()) {
             URL base = new URL(url.toString().substring(0, url.toString().lastIndexOf("/")));
