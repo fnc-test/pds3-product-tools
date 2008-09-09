@@ -28,6 +28,14 @@ $Id$
       </p>
     </section>
 
+    <section name="Release 1.2.1">
+      <p>This is a maintenance release of the Product Tools software to support release 2.0.0 of the Label Template Design Tool.
+      </p>
+
+      <p>The only change for this release involves passing the follow pointer property when validating label fragments.
+      </p>
+    </section>
+
     <section name="Release 1.2.0">
       <p>This is a maintenance release of the Product Tools software to support release 2.0.0 of the Label Template Design Tool and release 1.2.0 of the Validation Tool.
       </p>
