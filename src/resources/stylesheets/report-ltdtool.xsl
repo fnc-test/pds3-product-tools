@@ -10,29 +10,29 @@
 <xsl:template match="/">
   
   <xsl:for-each select="log/record [level='CONFIG']">
-    <xsl:value-of select="message"/><xsl:text>&#xd;&#xa;</xsl:text>
+    <xsl:value-of select="message"/><xsl:text>&#xa;&#xa;</xsl:text>
   </xsl:for-each>
   
   <xsl:for-each select="log/record[level!='NOTIFICATION' and (level='INFO' or level='WARNING' or level='ERROR')]">
     <xsl:if test="$level='INFO'">
       <xsl:value-of select="level" /><xsl:value-of select="$pad2" />
       <xsl:if test="line">line <xsl:value-of select="line" />: </xsl:if>
-      <xsl:value-of select="message" /><xsl:text>&#xd;&#xa;</xsl:text>
+      <xsl:value-of select="message" /><xsl:text>&#xa;&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$level='WARNING' and level!='INFO'">
       <xsl:value-of select="level" /><xsl:value-of select="$pad2" />
       <xsl:if test="line">line <xsl:value-of select="line" />: </xsl:if>
-      <xsl:value-of select="message" /><xsl:text>&#xd;&#xa;</xsl:text>
+      <xsl:value-of select="message" /><xsl:text>&#xa;&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$level='ERROR' and level!='INFO' and level!='WARNING'">
       <xsl:value-of select="level" /><xsl:value-of select="$pad2" />
       <xsl:if test="line">line <xsl:value-of select="line" />: </xsl:if>
-      <xsl:value-of select="message" /><xsl:text>&#xd;&#xa;</xsl:text>
+      <xsl:value-of select="message" /><xsl:text>&#xa;&#xa;</xsl:text>
     </xsl:if>
   </xsl:for-each>
   
   <xsl:if test="$numErrors = 0 and $numWarnings = 0">
-    <xsl:text>Validation completed with no errors or warnings.&#xd;&#xa;</xsl:text>
+    <xsl:text>Validation completed with no errors or warnings.&#xa;&#xa;</xsl:text>
   </xsl:if>
 
 </xsl:template>
