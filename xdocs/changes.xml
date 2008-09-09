@@ -26,6 +26,9 @@ $Id$
       <action dev="pramariez" type="fix">
         When parsing a label fragment passing the follow pointer property was not being propagated.
       </action>
+      <action dev="mcayanan" type="fix">
+        Fix spacing issue of the validation report. Seen on the Mac platform.
+      </action>
     </release>
 
     <release version="1.2.0" date="2008-07-24" description="This is a maintenance release of the Product Tools software to support release 2.0.0 of the Label Template Design Tool and release 1.2.0 of the Validation Tool.">

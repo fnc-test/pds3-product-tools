@@ -32,7 +32,7 @@ $Id$
       <p>This is a maintenance release of the Product Tools software to support release 2.0.0 of the Label Template Design Tool.
       </p>
 
-      <p>The only change for this release involves passing the follow pointer property when validating label fragments.
+      <p>The only changes for this release involve passing the follow pointer property when validating label fragments and fixing a spacing issue in the validation report for LTDTool.
       </p>
     </section>
 
