@@ -337,16 +337,9 @@ pointer_statement returns [PointerStatement result = null]
     : POINT_OPERATOR a=assignment_statement
       {
          if (a != null) {
-            try {
                result = PointerStatementFactory.newInstance(a.getLineNumber(), a.getIdentifier(), a.getValue());
                result.setFilename(filename);
                result.setContext(context);
-            } catch (MalformedURLException mue) {
-               result = null;
-               setStatus(Status.FAIL);
-               incrementErrors();
-               log.log(new ToolsLogRecord(Level.SEVERE, mue.getMessage(), filename, context, a.getLineNumber()));
-            }
             if (followPointers && result != null && result instanceof IncludePointer) {
                IncludePointer ip = (IncludePointer) result;
                try {
