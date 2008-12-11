@@ -52,7 +52,7 @@ public interface LabelParser {
      * Parses the given file, validates against dictionary, and may perform dataObjectValidation
      * @param file
      * @param dictionary
-     * @param dataObjectValidation
+     * @param skipVersion
      * @return {@link Label} representation of the file
      */
     public Label parse(URL file, Dictionary dictionary, boolean dataObjectValidation) throws ParseException, IOException;
@@ -68,6 +68,15 @@ public interface LabelParser {
     
     /**
      * Parses the given partial label.
+     * @param file
+     * @return {@link Label} representation of the file
+     * @throws ParseException
+     * @throws IOException
+     */
+    public Label parsePartial(URL file, boolean skipVersion) throws ParseException, IOException;
+    
+    /**
+     * Parses the given partial label.
      * @param context
      * @param file
      * @return {@link Label} representation of the file
@@ -75,6 +84,16 @@ public interface LabelParser {
      * @throws IOException
      */
     public Label parsePartial(String context, URL file) throws ParseException, IOException;
+    
+    /**
+     * Parses the given partial label.
+     * @param context
+     * @param file
+     * @return {@link Label} representation of the file
+     * @throws ParseException
+     * @throws IOException
+     */
+    public Label parsePartial(String context, URL file, boolean skipVersion) throws ParseException, IOException;
     
     /**
      * Parses the given partial label and validates against the dictionary.
@@ -90,12 +109,12 @@ public interface LabelParser {
      * Parses the given partial label, validates against dictionary, and may perform dataObjectValidation
      * @param file
      * @param dictionary
-     * @param dataObjectValidation
+     * @param skipVersion
      * @return {@link Label} representation of the file
      * @throws ParseException
      * @throws IOException
      */
-    public Label parsePartial(URL file, Dictionary dictionary, boolean dataObjectValidation) throws ParseException, IOException;
+    public Label parsePartial(URL file, Dictionary dictionary, boolean skipVersion) throws ParseException, IOException;
     
     /**
      * Passes properties to the parser. 

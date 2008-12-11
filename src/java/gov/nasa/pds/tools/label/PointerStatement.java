@@ -15,6 +15,10 @@
 
 package gov.nasa.pds.tools.label;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Iterator;
+
 /**
  * This class is the object representation of a pointer statement in a label.
  * 
@@ -26,9 +30,11 @@ public class PointerStatement extends Statement implements PointerType {
     protected Value value;
     private CommentStatement comment;
     private int pointerType;
+    protected boolean externalReference;
 
     /**
      * Constructs essentially a null pointer
+     * @param pointerType indicates whether it is data location, include, or description pointer
      * @param lineNumber at which the statement occurs
      * @param identifier of the statement
      */
@@ -38,6 +44,7 @@ public class PointerStatement extends Statement implements PointerType {
     
     /**
      * Constructs a pointer with a value on the right hand side
+     * @param pointerType indicates whether it is data location, include, or description pointer
      * @param lineNumber at which the statement occurs
      * @param identifier of the statement
      * @param value of the assignment
@@ -46,6 +53,7 @@ public class PointerStatement extends Statement implements PointerType {
         super(lineNumber, identifier);
         this.value = value; 
         this.pointerType = pointerType;
+        this.externalReference = false;
         comment = null;  
     }
     
@@ -89,5 +97,56 @@ public class PointerStatement extends Statement implements PointerType {
     public int getPointerType() {
         return pointerType;
     }
+    
+    /**
+     * Indicates whether or not the pointer makes reference to an external file.
+     * @return flag indicating whether an external reference is made
+     */
+    public boolean hasExternalReference() {
+    	return externalReference;
+    }
+    
+    public boolean hasMultipleReferences() {
+    	if (value instanceof Set) 
+    		return true;
+    	return false;
+    }
 
+    /**
+     * Gets the name of the external file that this pointer references
+     * @return filename associated with this pointer. Returns null if this is not 
+     * an external reference or there is multiple values for external references
+     */
+    public String getExternalFileReference() {
+    	if (!externalReference || hasMultipleReferences())
+    		return null;
+    	
+        String filename = "";
+        
+        //The name of the file will be the first element in the sequence or the value if not 
+        //contained in a sequence
+        if (value instanceof Sequence)
+            filename = ((Sequence) value).get(0).toString();
+        else
+            filename = value.toString();
+        
+        return filename;
+    }
+    
+    public List getExternalFileReferences() {
+    	if (!externalReference)
+    		return null;
+    	
+    	List fileReferences = new ArrayList();
+    	if (!hasMultipleReferences()) {
+    		fileReferences.add(getExternalFileReference());
+    	} else {
+    	    for (Iterator i = ((Set) value).iterator(); i.hasNext();) {
+	    		Value value = (Value) i.next();
+	    		fileReferences.add(value.toString());
+	        }
+    	}
+    	
+    	return fileReferences;
+    }
 }

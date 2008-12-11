@@ -15,34 +15,33 @@
 
 package gov.nasa.pds.tools.label;
 
-import java.net.MalformedURLException;
-
 /**
  * This class hides the construction of pointers. It helps determine the exact type of pointer and
- * contstructs it. If modifications need to be made to this behavior it will be hidden here.
+ * constructs it. If modifications need to be made to this behavior it will be hidden here.
  * 
  * @author pramirez
  * @version $Revision$
  * 
  */
 public class PointerStatementFactory implements PointerType {
-    public static PointerStatement newInstance(int line, String identifier, Value value) throws MalformedURLException {
-        //Essentially the pointer will be an internal or external pointer
-        //The two classes of external pointers we need to differentiate between are structure pointers which
-        //should allow us to load statments and just external references where we only care of the existence
-        //of the file which is pointed too
-        
-        if (value instanceof TextString) {
-            for (int i = 0; i < INCLUDE_NAMES.length; i++) {
-                if (identifier.endsWith(INCLUDE_NAMES[i]))
-                    return new IncludePointer(line, identifier, value);
-            }
-            return new ExternalPointer(resolvePointerType(identifier), line, identifier, value);
-        } else if (value instanceof Sequence) {
-            return new ExternalPointer(resolvePointerType(identifier), line, identifier, value);
-        }
-        else
-            return new PointerStatement(resolvePointerType(identifier), line, identifier, value);
+	
+    public static PointerStatement newInstance(int line, String identifier, Value value) {
+    	int pointerType = resolvePointerType(identifier);
+    	PointerStatement newPointer = null;
+    	
+    	if (pointerType == DATA_LOCATION) {
+    		newPointer = new DataLocationPointer(line, identifier, value);
+    	} else if (pointerType == INCLUDE) {
+    		if (identifier.endsWith(CATALOG))
+    			newPointer = new CatalogPointer(line, identifier, value);
+    		else 
+    			newPointer = new IncludePointer(line, identifier, value);
+    	} else if (pointerType == DESCRIPTION) {
+    		newPointer = new DescriptionPointer(line, identifier, value);
+    	} else
+    		newPointer = new PointerStatement(UNDEFINED, line, identifier, value);
+    	
+    	return newPointer;
     }
     
     private static int resolvePointerType(String identifier) {
@@ -50,6 +49,10 @@ public class PointerStatementFactory implements PointerType {
         for (int i = 0; i < DESCRIPTION_NAMES.length && pointerType == UNDEFINED; i++) {
             if (identifier.endsWith(DESCRIPTION_NAMES[i]))
                 pointerType = DESCRIPTION;
+        }
+        for (int i = 0; i < INCLUDE_NAMES.length && pointerType == UNDEFINED; i++) {
+        	if (identifier.endsWith(INCLUDE_NAMES[i]))
+        		pointerType = INCLUDE;
         }
         if (pointerType == UNDEFINED)
             pointerType = DATA_LOCATION;

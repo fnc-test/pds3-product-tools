@@ -65,7 +65,7 @@ public class DuplicateIdentifierValidator implements LabelValidator {
                     log.log(new ToolsLogRecord(Level.SEVERE, "Duplicate " + statement.getIdentifier() + " found.", 
                             statement.getFilename(), statement.getContext(), statement.getLineNumber()));
                 } else {
-                    seenIdentifiers.add(statement.getIdentifier());
+                    seenIdentifiers.add(statement.getFilename() + "#" + statement.getIdentifier());
                 }
             } else if (statement instanceof ObjectStatement) {
                 ObjectStatement object = (ObjectStatement) statement;

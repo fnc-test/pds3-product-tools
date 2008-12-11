@@ -15,46 +15,31 @@
 
 package gov.nasa.pds.tools.label;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import gov.nasa.pds.tools.label.parser.LabelParser;
 import gov.nasa.pds.tools.label.parser.LabelParserFactory;
 import gov.nasa.pds.tools.label.parser.ParseException;
-import gov.nasa.pds.tools.label.validate.Status;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.Iterator;
+import java.util.List;
 
 /**
- * This class represents a pointer that is a set of external statements that can and should
- * be included in label containing this statement when performing validation.
+ * This class represents a pointer to a catalog file. This is different than normal
+ * pointers in that it can reference several files.
+ * 
  * @author pramirez
  * @version $Revision$
  * 
  */
-public class IncludePointer extends PointerStatement implements PointerType, Status {
-    protected List statements;
-    protected boolean loaded = false;
-    protected String loadStatus = null;
-    protected int numErrors;
-    protected int numWarnings;
+public class CatalogPointer extends IncludePointer {
 
-    /**
-     * Constructs a pointer that can be resolved to a set of statements.
-     * @param lineNumber of statement
-     * @param identifier of statement
-     * @param value assigned to statement
-     */
-    public IncludePointer(int lineNumber, String identifier, Value value) {
-        super(INCLUDE, lineNumber, identifier, value);
-        statements = new ArrayList();
-        numWarnings = 0;
-        numErrors = 0;
-        loadStatus = UNKNOWN;
-    }
-    
-    /**
+	public CatalogPointer(int lineNumber, String identifier, Value value) {
+		super(lineNumber, identifier, value);
+		this.externalReference = true;
+	}
+
+	/**
      * This method attempts to load the referenced statements. If unsuccessful will throw an error.
      * Once loaded the statements are held in the class so they may be accessed at a later time.
      * @param includePaths An list of {@link URL} in which to search for the referenced file
@@ -73,7 +58,7 @@ public class IncludePointer extends PointerStatement implements PointerType, Sta
 	            String labelContext = context;
 	            if (labelContext == null)
 	                labelContext = filename;
-	            Label label = parser.parsePartial(labelContext, labelURL);
+	            Label label = parser.parsePartial(labelContext, labelURL, true);
 	            loadStatus = label.getStatus();
 	            statements = label.getStatements();
 	            numErrors = label.getNumErrors();
@@ -81,28 +66,4 @@ public class IncludePointer extends PointerStatement implements PointerType, Sta
         	}
         }
     }
-    
-    /**
-     * Retrieves the list of statements pointed to by this structure pointer
-     * @return external list of statements
-     */
-    public List getStatements() {
-        return statements;
-    }
-    
-    /**
-     * Indicates whether or not the statements pointed to have been loaded.
-     * @return flag indicating load status
-     */
-    public boolean isLoaded() {
-        return loaded;
-    }
-    
-    public String getLoadStatus() {
-        return loadStatus;
-    }
-    
-    public int getNumErrors() {return numErrors;}
-    public int getNumWarnings() {return numWarnings;}
-
 }

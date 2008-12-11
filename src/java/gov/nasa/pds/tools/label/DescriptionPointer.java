@@ -16,19 +16,18 @@
 package gov.nasa.pds.tools.label;
 
 /**
+ * This class represents a description pointer that references an external 
+ * file of additional documentation of special use to human readers.
+ * 
  * @author pramirez
  * @version $Revision$
  * 
  */
-public interface PointerType {
-    public final static int DATA_LOCATION = 0;
-    public final static int INCLUDE = 1;
-    public final static int DESCRIPTION = 2;
-    public final static int UNDEFINED = -1;
-    public final static String [] DESCRIPTION_NAMES = {"DESCRIPTION", "DESC"};
-    public final static String [] INCLUDE_NAMES = {"STRUCTURE", "CATALOG", "MAP_PROJECTION"};
-    public final static String [] CATALOG_NAMES = {"DATA_SET_CATALOG", "DATA_SET_COLLECTION_CATALOG",
-    	"INSTRUMENT_CATALOG", "INSTRUMENT_HOST_CATALOG", "MISSION_CATALOG", "PERSONNEL_CATALOG,",
-    	"REFERENCE_CATALOG", "SOFTWARE_CATALOG", "TARGET_CATALOG"};
-    public final static String CATALOG = "CATALOG";
+public class DescriptionPointer extends PointerStatement {
+	
+	protected DescriptionPointer(int lineNumber,String identifier, Value value) {
+		super(DESCRIPTION, lineNumber, identifier, value);
+		this.externalReference = true;
+	}
+	
 }
