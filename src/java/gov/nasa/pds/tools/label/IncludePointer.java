@@ -52,6 +52,7 @@ public class IncludePointer extends PointerStatement implements PointerType, Sta
         numWarnings = 0;
         numErrors = 0;
         loadStatus = UNKNOWN;
+		this.externalReference = true;
     }
     
     /**
