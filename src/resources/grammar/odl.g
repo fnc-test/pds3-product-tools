@@ -19,13 +19,13 @@ package gov.nasa.pds.tools.label.antlr;
 import gov.nasa.pds.tools.label.AttributeStatement;
 import gov.nasa.pds.tools.label.CommentStatement;
 import gov.nasa.pds.tools.label.DateTime;
-import gov.nasa.pds.tools.label.ExternalPointer;
 import gov.nasa.pds.tools.label.GroupStatement;
 import gov.nasa.pds.tools.label.Label;
 import gov.nasa.pds.tools.label.Numeric;
 import gov.nasa.pds.tools.label.ObjectStatement;
 import gov.nasa.pds.tools.label.PointerStatement;
 import gov.nasa.pds.tools.label.PointerStatementFactory;
+import gov.nasa.pds.tools.label.URLResolver;
 import gov.nasa.pds.tools.label.Scalar;
 import gov.nasa.pds.tools.label.Sequence;
 import gov.nasa.pds.tools.label.Set;
@@ -356,10 +356,9 @@ pointer_statement returns [PointerStatement result = null]
                   incrementErrors();
                   log.log(new ToolsLogRecord(Level.SEVERE, ioe.getMessage(), filename, context, a.getLineNumber()));
                } 
-            } else if (followPointers && result != null && result instanceof ExternalPointer) {
-               ExternalPointer ep = (ExternalPointer) result;
+            } else if (followPointers && result != null && result.hasExternalReference()) {
                try {
-                  ep.resolveURL(includePaths);
+                  URLResolver.resolveURL(includePaths, result, result.getExternalFileReference());
                } catch (IOException ioe) {
                   setStatus(Status.FAIL);
                   incrementErrors();
