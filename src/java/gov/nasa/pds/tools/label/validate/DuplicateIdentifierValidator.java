@@ -59,7 +59,7 @@ public class DuplicateIdentifierValidator implements LabelValidator {
         for (Iterator i = statements.iterator(); i.hasNext();) {
             Statement statement = (Statement) i.next();
             if (statement instanceof AttributeStatement) {
-                if (seenIdentifiers.contains(statement.getIdentifier())) {
+                if (seenIdentifiers.contains(statement.getFilename() + "#" + statement.getIdentifier())) {
                     valid = false;
                     listener.reportError("Duplicate " + statement.getIdentifier() + "found.");
                     log.log(new ToolsLogRecord(Level.SEVERE, "Duplicate " + statement.getIdentifier() + " found.", 
