@@ -65,8 +65,8 @@ public class IncludePointer extends PointerStatement implements PointerType, Sta
     public synchronized void loadReferencedStatements(List includePaths) throws ParseException, IOException {
         if (!loaded) {
         	for (Iterator n = getExternalFileReferences().iterator(); n.hasNext();) {
-        		String filename = (String) n.next();
-	            URL labelURL = URLResolver.resolveURL(includePaths, this, filename);
+        		String file = (String) n.next();
+	            URL labelURL = URLResolver.resolveURL(includePaths, this, file);
 	            loaded = true;
 	            LabelParser parser = LabelParserFactory.getInstance().newLabelParser();
 	            for (Iterator i = includePaths.iterator(); i.hasNext();)
