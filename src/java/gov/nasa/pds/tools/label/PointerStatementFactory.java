@@ -26,7 +26,7 @@ package gov.nasa.pds.tools.label;
 public class PointerStatementFactory implements PointerType {
 	
     public static PointerStatement newInstance(int line, String identifier, Value value) {
-    	int pointerType = resolvePointerType(identifier);
+    	int pointerType = resolvePointerType(identifier, value);
     	PointerStatement newPointer = null;
     	
     	if (pointerType == DATA_LOCATION) {
@@ -44,15 +44,17 @@ public class PointerStatementFactory implements PointerType {
     	return newPointer;
     }
     
-    private static int resolvePointerType(String identifier) {
+    private static int resolvePointerType(String identifier, Value value) {
         int pointerType = UNDEFINED;
         for (int i = 0; i < DESCRIPTION_NAMES.length && pointerType == UNDEFINED; i++) {
             if (identifier.endsWith(DESCRIPTION_NAMES[i]))
                 pointerType = DESCRIPTION;
         }
-        for (int i = 0; i < INCLUDE_NAMES.length && pointerType == UNDEFINED; i++) {
-        	if (identifier.endsWith(INCLUDE_NAMES[i]))
-        		pointerType = INCLUDE;
+        if (value instanceof TextString) {
+	        for (int i = 0; i < INCLUDE_NAMES.length && pointerType == UNDEFINED; i++) {
+	        	if (identifier.endsWith(INCLUDE_NAMES[i]))
+	        		pointerType = INCLUDE;
+	        }
         }
         if (pointerType == UNDEFINED)
             pointerType = DATA_LOCATION;
