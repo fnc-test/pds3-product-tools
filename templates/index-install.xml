@@ -44,7 +44,7 @@ $Id$
       </subsection>
       
       <subsection name="Data Dictionary Requirement">
-        <p>Release <i>1r64</i> or later of the Planetary Science Data Dictionary (PSDD) is required for the tools to function properly. Release <i>1r66</i> of the PSDD supports the validation of explicit FILE objects. The latest version of the PDS data dictionary can be retrieved from the <a href="http://pds.nasa.gov/tools/data_dictionary_lookup.cfm" target="_blank">PDS Data Dictionary Lookup</a> web page.
+        <p>Release <i>1r64</i> or later of the Planetary Science Data Dictionary (PSDD) is required for the tools to function properly. Release <i>1r66</i> of the PSDD supports the validation of explicit FILE objects. The latest version of the PDS data dictionary can be retrieved from the <a href="http://pds.nasa.gov/tools/dictionary.shtml" target="_blank">PDS Data Dictionary</a> web page.
         </p>
       </subsection>
     </section>

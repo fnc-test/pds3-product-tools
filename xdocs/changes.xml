@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-Copyright 2006-2008, by the California Institute of Technology.
+Copyright 2006-2009, by the California Institute of Technology.
 ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
 Any commercial use must be negotiated with the Office of Technology Transfer
 at the California Institute of Technology.
@@ -22,7 +22,31 @@ $Id$
     <author email="Sean.Hardman@jpl.nasa.gov">Sean Hardman</author>
   </properties>
   <body>
-    <release version="1.2.1" date="2009-09-09" description="This is a maintenance release of the Product Tools software to support release 2.0.0 of the Label Template Design Tool.">
+    <release version="2.0.0" date="2009-01-09" description="This release of the Product Tools software incorporates the Phase II capability supporting validation of catalog files.">
+      <action dev="pramariez" type="add">
+        <b>PDSEN-116</b> - Support validation of catalog files.
+      </action>
+      <action dev="pramirez" type="fix">
+        <b>PDSEN-107</b> - Inconsistent validation of values with quotation marks based on the associated element's general data type. The issues related to quoted date/time strings has been resolved. The issue related to quoted variables was determined to be a LTDTool issue and new issues was created and assigned to that component.
+      </action>
+      <action dev="pramirez" type="fix">
+        <b>PDSEN-147</b> - VTool exits ungracefully when validating a catalog directory in a GCJ environment. This is believed to be associated with the limitation in catalog file support (PDSEN-116) as opposed to the GCJ environment so it should also be resolved in this release.
+      </action>
+    </release>
+
+    <release version="1.2.1" date="2008-09-09" description="This is a maintenance release of the Product Tools software to support release 2.0.0 of the Label Template Design Tool.">
+      <action dev="pramirez" type="add">
+        <b>PDSEN-119</b> - Add another constructor to GroupStatement class to initialize the Map used to store the statements.
+      </action>
+      <action dev="pramirez" type="fix">
+        <b>PDSEN-104</b> - The AttributeStatement.hasNamespace() method returns an incorrect value.
+      </action>
+      <action dev="pramirez" type="fix">
+        <b>PDSEN-121</b> - Quotes missing for keywords with colon ":" when writing to DD.
+      </action>
+      <action dev="pramirez" type="fix">
+        <b>PDSEN-124</b> - Need a way to distinguish specific vs. generic object type.
+      </action>
       <action dev="pramariez" type="fix">
         When parsing a label fragment passing the follow pointer property was not being propagated.
       </action>

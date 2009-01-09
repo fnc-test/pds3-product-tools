@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-Copyright 2007-2008, by the California Institute of Technology.
+Copyright 2007-2009, by the California Institute of Technology.
 ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
 Any commercial use must be negotiated with the Office of Technology Transfer
 at the California Institute of Technology.
@@ -28,121 +28,16 @@ $Id$
       </p>
     </section>
 
-    <section name="Release 1.2.1">
-      <p>This is a maintenance release of the Product Tools software to support release 2.0.0 of the Label Template Design Tool.
+    <section name="Release 2.0.0">
+      <p>This release of the Product Tools software incorporates the Phase II capability supporting validation of catalog files.
       </p>
 
-      <p>The only changes for this release involve passing the follow pointer property when validating label fragments and fixing a spacing issue in the validation report for LTDTool.
-      </p>
-    </section>
-
-    <section name="Release 1.2.0">
-      <p>This is a maintenance release of the Product Tools software to support release 2.0.0 of the Label Template Design Tool and release 1.2.0 of the Validation Tool.
+      <p>The major change for this release is the addition of support for validating catalog files, either standalone or as a set within a CATALOG directory. Modifications to support this capability included a general change with regard to how pointers are handled as well as relaxing some of the PDS Label constraints where catalog files do not conform to those constraints. The result is that catalog files are now validated correctly and the spurious messages that were previously produced have been eliminated.
       </p>
 
-      <p>The major changes for this release are as follows:
-      </p>
-
-      <ul>
-        <li>Corrected the problem where VTool was taking an extremely long time generating a report or was just crashing when validating a large number of files. There are two impacts from this change. The first is that the XML log does not need to be written to disk anymore and the second is that the summary of errors in the summary report format can now be found at the end of the report instead of at the beginning. This has also had the nice side affect of increasing the performance of the tool.</li>
-        <li>Fixed a problem where VTool was exiting prematurely when it encountered an empty file.</li>
-        <li>Resolved several issues regarding validation of date/time strings including day-of-year values with leading zeros, leap year recognition, date/time string values for character type elements and support for microsecond precision.</li>
-        <li>Added support for required groups that are defined as required objects.</li>
-        <li>Resolved a problem where elements within an undefined object/group were not being validated.</li>
-        <li>A number of new constraints for type checking have been implemented. This is mostly an attempt to make sure the value matches the element's data type.</li>
-        <li>A number of messages were improved.</li>
-      </ul>
-    </section>
-
-    <section name="Release 1.1.2">
-      <p>This is a maintenance release of the Product Tools software to support release 0.4.0 of the Label Template Design Tool.
-      </p>
-
-      <p>The major changes for this release are as follows:
-      </p>
-
-      <ul>
-        <li>Added support for objects, groups and elements with namespaces when writing a data dicitonary to a file.</li>
-        <li>Added a new report format to be used by LTDTool.</li>
-      </ul>
-    </section>
-
-    <section name="Release 1.1.1">
-      <p>This is a maintenance release of the Product Tools software to support release 0.3.0 of the Label Template Design Tool.
-      </p>
-
-      <p>The only change for this release was to add handler classes for the tools logging capability. This change supports both VTool and LTDTool.
+      <p>The other change in this release involved correct validation of quoted date/time strings. Date/time strings may not be quoted when associated with an element that is defined with one of the DATE data types.
       </p>
     </section>
-
-    <section name="Release 1.1.0">
-      <p>This is a maintenance release of the Product Tools software including fixes and changes requested by the early adopters of the application.
-      </p>
-
-      <p>The major changes for this release are as follows:
-      </p>
-
-      <ul>
-        <li>Moved the Validation Tool main class to the <i>vtool</i> project<br/>
-            The Validation Tool main class has been split out from the <i>product-tools</i> project in order to provide more specific documentation and to turn the <i>product-tools</i> project into a library of classes that can be included by other projects.
-        </li>
-        <li>Improved data dictionary handling<br/>
-            Many improvements and fixes were applied to the data dictionary classes. Many of these were initiated in order to support the Label Template Design Tool. They include better handling of aliases, support for namespaces in identifiers, access to all element definition fields, support for SPECIFIC_OBJECT_DEFINITION in GROUP definitions and the ability to write out a dictionary file.
-        </li>
-        <li>Elements may not be duplicated<br/>
-            An element may not be duplicated within a given block of a label. An error message will be generated stating that multiple elements of the same name were found.
-        </li>
-        <li>Unit handling<br/>
-            Messages regarding unknown unit values will now have a severity of WARNING instead of ERROR.
-        </li>
-        <li>Documentation Updates<br/>
-            Added the release notes to the PDF version of the Product Tools Guide and included README files in the binary and source distributions. Also added documentation detailing the grammar to the Development section.
-        </li>
-      </ul>
-
-      <p>The liens for this release are the same as they were for release 1.0.0. 
-      </p>
-    </section>
-
-    <section name="Release 1.0.0">
-      <p>This release of the Product Tools software, including the Validation Tool, represents the operational release for the Phase I targeted capabilities. The tool currently supports data product label validation including syntactic validation against the grammar and semantic validation against the PDS data dictionary.
-      </p>
-
-      <p>The major changes for this release are as follows:
-      </p>
-
-      <ul>
-        <li>Sub-objects supported in explicit FILE objects<br/>
-            Although the tool didn't require any changes, SCR 3-1089 was approved and implemented in release 1r66 of the PSDD, enabling this capability. 
-        </li>
-        <li>Report Fine Tuning<br/>
-            The majority of changes for this release involved fine tuning the reporting capability. The parameters related to reporting in this release have been modified to support these changes.
-        </li>
-        <li>Executable Scripts and Exit Status Values<br/>
-            Batch and shell scripts have been provided with this release allowing for simpler execution of the tool. Exit status values are now returned by the tool enabling execution from a script.
-        </li>
-      </ul>
-
-      <p>The liens for this release are as follows:
-      </p>
-
-      <ul>
-        <li>Checking for Label Padding<br/>
-            Validation of proper label padding has not been implemented yet.
-        </li>
-        <li>Summary Report Message Ordering<br/>
-            The summary report still lists the messages in alphabetical order instead of the preferred chronological order.
-        </li>
-        <li>Date/Time Interpretation<br/>
-            When running the tool under Java version 1.5, date/time values are periodically interpreted incorrectly generating an error message in the resulting report. This appears to be a bug in Java version 1.5, but we will research it further to determine a workaround or fix for the next release.
-        </li>
-        <li>Developer Guide<br/>
-            Although a minimal <i>Development</i> guide is available in this release, it still needs content detailing the entry points for the API.
-        </li>
-      </ul>
-
-    </section>
-
   </body>
 </document>
 
