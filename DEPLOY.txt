@@ -1,7 +1,6 @@
 Although this document may contain more information in the future it currently only covers how to generate and incorporate the grammar output. The following command will generate the HTML output from the grammar source:
 
-[node: ~] java -classpath antlr-2.7.6.jar antlr.Tool -html ./product-tools
-/src/resources/grammar/odl.g
+[node: ~] java -classpath antlr-2.7.6.jar antlr.Tool -html ./product-tools/src/resources/grammar/odl.g
 
 The antlr-2.7.6.jar file can be downloaded from http://www.ibiblio.org/maven/antlr/. The above command will produce two HTML files:
 
