@@ -47,7 +47,7 @@ $Id$
       <action dev="pramirez" type="fix">
         <b>PDSEN-124</b> - Need a way to distinguish specific vs. generic object type.
       </action>
-      <action dev="pramariez" type="fix">
+      <action dev="pramirez" type="fix">
         When parsing a label fragment passing the follow pointer property was not being propagated.
       </action>
       <action dev="mcayanan" type="fix">
