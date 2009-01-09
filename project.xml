@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- 
-Copyright 2006-2008, by the California Institute of Technology.
+Copyright 2006-2009, by the California Institute of Technology.
 ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
 Any commercial use must be negotiated with the Office of Technology Transfer
 at the California Institute of Technology.
@@ -20,7 +20,7 @@ $Id$
   <extend>${defaults.xml}</extend>
   <id>product-tools</id>
   <name>Product Tools</name>
-  <currentVersion>1.2.2</currentVersion>
+  <currentVersion>2.0.0</currentVersion>
   <package>gov.nasa.pds.tools</package>
   <shortDescription>
     Next generation of PDS product tools.
