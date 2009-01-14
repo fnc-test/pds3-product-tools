@@ -50,7 +50,6 @@ public class CatalogNameValidator implements LabelValidator, PointerType {
 		
 		for (Iterator i = objects.iterator(); i.hasNext();) {
 			ObjectStatement object = (ObjectStatement) i.next();
-			System.out.println("OBJECT: " + object.getIdentifier());
 			if (!checkPointers(object.getPointers(), listener))
 				valid = false;
 			if (!checkPointersInObjects(object.getObjects(), listener))
@@ -65,7 +64,6 @@ public class CatalogNameValidator implements LabelValidator, PointerType {
 		
 		for (Iterator i = pointers.iterator(); i.hasNext();) {
             Statement statement = (Statement) i.next();
-            System.out.println("Pointer: " + statement.getIdentifier());
             
             if (statement.getIdentifier().endsWith("_" + CATALOG)) {
             	boolean found = false;
