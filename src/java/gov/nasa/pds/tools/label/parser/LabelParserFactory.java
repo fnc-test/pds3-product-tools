@@ -15,6 +15,7 @@
 
 package gov.nasa.pds.tools.label.parser;
 
+import gov.nasa.pds.tools.label.validate.CatalogNameValidator;
 import gov.nasa.pds.tools.label.validate.FileCharacteristicValidator;
 import gov.nasa.pds.tools.label.validate.DuplicateIdentifierValidator;
 
@@ -53,6 +54,7 @@ public class LabelParserFactory {
         LabelParser parser = new DefaultLabelParser();
         parser.addLabelValidator(new FileCharacteristicValidator());
         parser.addLabelValidator(new DuplicateIdentifierValidator());
+        parser.addLabelValidator(new CatalogNameValidator());
         parser.addFragmentValidator(new DuplicateIdentifierValidator());
         return parser;
     }

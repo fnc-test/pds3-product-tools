@@ -28,8 +28,6 @@ public class DataLocationPointer extends PointerStatement {
 
 	protected DataLocationPointer(int lineNumber, String identifier, Value value) {
 		super(DATA_LOCATION, lineNumber, identifier, value);
-		if (value instanceof TextString || value instanceof Sequence)
-			this.externalReference = true;
 	}
 
 }

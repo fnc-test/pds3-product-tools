@@ -36,7 +36,6 @@ public class CatalogPointer extends IncludePointer {
 
 	public CatalogPointer(int lineNumber, String identifier, Value value) {
 		super(lineNumber, identifier, value);
-		this.externalReference = true;
 	}
 
 	/**
@@ -58,7 +57,7 @@ public class CatalogPointer extends IncludePointer {
 	            String labelContext = context;
 	            if (labelContext == null)
 	                labelContext = filename;
-	            Label label = parser.parsePartial(labelContext, labelURL, true);
+	            Label label = parser.parsePartial(labelContext, labelURL);
 	            loadStatus = label.getStatus();
 	            statements = label.getStatements();
 	            numErrors = label.getNumErrors();

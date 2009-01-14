@@ -27,7 +27,6 @@ public class DescriptionPointer extends PointerStatement {
 	
 	protected DescriptionPointer(int lineNumber,String identifier, Value value) {
 		super(DESCRIPTION, lineNumber, identifier, value);
-		this.externalReference = true;
 	}
 	
 }

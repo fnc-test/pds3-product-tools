@@ -35,7 +35,7 @@ import gov.nasa.pds.tools.label.validate.LabelValidator;
 import gov.nasa.pds.tools.label.validate.ObjectValidator;
 import gov.nasa.pds.tools.label.validate.Status;
 import gov.nasa.pds.tools.logging.ToolsLevel;
-import gov.nasa.pds.tools.logging.ToolsLogFormatter;
+import gov.nasa.pds.tools.logging.FullLogFormatter;
 import gov.nasa.pds.tools.logging.ToolsLogRecord;
 
 import java.io.BufferedReader;
@@ -311,22 +311,15 @@ public class DefaultLabelParser implements LabelParser, Status {
     public String getODLVersion() {
         return "2.1";
     }
-
-    /* (non-Javadoc)
-     * @see gov.nasa.pds.tools.label.parser.LabelParser#parsePartial(java.net.URL)
-     */
-    public Label parsePartial(URL url) throws ParseException, IOException {
-    	return parsePartial(url, false);
-    }
     
     /* (non-Javadoc)
      * @see gov.nasa.pds.tools.label.parser.LabelParser#parsePartial(java.net.URL, boolean)
      */
-    public Label parsePartial(URL url, boolean skipVersion) throws ParseException, IOException {
+    public Label parsePartial(URL url) throws ParseException, IOException {
         Label label =  null;
         
         try {
-        	label = parsePartial(null, url, skipVersion);
+        	label = parsePartial(null, url);
         } catch (ParseException pe) {
         	log.log(new ToolsLogRecord(ToolsLevel.SEVERE, pe.getMessage(), url.toString()));
         	log.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, Label.FAIL, url.toString()));
@@ -353,16 +346,9 @@ public class DefaultLabelParser implements LabelParser, Status {
     }
     
     /**
-     * @see gov.nasa.pds.tools.label.parser.LabelParser#parsePartial(String,java.net.URL)
-     */
-    public Label parsePartial(String context, URL url) throws ParseException, IOException {
-    	return parsePartial(context, url, false);
-    }
-    
-    /**
      * @see gov.nasa.pds.tools.label.parser.LabelParser#parsePartial(String,java.net.URL, boolean)
      */
-    public Label parsePartial(String context, URL url, boolean skipVersion) throws ParseException, IOException {
+    public Label parsePartial(String context, URL url) throws ParseException, IOException {
         Label label = null;
         
         log.log(new ToolsLogRecord(ToolsLevel.NOTIFICATION, "BEGIN", url.toString(), context));
@@ -419,7 +405,7 @@ public class DefaultLabelParser implements LabelParser, Status {
             throw new ParseException(ex.getMessage());
         }
         
-        if (!skipVersion && label.getStatement("PDS_VERSION_ID") != null) {
+        if (label.getStatement("PDS_VERSION_ID") != null) {
             label.incrementWarnings();
             log.log(new ToolsLogRecord(Level.WARNING, "Fragment contains PDS_VERSION_ID which should not be present in a label fragment.", url.toString(), context));
         }
@@ -487,7 +473,7 @@ public class DefaultLabelParser implements LabelParser, Status {
         for (int i = 0; i < logger.getHandlers().length; i++)
             logger.removeHandler(handler[i]);
         
-        StreamHandler stream = new StreamHandler(System.out, new ToolsLogFormatter());
+        StreamHandler stream = new StreamHandler(System.out, new FullLogFormatter());
         logger.addHandler(stream);
         logger.setLevel(Level.ALL);
         
@@ -498,7 +484,7 @@ public class DefaultLabelParser implements LabelParser, Status {
         URL dictionaryURL = null;
         URL includePathURL = null;
         Boolean pointers = null; 
-        Boolean aliasing = null;
+        Boolean aliasing = new Boolean(true);
         
         if (args.length%2 == 0) {
             for (int i=0; i<args.length; i+=2) {

@@ -53,7 +53,8 @@ public class PointerStatement extends Statement implements PointerType {
         super(lineNumber, identifier);
         this.value = value; 
         this.pointerType = pointerType;
-        this.externalReference = false;
+        if (value instanceof TextString || value instanceof Sequence)
+			this.externalReference = true;
         comment = null;  
     }
     

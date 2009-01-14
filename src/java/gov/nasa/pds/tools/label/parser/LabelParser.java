@@ -68,15 +68,6 @@ public interface LabelParser {
     
     /**
      * Parses the given partial label.
-     * @param file
-     * @return {@link Label} representation of the file
-     * @throws ParseException
-     * @throws IOException
-     */
-    public Label parsePartial(URL file, boolean skipVersion) throws ParseException, IOException;
-    
-    /**
-     * Parses the given partial label.
      * @param context
      * @param file
      * @return {@link Label} representation of the file
@@ -84,16 +75,6 @@ public interface LabelParser {
      * @throws IOException
      */
     public Label parsePartial(String context, URL file) throws ParseException, IOException;
-    
-    /**
-     * Parses the given partial label.
-     * @param context
-     * @param file
-     * @return {@link Label} representation of the file
-     * @throws ParseException
-     * @throws IOException
-     */
-    public Label parsePartial(String context, URL file, boolean skipVersion) throws ParseException, IOException;
     
     /**
      * Parses the given partial label and validates against the dictionary.

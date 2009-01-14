@@ -32,7 +32,7 @@ public class PointerStatementFactory implements PointerType {
     	if (pointerType == DATA_LOCATION) {
     		newPointer = new DataLocationPointer(line, identifier, value);
     	} else if (pointerType == INCLUDE) {
-    		if (identifier.endsWith(CATALOG))
+    		if (identifier.equals(CATALOG))
     			newPointer = new CatalogPointer(line, identifier, value);
     		else 
     			newPointer = new IncludePointer(line, identifier, value);
@@ -55,6 +55,8 @@ public class PointerStatementFactory implements PointerType {
 	        	if (identifier.endsWith(INCLUDE_NAMES[i]))
 	        		pointerType = INCLUDE;
 	        }
+	        if (identifier.equals(CATALOG))
+	        	pointerType = INCLUDE;
         }
         if (pointerType == UNDEFINED)
             pointerType = DATA_LOCATION;
