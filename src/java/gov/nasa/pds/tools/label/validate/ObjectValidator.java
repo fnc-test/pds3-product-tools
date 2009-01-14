@@ -23,6 +23,7 @@ import gov.nasa.pds.tools.dict.ObjectDefinition;
 import gov.nasa.pds.tools.label.AttributeStatement;
 import gov.nasa.pds.tools.label.GroupStatement;
 import gov.nasa.pds.tools.label.ObjectStatement;
+import gov.nasa.pds.tools.label.PointerType;
 import gov.nasa.pds.tools.logging.ToolsLogRecord;
 
 import java.util.Collections;
@@ -36,7 +37,7 @@ import java.util.logging.Logger;
  * @version $Revision$
  * 
  */
-public class ObjectValidator {
+public class ObjectValidator implements PointerType {
     private static Logger log = Logger.getLogger(ObjectValidator.class.getName());
     
     public static boolean isValid(Dictionary dictionary, ObjectStatement object) {
@@ -105,6 +106,14 @@ public class ObjectValidator {
 		                    if (object.hasObject(alias) || object.hasGroup(alias))
 		                        foundAlias = true;
 		                }
+	                }
+	                //Check to see if this is a reference to a catalog object
+	                for (int n = 0; !foundAlias && n < CATALOG_NAMES.length; n++) {
+	                	if (CATALOG_NAMES[n].equals(required.toUpperCase() + "_" + CATALOG)) {
+	                		if (object.hasPointer(CATALOG_NAMES[n])) {
+	                			foundAlias = true;
+	                		}
+	                	}
 	                }
 	                //Didn't find anything time to log
 	                if (!foundAlias) {
