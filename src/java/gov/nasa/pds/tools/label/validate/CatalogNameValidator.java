@@ -72,8 +72,8 @@ public class CatalogNameValidator implements LabelValidator, PointerType {
             			found = true;
             	}
             	if (!found) {
-            		listener.reportError(statement.getIdentifier() + " does not following catalog pointer naming convention.");
-            		log.log(new ToolsLogRecord(Level.SEVERE, statement.getIdentifier() + " does not following catalog pointer naming convention.",
+            		listener.reportError(statement.getIdentifier() + " does not follow catalog pointer naming convention.");
+            		log.log(new ToolsLogRecord(Level.SEVERE, statement.getIdentifier() + " does not follow catalog pointer naming convention.",
             				statement.getFilename(), statement.getContext(), statement.getLineNumber()));
             		valid = false;
             	}
