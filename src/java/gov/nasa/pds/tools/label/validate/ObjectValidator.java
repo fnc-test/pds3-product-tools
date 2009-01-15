@@ -115,6 +115,10 @@ public class ObjectValidator implements PointerType {
 	                		}
 	                	}
 	                }
+	                //Check to see if this is a reference to a map projection
+            		if (object.hasPointer(required.toUpperCase() + "_" + MAP_PROJECTION)) {
+            			foundAlias = true;
+            		}
 	                //Didn't find anything time to log
 	                if (!foundAlias) {
 	                    valid = false;
