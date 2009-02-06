@@ -28,6 +28,11 @@ $Id$
       </p>
     </section>
 
+    <section name="Release 2.0.1">
+      <p>The operational release of the Product Tools software incorporating the Phase II capability supporting validation of catalog files. This release includes some minor modifications regarding how catalog pointers are handled based on beta testing results.
+      </p>
+    </section>
+
     <section name="Release 2.0.0">
       <p>This release of the Product Tools software incorporates the Phase II capability supporting validation of catalog files.
       </p>

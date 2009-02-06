@@ -22,8 +22,14 @@ $Id$
     <author email="Sean.Hardman@jpl.nasa.gov">Sean Hardman</author>
   </properties>
   <body>
+    <release version="2.0.1" date="2009-02-06" description="The operational release of the Product Tools software incorporating the Phase II capability supporting validation of catalog files.">
+      <action dev="pramirez" type="update">
+        Modified how catalog pointers are handled to not include referenced content but to validate the existence of the referenced file. Added check for valid catalog pointer names.
+      </action>
+    </release>
+
     <release version="2.0.0" date="2009-01-09" description="This release of the Product Tools software incorporates the Phase II capability supporting validation of catalog files.">
-      <action dev="pramariez" type="add">
+      <action dev="pramirez" type="add">
         <b>PDSEN-116</b> - Support validation of catalog files.
       </action>
       <action dev="pramirez" type="fix">
