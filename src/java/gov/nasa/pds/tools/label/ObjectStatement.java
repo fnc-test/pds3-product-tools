@@ -240,5 +240,89 @@ public class ObjectStatement extends Statement {
         }
         return statementList;
     }
+    
+    public boolean equals(Object object) {
+    	if(this == object)
+    		return true;
+    	if( (object == null) || (object.getClass() != this.getClass()) )
+    		return false;
+    	
+    	ObjectStatement thatObject = (ObjectStatement) object;	
+		ArrayList<AttributeStatement> thoseAttributes = (ArrayList<AttributeStatement>) thatObject.getAttributes();		
+    	
+		for(AttributeStatement thisAttribute : (ArrayList<AttributeStatement>) getAttributes()) {
+    		AttributeStatement thatAttribute = thatObject.getAttribute(thisAttribute.getIdentifier());
+    		if(thatAttribute == null) {
+    			return false;
+    		}
+    		else {
+    			if(!thisAttribute.equals(thatAttribute))
+    				return false;
+    			else
+    				thoseAttributes.remove(thatAttribute);
+    		}
+    	}
+    	if(!thoseAttributes.isEmpty())
+    		return false;
 
+		ArrayList<PointerStatement> thosePointers = (ArrayList<PointerStatement>) thatObject.getPointers();  
+    	for(PointerStatement thisPointer : (ArrayList<PointerStatement>) getPointers()) {
+    		boolean foundMatch = false;
+    		for(PointerStatement thatPointer : thosePointers) {
+    			if((foundMatch = thisPointer.equals(thatPointer))) {
+    				thosePointers.remove(thatPointer);
+    				break;
+    			}
+    		}
+    		if(foundMatch == false)
+    			return false;
+    	}
+    	//Check if the object passed in has any left over pointers
+    	if(!thosePointers.isEmpty())
+    		return false;
+
+    	
+		ArrayList<ObjectStatement> thoseObjects = (ArrayList<ObjectStatement>) thatObject.getObjects();
+    	for(ObjectStatement thisObject : (ArrayList<ObjectStatement>) getObjects()) {
+    		boolean foundMatch = false;
+    		for(ObjectStatement o : thoseObjects) {
+    			if((foundMatch = thisObject.equals(o))) {
+    				thoseObjects.remove(o);
+    				break;
+    			}
+    		}
+    		if(foundMatch == false)
+    			return false;
+    	}
+    	if(!thoseObjects.isEmpty())
+    		return false;
+    	
+		ArrayList<GroupStatement> thoseGroups = (ArrayList<GroupStatement>) thatObject.getGroups();    	
+    	for(GroupStatement thisGroup : (ArrayList<GroupStatement>) getGroups()) {
+    		boolean foundMatch = false;
+    		for(GroupStatement thatGroup : thoseGroups) {
+    			if((foundMatch = thisGroup.equals(thatGroup))) {
+    				thoseGroups.remove(thatGroup);
+    				break;
+    			}
+    		}
+    		if(foundMatch == false)
+    			return false;
+    	}
+    	if(!thoseGroups.isEmpty())
+    		return false;
+	
+    	return true;
+    }
+    
+    public int hashcode() {
+    	int hash = 7;
+    	
+    	hash = 31 * hash + (null == getAttributes() ? 0 : getAttributes().hashCode());
+    	hash = 31 * hash + (null == getPointers() ? 0 : getPointers().hashCode());
+    	hash = 31 * hash + (null == getObjects() ? 0 : getObjects().hashCode());
+    	hash = 31 * hash + (null == getGroups() ? 0: getGroups().hashCode());
+    	
+    	return hash;
+    }     
 }

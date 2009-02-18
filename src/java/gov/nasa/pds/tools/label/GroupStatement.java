@@ -125,4 +125,39 @@ public class GroupStatement extends Statement {
         }
         return statementList;
     }
+    
+    public boolean equals(Object object) {
+       	if(this == object)
+    		return true;
+    	if( (object == null) || (object.getClass() != this.getClass()) )
+    		return false;
+    	
+    	GroupStatement thatGroup = (GroupStatement) object;
+		ArrayList<AttributeStatement> thoseAttributes = (ArrayList<AttributeStatement>) thatGroup.getAttributes();
+    	
+    	for(AttributeStatement thisAttribute : (ArrayList<AttributeStatement>) getAttributes()) {
+    		AttributeStatement thatAttribute = thatGroup.getAttribute(thisAttribute.getIdentifier());
+    		if(thatAttribute == null) {
+    			return false;
+    		}
+    		else {
+    			if(!thisAttribute.equals(thatAttribute))
+    				return false;
+    			else
+    				thoseAttributes.remove(thatAttribute);
+    		}
+    	}
+    	if(!thoseAttributes.isEmpty())
+    		return false;
+    	
+    	return true;
+    }
+    
+    public int hashcode() {
+    	int hash = 7;
+    	
+    	hash = 31 * hash + (null == getAttributes() ? 0 : getAttributes().hashCode());
+    	
+    	return hash;
+    }     
 }

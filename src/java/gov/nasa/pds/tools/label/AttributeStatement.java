@@ -15,6 +15,8 @@
 
 package gov.nasa.pds.tools.label;
 
+import gov.nasa.pds.tools.util.Utility;
+
 /**
  * This class represents an attribute assignment in a PDS label file.
  * @author pramirez
@@ -116,6 +118,38 @@ public class AttributeStatement extends Statement {
         if ("".equals(namespace))
             return false;
         return true;
+    }
+    
+    public boolean equals(Object object) {
+    	if(this == object)
+    		return true;
+    	if( (object == null) || (object.getClass() != this.getClass()) )
+    		return false;
+    	
+    	AttributeStatement as = (AttributeStatement) object;
+    	if(value == null) {
+    		return ( identifier == as.identifier || (identifier != null && identifier.equals(as.identifier)) );
+    	}
+    	else {
+    		boolean sameIdentifier = (identifier == as.identifier || (identifier != null && identifier.equals(as.identifier)));
+    	    boolean sameValue = ( value == as.value || (value != null && value.toString().equals(as.value.toString())) );
+    	    if(sameValue == false) {
+    	    	String strippedValue1 = Utility.stripWhitespace(value.toString());
+    	    	String strippedValue2 = Utility.stripWhitespace(as.value.toString());
+    	    	sameValue = (strippedValue1.equals(strippedValue2));
+    	    }
+    	    return (sameIdentifier && sameValue);
+    	}
+    }
+    
+    public int hashcode() {
+    	int hash = 7;
+    	
+    	hash = 31 * hash + (null == identifier ? 0 : identifier.hashCode());
+    	if(value != null)
+    		hash = 31 * hash + (null == value.toString() ? 0 : value.toString().hashCode());
+    	
+    	return hash;
     }
 
 }
