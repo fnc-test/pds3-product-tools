@@ -66,13 +66,27 @@ public class ToolsOption extends Option {
 	 * to take in multiple arguments. Does not define a maximum
 	 * number of allowable arguments. 
 	 * 
-	 * The separator value is set to the space character ' '. 
+	 * The separator value is set to the default comma character. 
 	 *  
 	 * @param name Sets the display name of the argument value.
 	 * @param type Sets the data type allowed for this argument.
 	 */
 	public void hasArgs(String name, Object type) {
 		hasArgs(name, type, argSeparator, false);
+	}
+	
+	/**
+	 * Requires an argument to follow the option. This method allows the option
+	 * to take in multiple arguments.
+	 * 
+	 * The separator value is set to the default comma character.
+	 * 
+	 * @param name Sets the display name of the argument value.
+	 * @param type Sets the data type allowed for this argument.
+	 * @param num Sets the maximum number of arguments allowed
+	 */
+	public void hasArgs(String name, Object type, int num) {
+		hasArgs(num, name, type, argSeparator, false);
 	}
 	
 	/**
