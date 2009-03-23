@@ -66,6 +66,9 @@ public class FileListGenerator {
 		fileFilter = new WildcardOSFilter("*");
 		noFileFilter = null;
 		noDirFilter = null;
+		
+		effFileFilter = fileFilter;
+		effDirFilter = FileFilterUtils.directoryFileFilter();
 	}
 	
 	/**
