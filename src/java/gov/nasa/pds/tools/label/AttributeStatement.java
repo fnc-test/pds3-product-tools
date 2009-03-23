@@ -134,8 +134,8 @@ public class AttributeStatement extends Statement {
     		boolean sameIdentifier = (identifier == as.identifier || (identifier != null && identifier.equals(as.identifier)));
     	    boolean sameValue = ( value == as.value || (value != null && value.toString().equals(as.value.toString())) );
     	    if(sameValue == false) {
-    	    	String strippedValue1 = Utility.stripWhitespace(value.toString());
-    	    	String strippedValue2 = Utility.stripWhitespace(as.value.toString());
+    	    	String strippedValue1 = Utility.stripOnlyWhitespaceAndNewLine(value.toString());
+    	    	String strippedValue2 = Utility.stripOnlyWhitespaceAndNewLine(as.value.toString());
     	    	sameValue = (strippedValue1.equals(strippedValue2));
     	    }
     	    return (sameIdentifier && sameValue);
