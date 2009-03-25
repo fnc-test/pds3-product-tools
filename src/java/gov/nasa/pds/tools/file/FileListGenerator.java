@@ -125,11 +125,11 @@ public class FileListGenerator {
 	 * @param noDirs Directory patterns to ignore when finding sub-directories
 	 */
 	public void setFilters(List regexp, List noFiles, List noDirs) {
-		if(regexp != null)
+		if(regexp != null && !regexp.isEmpty())
 			setFileFilter(regexp);
-		if(noFiles != null)
+		if(noFiles != null && !regexp.isEmpty())
 			setNoFileFilter(noFiles);
-		if(noDirs != null)
+		if(noDirs != null && !regexp.isEmpty())
 			setNoDirFilter(noDirs);
 		
 		setEffFileFilter();
