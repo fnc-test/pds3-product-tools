@@ -127,9 +127,9 @@ public class FileListGenerator {
 	public void setFilters(List regexp, List noFiles, List noDirs) {
 		if(regexp != null && !regexp.isEmpty())
 			setFileFilter(regexp);
-		if(noFiles != null && !regexp.isEmpty())
+		if(noFiles != null && !noFiles.isEmpty())
 			setNoFileFilter(noFiles);
-		if(noDirs != null && !regexp.isEmpty())
+		if(noDirs != null && !noDirs.isEmpty())
 			setNoDirFilter(noDirs);
 		
 		setEffFileFilter();
