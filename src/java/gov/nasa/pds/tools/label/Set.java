@@ -130,4 +130,16 @@ public class Set implements Collection, Value {
         values.clear();
     }
 
+    public String toString() {
+    	String value = "{";
+    	
+    	for(Iterator i = iterator(); i.hasNext();) {
+    		value += i.next().toString();
+    		if(i.hasNext())
+    			value += ", ";
+    	}
+    	value += "}";
+    	
+    	return value;
+    }
 }

@@ -231,4 +231,17 @@ public class Sequence implements List, Value {
     public Iterator iterator() {
         return values.iterator();
     }
+    
+    public String toString() {
+    	String value = "(";
+    	
+    	for(Iterator i = iterator(); i.hasNext();) {
+    		value += i.next().toString();
+    		if(i.hasNext())
+    			value += ", ";
+    	}
+    	value += ")";
+    	
+    	return value;
+    }
 }
