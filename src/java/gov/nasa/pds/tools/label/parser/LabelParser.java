@@ -30,7 +30,10 @@ import java.io.IOException;
  * 
  */
 public interface LabelParser {
-    
+	public static final String CATALOG = "CATALOG";
+    public static final String LABEL = "LABEL";
+    public static final String PRODUCT = "PRODUCT";
+	
     /**
      * Parses the given file
      * @param file File to 

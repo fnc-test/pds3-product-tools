@@ -46,17 +46,53 @@ public class LabelParserFactory {
     }
     
     /**
-     * Retrieves a parser that will read in PDS label files.
-     * @return The parser
+     * Returns a default label parser that will read in PDS label files.
+     * 
+     * @return The parser.
      */
     public LabelParser newLabelParser() {
+    	return newLabelParser(LabelParser.LABEL);
+    }
+    
+    /**
+     * Returns a label parser that can either read in PDS label files,
+     * PDS catalogs, or PDS label products.
+     * 
+     * @param type Set to 'CATALOG' to read catalog files, 'LABEL' to
+     * read label files, or 'PRODUCT' to read label products.
+     * 
+     * @return The parser.
+     */
+    public LabelParser newLabelParser(String type) {
         // TODO: Change to dynamic class loading based upon configuration
         LabelParser parser = new DefaultLabelParser();
-        parser.addLabelValidator(new FileCharacteristicValidator());
-        parser.addLabelValidator(new DuplicateIdentifierValidator());
-        parser.addLabelValidator(new CatalogNameValidator());
-        parser.addFragmentValidator(new DuplicateIdentifierValidator());
+        loadValidators(parser, type);
         return parser;
+    }
+    
+    /**
+     * Loads the appropriate LabelValidator classes into the parser based
+     * on the supplied type.
+     * 
+     * @param parser The parser.
+     * @param type 'CATALOG' for catalog files, 'LABEL' for label files,
+     * or 'PRODUCT' for label products.
+     */
+    private void loadValidators(LabelParser parser, String type) {
+    	if(LabelParser.CATALOG.equals(type)) {
+            parser.addLabelValidator(new DuplicateIdentifierValidator());
+            parser.addLabelValidator(new CatalogNameValidator());
+    	}
+    	else if(LabelParser.LABEL.equals(type)) {
+            parser.addLabelValidator(new FileCharacteristicValidator());
+            parser.addLabelValidator(new DuplicateIdentifierValidator());
+            parser.addFragmentValidator(new DuplicateIdentifierValidator());  		
+    	}
+    	else if(LabelParser.PRODUCT.equals(type)) {
+            parser.addLabelValidator(new FileCharacteristicValidator());
+            parser.addLabelValidator(new DuplicateIdentifierValidator());
+            parser.addFragmentValidator(new DuplicateIdentifierValidator());     		
+    	}
     }
 
 }
