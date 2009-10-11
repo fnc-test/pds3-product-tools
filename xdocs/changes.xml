@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-Copyright 2006-2009, by the California Institute of Technology.
-ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
-Any commercial use must be negotiated with the Office of Technology Transfer
-at the California Institute of Technology.
+  Copyright 2006-2009, by the California Institute of Technology.
+  ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+  Any commercial use must be negotiated with the Office of Technology Transfer
+  at the California Institute of Technology.
 
-This software is subject to U. S. export control laws and regulations
-(22 C.F.R. 120-130 and 15 C.F.R. 730-774). To the extent that the software
-is subject to U.S. export control laws and regulations, the recipient has
-the responsibility to obtain export licenses or other export authority as
-may be required before exporting such information to foreign countries or
-providing access to foreign nationals.
+  This software is subject to U. S. export control laws and regulations
+  (22 C.F.R. 120-130 and 15 C.F.R. 730-774). To the extent that the software
+  is subject to U.S. export control laws and regulations, the recipient has
+  the responsibility to obtain export licenses or other export authority as
+  may be required before exporting such information to foreign countries or
+  providing access to foreign nationals.
 
-$Id$
+  $Id$
 -->
 
 <document>
@@ -22,6 +22,15 @@ $Id$
     <author email="Sean.Hardman@jpl.nasa.gov">Sean Hardman</author>
   </properties>
   <body>
+    <release version="2.0.2" date="2009-10-11" description="This release of the Product Tools software supports the beta releases of the Catalog Ingest Tool.">
+      <action dev="mcayanan" type="add">
+        Added the capability to configure the label parser to do file-specific checks based on the specified file to be parsed.
+      </action>
+      <action dev="mcayanan" type="add">
+        Implemented the equals method to compare two Statement objects.
+      </action>
+    </release>
+
     <release version="2.0.1" date="2009-02-06" description="The operational release of the Product Tools software incorporating the Phase II capability supporting validation of catalog files.">
       <action dev="pramirez" type="update">
         Modified how catalog pointers are handled to not include referenced content but to validate the existence of the referenced file. Added check for valid catalog pointer names.
