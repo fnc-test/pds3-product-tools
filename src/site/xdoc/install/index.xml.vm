@@ -57,9 +57,9 @@
       </p>
 
       <source>
-[node: ~] unzip ${xdoc-artifactId}-${xdoc-version}-bin.zip
+% unzip ${xdoc-artifactId}-${xdoc-version}-bin.zip
 or
-[node: ~] tar -xzvf ${xdoc-artifactId}-${xdoc-version}-bin.tar.gz
+% tar -xzvf ${xdoc-artifactId}-${xdoc-version}-bin.tar.gz
       </source>
 
       <p>Note: Depending on the platform, the native version of <i>tar</i> may produce an error when attempting to unpack the distribution file because many of the file paths are greater than 100 characters. If available, the GNU version of tar will resolve this problem. If that is not available or cannot be installed, the zipped package will work just fine in a UNIX environment.
