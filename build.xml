@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  Copyright 2009, by the California Institute of Technology.
+  ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+  Any commercial use must be negotiated with the Office of Technology 
+  Transfer at the California Institute of Technology.
+
+  This software is subject to U. S. export control laws and regulations 
+  (22 C.F.R. 120-130 and 15 C.F.R. 730-774). To the extent that the software 
+  is subject to U.S. export control laws and regulations, the recipient has 
+  the responsibility to obtain export licenses or other export authority as 
+  may be required before exporting such information to foreign countries or 
+  providing access to foreign nationals.
+
+  $Id$
+-->
+
+<project name="product-tools">
+  <property environment="env" />
+  <property name="base.dir" value="." />
+  <property name="source.dir" value="${base.dir}/src/main" />
+  <property name="target.dir" value="${base.dir}/target/generated-sources" />
+  <property name="grammar.dir" value="${source.dir}/antlr3/gov/nasa/pds/tools/label/antlr" />
+  <property name="grammar.output.dir" value="${target.dir}/antlr3/gov/nasa/pds/tools/label/antlr" />
+
+  <condition property="m2-repo.dir" value="${env.M2_REPO}" else="${user.home}/.m2/repository">
+    <isset property="env.M2_REPO" />
+  </condition>
+  
+  <path id="antlr.classpath">
+    <pathelement location="${grammar.dir}" />
+    <pathelement location="${m2-repo.dir}/org/antlr/antlr/3.2/antlr-3.2.jar" />
+    <pathelement location="${m2-repo.dir}/org/antlr/antlr-runtime/3.2/antlr-runtime-3.2.jar" />
+    <pathelement location="${m2-repo.dir}/antlr/antlr/2.7.7/antlr-2.7.7.jar" />
+    <pathelement location="${m2-repo.dir}/org/antlr/stringtemplate/3.2/stringtemplate-3.2.jar" />
+  </path>
+
+  <target name="build-parser">
+    <echo>=== Started Building Parser and Lexer from Antlr Grammar ===</echo>
+    <java fork="true" classname="org.antlr.Tool" classpathref="antlr.classpath">
+      <arg value="-o" />
+      <arg file="${grammar.output.dir}" />
+
+      <arg file="${grammar.dir}/ODL.g" />
+    </java>
+    <replaceregexp match="(\n)public class" replace="@SuppressWarnings(&quot;all&quot;)\1public class" flags="m">
+      <fileset dir="${grammar.output.dir}" includes="**/*.java" />
+    </replaceregexp>
+    <echo>=== Finished Building Parser and Lexer from Antlr Grammar ===</echo>
+  </target>
+</project>

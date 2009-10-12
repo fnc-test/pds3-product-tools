@@ -1,0 +1,1 @@
+For documentation regarding installation of and development with the Product Tools software, either point your favorite browser to the ./docs/index.html file or view the PDF file located at ./docs/${project.artifactId}-${project.version}.pdf.

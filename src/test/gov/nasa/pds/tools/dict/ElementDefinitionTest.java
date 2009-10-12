@@ -1,81 +1,137 @@
-// Copyright 2006, by the California Institute of 
-// Technology. ALL RIGHTS RESERVED. United States Government 
-// Sponsorship acknowledged. Any commercial use must be negotiated with 
-// the Office of Technology Transfer at the California Institute of 
-// Technology.
+// Copyright 2006-2010, by the California Institute of Technology.
+// ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+// Any commercial use must be negotiated with the Office of Technology Transfer
+// at the California Institute of Technology.
 //
-// This software may be subject to U.S. export control laws. By 
-// accepting this software, the user agrees to comply with all 
-// applicable U.S. export laws and regulations. User has the 
-// responsibility to obtain export licenses, or other export authority 
-// as may be required before exporting such information to foreign 
-// countries or providing access to foreign persons.
+// This software is subject to U. S. export control laws and regulations
+// (22 C.F.R. 120-130 and 15 C.F.R. 730-774). To the extent that the software
+// is subject to U.S. export control laws and regulations, the recipient has
+// the responsibility to obtain export licenses or other export authority as
+// may be required before exporting such information to foreign countries or
+// providing access to foreign nationals.
 //
 // $Id$ 
 //
 
 package gov.nasa.pds.tools.dict;
 
-import gov.nasa.pds.tools.dict.ElementDefinition;
+import gov.nasa.pds.tools.constants.Constants.DictionaryType;
+import gov.nasa.pds.tools.dict.parser.DictIDFactory;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.*;
+import junit.framework.TestCase;
 
 /**
  * @author pramirez
+ * @author jagander
  * @version $Revision$
  * 
  */
+@SuppressWarnings("nls")
 public class ElementDefinitionTest extends TestCase {
     public ElementDefinitionTest(String name) {
         super(name);
     }
-    
-    public void testCtor() {
-        ElementDefinition definition = new ElementDefinition("TEST");
-        
-        assertEquals("TEST", definition.getIdentifier());
-        assertEquals("NULL", definition.getDataType());
-        assertEquals("NONE", definition.getUnitId());
-        assertEquals("NONE", definition.getValueType());
-        assertEquals(0, definition.getMinLength());
-        assertEquals(Integer.MAX_VALUE, definition.getMaxLength());
+
+    public void testCtors() {
+        ElementDefinition definition = new ElementDefinition(new Dictionary(),
+                1, DictIDFactory.createElementDefId("TEST"));
+
+        assertEquals("TEST", definition.getIdentifier().toString());
+        assertNull(definition.getDataType());
+        assertNull(definition.getUnits());
+        assertNull(definition.getValueType());
+        assertEquals(new Integer(0), definition.getMinLength());
+        assertEquals(new Integer(Integer.MAX_VALUE), definition.getMaxLength());
+        assertEquals(0, definition.getValues().size());
+
+        definition = new ElementDefinition(new Dictionary(
+                new File("pdsdd.full")), 1, DictIDFactory
+                .createElementDefId("TEST"));
+
+        assertEquals("pdsdd.full", definition.getSourceDictionary()
+                .getSourceString());
+        assertEquals("TEST", definition.getIdentifier().toString());
+        assertNull(definition.getDataType());
+        assertNull(definition.getUnits());
+        assertNull(definition.getValueType());
+        assertEquals(new Integer(0), definition.getMinLength());
+        assertEquals(new Integer(Integer.MAX_VALUE), definition.getMaxLength());
         assertEquals(0, definition.getValues().size());
     }
-    
+
     public void testSetters() {
-        ElementDefinition definition = new ElementDefinition("TEST");
-        
-        assertEquals("TEST", definition.getIdentifier());
-        definition.setIdentifier("TEST_NEW");
-        assertEquals("TEST_NEW", definition.getIdentifier());
-        
-        assertEquals("NULL", definition.getDataType());
-        definition.setDataType("DATA_TYPE");
-        assertEquals("DATA_TYPE", definition.getDataType());
-        
-        assertEquals("NONE", definition.getUnitId());
-        definition.setUnitId("m**2");
-        assertEquals("m**2", definition.getUnitId());
-        
-        assertEquals("NONE", definition.getValueType());
+        ElementDefinition definition = new ElementDefinition(new Dictionary(),
+                1, DictIDFactory.createElementDefId("TEST"));
+
+        assertEquals("TEST : null", definition.toString());
+
+        assertEquals("TEST", definition.getIdentifier().toString());
+        definition.setIdentifier(DictIDFactory.createElementDefId("TEST_NEW"));
+        assertEquals("TEST_NEW", definition.getIdentifier().toString());
+
+        assertNull(definition.getDataType());
+        definition.setDataType(DictionaryType.valueOf("ALPHANUMERIC"));
+        assertEquals("ALPHANUMERIC", definition.getDataType().toString());
+
+        assertNull(definition.getUnits());
+        definition.setUnits("m**2");
+        assertEquals("m**2", definition.getUnits());
+
+        assertNull(definition.getValueType());
         definition.setValueType("INTEGER");
         assertEquals("INTEGER", definition.getValueType());
-        
-        assertEquals(0, definition.getMinLength());
+
+        assertFalse(definition.hasMinLength());
+        assertEquals(new Integer(0), definition.getMinLength());
         definition.setMinLength(10);
-        assertEquals(10, definition.getMinLength());
-        
-        assertEquals(Integer.MAX_VALUE, definition.getMaxLength());
+        assertTrue(definition.hasMinLength());
+        assertEquals(new Integer(10), definition.getMinLength());
+
+        assertFalse(definition.hasMaxLength());
+        assertEquals(new Integer(Integer.MAX_VALUE), definition.getMaxLength());
         definition.setMaxLength(100);
-        assertEquals(100, definition.getMaxLength());
-        
+        assertTrue(definition.hasMaxLength());
+        assertEquals(new Integer(100), definition.getMaxLength());
+
+        assertFalse(definition.hasMinimum());
+        assertNull(definition.getMinimum());
+        definition.setMinimum(0);
+        assertTrue(definition.hasMinimum());
+        assertEquals(0, definition.getMinimum());
+
+        assertFalse(definition.hasMaximum());
+        assertNull(definition.getMaximum());
+        definition.setMaximum(Integer.MAX_VALUE);
+        assertTrue(definition.hasMaximum());
+        assertEquals(Integer.MAX_VALUE, definition.getMaximum());
+
+        assertNull(definition.getObjectType());
+        definition.setObjectType("TEST");
+        assertEquals("TEST", definition.getObjectType());
+
         assertEquals(0, definition.getValues().size());
-        List values = new ArrayList();
+        assertFalse(definition.hasValidValues());
+        definition.addValue("TEST");
+        assertTrue(definition.hasValidValues());
+        assertEquals("TEST", ((ArrayList<String>) definition.getValues())
+                .get(0));
+        List<String> values = new ArrayList<String>();
         values.add("TEST");
         definition.setValues(values);
-        assertEquals("TEST", ((ArrayList) definition.getValues()).get(0));
+        assertEquals("TEST", ((ArrayList<String>) definition.getValues())
+                .get(0));
+
+        assertEquals(0, definition.getAliases().size());
+        assertFalse(definition.hasAliases());
+        List<Alias> aliases = new ArrayList<Alias>();
+        aliases.add(new Alias("ALIAS1"));
+        aliases.add(new Alias("CONTEXT2", "ALIAS2"));
+        definition.addAliases(aliases);
+        assertTrue(definition.hasAliases());
+        assertEquals(2, definition.getAliases().size());
     }
 }
