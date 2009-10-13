@@ -138,8 +138,27 @@ public class Numeric extends Scalar {
                 || DictionaryType.NONDECIMAL.equals(type)
                 || DictionaryType.ASCII_INTEGER.equals(type)
                 || DictionaryType.NON_DECIMAL.equals(type)
-                || DictionaryType.DECIMAL.equals(type)) {
+                || DictionaryType.DECIMAL.equals(type)
+                || DictionaryType.CONTEXT_DEPENDENT.equals(type)
+                || DictionaryType.CONTEXTDEPENDENT.equals(type)) {
             return true;
+        }
+        // special case for ambiguous date values
+        if (DictionaryType.DATE.equals(type)) {
+            try {
+                Integer intVal = Integer.valueOf(this.getValue());
+                // make sure same value after transformation, ie no decimals
+                // ignored
+                if (intVal.toString().equals(this.getValue())) {
+
+                    return true;
+                }
+                // NOTE: there are at least a few missions that have a start
+                // date far in the past. Believe this is projected trajectories
+                // or similar. Not doing test beyond the value being numeric
+            } catch (final NumberFormatException e) {
+                // not able to cast to int, can't be a year
+            }
         }
         return false;
     }

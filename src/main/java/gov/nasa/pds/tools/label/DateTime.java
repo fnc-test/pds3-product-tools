@@ -78,7 +78,9 @@ public class DateTime extends Scalar {
     @Override
     public boolean isSupportedPDSType(DictionaryType type) {
         if (DictionaryType.DATE.equals(type)
-                || DictionaryType.TIME.equals(type)) {
+                || DictionaryType.TIME.equals(type)
+                || DictionaryType.CONTEXT_DEPENDENT.equals(type)
+                || DictionaryType.CONTEXTDEPENDENT.equals(type)) {
             return true;
         }
         return false;

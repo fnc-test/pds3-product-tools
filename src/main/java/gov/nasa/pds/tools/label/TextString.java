@@ -40,7 +40,9 @@ public class TextString extends Scalar {
                 || DictionaryType.CHARACTER.equals(type)
                 || DictionaryType.BIBLIO.equals(type)
                 || DictionaryType.DATA_SET.equals(type)
-                || DictionaryType.IDENTIFIER.equals(type)) {
+                || DictionaryType.IDENTIFIER.equals(type)
+                || DictionaryType.CONTEXT_DEPENDENT.equals(type)
+                || DictionaryType.CONTEXTDEPENDENT.equals(type)) {
             return true;
         }
         return false;
