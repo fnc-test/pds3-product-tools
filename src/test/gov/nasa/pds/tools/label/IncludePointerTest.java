@@ -18,7 +18,6 @@ package gov.nasa.pds.tools.label;
 import gov.nasa.pds.tools.BaseTestCase;
 import gov.nasa.pds.tools.LabelParserException;
 import gov.nasa.pds.tools.constants.Constants.ProblemType;
-import gov.nasa.pds.tools.label.parser.DefaultLabelParser;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,37 +32,31 @@ import java.io.IOException;
 public class IncludePointerTest extends BaseTestCase {
 
     public void testSelfReferences() throws LabelParserException, IOException {
-        final File sampleDir = new File(TEST_DIR, "labels");
-        final File testFile = new File(sampleDir, "selfpointer.lbl");
+        final File testFile = new File(LABEL_DIR, "selfpointer.lbl");
 
-        StandardPathResolver resolver = new StandardPathResolver();
-        DefaultLabelParser parser = new DefaultLabelParser(resolver);
-        Label label = parser.parseLabel(testFile);
+        Label label = PARSER.parseLabel(testFile);
         assertHasProblem(label, ProblemType.CIRCULAR_POINTER_REF);
+        assertEquals(1, label.getProblems().size());
 
     }
 
     public void testCircularReferences() throws LabelParserException,
             IOException {
-        final File sampleDir = new File(TEST_DIR, "labels");
-        final File testFile = new File(sampleDir, "circular1.lbl");
+        final File testFile = new File(LABEL_DIR, "circular1.lbl");
 
-        StandardPathResolver resolver = new StandardPathResolver();
-        DefaultLabelParser parser = new DefaultLabelParser(resolver);
-        Label label = parser.parseLabel(testFile);
+        Label label = PARSER.parseLabel(testFile);
         assertHasProblem(label, ProblemType.CIRCULAR_POINTER_REF);
+        assertEquals(1, label.getProblems().size());
     }
 
     public void testProblemsSuppressed() throws LabelParserException,
             IOException {
-        final File sampleDir = new File(TEST_DIR, "labels");
-        final File testFile = new File(sampleDir, "parent.lbl");
+        final File testFile = new File(LABEL_DIR, "parent.lbl");
 
-        StandardPathResolver resolver = new StandardPathResolver();
-        DefaultLabelParser parser = new DefaultLabelParser(resolver);
-        Label label = parser.parseLabel(testFile);
+        Label label = PARSER.parseLabel(testFile);
         validate(label);
 
         assertDoesntHaveProblem(label, ProblemType.EXCESSIVE_VALUE_LENGTH);
+        assertEquals(0, label.getProblems().size());
     }
 }

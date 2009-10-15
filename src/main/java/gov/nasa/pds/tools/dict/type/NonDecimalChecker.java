@@ -93,8 +93,8 @@ public class NonDecimalChecker extends LengthChecker implements
             AttributeStatement attribute) throws OutOfRangeException {
         final Number min = def.getMinimum();
         if (value.doubleValue() < min.doubleValue())
-            throw new OutOfRangeException(attribute, value.toString(), min,
-                    false, def.getIdentifier(), def.getDataType());
+            throw new OutOfRangeException(attribute, value, min, false, def
+                    .getIdentifier(), def.getDataType());
     }
 
     /*
@@ -108,8 +108,8 @@ public class NonDecimalChecker extends LengthChecker implements
             AttributeStatement attribute) throws OutOfRangeException {
         final Number max = def.getMaximum();
         if (value.doubleValue() > max.doubleValue())
-            throw new OutOfRangeException(attribute, value.toString(), max,
-                    true, def.getIdentifier(), def.getDataType());
+            throw new OutOfRangeException(attribute, value, max, true, def
+                    .getIdentifier(), def.getDataType());
     }
 
 }

@@ -124,8 +124,9 @@ public class Constants {
         START_BYTE_POSSIBLE_MISMATCH(Severity.WARNING), // WS start?
 
         // invalid label fragment problems
-        INVALID_LABEL_FRAGMENT(Severity.WARNING), FRAGMENT_HAS_VERSION(
-                Severity.WARNING), FRAGMENT_HAS_SFDU(Severity.WARNING),
+        INVALID_LABEL_FRAGMENT(Severity.WARNING), //
+        FRAGMENT_HAS_VERSION(Severity.WARNING), //
+        FRAGMENT_HAS_SFDU(Severity.WARNING), //
 
         // tabular data problem
         COLUMN_NUMBER_MISMATCH(Severity.ERROR), // wrong num columns

@@ -45,4 +45,6 @@ public interface PointerResolver {
     public File getBaseFile();
 
     public URI getBaseURI();
+
+    public String getBaseString();
 }

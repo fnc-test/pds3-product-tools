@@ -156,6 +156,11 @@ public class ManualPathResolver implements PointerResolver {
         return null;
     }
 
+    public String getBaseString() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
     public Map<Numeric, File> resolveFileMap(PointerStatement pointer) {
         return new HashMap<Numeric, File>();
     }

@@ -62,8 +62,8 @@ public class IntegerChecker extends LengthChecker implements NumericTypeChecker 
             AttributeStatement attribute) throws OutOfRangeException {
         final Number min = def.getMinimum();
         if (value.intValue() < min.intValue()) {
-            throw new OutOfRangeException(attribute, value.toString(), min,
-                    false, def.getIdentifier(), def.getDataType());
+            throw new OutOfRangeException(attribute, value, min, false, def
+                    .getIdentifier(), def.getDataType());
         }
     }
 
@@ -78,8 +78,8 @@ public class IntegerChecker extends LengthChecker implements NumericTypeChecker 
             AttributeStatement attribute) throws OutOfRangeException {
         final Number max = def.getMaximum();
         if (value.intValue() > max.intValue()) {
-            throw new OutOfRangeException(attribute, value.toString(), max,
-                    true, def.getIdentifier(), def.getDataType());
+            throw new OutOfRangeException(attribute, value, max, true, def
+                    .getIdentifier(), def.getDataType());
         }
     }
 

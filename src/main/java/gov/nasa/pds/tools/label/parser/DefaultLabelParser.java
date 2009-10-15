@@ -15,6 +15,7 @@
 
 package gov.nasa.pds.tools.label.parser;
 
+import gov.nasa.arc.pds.tools.util.FileUtils;
 import gov.nasa.pds.tools.LabelParserException;
 import gov.nasa.pds.tools.constants.Constants.ProblemType;
 import gov.nasa.pds.tools.label.CommentStatement;
@@ -33,6 +34,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -382,21 +384,40 @@ public class DefaultLabelParser implements LabelParser {
 
             // Label fragments should not have PDS_VERSION_ID
             if ("PDS_VERSION_ID".equals(name)) { //$NON-NLS-1$
-                label.addProblem(new LabelParserException(label, null, null,
+                label.addProblem(new LabelParserException(label, null,
+                        null,
                         "parser.warning.versionPresent", //$NON-NLS-1$
-                        ProblemType.FRAGMENT_HAS_VERSION, label
-                                .getSourceString()));
+                        ProblemType.FRAGMENT_HAS_VERSION,
+                        getRelativePath(label)));
             }
         }
 
         inputStream.reset();
 
         if (numConsumed != 0) {
+            // TODO: when pds utils library updated, use getRelativePath(String,
+            // String)
             label.addProblem(new LabelParserException(label, null, null,
                     "parser.warning.sfduPresent", //$NON-NLS-1$
-                    ProblemType.FRAGMENT_HAS_SFDU, label.getSourceString()));
+                    ProblemType.FRAGMENT_HAS_SFDU, getRelativePath(label)));
         }
 
         return parseLabel(inputStream, label, numConsumed);
+    }
+
+    private String getRelativePath(final Label label) {
+        String relativePath = ""; //$NON-NLS-1$
+        if (label.getLabelFile() != null) {
+            relativePath = FileUtils.getRelativePath(this.resolver
+                    .getBaseFile(), label.getLabelFile());
+        } else {
+            try {
+                relativePath = FileUtils.getRelativePath(this.resolver
+                        .getBaseURI().toURL(), label.getLabelURI().toURL());
+            } catch (MalformedURLException e) {
+                // noop
+            }
+        }
+        return relativePath;
     }
 }

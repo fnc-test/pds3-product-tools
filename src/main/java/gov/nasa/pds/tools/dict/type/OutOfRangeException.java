@@ -30,7 +30,7 @@ import gov.nasa.pds.tools.label.Statement;
 public class OutOfRangeException extends LabelParserException {
     private static final long serialVersionUID = -300278035096004819L;
 
-    public OutOfRangeException(final Statement statement, final String value,
+    public OutOfRangeException(final Statement statement, final Number value,
             final Number limit, final boolean exceeds,
             final DictIdentifier fieldName, final DictionaryType dataType) {
         super(statement, null, exceeds ? "parser.error.exceedsMax" //$NON-NLS-1$

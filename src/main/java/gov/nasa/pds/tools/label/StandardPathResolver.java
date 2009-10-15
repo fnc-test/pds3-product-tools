@@ -176,6 +176,16 @@ public class StandardPathResolver implements PointerResolver {
         return this.volume.getBaseURI();
     }
 
+    public String getBaseString() {
+        if (this.volume == null) {
+            return null;
+        }
+        if (this.getBaseFile() != null) {
+            return this.getBaseFile().toString();
+        }
+        return this.getBaseURI().toString();
+    }
+
     public List<File> resolveFiles(PointerStatement pointer) {
         final Map<Numeric, File> fileMap = resolveFileMap(pointer);
         Iterator<Entry<Numeric, File>> it = fileMap.entrySet().iterator();
