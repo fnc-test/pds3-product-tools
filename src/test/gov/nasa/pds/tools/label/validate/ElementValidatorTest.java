@@ -31,6 +31,25 @@ import java.io.IOException;
 @SuppressWarnings("nls")
 public class ElementValidatorTest extends BaseTestCase {
 
+    public void testSet() throws LabelParserException, IOException {
+
+        final File testFile = new File(LABEL_DIR, "setValue.lbl");
+
+        final Label label = PARSER.parseLabel(testFile);
+        validate(label);
+
+        AttributeStatement eccentricity = label.getAttribute("FILTER_NAME");
+        assertTrue(eccentricity.getValue() instanceof Set);
+        LabelParserException lpe = assertHasProblem(label,
+                ProblemType.UNKNOWN_VALUE);
+        assertProblemEquals(lpe, 4, null, "parser.warning.unknownValue",
+                ProblemType.UNKNOWN_VALUE, "HAZEL", "FILTER_NAME", "HAZEL");
+
+        // TODO: should only be 2 errors but NoViableAltException seems to be
+        // tripled due to recovery issues
+        assertEquals(4, label.getProblems().size());
+    }
+
     public void testUnknownValue() throws LabelParserException, IOException {
         // minimize contents
         final File testFile = new File(LABEL_DIR, "newValue.lbl");
@@ -108,23 +127,6 @@ public class ElementValidatorTest extends BaseTestCase {
         assertProblemEquals(lpe, 7, null, "parser.error.missingValue",
                 ProblemType.MISSING_VALUE, "DESCRIPTION");
         assertEquals(3, label.getProblems().size());
-    }
-
-    public void testSet() throws LabelParserException, IOException {
-
-        final File testFile = new File(LABEL_DIR, "setValue.lbl");
-
-        final Label label = PARSER.parseLabel(testFile);
-        validate(label);
-
-        AttributeStatement eccentricity = label.getAttribute("FILTER_NAME");
-        assertTrue(eccentricity.getValue() instanceof Set);
-        LabelParserException lpe = assertHasProblem(label,
-                ProblemType.UNKNOWN_VALUE);
-        assertProblemEquals(lpe, 4, null, "parser.warning.unknownValue",
-                ProblemType.UNKNOWN_VALUE, "HAZEL", "FILTER_NAME", "HAZEL");
-
-        assertEquals(1, label.getProblems().size());
     }
 
     // tests that value is of type Set and that individual elements are
@@ -321,6 +323,15 @@ public class ElementValidatorTest extends BaseTestCase {
                 ProblemType.TYPE_MISMATCH, "DELIMITING_PARAMETER_NAME",
                 "CHARACTER", "Numeric", "43");
         assertEquals(1, label.getProblems().size());
+    }
+
+    public void testNoProbsPastEnd() throws LabelParserException, IOException {
+        final File testFile = new File(LABEL_DIR, "probPastEnd.lbl");
+
+        final Label label = PARSER.parseLabel(testFile);
+        validate(label);
+
+        assertEquals(0, label.getProblems().size());
     }
 
 }

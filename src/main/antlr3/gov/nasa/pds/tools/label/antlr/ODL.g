@@ -155,7 +155,7 @@ import gov.nasa.pds.tools.constants.Constants.ProblemType;
 	
 	@Override
     public void reportError(RecognitionException e) {
-		if (this.label != null) {
+		if (this.label != null && !this.foundEND) {
 			this.label.addProblem(e.line, e.charPositionInLine, "parser.error.illegalCharacter", ProblemType.PARSE_ERROR, displayableString(e.c));
 		}
     }    
