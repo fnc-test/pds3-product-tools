@@ -30,6 +30,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * This class represents a PDS data dictionary.
@@ -42,6 +44,9 @@ import java.util.Map.Entry;
 public class Dictionary implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    public static final Pattern VERSION_REGEX = Pattern
+            .compile("Online Database: pdscat(.+) \\*"); //$NON-NLS-1$
 
     private Map<DictIdentifier, Definition> definitions = new HashMap<DictIdentifier, Definition>();
 
@@ -91,8 +96,15 @@ public class Dictionary implements Serializable {
     }
 
     public String getVersion() {
-        // TODO: Figure out if there is a better way to handle this
-        return this.getInformation();
+        // TODO: have a better way of extracting version info than munged
+        // comment parsing
+        final String info = this.getInformation();
+        final Matcher matcher = VERSION_REGEX.matcher(info);
+        if (matcher.find()) {
+            return matcher.group(1);
+        }
+        return null;
+
     }
 
     /**

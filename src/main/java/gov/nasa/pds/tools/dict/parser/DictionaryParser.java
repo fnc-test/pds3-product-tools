@@ -268,7 +268,7 @@ public class DictionaryParser {
                 for (Statement statement : headerLabel.getStatements()) {
                     if (statement instanceof CommentStatement)
                         information.append(((CommentStatement) statement)
-                                .getComment()
+                                .getText()
                                 + "\n"); //$NON-NLS-1$
                 }
 

@@ -59,20 +59,4 @@ public interface LabelParser {
 
     public Label parsePartial(final File file, final Label parent)
             throws LabelParserException, IOException;
-
-    /**
-     * Returns the version of the PDS specification that this parser is
-     * compliant with.
-     * 
-     * @return The PDS version string
-     */
-    public String getPDSVersion();
-
-    /**
-     * Returns the version of ODL that this parser is compliant with.
-     * 
-     * @return The ODL version string
-     */
-    public String getODLVersion();
-
 }

@@ -18,7 +18,8 @@ public final class VersionInfo {
             props.load(VersionInfo.class
                     .getResourceAsStream("product-tools.properties")); //$NON-NLS-1$
         } catch (IOException e) {
-            // TODO: Should we do something other than consume error?
+            // re-throw as runtime so that it needn't be explicitly caught
+            throw new RuntimeException(e);
         }
     }
 
@@ -32,6 +33,10 @@ public final class VersionInfo {
 
     public static String getStandardsRefVersion() {
         return props.getProperty(STANDARDS_VERSION);
+    }
+
+    public static String getPDSVersion() {
+        return "PDS3"; //$NON-NLS-1$
     }
 
 }

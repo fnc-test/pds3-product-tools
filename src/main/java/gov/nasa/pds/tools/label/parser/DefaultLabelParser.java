@@ -283,19 +283,10 @@ public class DefaultLabelParser implements LabelParser {
     /*
      * (non-Javadoc)
      * 
-     * @see gov.nasa.jpl.pds.tools.label.parser.LabelParser#getPDSVersion()
-     */
-    public String getPDSVersion() {
-        return "PDS3"; //$NON-NLS-1$
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
      * @see gov.nasa.jpl.pds.tools.label.parser.LabelParser#getODLVersion()
      */
     public String getODLVersion() {
-        return VersionInfo.getODLVersion(); //$NON-NLS-1$
+        return VersionInfo.getODLVersion();
     }
 
     public Label parsePartial(final File file, final Label parent)

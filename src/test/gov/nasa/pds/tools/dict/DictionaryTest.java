@@ -15,16 +15,18 @@
 
 package gov.nasa.pds.tools.dict;
 
+import gov.nasa.pds.tools.BaseTestCase;
+import gov.nasa.pds.tools.LabelParserException;
 import gov.nasa.pds.tools.constants.Constants.DictionaryType;
 import gov.nasa.pds.tools.dict.parser.DictIDFactory;
+import gov.nasa.pds.tools.dict.parser.DictionaryParser;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
-
-import junit.framework.TestCase;
 
 /**
  * JUnit test for dictionary class. The dictionary class represents a PDS
@@ -36,11 +38,7 @@ import junit.framework.TestCase;
  * 
  */
 @SuppressWarnings("nls")
-public class DictionaryTest extends TestCase {
-
-    public DictionaryTest(String name) {
-        super(name);
-    }
+public class DictionaryTest extends BaseTestCase {
 
     public void testCtors() throws URISyntaxException {
         Dictionary dictionary = new Dictionary();
@@ -155,5 +153,11 @@ public class DictionaryTest extends TestCase {
         assertEquals("IMAGE", dictionary.findObjectClassDefinition(
                 DictIDFactory.createObjectDefId("XYZ_IMAGE")).getIdentifier()
                 .toString());
+    }
+
+    public void testVersion() throws LabelParserException, IOException {
+        Dictionary dictionary = DictionaryParser.parse(new File(TEST_DIR,
+                "pdsdd.full"));
+        assertEquals("1r75", dictionary.getVersion());
     }
 }
