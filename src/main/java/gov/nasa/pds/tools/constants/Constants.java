@@ -102,8 +102,8 @@ public class Constants {
         MISSING_MEMBER(Severity.ERROR), // missing required child obj
         MISSING_PROPERTY(Severity.ERROR), // missing required property
         POTENTIAL_POINTER_PROBLEM(Severity.WARNING), // may be wrong link
-        EXCESSIVE_LINE_LENGTH(Severity.ERROR), // line is too long
-        WRONG_LINE_LENGTH(Severity.ERROR), // line length doesn't match
+        EXCESSIVE_LINE_LENGTH(Severity.WARNING), // line is too long
+        WRONG_LINE_LENGTH(Severity.WARNING), // line length doesn't match
         // RECORD_SIZE
         ILLEGAL_LINE_ENDING(Severity.ERROR), // not CRLF
         MISSING_ID(Severity.ERROR), // no id

@@ -41,7 +41,7 @@ public class LineLengthTest extends BaseTestCase {
         LabelParserException lpe = assertHasProblem(label,
                 ProblemType.EXCESSIVE_LINE_LENGTH);
         assertProblemEquals(lpe, 3, null, "parser.error.lineTooLong",
-                ProblemType.EXCESSIVE_LINE_LENGTH);
+                ProblemType.EXCESSIVE_LINE_LENGTH, "79");
 
         assertEquals(1, label.getProblems().size());
     }
@@ -62,7 +62,7 @@ public class LineLengthTest extends BaseTestCase {
 
         lpe = assertHasProblem(label, ProblemType.EXCESSIVE_LINE_LENGTH);
         assertProblemEquals(lpe, 3, null, "parser.error.lineTooLong",
-                ProblemType.EXCESSIVE_LINE_LENGTH);
+                ProblemType.EXCESSIVE_LINE_LENGTH, "79");
 
         assertEquals(2, label.getProblems().size());
     }
@@ -120,7 +120,7 @@ public class LineLengthTest extends BaseTestCase {
         LabelParserException lpe = assertHasProblem(label,
                 ProblemType.EXCESSIVE_LINE_LENGTH);
         assertProblemEquals(lpe, 3, null, "parser.error.lineTooLong",
-                ProblemType.EXCESSIVE_LINE_LENGTH);
+                ProblemType.EXCESSIVE_LINE_LENGTH, "79");
 
         assertEquals(1, label.getProblems().size());
     }
@@ -135,7 +135,7 @@ public class LineLengthTest extends BaseTestCase {
         LabelParserException lpe = assertHasProblem(label,
                 ProblemType.EXCESSIVE_LINE_LENGTH);
         assertProblemEquals(lpe, 3, null, "parser.error.lineTooLong",
-                ProblemType.EXCESSIVE_LINE_LENGTH);
+                ProblemType.EXCESSIVE_LINE_LENGTH, "79");
 
         assertEquals(1, label.getProblems().size());
     }
@@ -152,7 +152,7 @@ public class LineLengthTest extends BaseTestCase {
         LabelParserException lpe = assertHasProblem(label,
                 ProblemType.EXCESSIVE_LINE_LENGTH);
         assertProblemEquals(lpe, 3, null, "parser.error.lineTooLong",
-                ProblemType.EXCESSIVE_LINE_LENGTH);
+                ProblemType.EXCESSIVE_LINE_LENGTH, "79");
 
         lpe = assertHasProblem(label, ProblemType.START_BYTE_POSSIBLE_MISMATCH);
         assertProblemEquals(lpe, 6, null,
@@ -208,7 +208,7 @@ public class LineLengthTest extends BaseTestCase {
         LabelParserException lpe = assertHasProblem(label,
                 ProblemType.EXCESSIVE_LINE_LENGTH);
         assertProblemEquals(lpe, 3, null, "parser.error.lineTooLong",
-                ProblemType.EXCESSIVE_LINE_LENGTH);
+                ProblemType.EXCESSIVE_LINE_LENGTH, "79");
 
         assertEquals(1, label.getProblems().size());
     }

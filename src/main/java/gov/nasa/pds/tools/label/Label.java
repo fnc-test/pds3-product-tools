@@ -604,7 +604,7 @@ public class Label {
         for (LineLength l : getLineLengths()) {
             if (l.getLength() > 78) {
                 addProblem(l.getLine(), "parser.error.lineTooLong", //$NON-NLS-1$
-                        ProblemType.EXCESSIVE_LINE_LENGTH);
+                        ProblemType.EXCESSIVE_LINE_LENGTH, l.getLength());
             }
         }
     }
