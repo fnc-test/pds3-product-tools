@@ -120,7 +120,7 @@
     <resources>
       <resource>
         <filtering>true</filtering>
-        <targetPath>gov/nasa/pds/tools/label</targetPath>
+        <targetPath>gov/nasa/pds/tools/util</targetPath>
         <directory>src/main/resources/conf</directory>
         <includes>
           <include>product-tools.properties</include>
