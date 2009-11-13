@@ -73,8 +73,9 @@ public class GroupStatement extends Statement {
      * @return The named AttributeStatement or null if not found.
      */
     public AttributeStatement getAttribute(String id) {
-        if (this.statements.get(id) != null) {
-            for (Statement stmt : this.statements.get(id)) {
+        if (this.statements.get(DictIDFactory.createGroupDefId(id)) != null) {
+            for (Statement stmt : this.statements.get(DictIDFactory
+                    .createGroupDefId(id))) {
                 if (stmt instanceof AttributeStatement)
                     return (AttributeStatement) stmt;
             }
