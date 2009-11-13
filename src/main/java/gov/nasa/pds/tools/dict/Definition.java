@@ -103,8 +103,7 @@ public abstract class Definition implements Serializable {
 
     public void addAliases(List<Alias> newAliases) {
         for (Alias alias : newAliases) {
-            if (!this.aliases.contains(alias)
-                    && !this.identifier.equals(alias.getIdentifier()))
+            if (!this.aliases.contains(alias))
                 this.aliases.add(alias);
         }
     }
