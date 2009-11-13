@@ -138,7 +138,7 @@ public class Dictionary implements Serializable {
                     // iterate over local
                     for (final Alias alias : newVals) {
                         // alias didn't already exist
-                        if (!oldVals.contains(alias) && !key.equals(alias)) {
+                        if (!oldVals.contains(alias)) {
                             local.addAliasSimple(alias);
                             // TODO: move out of loop and consolidate message?
                             addMerge(overwrite, "dictionary.text.aliasAdded", //$NON-NLS-1$
