@@ -85,7 +85,7 @@ public class Set implements Collection<Scalar>, Value {
      * @see java.util.Collection#toArray()
      */
     public Scalar[] toArray() {
-        return (Scalar[]) this.values.toArray();
+        return this.values.toArray(new Scalar[this.values.size()]);
     }
 
     /*
