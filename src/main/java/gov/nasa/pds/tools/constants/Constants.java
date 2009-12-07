@@ -168,6 +168,8 @@ public class Constants {
         INFO(3), //
         WARNING(2), //
         ERROR(1); //
+        private final static String[] names = { "ERROR", "WARNING", "INFO",
+                "NONE" };
 
         // used for sorting
         private final int value;
@@ -178,6 +180,10 @@ public class Constants {
 
         public int getValue() {
             return this.value;
+        }
+
+        public String getName() {
+            return Severity.names[this.value - 1];
         }
     }
 
