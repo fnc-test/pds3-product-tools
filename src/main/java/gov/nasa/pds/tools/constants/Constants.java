@@ -164,18 +164,20 @@ public class Constants {
     }
 
     public enum Severity {
-        NONE(4), //
-        INFO(3), //
-        WARNING(2), //
-        ERROR(1); //
-        private final static String[] names = { "ERROR", "WARNING", "INFO",
-                "NONE" };
+        NONE(4, "NONE"), //
+        INFO(3, "INFO"), //
+        WARNING(2, "WARNING"), //
+        ERROR(1, "ERROR"); //
 
         // used for sorting
         private final int value;
 
-        private Severity(final int value) {
+        // used for display
+        private final String name;
+
+        private Severity(final int value, final String name) {
             this.value = value;
+            this.name = name;
         }
 
         public int getValue() {
@@ -183,7 +185,7 @@ public class Constants {
         }
 
         public String getName() {
-            return Severity.names[this.value - 1];
+            return this.name;
         }
     }
 
