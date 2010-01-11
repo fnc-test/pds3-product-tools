@@ -295,12 +295,15 @@ pointer_statement[Label label] returns [PointerStatement result = null]
          if (result != null && result instanceof IncludePointer) {
             IncludePointer sp = (IncludePointer) result;
             try {
+               // When using ManualPathResolver problems will be added at this time to the pointer's label.
+               // This is a different behavior than the StandardPathResolver and reference checking will need 
+               // at a higher level to be done. 
                sp.loadReferencedStatements(label, this.pointerResolver);
             } catch (LabelParserException lpe) {
-             // don't add problem since for a different file
+               // don't add problem since for a different file
                //label.addProblem(lpe);
             } catch (IOException ioe) {
-            // for now, missing files are tested elsewhere
+              // for now, missing files are tested elsewhere
               // label.addProblem(a.getLineNumber(), ioe.getMessage(), ProblemType.PARSE_ERROR);
             } 
          }

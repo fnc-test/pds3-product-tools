@@ -15,10 +15,13 @@
 
 package gov.nasa.pds.tools.label;
 
+import gov.nasa.pds.tools.LabelParserException;
+import gov.nasa.pds.tools.constants.Constants.ProblemType;
 import gov.nasa.pds.tools.containers.FileReference;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -39,10 +42,11 @@ import org.apache.log4j.Logger;
  * 
  */
 public class ManualPathResolver implements PointerResolver {
-
-    private static Logger log = Logger.getLogger(ManualPathResolver.class);
+    private static Logger log = Logger.getLogger(ManualPathResolver.class
+            .getName());
 
     private List<URL> includePaths = new ArrayList<URL>();
+    private URI baseURI = null;
 
     public void setIncludePaths(final List<URL> paths) {
         this.includePaths.addAll(paths);
@@ -52,7 +56,35 @@ public class ManualPathResolver implements PointerResolver {
     private URI resolveURI(final FileReference fileRef,
             final PointerStatement pointer) throws URISyntaxException {
         final String path = fileRef.getPath();
-        for (Iterator<URL> i = this.includePaths.iterator(); i.hasNext();) {
+        List<URL> searchPaths = new ArrayList<URL>(this.includePaths);
+
+        // Add the base URI into the areas to search and default it to the
+        // first place to look
+        try {
+            if (this.baseURI != null) {
+                searchPaths.add(0, this.baseURI.toURL());
+            }
+        } catch (MalformedURLException e) {
+            log.error("Problem using base URI " + this.baseURI);
+        }
+
+        // Add in the base URI of the label this pointer resides in to the
+        // list of include paths if it is not equal to the base URI for this
+        // resolver
+        URI pointerLabelBaseURI = null;
+        try {
+            pointerLabelBaseURI = ManualPathResolver.getBaseURI(pointer.label
+                    .getLabelURI());
+            if (!pointerLabelBaseURI.equals(this.baseURI)) {
+                searchPaths.add(0, pointerLabelBaseURI.toURL());
+            }
+
+        } catch (MalformedURLException e) {
+            log.error("Problem using pointer's label URI "
+                    + pointerLabelBaseURI);
+        }
+
+        for (Iterator<URL> i = searchPaths.iterator(); i.hasNext();) {
             URL baseURL = i.next();
             String url = baseURL.toString();
 
@@ -61,7 +93,9 @@ public class ManualPathResolver implements PointerResolver {
                 url += "/"; //$NON-NLS-1$
 
             URL fileURL = null;
-            // Check to see if this is the right URL for the file
+            // Check to see if this is the right URL for the file.
+            // Depending on the OS and/or protocol this may never get called as
+            // the underlying OS may be case insensitive
             try {
                 fileURL = new URL(url + path);
                 fileURL.openStream();
@@ -70,37 +104,38 @@ public class ManualPathResolver implements PointerResolver {
                 // Ignore this must not be the path to the pointed file
             }
 
-            // Check to see if we can find the file as upper case
+            // Check to see if we can find the file as upper case.
             try {
                 fileURL = new URL(url + path.toUpperCase());
                 fileURL.openStream();
-                log.warn("In order to resolve the pointer the filename "
-                        + "had to be forced to upper case. "
-                        + pointer.getSourceURI() + " line "
-                        + pointer.getLineNumber());
+                // Found the file by upper casing the name so report it
+                pointer.label.addProblem(new LabelParserException(pointer,
+                        null, "parser.error.mismatchedPointerReference",
+                        ProblemType.POTENTIAL_POINTER_PROBLEM));
                 return new URI(fileURL.toString());
             } catch (IOException ioEx) {
                 // Ignore this must not be the path to the pointed file
             }
 
             // Check to see if we can find the file as lower case
-
             try {
                 fileURL = new URL(url + path.toLowerCase());
                 fileURL.openStream();
-                log.warn("In order to resolve the pointer the filename "
-                        + "had to be forced to lower case. "
-                        + pointer.getSourceURI() + " line "
-                        + pointer.getLineNumber());
+                // Found the file by lower casing the name so report it
+                pointer.label.addProblem(new LabelParserException(pointer,
+                        null, "parser.error.mismatchedPointerReference",
+                        ProblemType.POTENTIAL_POINTER_PROBLEM));
                 return new URI(fileURL.toString());
             } catch (IOException ioEx) {
                 // Ignore this must not be the path to the pointed file
             }
 
         }
-        log.error("Could not find referenced pointer " + path + " in pointer "
-                + pointer.getSourceURI() + " on line "
-                + pointer.getLineNumber());
+
+        // The file just can not be found so now report it
+        pointer.label.addProblem(new LabelParserException(pointer, null,
+                "parser.error.missingFile", ProblemType.MISSING_RESOURCE,
+                pointer.getValue().toString()));
         return null;
     }
 
@@ -147,18 +182,38 @@ public class ManualPathResolver implements PointerResolver {
     }
 
     public File getBaseFile() {
-        // TODO Auto-generated method stub
-        return null;
+        if (this.baseURI == null) {
+            return null;
+        }
+        return new File(this.baseURI);
     }
 
     public URI getBaseURI() {
-        // TODO Auto-generated method stub
-        return null;
+        return this.baseURI;
     }
 
     public String getBaseString() {
-        // TODO Auto-generated method stub
-        return null;
+        if (this.baseURI == null) {
+            return null;
+        }
+        return this.baseURI.getPath();
+    }
+
+    public void setBaseURI(URI baseURI) {
+        this.baseURI = baseURI;
+    }
+
+    public static URI getBaseURI(URI uri) throws URISyntaxException {
+        if (uri == null) {
+            return null;
+        }
+        File uriFilePath = new File(uri.getPath());
+        String baseURI = uri.toString().substring(
+                0,
+                uri.toString().indexOf(uriFilePath.getParent())
+                        + uriFilePath.getParent().length())
+                + "/"; //$NON-NLS-1$
+        return new URI(baseURI);
     }
 
     public Map<Numeric, File> resolveFileMap(PointerStatement pointer) {
