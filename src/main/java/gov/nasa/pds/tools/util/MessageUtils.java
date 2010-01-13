@@ -9,12 +9,13 @@ import java.util.ResourceBundle;
 public class MessageUtils {
 
     private static final LocaleUtils LOCALE_UTILS = new LocaleUtils(
-            Constants.DEFAULT_LOCALE, true, "resources"); //$NON-NLS-1$
+            Constants.DEFAULT_LOCALE, false, "resources"); //$NON-NLS-1$
 
     private static LocaleUtils OVERRIDE_LOCALE_UTILS;
 
     public static void setOverride(final ResourceBundle bundle) {
-        new LocaleUtils(Constants.DEFAULT_LOCALE, true, bundle);
+        MessageUtils.OVERRIDE_LOCALE_UTILS = new LocaleUtils(
+                Constants.DEFAULT_LOCALE, false, bundle);
     }
 
     public static String getText(final String key, final Object... arguments) {
