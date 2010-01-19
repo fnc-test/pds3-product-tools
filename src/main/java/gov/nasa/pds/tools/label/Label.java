@@ -626,7 +626,7 @@ public class Label {
             final Value value = pointer.getValue();
             if (value instanceof Numeric) {
                 long start = getStartByte((Numeric) value, recordBytes);
-                if (lowWaterMark == null || start > lowWaterMark.longValue()) {
+                if (lowWaterMark == null || start < lowWaterMark.longValue()) {
                     lowWaterMark = start;
                     lowest = pointer;
                 }

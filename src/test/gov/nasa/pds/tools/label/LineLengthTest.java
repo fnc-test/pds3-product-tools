@@ -212,4 +212,16 @@ public class LineLengthTest extends BaseTestCase {
 
         assertEquals(1, label.getProblems().size());
     }
+
+    // make sure that a valid label with multiple internal pointers gets the
+    // right pointer when testing for start byte
+    public void testLowestPointer() throws LabelParserException, IOException {
+        final File testFile = new File(LABEL_DIR,
+                "attachedMultiplePointers.lbl");
+
+        final Label label = PARSER.parseLabel(testFile);
+        validate(label);
+
+        assertEquals(0, label.getProblems().size());
+    }
 }
