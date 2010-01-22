@@ -41,7 +41,9 @@ public class IntegerChecker extends LengthChecker implements NumericTypeChecker 
         }
         Long longValue = null;
         try {
-            longValue = Long.valueOf(value);
+            // strip off preceding "+" so that it can be parsed
+            String javaVal = value.replaceFirst("^\\+(.*)$", "$1"); //$NON-NLS-1$ //$NON-NLS-2$
+            longValue = Long.valueOf(javaVal);
         } catch (NumberFormatException nfe) {
             // TODO: this is probably a valid integer but out of range for
             // java... leave undocumented limit in test or use Long?
