@@ -541,7 +541,7 @@ public class Label {
                     addProblem(
                             internalPointer.getLineNumber(),
                             "parser.error.startByteMismatch", //$NON-NLS-1$
-                            ProblemType.START_BYTE_MISMATCH,
+                            ProblemType.ATTACHED_START_BYTE_MISMATCH,
                             this.attachedStartByte, startByte);
                 } else if (startByte < foundStartByte) {
                     // if found start is after listed, might be that data starts

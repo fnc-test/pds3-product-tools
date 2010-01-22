@@ -171,9 +171,9 @@ public class LineLengthTest extends BaseTestCase {
         validate(label);
 
         LabelParserException lpe = assertHasProblem(label,
-                ProblemType.START_BYTE_MISMATCH);
+                ProblemType.ATTACHED_START_BYTE_MISMATCH);
         assertProblemEquals(lpe, 6, null, "parser.error.startByteMismatch",
-                ProblemType.START_BYTE_MISMATCH, "568", "569");
+                ProblemType.ATTACHED_START_BYTE_MISMATCH, "568", "569");
 
         assertEquals(1, label.getProblems().size());
     }
@@ -188,9 +188,9 @@ public class LineLengthTest extends BaseTestCase {
         validate(label);
 
         LabelParserException lpe = assertHasProblem(label,
-                ProblemType.START_BYTE_MISMATCH);
+                ProblemType.ATTACHED_START_BYTE_MISMATCH);
         assertProblemEquals(lpe, 6, null, "parser.error.startByteMismatch",
-                ProblemType.START_BYTE_MISMATCH, "568", "569");
+                ProblemType.ATTACHED_START_BYTE_MISMATCH, "568", "569");
 
         assertEquals(1, label.getProblems().size());
     }

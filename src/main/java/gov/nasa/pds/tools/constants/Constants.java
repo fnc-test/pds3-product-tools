@@ -120,7 +120,7 @@ public class Constants {
         BAD_CATALOG_NAME(Severity.ERROR), // bad catalog pointer name
         DUPLICATE_IDENTIFIER(Severity.ERROR), // duplicate identifier
         PLACEHOLDER_VALUE(Severity.INFO), // placeholder 'NULL' instead of 'UNK'
-        START_BYTE_MISMATCH(Severity.ERROR), // pointer val != actual start byte
+        ATTACHED_START_BYTE_MISMATCH(Severity.ERROR), // pointer val != actual start byte
         START_BYTE_POSSIBLE_MISMATCH(Severity.WARNING), // WS start?
 
         // invalid label fragment problems
