@@ -144,12 +144,14 @@ public class Numeric extends Scalar {
             return true;
         }
         // special case for ambiguous date values
-        if (DictionaryType.DATE.equals(type)) {
+        if (DictionaryType.DATE.equals(type)
+                || DictionaryType.TIME.equals(type)) {
             try {
                 Integer intVal = Integer.valueOf(this.getValue());
                 // make sure same value after transformation, ie no decimals
-                // ignored
-                if (intVal.toString().equals(this.getValue())) {
+                // ignored and right length for years
+                if (intVal.toString().equals(this.getValue())
+                        && this.getValue().length() == 4) {
 
                     return true;
                 }

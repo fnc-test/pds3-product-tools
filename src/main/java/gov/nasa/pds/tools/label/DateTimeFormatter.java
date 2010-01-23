@@ -33,6 +33,10 @@ public class DateTimeFormatter {
     private static SimpleDateFormat[] formats = {
             new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"),
             new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS"),
+            new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SS'Z'"),
+            new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SS"),
+            new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S'Z'"),
+            new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S"),
             new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'"),
             new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss"),
             new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'"),
@@ -44,6 +48,10 @@ public class DateTimeFormatter {
             // so that yyyy-mm is not misinterpreted as a day-of-year.
             new SimpleDateFormat("yyyy-DDD'T'HH:mm:ss.SSS'Z'"),
             new SimpleDateFormat("yyyy-DDD'T'HH:mm:ss.SSS"),
+            new SimpleDateFormat("yyyy-DDD'T'HH:mm:ss.SS'Z'"),
+            new SimpleDateFormat("yyyy-DDD'T'HH:mm:ss.SS"),
+            new SimpleDateFormat("yyyy-DDD'T'HH:mm:ss.S'Z'"),
+            new SimpleDateFormat("yyyy-DDD'T'HH:mm:ss.S"),
             new SimpleDateFormat("yyyy-DDD'T'HH:mm:ss'Z'"),
             new SimpleDateFormat("yyyy-DDD'T'HH:mm:ss"),
             new SimpleDateFormat("yyyy-DDD'T'HH:mm'Z'"),
@@ -69,6 +77,21 @@ public class DateTimeFormatter {
             new SimpleDateFormat("yyyy"), //
     };
 
+    @SuppressWarnings("nls")
+    private static SimpleDateFormat[] timeFormats = {
+            new SimpleDateFormat("HH:mm:ss.SSS'Z'"), //
+            new SimpleDateFormat("HH:mm:ss.SSS"), //
+            new SimpleDateFormat("HH:mm:ss.SS'Z'"), //
+            new SimpleDateFormat("HH:mm:ss.SS"), //
+            new SimpleDateFormat("HH:mm:ss.S'Z'"), //
+            new SimpleDateFormat("HH:mm:ss.S"), //
+            new SimpleDateFormat("HH:mm:ss'Z'"), //
+            new SimpleDateFormat("HH:mm:ss"), //
+            new SimpleDateFormat("HH:mm'Z'"), //
+            new SimpleDateFormat("HH:mm"), //
+            new SimpleDateFormat("HH'Z'"), //
+            new SimpleDateFormat("HH"), };
+
     static {
         for (int i = 0; i < formats.length; ++i) {
             formats[i].setLenient(false);
@@ -87,7 +110,17 @@ public class DateTimeFormatter {
         for (int i = 0; i < dateFormats.length; ++i) {
             String checkDate = dateFormats[i].format(d);
             if (dateParts[0].equals(checkDate)) {
-                return d;
+                // if has time component, compare that
+                if (dateParts.length > 1) {
+                    for (int j = 0; j < timeFormats.length; ++j) {
+                        String checkTime = timeFormats[j].format(d);
+                        if (dateParts[1].equals(checkTime)) {
+                            return d;
+                        }
+                    }
+                } else {
+                    return d;
+                }
             }
         }
 
@@ -145,33 +178,38 @@ public class DateTimeFormatter {
             final String dateStr, final int lineNumber)
             throws LabelParserException {
         String[] dateComponents = dateStr.split("-"); //$NON-NLS-1$
+        // must at least have years
         if (dateComponents.length < 1) {
             throw new LabelParserException(label, lineNumber, null,
                     "parser.error.missingDateParts", ProblemType.INVALID_DATE, //$NON-NLS-1$
                     dateStr);
         }
+        // may not have more than years months and days on this side
         if (dateComponents.length > 3) {
             throw new LabelParserException(label, lineNumber, null,
                     "parser.error.extraDateParts", ProblemType.INVALID_DATE, //$NON-NLS-1$
                     dateStr);
         }
 
+        // years must be 4 digits
         checkComponent(label, dateComponents[0], 4, 4,
                 "parser.error.badYearLength", //$NON-NLS-1$
                 lineNumber);
 
+        // if has 2 parts, second may be days of year or month
         if (dateComponents.length == 2) {
             // yyyy-doy or yyyy-mm
             checkComponent(label, dateComponents[1], 2, 3,
-                    "parser.error.badyMonthDayLength", lineNumber); //$NON-NLS-1$
+                    "parser.error.badMonthDayLength", lineNumber); //$NON-NLS-1$
         }
 
+        // if 3 parts, second is months, third is day of month
         if (dateComponents.length == 3) {
             // yyyy-mm-dd
             checkComponent(label, dateComponents[1], 2, 2,
-                    "parser.error.badyMonthLength", lineNumber); //$NON-NLS-1$
+                    "parser.error.badMonthLength", lineNumber); //$NON-NLS-1$
             checkComponent(label, dateComponents[2], 2, 2,
-                    "parser.error.badyDayLength", lineNumber); //$NON-NLS-1$
+                    "parser.error.badDayLength", lineNumber); //$NON-NLS-1$
         }
     }
 
