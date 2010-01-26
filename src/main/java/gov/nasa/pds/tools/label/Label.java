@@ -59,6 +59,14 @@ public class Label {
     // to capture no problems at all
     private boolean captureProblems = true;
 
+    // Used to determine whether or not problems whose source is a different
+    // label should be allowed to be captured in this label. By default this is
+    // turned off as it can lead to double reporting of problems in the cases
+    // where the referenced statements are included more than once or parsed
+    // independently. Use caution when setting this flag to true as filtering of
+    // problems would then need to be done at a higher level.
+    private boolean allowExternalProblems = false;
+
     // Start byte of attached content if any was found. Note that this may be
     // inaccurate if data started with whitespace.
     private Integer attachedStartByte;
@@ -100,6 +108,10 @@ public class Label {
 
     public void setCaptureProblems(final boolean captureProblems) {
         this.captureProblems = captureProblems;
+    }
+
+    public void setAllowExternalProblems(final boolean allowExternalProblems) {
+        this.allowExternalProblems = allowExternalProblems;
     }
 
     public void setHasBlankFill(final boolean hasBlankFill) {
@@ -197,12 +209,12 @@ public class Label {
 
     // try to only use when exception has context
     public void addProblem(final LabelParserException e) {
-        // if capture problems and same context add
-        // else, if non-suppresable error, pass through anyway
+        // if capture problems and (same context add or allowing external
+        // problems) else, if non-suppresable error, pass through anyway
         if (this.captureProblems
-                && ((this.labelFile != null && this.labelFile.equals(e
-                        .getSourceFile())) || (this.labelURI != null && this.labelURI
-                        .equals(e.getSourceURI())))) {
+                && ((this.labelFile != null && (this.allowExternalProblems || this.labelFile
+                        .equals(e.getSourceFile()))) || (this.labelURI != null && (this.allowExternalProblems || this.labelURI
+                        .equals(e.getSourceURI()))))) {
             this.problems.add(e);
         } else if (e.getType().equals(ProblemType.CIRCULAR_POINTER_REF)) {
             this.problems.add(e);
@@ -210,14 +222,14 @@ public class Label {
     }
 
     public void addProblem(final URI sourceURI, final LabelParserException e) {
-        if ((this.labelURI.equals(sourceURI) && this.captureProblems)
+        if (((this.allowExternalProblems || this.labelURI.equals(sourceURI)) && this.captureProblems)
                 || e.getType().equals(ProblemType.CIRCULAR_POINTER_REF)) {
             addProblemLocal(e);
         }
     }
 
     public void addProblem(final File sourceFile, final LabelParserException e) {
-        if ((this.labelFile.equals(sourceFile) && this.captureProblems)
+        if (((this.allowExternalProblems || this.labelFile.equals(sourceFile)) && this.captureProblems)
                 || e.getType().equals(ProblemType.CIRCULAR_POINTER_REF)) {
             addProblemLocal(e);
         }

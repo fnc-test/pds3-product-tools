@@ -21,10 +21,13 @@ import gov.nasa.pds.tools.constants.Constants.ProblemType;
 import gov.nasa.pds.tools.label.CommentStatement;
 import gov.nasa.pds.tools.label.Label;
 import gov.nasa.pds.tools.label.MalformedSFDULabel;
+import gov.nasa.pds.tools.label.ManualPathResolver;
 import gov.nasa.pds.tools.label.PointerResolver;
 import gov.nasa.pds.tools.label.SFDULabel;
 import gov.nasa.pds.tools.label.antlr.ODLLexer;
 import gov.nasa.pds.tools.label.antlr.ODLParser;
+import gov.nasa.pds.tools.label.validate.Validator;
+import gov.nasa.pds.tools.util.MessageUtils;
 import gov.nasa.pds.tools.util.VersionInfo;
 
 import java.io.BufferedInputStream;
@@ -46,6 +49,9 @@ import org.antlr.runtime.ANTLRInputStream;
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.ConsoleAppender;
+import org.apache.log4j.PatternLayout;
 
 /**
  * Default implementation
@@ -62,6 +68,8 @@ public class DefaultLabelParser implements LabelParser {
 
     private final boolean captureProblems;
 
+    private final boolean allowExternalProblems;
+
     private final PointerResolver resolver;
 
     // default constructor, assumes you want to load included statements and
@@ -72,8 +80,15 @@ public class DefaultLabelParser implements LabelParser {
 
     public DefaultLabelParser(final boolean loadIncludes,
             final boolean captureProblems, final PointerResolver resolver) {
+        this(loadIncludes, captureProblems, false, resolver);
+    }
+
+    public DefaultLabelParser(final boolean loadIncludes,
+            final boolean captureProblems, final boolean allowExternalProblems,
+            final PointerResolver resolver) {
         this.loadIncludes = loadIncludes;
         this.captureProblems = captureProblems;
+        this.allowExternalProblems = allowExternalProblems;
         this.resolver = resolver;
 
         // make sure resolver exists if loading includes
@@ -117,6 +132,7 @@ public class DefaultLabelParser implements LabelParser {
 
         final Label label = new Label(labelURI);
         label.setCaptureProblems(this.captureProblems);
+        label.setAllowExternalProblems(this.allowExternalProblems);
         return parseLabel(inputStream, label, forceParse);
     }
 
@@ -133,6 +149,7 @@ public class DefaultLabelParser implements LabelParser {
         }
         final Label label = new Label(file);
         label.setCaptureProblems(this.captureProblems);
+        label.setAllowExternalProblems(this.allowExternalProblems);
         return parseLabel(inputStream, label, forceParse);
     }
 
@@ -297,6 +314,13 @@ public class DefaultLabelParser implements LabelParser {
     public Label parsePartial(final File file, final Label parent,
             final boolean captureProbs) throws IOException,
             LabelParserException {
+        return parsePartial(file, parent, captureProbs,
+                this.allowExternalProblems);
+    }
+
+    public Label parsePartial(final File file, final Label parent,
+            final boolean captureProbs, final boolean allowExternalProbs)
+            throws IOException, LabelParserException {
         BufferedInputStream inputStream;
         try {
             inputStream = new BufferedInputStream(new FileInputStream(file));
@@ -308,6 +332,7 @@ public class DefaultLabelParser implements LabelParser {
         }
         final Label label = new Label(file);
         label.setCaptureProblems(captureProbs);
+        label.setAllowExternalProblems(allowExternalProbs);
         return parsePartial(inputStream, label, parent);
     }
 
@@ -319,6 +344,13 @@ public class DefaultLabelParser implements LabelParser {
     public Label parsePartial(final URL url, final Label parent,
             final boolean captureProbs) throws IOException,
             LabelParserException {
+        return parsePartial(url, parent, captureProbs,
+                this.allowExternalProblems);
+    }
+
+    public Label parsePartial(final URL url, final Label parent,
+            final boolean captureProbs, final boolean allowExternalProbs)
+            throws IOException, LabelParserException {
         final BufferedInputStream inputStream = new BufferedInputStream(url
                 .openStream());
         inputStream.mark(100);
@@ -333,6 +365,7 @@ public class DefaultLabelParser implements LabelParser {
 
         final Label label = new Label(labelURI);
         label.setCaptureProblems(captureProbs);
+        label.setAllowExternalProblems(allowExternalProbs);
         return parsePartial(inputStream, label, parent);
     }
 
@@ -411,5 +444,23 @@ public class DefaultLabelParser implements LabelParser {
             }
         }
         return relativePath;
+    }
+
+    public static void main(String[] args) throws Exception {
+        BasicConfigurator.configure(new ConsoleAppender(new PatternLayout(
+                "%-5p %m%n"))); //$NON-NLS-1$
+        ManualPathResolver resolver = new ManualPathResolver();
+        URL labelURL = new URL(args[0]);
+        resolver.setBaseURI(ManualPathResolver.getBaseURI(labelURL.toURI()));
+        DefaultLabelParser parser = new DefaultLabelParser(resolver);
+        Label label = parser.parseLabel(labelURL, true);
+        Validator validator = new Validator();
+        validator.validate(label);
+        System.out.println("Found " + label.getProblems().size() //$NON-NLS-1$
+                + " problem(s):"); //$NON-NLS-1$
+        for (LabelParserException problem : label.getProblems()) {
+            System.out.println(problem.getMessage());
+            System.out.println(MessageUtils.getProblemMessage(problem));
+        }
     }
 }
