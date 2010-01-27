@@ -203,17 +203,12 @@ public class ManualPathResolver implements PointerResolver {
         this.baseURI = baseURI;
     }
 
-    public static URI getBaseURI(URI uri) throws URISyntaxException {
+    public static URI getBaseURI(URI uri) {
         if (uri == null) {
             return null;
         }
         File uriFilePath = new File(uri.getPath());
-        String baseURI = uri.toString().substring(
-                0,
-                uri.toString().indexOf(uriFilePath.getParent())
-                        + uriFilePath.getParent().length())
-                + "/"; //$NON-NLS-1$
-        return new URI(baseURI);
+        return uriFilePath.getParentFile().toURI();
     }
 
     public Map<Numeric, File> resolveFileMap(PointerStatement pointer) {
