@@ -51,6 +51,7 @@ import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.ConsoleAppender;
+import org.apache.log4j.Level;
 import org.apache.log4j.PatternLayout;
 
 /**
@@ -447,19 +448,28 @@ public class DefaultLabelParser implements LabelParser {
     }
 
     public static void main(String[] args) throws Exception {
-        BasicConfigurator.configure(new ConsoleAppender(new PatternLayout(
-                "%-5p %m%n"))); //$NON-NLS-1$
+        ConsoleAppender console = new ConsoleAppender(new PatternLayout(
+                "%-5p %m%n")); //$NON-NLS-1$
+        console.setThreshold(Level.FATAL);
+        BasicConfigurator.configure(console);
         ManualPathResolver resolver = new ManualPathResolver();
         URL labelURL = new URL(args[0]);
         resolver.setBaseURI(ManualPathResolver.getBaseURI(labelURL.toURI()));
-        DefaultLabelParser parser = new DefaultLabelParser(resolver);
+        DefaultLabelParser parser = new DefaultLabelParser(true, true, true,
+                resolver);
         Label label = parser.parseLabel(labelURL, true);
         Validator validator = new Validator();
         validator.validate(label);
         System.out.println("Found " + label.getProblems().size() //$NON-NLS-1$
                 + " problem(s):"); //$NON-NLS-1$
         for (LabelParserException problem : label.getProblems()) {
-            System.out.println(problem.getMessage());
+            if (problem.getLineNumber() != null) {
+                System.out.print("Line " + problem.getLineNumber()); //$NON-NLS-1$
+                if (problem.getColumn() != null) {
+                    System.out.print(", " + problem.getColumn()); //$NON-NLS-1$
+                }
+                System.out.print(": "); //$NON-NLS-1$
+            }
             System.out.println(MessageUtils.getProblemMessage(problem));
         }
     }

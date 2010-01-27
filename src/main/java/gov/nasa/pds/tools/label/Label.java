@@ -190,6 +190,10 @@ public class Label {
             final LabelParserException e = new LabelParserException(this,
                     lineNumber, column, key, type, arguments);
             addProblemLocal(e);
+        } else if (this.allowExternalProblems) {
+            final LabelParserException e = new LabelParserException(sourceURI,
+                    lineNumber, column, key, type, arguments);
+            addProblemLocal(e);
         }
     }
 
