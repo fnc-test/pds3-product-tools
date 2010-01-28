@@ -410,11 +410,12 @@ public class DefaultLabelParser implements LabelParser {
 
             // Label fragments should not have PDS_VERSION_ID
             if ("PDS_VERSION_ID".equals(name)) { //$NON-NLS-1$
-                label.addProblem(new LabelParserException(label, null,
-                        null,
-                        "parser.warning.versionPresent", //$NON-NLS-1$
-                        ProblemType.FRAGMENT_HAS_VERSION,
-                        getRelativePath(label)));
+                label
+                        .addProblem(new LabelParserException(label, null,
+                                null,
+                                "parser.warning.versionPresent", //$NON-NLS-1$
+                                ProblemType.FRAGMENT_HAS_VERSION,
+                                getDisplayPath(label)));
             }
         }
 
@@ -425,26 +426,48 @@ public class DefaultLabelParser implements LabelParser {
             // String)
             label.addProblem(new LabelParserException(label, null, null,
                     "parser.warning.sfduPresent", //$NON-NLS-1$
-                    ProblemType.FRAGMENT_HAS_SFDU, getRelativePath(label)));
+                    ProblemType.FRAGMENT_HAS_SFDU, getDisplayPath(label)));
         }
 
         return parseLabel(inputStream, label, numConsumed);
     }
 
+    // This function returns null if there if no relative path can be found.
     private String getRelativePath(final Label label) {
-        String relativePath = ""; //$NON-NLS-1$
+        String relativePath = null; //$NON-NLS-1$
         if (label.getLabelFile() != null) {
-            relativePath = FileUtils.getRelativePath(this.resolver
-                    .getBaseFile(), label.getLabelFile());
+            try {
+                relativePath = FileUtils.getRelativePath(this.resolver
+                        .getBaseFile(), label.getLabelFile());
+            } catch (RuntimeException re) {
+                // If the files don't share a path
+                // no op
+            }
         } else {
             try {
                 relativePath = FileUtils.getRelativePath(this.resolver
                         .getBaseURI().toURL(), label.getLabelURI().toURL());
             } catch (MalformedURLException e) {
                 // noop
+            } catch (RuntimeException re) {
+                // If the files don't share a path
+                // no op
             }
         }
         return relativePath;
+    }
+
+    private String getDisplayPath(final Label label) {
+        String displayPath = getRelativePath(label);
+
+        if (displayPath == null) {
+            if (label.getLabelFile() != null) {
+                displayPath = label.getLabelFile().getPath();
+            } else {
+                displayPath = label.getLabelURI().getPath();
+            }
+        }
+        return displayPath;
     }
 
     public static void main(String[] args) throws Exception {
