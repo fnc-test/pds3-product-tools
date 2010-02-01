@@ -120,7 +120,8 @@ public class Constants {
         BAD_CATALOG_NAME(Severity.ERROR), // bad catalog pointer name
         DUPLICATE_IDENTIFIER(Severity.ERROR), // duplicate identifier
         PLACEHOLDER_VALUE(Severity.INFO), // placeholder 'NULL' instead of 'UNK'
-        ATTACHED_START_BYTE_MISMATCH(Severity.ERROR), // pointer val != actual start byte
+        // pointer val != actual start byte
+        ATTACHED_START_BYTE_MISMATCH(Severity.ERROR), // 
         START_BYTE_POSSIBLE_MISMATCH(Severity.WARNING), // WS start?
 
         // invalid label fragment problems
@@ -132,6 +133,7 @@ public class Constants {
         COLUMN_NUMBER_MISMATCH(Severity.ERROR), // wrong num columns
         COLUMN_LENGTH_MISMATCH(Severity.ERROR), // wrong value length
         INVALID_VALUE_FOR_COLUMN(Severity.ERROR), // wrong value type
+        COLUMN_DEF_OOR(Severity.ERROR), // start byte out of range (after eol)
 
         // file problems
         MISSING_RESOURCE(Severity.ERROR), // missing file from pointer
