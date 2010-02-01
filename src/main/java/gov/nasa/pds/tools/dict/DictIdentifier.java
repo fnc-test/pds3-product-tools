@@ -17,7 +17,11 @@ package gov.nasa.pds.tools.dict;
 
 import java.io.Serializable;
 
+import org.apache.log4j.Logger;
+
 public class DictIdentifier implements Serializable {
+    private static final Logger log = Logger.getLogger(DictIdentifier.class
+            .getName());
 
     private static final long serialVersionUID = 5818359213098660993L;
 
@@ -47,8 +51,7 @@ public class DictIdentifier implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof DictIdentifier)) {
-            System.out.println(o.toString()
-                    + " is not an instance of DictIdentifier"); //$NON-NLS-1$
+            log.info(o.toString() + " is not an instance of DictIdentifier"); //$NON-NLS-1$
             return false;
         }
         DictIdentifier oId = (DictIdentifier) o;

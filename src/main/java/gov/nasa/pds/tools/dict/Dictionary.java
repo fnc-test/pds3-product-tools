@@ -33,6 +33,8 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.log4j.Logger;
+
 /**
  * This class represents a PDS data dictionary.
  * 
@@ -42,6 +44,8 @@ import java.util.regex.Pattern;
  * 
  */
 public class Dictionary implements Serializable {
+    private static final Logger log = Logger.getLogger(Dictionary.class
+            .getName());
 
     private static final long serialVersionUID = 1L;
 
@@ -543,7 +547,7 @@ public class Dictionary implements Serializable {
                 this.definitions.put(aliasId, definition);
             }
         } else {
-            System.out.println(definition.getIdentifier() + " of type " //$NON-NLS-1$
+            log.info(definition.getIdentifier() + " of type " //$NON-NLS-1$
                     + definition.getClass() + " definition already exists"); //$NON-NLS-1$
         }
     }
