@@ -334,4 +334,30 @@ public class ElementValidatorTest extends BaseTestCase {
         assertEquals(0, label.getProblems().size());
     }
 
+    public void testMissingEquals() throws LabelParserException, IOException {
+        final File testFile = new File(LABEL_DIR, "missingEquals.lbl");
+
+        final Label label = PARSER.parseLabel(testFile);
+        validate(label);
+
+        LabelParserException lpe1 = assertHasProblem(label,
+                ProblemType.PARSE_ERROR, 2);
+        assertProblemEquals(lpe1, 2, 16,
+                "no viable alternative at input '\"MARS\"'",
+                ProblemType.PARSE_ERROR);
+
+        LabelParserException lpe2 = assertHasProblem(label,
+                ProblemType.PARSE_ERROR, 4);
+        assertProblemEquals(lpe2, 4, 17,
+                "no viable alternative at input 'MER'", ProblemType.PARSE_ERROR);
+
+        LabelParserException lpe3 = assertHasProblem(label,
+                ProblemType.PARSE_ERROR, 6);
+        assertProblemEquals(lpe3, 6, 31,
+                "no viable alternative at input '\"LEAPSECS.KER\"'",
+                ProblemType.PARSE_ERROR);
+
+        assertEquals(3, label.getProblems().size());
+    }
+
 }
