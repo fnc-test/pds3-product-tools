@@ -342,20 +342,18 @@ public class ElementValidatorTest extends BaseTestCase {
 
         LabelParserException lpe1 = assertHasProblem(label,
                 ProblemType.PARSE_ERROR, 2);
-        assertProblemEquals(lpe1, 2, 16,
-                "no viable alternative at input '\"MARS\"'",
-                ProblemType.PARSE_ERROR);
+        assertProblemEquals(lpe1, 2, 16, "parser.error.noViableAlternative",
+                ProblemType.PARSE_ERROR, "\"MARS\"");
 
         LabelParserException lpe2 = assertHasProblem(label,
                 ProblemType.PARSE_ERROR, 4);
-        assertProblemEquals(lpe2, 4, 17,
-                "no viable alternative at input 'MER'", ProblemType.PARSE_ERROR);
+        assertProblemEquals(lpe2, 4, 17, "parser.error.noViableAlternative",
+                ProblemType.PARSE_ERROR, "MER");
 
         LabelParserException lpe3 = assertHasProblem(label,
                 ProblemType.PARSE_ERROR, 6);
-        assertProblemEquals(lpe3, 6, 31,
-                "no viable alternative at input '\"LEAPSECS.KER\"'",
-                ProblemType.PARSE_ERROR);
+        assertProblemEquals(lpe3, 6, 31, "parser.error.noViableAlternative",
+                ProblemType.PARSE_ERROR, "\"LEAPSECS.KER\"");
 
         assertEquals(3, label.getProblems().size());
     }

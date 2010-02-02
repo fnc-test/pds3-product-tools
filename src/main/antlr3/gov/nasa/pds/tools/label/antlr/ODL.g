@@ -76,8 +76,13 @@ import gov.nasa.pds.tools.constants.Constants.ProblemType;
     public void displayRecognitionError(String[] tokenNames,
                                         RecognitionException e) {
         if (label != null) {
-        	String msg = getErrorMessage(e, tokenNames);
-            label.addProblem(e.line, e.charPositionInLine, msg, ProblemType.PARSE_ERROR);
+        	if(e instanceof NoViableAltException) {
+                label.addProblem(e.line, e.charPositionInLine, "parser.error.noViableAlternative", ProblemType.PARSE_ERROR, e.token.getText());
+            } else {
+                System.out.println(e.getClass().getName() + " was not handled in displayRecognitionError explicitly");
+            	String msg = getErrorMessage(e, tokenNames);
+            	label.addProblem(e.line, e.charPositionInLine, msg, ProblemType.PARSE_ERROR);
+            }
         }
     }
     
@@ -251,7 +256,7 @@ object_statement[Label label] returns [ObjectStatement result = null]
         (~(END_OBJECT)) => s=statement[label] {if (s != null) {result.addStatement(s);}}
       	|
         (~(END_OBJECT|END|EOF|'OBJECT') (~(EOL|END|EOF))* EOL) => t = . (~(EOL|END|EOF))* EOL
-          {label.addProblem(t.getLine(),t.getCharPositionInLine(), "Illegal start of statement: '" + t.getText() + "'", ProblemType.PARSE_ERROR);}
+          {label.addProblem(t.getLine(),t.getCharPositionInLine(), "parser.error.illegalStatementStart", ProblemType.PARSE_ERROR, t.getText());}
           
       )*
       // TODO: complain if id mismatch
@@ -276,7 +281,7 @@ group_statement[Label label] returns [GroupStatement result = null]
         (~(END_GROUP)) => s=simple_statement[label] {if (s != null) {result.addStatement(s);}}
       	| 
         (~(END_GROUP|END|EOF)) => t = . (~EOL)* EOL
-          {label.addProblem(t.getLine(), t.getCharPositionInLine(), "Iillegal start of statement: '" + t.getText() + "'", ProblemType.PARSE_ERROR);}
+          {label.addProblem(t.getLine(), t.getCharPositionInLine(), "parser.error.illegalStatementStart", ProblemType.PARSE_ERROR, t.getText());}
         
       )*
       (END_GROUP|END|EOF) => ( (END_GROUP) => (END_GROUP ('=' id2=IDENTIFIER)? (c3=COMMENT)? EOL)
