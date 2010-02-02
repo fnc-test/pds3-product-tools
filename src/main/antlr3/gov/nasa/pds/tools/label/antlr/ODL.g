@@ -295,7 +295,7 @@ pointer_statement[Label label] returns [PointerStatement result = null]
     : '^' a=assignment_statement[label]
       {
         if(a != null) {
-        	result = PointerStatementFactory.newInstance(label, a.getLineNumber(), a.getIdentifier(), a.getValue());
+        	result = PointerStatementFactory.newInstance(label, a.getLineNumber(), a.getIdentifier().getId(), a.getValue());
 	         if (result != null && result instanceof IncludePointer) {
 	            IncludePointer sp = (IncludePointer) result;
 	            try {

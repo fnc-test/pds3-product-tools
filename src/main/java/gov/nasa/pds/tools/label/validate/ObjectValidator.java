@@ -60,7 +60,11 @@ public class ObjectValidator {
                     .iterator(); i.hasNext();) {
                 DictIdentifier required = i.next();
                 // First check to see if attribute is found by its identifier
-                if (!object.hasAttribute(required)) {
+                // Second, check if the required element appears as a pointer
+                // with the identifier
+                if (!object.hasAttribute(required)
+                        && !object.hasPointer(DictIDFactory
+                                .createPointerDefId(required.getId()))) {
                     boolean foundAlias = false;
                     // Next check to see if the attribute is present as an alias
                     // Lookup definition for required element

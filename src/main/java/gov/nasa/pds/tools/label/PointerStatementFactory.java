@@ -16,6 +16,7 @@
 package gov.nasa.pds.tools.label;
 
 import gov.nasa.pds.tools.dict.DictIdentifier;
+import gov.nasa.pds.tools.dict.parser.DictIDFactory;
 
 /**
  * This class hides the construction of pointers. It helps determine the exact
@@ -30,17 +31,18 @@ import gov.nasa.pds.tools.dict.DictIdentifier;
 public class PointerStatementFactory {
 
     public static PointerStatement newInstance(final Label sourceLabel,
-            final int line, final DictIdentifier identifier, final Value value) {
-        if (matchesIdentifier(identifier, SpecialPointer.DESCRIPTION_KEY)) {
-            return new DescriptionPointer(sourceLabel, line, identifier, value);
-        } else if (matchesIdentifier(identifier, SpecialPointer.STRUCTURE_KEY)) {
-            return new StructurePointer(sourceLabel, line, identifier, value);
-        } else if (matchesIdentifier(identifier, SpecialPointer.INDEX_KEY)) {
-            return new IndexPointer(sourceLabel, line, identifier, value);
-        } else if (matchesIdentifier(identifier, SpecialPointer.CATALOG_KEY)) {
-            return new CatalogPointer(sourceLabel, line, identifier, value);
+            final int line, final String identifier, final Value value) {
+        DictIdentifier pointerId = DictIDFactory.createPointerDefId(identifier);
+        if (matchesIdentifier(pointerId, SpecialPointer.DESCRIPTION_KEY)) {
+            return new DescriptionPointer(sourceLabel, line, pointerId, value);
+        } else if (matchesIdentifier(pointerId, SpecialPointer.STRUCTURE_KEY)) {
+            return new StructurePointer(sourceLabel, line, pointerId, value);
+        } else if (matchesIdentifier(pointerId, SpecialPointer.INDEX_KEY)) {
+            return new IndexPointer(sourceLabel, line, pointerId, value);
+        } else if (matchesIdentifier(pointerId, SpecialPointer.CATALOG_KEY)) {
+            return new CatalogPointer(sourceLabel, line, pointerId, value);
         }
-        return new PointerStatement(sourceLabel, line, identifier, value);
+        return new PointerStatement(sourceLabel, line, pointerId, value);
     }
 
     @SuppressWarnings("nls")
