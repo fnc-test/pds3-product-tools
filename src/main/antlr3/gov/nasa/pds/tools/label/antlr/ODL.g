@@ -78,10 +78,18 @@ import gov.nasa.pds.tools.constants.Constants.ProblemType;
         if (label != null) {
         	if(e instanceof NoViableAltException) {
                 label.addProblem(e.line, e.charPositionInLine, "parser.error.noViableAlternative", ProblemType.PARSE_ERROR, e.token.getText());
+            } else if(e instanceof MissingTokenException) {
+                final MissingTokenException mte = (MissingTokenException) e;
+                String missing = tokenNames[mte.expecting];
+                label.addProblem(e.line, e.charPositionInLine, "parser.error.missingToken", ProblemType.PARSE_ERROR, missing, mte.token.getText());
+            } else if(e instanceof UnwantedTokenException) {
+                final UnwantedTokenException ute = (UnwantedTokenException) e;
+                String expectingToken = tokenNames[ute.expecting];
+                label.addProblem(e.line, e.charPositionInLine, "parser.error.extraToken", ProblemType.PARSE_ERROR, e.token.getText(), expectingToken);
             } else {
-                System.out.println(e.getClass().getName() + " was not handled in displayRecognitionError explicitly");
+            	// unhandled, if example found, do another instanceof case
             	String msg = getErrorMessage(e, tokenNames);
-            	label.addProblem(e.line, e.charPositionInLine, msg, ProblemType.PARSE_ERROR);
+            	label.addProblem(e.line, e.charPositionInLine, "parser.error.unhandledException", ProblemType.PARSE_ERROR, msg, e.getClass().getName());
             }
         }
     }
