@@ -640,17 +640,19 @@ public class Dictionary implements Serializable {
      */
     public GroupDefinition findGroupClassDefinition(DictIdentifier identifier) {
         GroupDefinition definition = null;
+        DictIdentifier curID = identifier;
         String className = identifier.toString();
         boolean done = false;
 
         while (definition == null && !done) {
-            if (containsGroupDefinition(identifier)) {
-                definition = getGroupDefinition(identifier);
+            if (containsGroupDefinition(curID)) {
+                definition = (GroupDefinition) this.definitions.get(curID);
             } else {
                 if (className.indexOf("_") == -1 || className.indexOf("_") == className.length() - 1) {//$NON-NLS-1$ //$NON-NLS-2$
                     done = true;
                 } else {
                     className = className.substring(className.indexOf("_") + 1); //$NON-NLS-1$
+                    curID = DictIDFactory.createGroupDefId(className);
                 }
             }
         }
