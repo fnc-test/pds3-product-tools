@@ -31,7 +31,7 @@ public class DictIdentifier implements Serializable {
 
     public DictIdentifier(final Alias alias,
             final Class<? extends Definition> clazz) {
-        this(alias.getIdentifier().toString(), clazz);
+        this(alias.toString(), clazz);
     }
 
     public DictIdentifier(final String id,
