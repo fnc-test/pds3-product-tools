@@ -23,6 +23,9 @@
   </properties>
   <body>
     <release version="3.0.1-dev" date="2010-02-05" description="">
+      <action dev="pramirez" type="update">
+        PDSEN-294 - Allows required element checks in objects to pass if a description pointer with the required identifier exists. This is a restriction of older behavior in original product tools library but was something not present in the merged product tools. This was done with consultation with the standards team and is common practice in labels. 
+      </action>
       <action dev="jagander" type="update">
         PDSEN-293 - Modifying displayRecognitionError to handle two more explicit cases per the examples in the issue's attached labels. Also modified the fall through case to pass the exception message through but warn the user that it is an unhandled message and they should report it.
       </action>
