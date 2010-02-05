@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-  Copyright 2007-2009, by the California Institute of Technology.
+  Copyright 2007-2010, by the California Institute of Technology.
   ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
   Any commercial use must be negotiated with the Office of Technology Transfer
   at the California Institute of Technology.
@@ -26,6 +26,30 @@
     <section name="Release Notes">
       <p>The purpose of this section is to provide a description of a Product Tools release including any impact that the new or modified capabilities will have on the Discipline Nodes or the PDS user community. A somewhat itemized list of changes for each release can be found on the <a href="../changes-report.html">Release Changes</a> page. If viewing this document in PDF form, the release change details are not available.
       </p>
+    </section>
+
+    <section name="Release 3.0.1">
+      <p>This release of the Product Tools software supports the beta release of the Validation Tool and includes a number of updates and corrections including:
+      </p>
+
+      <ul>
+        <li>Report line lengths greater than 80 characters (78 + CR/LF) and when lines do not end in CR/LF.</li>
+        <li>Combine attribute lists for identical elements when two dictionaries are merged.</li>
+        <li>Allows required element checks in objects to pass if a description pointer with the required identifier exists.</li>
+        <li>Fixed group definition lookup.</li>
+        <li>Fixed an issue where "+" sign on integer caused an error.</li>
+        <li>Fixed a problem with SFDU headers.</li>
+        <li>Fixed some issues where the software was not handling certain exceptions.</li>
+      </ul>
+
+      <p>The liens for this release are as follows:
+      </p>
+
+      <ul>
+        <li>Memory problem with very large attached labels.</li>
+        <li>Plural forms of valid unit names are not supported.</li>
+        <li>Checking of file characteristics not supported anymore.</li>
+      </ul>
     </section>
 
     <section name="Release 3.0.0">
