@@ -75,7 +75,7 @@
         PDSEN-289 - Pointer Statements were sharing identifiers with attributes statements. This caused them to be grouped together. When accessed through ObjectStatement.hasAttribute() this caused a ClassCastException. The PointerStatementFactory was updated to use the appropriate type of dictionary identifier. In addition, the ObjectValidator was update to allow pointers to satisfy the required element part of a definition. 
       </action>
       <action dev="jagander" type="fix">
-        Related to PDSEN-266 - Consume newline after SFDU header so that new line read reads next line rather than reading an empty line. This solves the erroneous error about pds version being mislocated when SFDU.
+        Related to PDSEN-266 - Consume newline after SFDU header so that new line read reads next line rather than reading an empty line. This solves the erroneous error about pds version being mislocated when SFDU. Removed no longer necessary skip based on presence of SFDU header. Note that this represents an improvement since skip always assumed 2 newline chars which was not always true.
       </action>
     </release>
     <release version="3.0.0" date="2009-10-12" description="This release of the Product Tools software represents the reconciliation of the Ames and JPL versions of the library.">
