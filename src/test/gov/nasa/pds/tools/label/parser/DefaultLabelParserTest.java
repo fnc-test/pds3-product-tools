@@ -53,6 +53,8 @@ public class DefaultLabelParserTest extends BaseTestCase {
         DefaultLabelParser parser = new DefaultLabelParser(resolver);
         Label label = parser.parseLabel(testFile);
         assertTrue(label.isValid());
+
+        assertEquals(0, label.getProblems().size());
     }
 
     public void testMissingLabel() throws IOException {

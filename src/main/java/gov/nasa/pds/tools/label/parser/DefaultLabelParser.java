@@ -283,6 +283,7 @@ public class DefaultLabelParser implements LabelParser {
                     // Read in second SFDU label
                     input.read(sfduLabel);
                     sfdus.add(new SFDULabel(sfduLabel));
+                    consumePDSNewline(input);
                 }
             } catch (MalformedSFDULabel e) {
                 // For now we can ignore this error as there is likely not a
@@ -296,6 +297,29 @@ public class DefaultLabelParser implements LabelParser {
         }
 
         return sfdus;
+    }
+
+    // consume up to 2 newline type characters to conform to the PDS newline
+    // NOTE: will consume CR || LF || CRLF || LFCR... etc
+    private void consumePDSNewline(final InputStream input) throws IOException {
+        // consume CR if present
+        consumeNewline(input);
+        // consume LF if present
+        consumeNewline(input);
+    }
+
+    private void consumeNewline(final InputStream input) throws IOException {
+        byte[] newline = new byte[1];
+        input.mark(1);
+
+        int count = input.read(newline);
+        if (count == 1) {
+            String nl1 = new String(newline);
+            if (!(nl1.equals("\n") || nl1.equals("\r"))) {
+                // did not find newline char, reset
+                input.reset();
+            }
+        }
     }
 
     /*
