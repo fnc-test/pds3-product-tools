@@ -233,13 +233,6 @@ public class DefaultLabelParser implements LabelParser {
             final Label label, final int sfdusConsumed)
             throws LabelParserException, IOException {
 
-        // Skip 20 bytes per header consumed and 2 more bytes for carriage
-        // return
-        // TODO: deal with case where EOL is not two chars
-        if (sfdusConsumed != 0) {
-            inputStream.skip(sfdusConsumed * 20 + 2);
-        }
-
         CharStream antlrInput = new ANTLRInputStream(inputStream);
 
         ODLLexer lexer = new ODLLexer(antlrInput);
@@ -306,6 +299,8 @@ public class DefaultLabelParser implements LabelParser {
         consumeNewline(input);
         // consume LF if present
         consumeNewline(input);
+        // marking location so not rewound to just prior to last newline char
+        input.mark(100);
     }
 
     private void consumeNewline(final InputStream input) throws IOException {
