@@ -27,6 +27,7 @@ import gov.nasa.pds.tools.dict.ObjectDefinition;
 import gov.nasa.pds.tools.dict.parser.DictIDFactory;
 import gov.nasa.pds.tools.dict.type.UnsupportedTypeException;
 import gov.nasa.pds.tools.label.AttributeStatement;
+import gov.nasa.pds.tools.label.DescriptionPointer;
 import gov.nasa.pds.tools.label.GroupStatement;
 import gov.nasa.pds.tools.label.Label;
 import gov.nasa.pds.tools.label.ObjectStatement;
@@ -62,7 +63,9 @@ public class ObjectValidator {
                 // First check to see if attribute is found by its identifier
                 // TODO: Figure out if related information pointers can satisfy
                 // the required elements of an object definition
-                if (!object.hasAttribute(required)) {
+                if (!object.hasAttribute(required)
+                        && !(object.getPointer(DictIDFactory
+                                .createPointerDefId(required.getId())) instanceof DescriptionPointer)) {
                     boolean foundAlias = false;
                     // Next check to see if the attribute is present as an alias
                     // Lookup definition for required element

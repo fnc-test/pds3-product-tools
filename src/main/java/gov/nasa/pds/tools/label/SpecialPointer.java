@@ -25,7 +25,8 @@ import gov.nasa.pds.tools.dict.DictIdentifier;
  */
 public abstract class SpecialPointer extends PointerStatement {
 
-    public static String[] DESCRIPTION_KEY = { "DESCRIPTION", "TEXT" }; //$NON-NLS-1$ //$NON-NLS-2$
+    public static String[] DESCRIPTION_KEY = {
+            "DESCRIPTION", "DESC", "TEXT", "NOTE" }; //$NON-NLS-1$ //$NON-NLS-2$
 
     public static String[] STRUCTURE_KEY = { "STRUCTURE" }; //$NON-NLS-1$
 

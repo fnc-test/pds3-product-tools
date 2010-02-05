@@ -159,6 +159,22 @@ public class ObjectStatement extends Statement {
         return null;
     }
 
+    /**
+     * Retrieves the named pointer
+     * 
+     * @param id
+     * @return The named PointerStatement or null if not found
+     */
+    @SuppressWarnings("unchecked")
+    public PointerStatement getPointer(DictIdentifier id) {
+        validatePointerType(id);
+        List<PointerStatement> pointers = (List<PointerStatement>) getElements(id);
+        if (pointers.size() > 0) {
+            return pointers.get(0);
+        }
+        return null;
+    }
+
     // convenience method - to be used sparingly
     public AttributeStatement getAttribute(String id) {
         return getAttribute(DictIDFactory.createElementDefId(id));
