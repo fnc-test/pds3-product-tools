@@ -22,6 +22,59 @@
     <author email="Sean.Hardman@jpl.nasa.gov">Sean Hardman</author>
   </properties>
   <body>
+    <release version="3.0.1-dev" date="2010-02-05" description="">
+      <action dev="jagander" type="update">
+        PDSEN-293 - Modifying displayRecognitionError to handle two more explicit cases per the examples in the issue's attached labels. Also modified the fall through case to pass the exception message through but warn the user that it is an unhandled message and they should report it.
+      </action>
+      <action dev="pramirez" type="fix">
+        PDSEN-292 - Error only appeared when alias shared same identifier with an existing definition. When a dictionary identifier is created from the toString method which contains the object context instead of just the identifier.
+      </action>
+      <action dev="pramirez" type="fix">
+        PDSEN-285 Pointers don't have to share paths and therefore may not have the same relative path. The call to get relative path was wrapped to ignore this and return label path. This was encapsulated in a new function as to not conflict with the existing one.
+      </action>
+      <action dev="pramirez" type="fix">
+        PDSEN-270 - Problem was with Windows pathing and the way it converted from URIs to Files (i.e. change in slashing). Simplified method of getting parent path by avoiding substring. This was only related to the ManaulPathResolver.
+      </action>
+      <action dev="jagander" type="fix">
+        PDSEN-288 - Null protecting parsing of pointers when assignment statement parsing fails.
+      </action>
+      <action dev="pramirez" type="fix">
+        PDSEN-260 - Fixed group definition lookups. Used DictIdentifiers instead of strings.
+      </action>
+      <action dev="pramirez" type="fix">
+        PDSEN-269 -Sets the dev mode to off for LocaleUtils. This will prevent RuntimeExceptions from being thrown. 
+      </action>
+      <action dev="pramirez" type="fix">
+        Related to PDSEN-269 - Set the overriding locale utils when an override is passed in. Previously, the method was just dropping the override on the floor.
+      </action>
+      <action dev="pramirez" type="add">
+        PDSEN-255 - Updates the ManualPathResolver to add problems to the pointers label instead of logging them.
+      </action>
+      <action dev="jagander" type="fix">
+        PDSEN-280 - Updating message to indicate that time might be out of range, not just date.
+      </action>
+      <action dev="jagander" type="fix">
+        PDSEN-263 - Fixing issue where "+" sign on integer caused an error. Issue was the conversion to a Long value rather than the integer test itself. Resolution was to strip "+" before parsing into a Long value.
+      </action>
+      <action dev="pramirez" type="add">
+        PDSEN-276 - Implemented a flag to allow child label problems to be captured by a label. Allowing external problems to be logged to a label could mean duplication of problems and thus usage of this flag should be used with caution.
+      </action>
+      <action dev="pramirez" type="fix">
+        Related to PDSEN-276 - Update to fix a bug with allowing external problems to be reported such that the source URI would match the place where the error in which the file occurred. The source was erroneously being overwritten by the parent's label URI. This was only occurred with the addition of the allow external problems flag. The issue is now resolved.
+      </action>
+      <action dev="jagander" type="fix">
+        PDSEN-279 - Updated error name and message to be more explicit about start byte mismatch being about attached data rather than column def issues.
+      </action>
+      <action dev="pramirez" type="update">
+        PDSEN-271 - Converted some System.out.println over to logging. Using System.out conflicts with command line interfaces
+      </action>
+      <action dev="pramirez" type="fix">
+        PDSEN-289 - Pointer Statements were sharing identifiers with attributes statements. This caused them to be grouped together. When accessed through ObjectStatement.hasAttribute() this caused a ClassCastException. The PointerStatementFactory was updated to use the appropriate type of dictionary identifier. In addition, the ObjectValidator was update to allow pointers to satisfy the required element part of a definition. 
+      </action>
+      <action dev="jagander" type="fix">
+        Related to PDSEN-266 - Consume newline after SFDU header so that new line read reads next line rather than reading an empty line. This solves the erroneous error about pds version being mislocated when SFDU.
+      </action>
+    </release>
     <release version="3.0.0" date="2009-10-12" description="This release of the Product Tools software represents the reconciliation of the Ames and JPL versions of the library.">
       <action dev="pramirez, jagander" type="add">
         Added numerous unit tests to support the evolution of the code base.
