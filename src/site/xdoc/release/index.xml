@@ -33,7 +33,8 @@
       </p>
 
       <ul>
-        <li>Report line lengths greater than 80 characters (78 + CR/LF) and when lines do not end in CR/LF.</li>
+        <li>Report line lengths greater than 80 characters (78 + &lt;CR&gt;&lt;LF&gt;).</li>
+        <li>Report when lines do not end in &lt;CR&gt;&lt;LF&gt;.</li>
         <li>Combine attribute lists for identical elements when two dictionaries are merged.</li>
         <li>Allows required element checks in objects to pass if a description pointer with the required identifier exists.</li>
         <li>Fixed group definition lookup.</li>
@@ -48,7 +49,7 @@
       <ul>
         <li>Memory problem with very large attached labels.</li>
         <li>Plural forms of valid unit names are not supported.</li>
-        <li>Checking of file characteristics not supported anymore.</li>
+        <li>Checking of file characteristics not supported as of yet.</li>
       </ul>
     </section>
 
