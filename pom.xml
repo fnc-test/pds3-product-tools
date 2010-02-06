@@ -104,6 +104,14 @@
       </roles>
     </contributor>
     <contributor>
+      <name>Elizabeth Rye</name>
+      <email>Elizabeth.Rye@jpl.nasa.gov</email>
+      <organization>NASA Jet Propulsion Laboratory</organization>
+      <roles>
+        <role>System Engineer</role>
+      </roles>
+    </contributor>
+    <contributor>
       <name>Mark Rose</name>
       <email>Mark.Rose@nasa.gov</email>
       <organization>NASA Ames Research Center</organization>
