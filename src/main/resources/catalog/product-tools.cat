@@ -2,15 +2,13 @@
 PDS_VERSION_ID                    = PDS3
 RECORD_TYPE                       = STREAM
 LABEL_REVISION_NOTE               = "
-2009-10-12, SH(EN) V3.0.0;
- This release of the Product Tools software represents the reconciliation 
- of the Ames and JPL versions of the library. The library has undergone 
- significant enhancements to the grammar, message handling, support for 
- Java 1.5 and fixes for a number of issues found in previous releases."
+2010-02-05, SH(EN) V3.0.1;
+ This release of the Product Tools software supports the beta release of 
+ the Validation Tool and includes a number of updates and corrections."
 
 OBJECT                            = SOFTWARE
   SOFTWARE_ID                     = "product-tools"
-  SOFTWARE_VERSION_ID             = "3.0.0"
+  SOFTWARE_VERSION_ID             = "3.0.1"
 
   OBJECT                          = SOFTWARE_INFORMATION
     SOFTWARE_NAME                 = "PDS Product Tools"
