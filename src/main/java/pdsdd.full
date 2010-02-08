@@ -1,6 +1,6 @@
 /* Planetary Science Data Dictionary database dump */
-/* Online Database: pdscat1r75 */
-/* Generated: Mon Jul 20 11:09:38 2009 */
+/* Online Database: pdscat1r77 */
+/* Generated: Fri Jan 22 10:08:09 2010 */
 /* Version: OPS */
 /* Start of alias definitions */
 OBJECT = ALIAS_LIST
@@ -180,6 +180,7 @@ OBJECT = UNIT_LIST
     ('g','gram')
     ('g/cm**3','gram per cubic centimeter')
     ('h','hour')
+    ('kHz','kilohertz')
     ('kb/s','kilobits per second')
     ('kg','kilogram')
     ('kg/m**3','kilogram per cubic meter')
@@ -7351,6 +7352,7 @@ OBJECT = ELEMENT_DEFINITION
      "CO-D-HRD-3-COHRD-V3.0",
      "CO-D-HRD-3-COHRD-V4.0",
      "CO-D-HRD-3-COHRD-V5.0",
+     "CO-D-HRD-3-COHRD-V6.0",
      "CO-E/J/S/SW-CAPS-2-UNCALIBRATED-V1.0",
      "CO-E/J/S/SW-MIMI-2-CHEMS-UNCALIB-V1.0",
      "CO-E/J/S/SW-MIMI-2-INCA-UNCALIB-V1.0",
@@ -7378,6 +7380,7 @@ OBJECT = ELEMENT_DEFINITION
      "CO-S-RSS-1-SAGR6-V1.0",
      "CO-S-RSS-1-SAGR7-V1.0",
      "CO-S-RSS-1-SAGR8-V1.0",
+     "CO-S-RSS-1-SAGR9-V1.0",
      "CO-S-RSS-1-SROC1-V1.0",
      "CO-S-RSS-1-SROC2-V1.0",
      "CO-S-RSS-1-SROC3-V1.0",
@@ -7386,6 +7389,7 @@ OBJECT = ELEMENT_DEFINITION
      "CO-S-RSS-1-SROC6-V1.0",
      "CO-S-RSS-1-SROC7-V1.0",
      "CO-S-RSS-1-SROC8-V1.0",
+     "CO-S-RSS-1-SROC9-V1.0",
      "CO-S-UVIS-2-CALIB-V1.0",
      "CO-S-UVIS-2-CALIB-V1.1",
      "CO-S-UVIS-2-CUBE-V1.0",
@@ -7409,17 +7413,22 @@ OBJECT = ELEMENT_DEFINITION
      "CO-SSA-RSS-1-ENGR1-V1.0",
      "CO-SSA-RSS-1-ENGR2-V1.0",
      "CO-SSA-RSS-1-ENGR3-V1.0",
+     "CO-SSA-RSS-1-ENGR4-V1.0",
      "CO-SSA-RSS-1-ENOC1-V1.0",
      "CO-SSA-RSS-1-HYGR1-V1.0",
      "CO-SSA-RSS-1-IAGR1-V1.0",
      "CO-SSA-RSS-1-RHGR1-V1.0",
      "CO-SSA-RSS-1-TBIS1-V1.0",
+     "CO-SSA-RSS-1-TBIS2-V1.0",
      "CO-SSA-RSS-1-TBOC1-V1.0",
      "CO-SSA-RSS-1-TBOC2-V1.0",
      "CO-SSA-RSS-1-TBOC3-V1.0",
+     "CO-SSA-RSS-1-TBOC4-V1.0",
      "CO-SSA-RSS-1-TIGR1-V1.0",
      "CO-SSA-RSS-1-TIGR10-V1.0",
      "CO-SSA-RSS-1-TIGR11-V1.0",
+     "CO-SSA-RSS-1-TIGR12-V1.0",
+     "CO-SSA-RSS-1-TIGR13-V1.0",
      "CO-SSA-RSS-1-TIGR2-V1.0",
      "CO-SSA-RSS-1-TIGR3-V1.0",
      "CO-SSA-RSS-1-TIGR4-V1.0",
@@ -7450,6 +7459,7 @@ OBJECT = ELEMENT_DEFINITION
      "CON-CAL-TLM-1-EDR-GROUND-GSE-V1.0",
      "CO_CAL_ISSNA/ISSWA_2_EDR_V1.0",
      "DI-C-HRII/HRIV/MRI/ITS-6-DOC-SET-V1.0",
+     "DI-C-HRII/HRIV/MRI/ITS-6-DOC-SET-V2.0",
      "DI-C-SPICE-6-V1.0",
      "DI/EAR-C-I0034-3-UH22M-TMPL1-V1.0",
      "DI/EAR-C-I0046-2-IRTF-NIRIMG-TMPL1-V1.0",
@@ -7483,15 +7493,26 @@ OBJECT = ELEMENT_DEFINITION
      "DIF-C-MRI-3/4-9P-ENCOUNTER-V2.0",
      "DIF-C-MRI-5-TEMPEL1-PHOTOMETRY-V1.0",
      "DIF-C-RSS-1-9P-ENCOUNTER-V1.0",
+     "DIF-C/E/X-SPICE-6-V1.0",
      "DIF-CAL-HRII-2-9P-CRUISE-V1.0",
+     "DIF-CAL-HRII-2-EPOXI-CALIBRATIONS-V1.0",
      "DIF-CAL-HRII-2-GROUND-TV1-V1.0",
      "DIF-CAL-HRII/HRIV-2-GROUND-TV2-V1.0",
      "DIF-CAL-HRII/HRIV/MRI-2-GROUND-TV4-V1.0",
+     "DIF-CAL-HRII/HRIV/MRI-6-EPOXI-TEMPS-V1.0",
      "DIF-CAL-HRIV-2-9P-CRUISE-V1.0",
+     "DIF-CAL-HRIV-2-EPOXI-CALIBRATIONS-V1.0",
      "DIF-CAL-HRIV-2-NAV-9P-CRUISE-V1.0",
      "DIF-CAL-MRI-2-9P-CRUISE-V1.0",
+     "DIF-CAL-MRI-2-EPOXI-CALIBRATIONS-V1.0",
      "DIF-CAL-MRI-2-NAV-9P-CRUISE-V1.0",
      "DIF-CAL-MRI-2-NAV-9P-CRUISE-V1.1",
+     "DIF-E-HRIV-2-EPOXI-EARTH-V1.0",
+     "DIF-E-HRIV-3/4-EPOXI-EARTH-V1.0",
+     "DIF-E-MRI-2-EPOXI-EARTH-V1.0",
+     "DIF-E-MRI-3/4-EPOXI-EARTH-V1.0",
+     "DIF-X-HRIV-2-EPOXI-EXOPLANETS-V1.0",
+     "DIF-X-HRIV-3-EPOXI-EXOPLANETS-V1.0",
      "DII-C-ITS-2-9P-ENCOUNTER-V1.0",
      "DII-C-ITS-2-NAV-9P-ENCOUNTER-V1.0",
      "DII-C-ITS-2-NAV-9P-ENCOUNTER-V1.1",
@@ -7540,6 +7561,7 @@ OBJECT = ELEMENT_DEFINITION
      "EAR-A-3-RDR-OCCULTATIONS-V4.1",
      "EAR-A-3-RDR-OCCULTATIONS-V5.0",
      "EAR-A-3-RDR-OCCULTATIONS-V6.0",
+     "EAR-A-3-RDR-OCCULTATIONS-V7.0",
      "EAR-A-3-RDR-PCME-V1.0",
      "EAR-A-3-RDR-PCME-V2.0",
      "EAR-A-3-RDR-PCME-V3.0",
@@ -7654,6 +7676,7 @@ OBJECT = ELEMENT_DEFINITION
      "EAR-A-COMPIL-3-TNO-CEN-COLOR-V5.0",
      "EAR-A-COMPIL-3-TNO-CEN-COLOR-V6.0",
      "EAR-A-COMPIL-3-TNO-CEN-POLARIM-V1.0",
+     "EAR-A-COMPIL-5-ASTMASS-V1.0",
      "EAR-A-COMPIL-5-BINMP-V1.0",
      "EAR-A-COMPIL-5-BINMP-V2.0",
      "EAR-A-COMPIL-5-BINSUM-V1.0",
@@ -7670,6 +7693,8 @@ OBJECT = ELEMENT_DEFINITION
      "EAR-A-I0034-3-WHITELEY-PHOT-V1.0",
      "EAR-A-I0035-3-SDSSMOC-V1.0",
      "EAR-A-I0035-3-SDSSMOC-V2.0",
+     "EAR-A-I0039-4-IANNINISPEC-V1.0",
+     "EAR-A-I0039/I0576-4-SDSSMOCVSPEC-V1.0",
      "EAR-A-I0046-4-IRTFSPEC-V1.0",
      "EAR-A-I0052-8-S3OS2-V1.0",
      "EAR-A-I0054/I0055-5-2MASS-V1.0",
@@ -7678,6 +7703,7 @@ OBJECT = ELEMENT_DEFINITION
      "EAR-A-I0066-5-TORINOPOL-V1.0",
      "EAR-A-I0287-3-ASTDENIS-V1.0",
      "EAR-A-I0387-3-SUBMMLC-V1.0",
+     "EAR-A-I0688-5-CMORMETORB-V1.0",
      "EAR-A-KECK1LWS/ETAL-5-DELBO-V1.0",
      "EAR-A-M3SPEC-3-RDR-SMASS-V1.0",
      "EAR-A-M3SPEC-3-RDR-SMASS-V2.1",
@@ -7685,6 +7711,7 @@ OBJECT = ELEMENT_DEFINITION
      "EAR-A-RDR-3-52COLOR-V2.0",
      "EAR-A-RDR-3-52COLOR-V2.1",
      "EAR-A-VARGBDET-3-KBOMAGS-V1.0",
+     "EAR-A-VARGBDET-5-BUSDEMEOTAX-V1.0",
      "EAR-A-VARGBDET-5-METORB-V1.0",
      "EAR-A-VARGBDET-5-MOTHEFAM-V1.0",
      "EAR-A-VARGBDET-5-OCCALB-V1.0",
@@ -7770,6 +7797,7 @@ OBJECT = ELEMENT_DEFINITION
      "GO-CAL-SSI-6-V1.0",
      "GO-D-GDDS-5-DUST-V2.0",
      "GO-D-GDDS-5-DUST-V3.0",
+     "GO-D-GDDS-5-DUST-V4.0",
      "GO-E-EPD-2-EDR-EARTH-2-V1.0",
      "GO-E-EUV-2-EDR-V1.0",
      "GO-E-NIMS-3-TUBE-V1.0",
@@ -8241,6 +8269,7 @@ OBJECT = ELEMENT_DEFINITION
      "MGS-M-ER-3-MAP1/OMNIDIR-FLUX-V1.0",
      "MGS-M-ER-3-PREMAP/OMNIDIR-FLUX-V1.0",
      "MGS-M-ER-4-MAP1/ANGULAR-FLUX-V1.0",
+     "MGS-M-MAG-1-MAP/HIGHRES-FLUX-V1.0",
      "MGS-M-MAG-1-PREMAP/HIGHRES-FLUX-V1.0",
      "MGS-M-MAG-3-MAP1/FULLWORD-RES-MAG-V1.0",
      "MGS-M-MAG-3-PREMAP/FULLWORD-RES-MAG-V1.0",
@@ -8277,6 +8306,7 @@ OBJECT = ELEMENT_DEFINITION
      "MGS-M-TES-3-TSDR-V1.0",
      "MGS-M-TES-3-TSDR-V2.0",
      "MGS-M-TES-5-SAMPLER-V1.0",
+     "MGS-M-TES-5-TIMAP-V1.0",
      "MGS-SUN-RSS-1-ROCC-V1.0",
      "MK88-L-120CVF-3-RDR-120COLOR-V1.0",
      "MO-M-RSS-1-OIDR-V1.0",
@@ -8662,11 +8692,14 @@ OBJECT = ELEMENT_DEFINITION
      "SDU-C-SRC-6-GEOMETRY-V1.0",
      "SDU-C/D-CIDA-1-EDF/HK-V1.0",
      "SDU-C/E/L-DFMI-2-EDR-V1.0",
+     "SOHO-C-LASCO-4-COMETIMAGES-V1.0",
+     "SOHO-C-LASCO-5-KREUTZPHOTOM-V1.0",
      "STARDUST-C/E/L-DFMI-2-EDR-V1.0",
      "STARDUST-C/E/L-NC-2-EDR-V1.0",
      "SUISEI-C-ESP-3-RDR-HALLEY-V1.0",
      "ULY-D-UDDS-5-DUST-V1.1",
      "ULY-D-UDDS-5-DUST-V2.0",
+     "ULY-D-UDDS-5-DUST-V3.0",
      "ULY-J-COSPIN-AT-4-FLUX-256SEC-V1.0",
      "ULY-J-COSPIN-HET-3-RDR-FLUX-HIRES-V1.0",
      "ULY-J-COSPIN-HFT-3-RDR-FLUX-HIRES-V1.0",
@@ -9081,6 +9114,7 @@ OBJECT = ELEMENT_DEFINITION
      "ASTEROID LIGHTCURVE DERIVED DATA V7.0",
      "ASTEROID LIGHTCURVE DERIVED DATA V8.0",
      "ASTEROID LIGHTCURVE DERIVED DATA V9.0",
+     "ASTEROID MASSES V1.0",
      "ASTEROID NAMES AND DESIGNATIONS V1.0",
      "ASTEROID NAMES AND DESIGNATIONS V2.0",
      "ASTEROID NAMES AND DISCOVERY V1.0",
@@ -9102,6 +9136,7 @@ OBJECT = ELEMENT_DEFINITION
      "ASTEROID OCCULTATIONS V4.1",
      "ASTEROID OCCULTATIONS V5.0",
      "ASTEROID OCCULTATIONS V6.0",
+     "ASTEROID OCCULTATIONS V7.0",
      "ASTEROID PHOTOMETRIC CATALOG V1.0",
      "ASTEROID POLARIMETRIC DATABASE V1.0",
      "ASTEROID POLARIMETRIC DATABASE V2.0",
@@ -9144,6 +9179,7 @@ OBJECT = ELEMENT_DEFINITION
      "BINARY MINOR PLANETS V1.0",
      "BINARY MINOR PLANETS V2.0",
      "BINARY NEAS SUMMARY V1.0",
+     "BUS-DEMEO ASTEROID TAXONOMY V1.0",
      "C130 EARTH ASAS CALIBRATED REDUCED DATA RECORD IMAGE V1.0",
      "C130 EARTH TIMS EDITED EXPERIMENT DATA RECORD IMAGE V1.0",
      "CASSINI COSMIC DUST ANALYZER CALIBRATED/RESAMPLED DATA",
@@ -9156,6 +9192,7 @@ OBJECT = ELEMENT_DEFINITION
      "CASSINI HIGH RATE DETECTOR V3.0",
      "CASSINI HIGH RATE DETECTOR V4.0",
      "CASSINI HIGH RATE DETECTOR V5.0",
+     "CASSINI HIGH RATE DETECTOR V6.0",
      "CASSINI JUP CIRS TIME-SEQUENTIAL DATA RECORDS V1.0",
      "CASSINI JUP UVIS SOLAR STELLAR BRIGHTNESS TIME SERIES 1.0",
      "CASSINI JUPITR UVIS SOLAR STELLAR BRIGHTNESS TIME SERIES 1.0",
@@ -9195,6 +9232,7 @@ OBJECT = ELEMENT_DEFINITION
      "CASSINI RSS RAW DATA SET - ENGR1 V1.0",
      "CASSINI RSS RAW DATA SET - ENGR2 V1.0",
      "CASSINI RSS RAW DATA SET - ENGR3 V1.0",
+     "CASSINI RSS RAW DATA SET - ENGR4 V1.0",
      "CASSINI RSS RAW DATA SET - ENOC1 V1.0",
      "CASSINI RSS RAW DATA SET - GWE1 V1.0",
      "CASSINI RSS RAW DATA SET - GWE2 V1.0",
@@ -9210,6 +9248,7 @@ OBJECT = ELEMENT_DEFINITION
      "CASSINI RSS RAW DATA SET - SAGR6 V1.0",
      "CASSINI RSS RAW DATA SET - SAGR7 V1.0",
      "CASSINI RSS RAW DATA SET - SAGR8 V1.0",
+     "CASSINI RSS RAW DATA SET - SAGR9 V1.0",
      "CASSINI RSS RAW DATA SET - SCC1 V1.0",
      "CASSINI RSS RAW DATA SET - SCC2 V1.0",
      "CASSINI RSS RAW DATA SET - SCC3 V1.0",
@@ -9223,13 +9262,18 @@ OBJECT = ELEMENT_DEFINITION
      "CASSINI RSS RAW DATA SET - SROC6 V1.0",
      "CASSINI RSS RAW DATA SET - SROC7 V1.0",
      "CASSINI RSS RAW DATA SET - SROC8 V1.0",
+     "CASSINI RSS RAW DATA SET - SROC9 V1.0",
      "CASSINI RSS RAW DATA SET - TBIS1 V1.0",
+     "CASSINI RSS RAW DATA SET - TBIS2 V1.0",
      "CASSINI RSS RAW DATA SET - TBOC1 V1.0",
      "CASSINI RSS RAW DATA SET - TBOC2 V1.0",
      "CASSINI RSS RAW DATA SET - TBOC3 V1.0",
+     "CASSINI RSS RAW DATA SET - TBOC4 V1.0",
      "CASSINI RSS RAW DATA SET - TIGR1 V1.0",
      "CASSINI RSS RAW DATA SET - TIGR10 V1.0",
      "CASSINI RSS RAW DATA SET - TIGR11 V1.0",
+     "CASSINI RSS RAW DATA SET - TIGR12 V1.0",
+     "CASSINI RSS RAW DATA SET - TIGR13 V1.0",
      "CASSINI RSS RAW DATA SET - TIGR2 V1.0",
      "CASSINI RSS RAW DATA SET - TIGR3 V1.0",
      "CASSINI RSS RAW DATA SET - TIGR4 V1.0",
@@ -9265,6 +9309,7 @@ OBJECT = ELEMENT_DEFINITION
      "CLEMENTINE LWIR BRIGHTNESS TEMPERATURE V1.0",
      "CLEMENTINE MOON SPICE KERNELS V1.0",
      "CLEMENTINE UVVIS DIGITAL IMAGE MODEL",
+     "CMOR METEOROID STREAM SURVEY V1.0",
      "COLLECTED STARDUST/NAVCAM SHAPE MODELS OF 81P/WILD 2, V2.0",
      "COLLECTED STARDUST/NAVCAM SHAPE MODELS OF 81P/WILD 2, V2.1",
      "COMET HALLEY ARCHIVE - INFRARED PHOTOMETRY",
@@ -9327,6 +9372,7 @@ OBJECT = ELEMENT_DEFINITION
      "DEEP IMPACT PREFLIGHT THERMAL-VACUUM 3 ITS DATA",
      "DEEP IMPACT PREFLIGHT THERMAL-VACUUM 4 HRII/HRIV/MRI DATA",
      "DEEP IMPACT SPICE KERNELS V1.0",
+     "DEEP IMPACT/EPOXI DOCUMENTATION SET V2.0",
      "DEEP IMPACT: IRAS IMAGES OF COMET 9P/TEMPEL 1",
      "DEEP IMPACT: IRAS PHOTOMETRY OF COMET 9P/TEMPEL 1",
      "DEEP SPACE 1 19P/BORRELLY ENCOUNTER UNCALIBRATED PEPE V1.0",
@@ -9352,6 +9398,17 @@ OBJECT = ELEMENT_DEFINITION
      "EIGHT COLOR ASTEROID SURVEY V2.0",
      "EIGHT COLOR ASTEROID SURVEY V3.0",
      "EIGHT COLOR ASTEROID SURVEY V4.0",
+     "EPOXI EARTH OBS - HRIV CALIBRATED IMAGES V1.0",
+     "EPOXI EARTH OBS - HRIV RAW IMAGES V1.0",
+     "EPOXI EARTH OBS - MRI CALIBRATED IMAGES V1.0",
+     "EPOXI EARTH OBS - MRI RAW IMAGES V1.0",
+     "EPOXI EXOPLANET TRANSIT OBS - HRIV CALIBRATED IMAGES V1.0",
+     "EPOXI EXOPLANET TRANSIT OBS - HRIV RAW IMAGES V1.0",
+     "EPOXI HRII/HRIV/MRI INSTRUMENT TEMPERATURES V1.0",
+     "EPOXI INFLIGHT CALIBRATIONS - HRII RAW SPECTRA V1.0",
+     "EPOXI INFLIGHT CALIBRATIONS - HRIV RAW IMAGES V1.0",
+     "EPOXI INFLIGHT CALIBRATIONS - MRI RAW IMAGES V1.0",
+     "EPOXI SPICE KERNELS V1.0",
      "EPPS UNCALIBRATED (EDR) DATA E/V/H V1.0",
      "EPPS UNCALIBRATED (EDR) DATA E/V/H V2.0",
      "ER2 EARTH AVIRIS CALIBRATED REDUCED DATA RECORD IMAGE V1.0",
@@ -9375,6 +9432,7 @@ OBJECT = ELEMENT_DEFINITION
      "GAFFEY METEORITE SPECTRA V2.0",
      "GALILEO DUST DETECTION SYSTEM V2.0",
      "GALILEO DUST DETECTION SYSTEM V3.0",
+     "GALILEO DUST DETECTION SYSTEM V4.0",
      "GALILEO EARTH ENERGETIC PARTICLES DETECTOR (EPD) EXPERIMENTA",
      "GALILEO EARTH GASPRA ENERGETIC PARTICLES DETECTOR (EPD) EXPE",
      "GALILEO JUPITER PLASMA RESAMPLED BROWSE SPECTRA V1.0",
@@ -9509,6 +9567,7 @@ OBJECT = ELEMENT_DEFINITION
      "HUYGENS PROBE DWE RESULTS V1.0",
      "HUYGENS TITAN GAS CHROMATOGRAPH MASS SPEC 3 DESCENT V1.0",
      "HUYGENS TRAJECTORY",
+     "IANNINI ASTEROID FAMILY SPECTRA V1.0",
      "ICE ENERGETIC PARTICLE ANISOTROPY SPECTROMETER DATA V1.0",
      "ICE MAGNETOMETER DATA V1.0",
      "ICE PLASMA WAVE ELECTRIC FIELD MEASUREMENT DATA",
@@ -9908,6 +9967,7 @@ OBJECT = ELEMENT_DEFINITION
      "MGS MARS ACCELEROMETER CONSTANT ALTITUDE V1.0",
      "MGS MARS ACCELEROMETER ORBIT PROFILES V1.0",
      "MGS MARS ELECTRON REFLECTOMETER OMNI DIR. ELECTRON FLUX V1.0",
+     "MGS MARS MAG MAPPING DETAIL WORD RESOLUTION V1.0",
      "MGS MARS MAG PRE-MAP DETAIL WORD RESOLUTION V1.0",
      "MGS MARS SPICE CK KERNELS V1.0",
      "MGS MARS SPICE EK KERNELS V1.0",
@@ -9918,6 +9978,7 @@ OBJECT = ELEMENT_DEFINITION
      "MGS MARS SPICE PCK KERNELS V1.0",
      "MGS MARS SPICE SCLK KERNELS V1.0",
      "MGS MARS SPICE SPK KERNELS V1.0",
+     "MGS MARS TES DERIVED THERMAL INERTIA MAPS V1.0",
      "MGS MARS TES SCIENCE DATA RECORD V1.0",
      "MGS MARS/MOONS MAG/ER MAPPING ER ANGULAR FLUX V1.0",
      "MGS MARS/MOONS MAG/ER MAPPING ER OMNIDIRECTIONAL FLUX V1.0",
@@ -10321,8 +10382,11 @@ OBJECT = ELEMENT_DEFINITION
      "SMALL SOLAR SYSTEM OBJECTS SPECTROSCOPIC SURVEY V1.0",
      "SMASS ASTEROID SURVEY V1.0",
      "SMASS ASTEROID SURVEY V2.1",
+     "SOHO LASCO COMET IMAGES V1.0",
+     "SOHO LASCO COMET PHOTOMETRY V1.0",
      "SOUTH AFRICAN ASTRON. OBS. IMAGE DATA FROM SL9 IMPACTS",
      "SOUTH POLE IR EXPLORER DATA FROM SL9 IMPACTS WITH JUPITER",
+     "SPECTRA OF V-TYPE CANDIDATES FROM THE SDSS MOC V1.0",
      "SPECTROPHOTOMETRY OF THE JOVIAN PLANETS AND TITAN",
      "SPECTROSCOPY AND PHOTOMETRY OF JUPITER TROJANS V1.0",
      "STARDUST C/E/L DUST FLUX MONITOR INSTRUMENT-2-EDR-V1.0",
@@ -10397,6 +10461,7 @@ OBJECT = ELEMENT_DEFINITION
      "ULY JUPITER INTERSTELLAR NEUTRAL-GAS EXPERIMENT SKY MAPS",
      "ULY JUPITER SOLAR WIND ION COMPOSITION SPECTROMETER NO DATA",
      "ULYSSES DUST DETECTION SYSTEM V2.0",
+     "ULYSSES DUST DETECTION SYSTEM V3.0",
      "ULYSSES DUST DETECTOR SYSTEM V1.0",
      "ULYSSES JUP SPICE SPK KERNEL VERSION 1.0",
      "ULYSSES JUPITER EPAC ALL DATA CHANNELS",
@@ -11227,6 +11292,1482 @@ OBJECT = ELEMENT_DEFINITION
 END_OBJECT = ELEMENT_DEFINITION
 END 
 OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:CALLAMP_DELAY_TIME"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = INTEGER
+  UNIT_ID = US
+  STANDARD_VALUE_TYPE = RANGE
+  MINIMUM = 0
+  MAXIMUM = 10000000
+  DESCRIPTION = "
+     Callamp switch on delay measured in
+                                         microseconds after START_TIME.
+      
+                                         Callamp can be switched on before
+                                         (< 193000 microseconds`), at
+                                         (= 193000 microseconds`), or after
+                                         (> 193000 microseconds`) begin of
+                                         exposure."
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:CALLAMP_DUTY"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = REAL
+  UNIT_ID = NONE
+  STANDARD_VALUE_TYPE = RANGE
+  MINIMUM = 0
+  MAXIMUM = 100
+  DESCRIPTION = "
+     The callamp can be run at various
+                                         duty cycles between 0.0 % and 100.0 % by
+                                         using only every other pulse of the
+                                         callamp frequency to trigger the callamp.
+      
+                                         DAWN_CALLAMP_DUTY = CALLAMP_FREQUENCY
+                                                             / Value * 100 %
+      
+                                         Example:
+                                         Value = 1.0 : DAWN_CALLAMP_DUTY = 100 %
+                                         Value = 2.5 : DAWN_CALLAMP_DUTY = 40 %
+      
+                                         This calculation is done internally in the
+                                         camera, the user  commands the requensted
+                                         duty cycle in percentage."
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:CALLAMP_ENABLE_FLAG"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = CHARACTER
+  UNIT_ID = 'N/A'
+  STANDARD_VALUE_TYPE = STATIC
+  MINIMUM_LENGTH = 2
+  MAXIMUM_LENGTH = 3
+  DESCRIPTION = "
+     OFF  callamp set to disabled
+      
+                                         ON = callamp set to enabled"
+  STANDARD_VALUE_SET = {
+     "OFF",
+     "ON"}
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:CALLAMP_FREQUENCY"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = REAL
+  UNIT_ID = KHZ
+  STANDARD_VALUE_TYPE = RANGE
+  MINIMUM = 0
+  MAXIMUM = 250
+  DESCRIPTION = "
+     The callamp frequency is determined by the
+                                         internal 24 MHz clock and an integer
+                                         divisor.
+      
+                                         CALLAMP_FREQUENCY = 24 MHz / Value
+      
+                                         The standard callamp frequency is 100 kHz
+                                         (24MHz / 240)."
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:CALLAMP_STROBE_TIME"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = INTEGER
+  UNIT_ID = US
+  STANDARD_VALUE_TYPE = RANGE
+  MINIMUM = 0
+  MAXIMUM = 10000000
+  DESCRIPTION = "
+     Callamp strobe time is measured in
+                                         microseconds after callamp switch on.
+      
+                                         callamp switch off time =
+                                         START_TIME +
+                                         DAWN_CALLAMP_DELAY_TIME +
+                                         DAWN_CALLAMP_STROBE_TIME"
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:CHAMBER"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = CHARACTER
+  UNIT_ID = 'N/A'
+  STANDARD_VALUE_TYPE = TEXT
+  DESCRIPTION = "
+     This keyword was used during ground tests
+                                         to describe the test environment."
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:DATA_ROUTING_ID"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = CHARACTER
+  UNIT_ID = 'N/A'
+  STANDARD_VALUE_TYPE = STATIC
+  MINIMUM_LENGTH = 6
+  MAXIMUM_LENGTH = 9
+  DESCRIPTION = "
+     This keyword describes the priority of the
+                                      acquired image and thus how it was handled
+                                      on board.
+      
+                                      Op-Nav = The image is processed with highest
+                                      priority and streamed into VR10 of the s/c.
+      
+                                      Science 1 = The image is processed with high
+                                      priority and streamed into VR8 of the s/c.
+      
+                                      Science 2 = The image is processed with mid
+                                      priority and streamed into VR8 of the s/c.
+      
+                                      Science 3 = The image is processed with low
+                                      priority and streamed into VR8 of the s/c.
+      
+                                      Science 4 = The image is processed with
+                                      least priority and streamed into VR8 of the
+                                      s/c."
+  STANDARD_VALUE_SET = {
+     "OP-NAV",
+     "SCIENCE 1",
+     "SCIENCE 2",
+     "SCIENCE 3",
+     "SCIENCE 4"}
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:DPU_HARDWARE_ID"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = CHARACTER
+  UNIT_ID = 'N/A'
+  STANDARD_VALUE_TYPE = STATIC
+  MINIMUM_LENGTH = 4
+  MAXIMUM_LENGTH = 4
+  DESCRIPTION = "
+     Both DPUs for FC1 and FC2 have the same
+                                         DPU ID because they are identical."
+  STANDARD_VALUE_SET = {
+     "1.04"}
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:DPU_SOFTWARE_VERSION"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = CHARACTER
+  UNIT_ID = 'N/A'
+  STANDARD_VALUE_TYPE = TEXT
+  MINIMUM_LENGTH = 4
+  MAXIMUM_LENGTH = 4
+  DESCRIPTION = "
+     Current version of the FC onboard software"
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:FEE_FLAG"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = CHARACTER
+  UNIT_ID = 'N/A'
+  STANDARD_VALUE_TYPE = STATIC
+  MINIMUM_LENGTH = 2
+  MAXIMUM_LENGTH = 3
+  DESCRIPTION = "
+     OFF  FEE is disabled, images cannot be
+                                         acquired
+      
+                                         ON = FEE is enabled, images can be
+                                         acquired"
+  STANDARD_VALUE_SET = {
+     "OFF",
+     "ON"}
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:FEE_HARDWARE_ID"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = CHARACTER
+  UNIT_ID = 'N/A'
+  STANDARD_VALUE_TYPE = DEFINITION
+  MINIMUM_LENGTH = 9
+  MAXIMUM_LENGTH = 9
+  DESCRIPTION = "
+     017.10.10  FEE ID of FC1 (FS1)
+      
+                                        017.09.09 = FEE ID of FC2 (FM2)
+      
+                                        063.15.15 indicates that the FEE is off or
+                                        busy and cannot transmit its ID."
+  STANDARD_VALUE_SET = {
+     "017.09.09",
+     "017.10.10"}
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:FILTER_ENCODER"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = INTEGER
+  UNIT_ID = K
+  STANDARD_VALUE_TYPE = RANGE
+  MINIMUM = 0
+  MAXIMUM = 63
+  DESCRIPTION = "
+     FILTER_NUMBER
+                                      (((64 + 4 + encoderOnClearFilter
+                                      - FILTER_ENCODER) / 8) MOD 8) + 1
+      
+                                      encoderOnClearFilter is a hardware-dependent
+                                      constant filterEncoder is the current
+                                      readout of the encoder filterNumber
+                                      return a value in the range [1..8].
+      
+                                      All the operation are integer operations,
+                                      MOD represents modulo and / is the integer
+                                      division. The subtraction is negative
+                                      (F1 - Fx) because the encoder value
+                                      decreases with increasing filter number."
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:FRAME_PARAMETER_UNIT"
+  STATUS_TYPE = APPROVED
+  GENERAL_DATA_TYPE = CHARACTER
+  UNIT_ID = NONE
+  STANDARD_VALUE_TYPE = STATIC
+  MAXIMUM_LENGTH = 30
+  DESCRIPTION = "
+     This keyword defines the units
+        of FRAME_PARAMETER that define the individual frame parameters of
+        an instrument that transfers single frames to the mass memory of
+        the spacecraft or the instrument. The FRAME_PARAMETER element
+        is also accompanied by the element FRAME_PARAMETER_DESC, e.g.
+        FRAME_PARAMETER_DESC = ('EXPOSURE_DURATION', 'FRAME_SUMMING'
+        'EXTERNAL_REPETITION_TIME', 'EXTERNAL DARK_ACQUISITION_RATE')"
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:FRONT_DOOR_ENCODER"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = INTEGER
+  UNIT_ID = K
+  STANDARD_VALUE_TYPE = RANGE
+  MINIMUM = 0
+  MAXIMUM = 63
+  DESCRIPTION = "
+     The Front Door is closed if
+                                         FRONT_DOOR_ENCODER shows the nominal
+                                         value +/- 1 and otherwise is open."
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:FRONT_DOOR_STATUS_ID"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = CHARACTER
+  UNIT_ID = 'N/A'
+  STANDARD_VALUE_TYPE = STATIC
+  MINIMUM_LENGTH = 4
+  MAXIMUM_LENGTH = 6
+  DESCRIPTION = "
+     CLOSED  Front Door, covering the
+                                         aperture, is closed.
+      
+                                         DOOR = Front Door is open."
+  STANDARD_VALUE_SET = {
+     "CLOSED",
+     "OPEN"}
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:FSA_SHOOT_ENABLE_FLAG"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = CHARACTER
+  UNIT_ID = 'N/A'
+  STANDARD_VALUE_TYPE = STATIC
+  MINIMUM_LENGTH = 2
+  MAXIMUM_LENGTH = 3
+  DESCRIPTION = "
+     Fail Safe Actuator:
+                                         OFF = The Fail Safe Actuator for the
+                                         Front Door is disabled.
+      
+                                         ON = The Fail Safe Actuator for the
+                                         Front Door is enabled. FSA_SHOOT_FLAG
+                                         can be switched ON now."
+  STANDARD_VALUE_SET = {
+     "OFF",
+     "ON"}
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:FSA_SHOOT_FLAG"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = CHARACTER
+  UNIT_ID = 'N/A'
+  STANDARD_VALUE_TYPE = STATIC
+  MINIMUM_LENGTH = 2
+  MAXIMUM_LENGTH = 3
+  DESCRIPTION = "
+     Fail Safe Actuator:
+                                         OFF = The Fail Safe Actuator for the
+                                         Front Door is switched off.
+      
+                                         ON = The Fail Safe Actuator for the
+                                         Front Door is switched on."
+  STANDARD_VALUE_SET = {
+     "OFF",
+     "ON"}
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:HEATER0_FLAG"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = CHARACTER
+  UNIT_ID = 'N/A'
+  STANDARD_VALUE_TYPE = STATIC
+  MINIMUM_LENGTH = 2
+  MAXIMUM_LENGTH = 3
+  DESCRIPTION = "
+     Camera Head Heater:
+                                         OFF = The CH heater (HEATER0) is
+                                         switched on.
+      
+                                         ON = The CH heater (HEATER0) is
+                                         switched off.
+      
+                                         The heater produces 4.4 W
+                                         (5.6 Ohm at +5 V)"
+  STANDARD_VALUE_SET = {
+     "OFF",
+     "ON"}
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:HEATER1_FLAG"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = CHARACTER
+  UNIT_ID = 'N/A'
+  STANDARD_VALUE_TYPE = STATIC
+  MINIMUM_LENGTH = 2
+  MAXIMUM_LENGTH = 3
+  DESCRIPTION = "
+     Baffle Heater:
+                                         OFF = The Baffle heater (HEATER1) is
+                                         switched on.
+      
+                                         ON = The Baffle heater (HEATER1) is
+                                         switched off.
+      
+                                         The heater produces 1.0 W
+                                         (26 Ohm at +5 V)"
+  STANDARD_VALUE_SET = {
+     "OFF",
+     "ON"}
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:I_12"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = REAL
+  UNIT_ID = MA
+  STANDARD_VALUE_TYPE = RANGE
+  MINIMUM = -9999.99
+  MAXIMUM = 9999.999
+  DESCRIPTION = "
+     Name: C12FEE
+                                        Location: PCU
+                                        H/K Sensor: PCU Current Monitor
+                                        Sensor Type: Current Sensor
+                                        Gain: 0.02
+                                        Offset: 0
+                                        Sensor Offset FC1: 0
+                                        Sensor Offset FC2: 0
+      
+                                        I_12 = DN * Gain + Offset + Sensor Offset
+                                                   [mA]
+      
+                                        Lower limit red: 50 mA
+                                        Lower limit yellow: 60 mA
+                                        Upper limit yellow: 100 mA
+                                        Upper limit red: 200 mA"
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:I_16"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = REAL
+  UNIT_ID = MA
+  STANDARD_VALUE_TYPE = RANGE
+  MINIMUM = -9999.99
+  MAXIMUM = 9999.999
+  DESCRIPTION = "
+     Name: C16V15
+                                        Location: PCU
+                                        H/K Sensor: PCU Current Monitor
+                                        Sensor Type: Current Sensor
+                                        Gain: 0.009
+                                        Offset: 0
+                                        Sensor Offset FC1: 0
+                                        Sensor Offset FC2: 0
+      
+                                        I_16 = DN * Gain + Offset + Sensor Offset
+                                                   [mA]
+      
+                                        Lower limit red: 20 mA
+                                        Lower limit yellow: 30 mA
+                                        Upper limit yellow: 60 mA
+                                        Upper limit red: 100 mA"
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:I_28"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = REAL
+  UNIT_ID = MA
+  STANDARD_VALUE_TYPE = RANGE
+  MINIMUM = -9999.99
+  MAXIMUM = 9999.999
+  DESCRIPTION = "
+     Name: C28M
+                                        Location: PCU
+                                        H/K Sensor: MAIN +28V Current Monitor
+                                        Sensor Type: Current Sensor
+                                        Gain: 0.0016
+                                        Offset: 0
+                                        Sensor Offset FC1: 0
+                                        Sensor Offset FC2: 0
+      
+                                        I_28 = DN * Gain + Offset + Sensor Offset
+                                                   [mA]
+      
+                                        Lower limit red: 200 mA
+                                        Lower limit yellow: 250 mA
+                                        Upper limit yellow: 1200 mA
+                                        Upper limit red: 1400 mA"
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:I_2_5"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = REAL
+  UNIT_ID = MA
+  STANDARD_VALUE_TYPE = RANGE
+  MINIMUM = -9999.99
+  MAXIMUM = 9999.999
+  DESCRIPTION = "
+     Name: C2.5AN
+                                        Location: PCU
+                                        H/K Sensor: PCU Current Monitor
+                                        Sensor Type: Current Sensor
+                                        Gain: 0.15
+                                        Offset: 0
+                                        Sensor Offset FC1: 0
+                                        Sensor Offset FC2: 0
+      
+                                        I_2_5 = DN * Gain + Offset + Sensor Offset
+                                                   [mA]
+      
+                                        Lower limit red: 250 mA
+                                        Lower limit yellow: 300 mA
+                                        Upper limit yellow: 900 mA
+                                        Upper limit red: 1000 mA"
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:I_3_3"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = REAL
+  UNIT_ID = MA
+  STANDARD_VALUE_TYPE = RANGE
+  MINIMUM = -9999.99
+  MAXIMUM = 9999.999
+  DESCRIPTION = "
+     Name: C3.3AN
+                                        Location: PCU
+                                        H/K Sensor: PCU Current Monitor
+                                        Sensor Type: Current Sensor
+                                        Gain: 0.15
+                                        Offset: 0
+                                        Sensor Offset FC1: 0
+                                        Sensor Offset FC2: 0
+      
+                                        I_3_3 = DN * Gain + Offset + Sensor Offset
+                                                   [mA]
+      
+                                        Lower limit red: 100 mA
+                                        Lower limit yellow: 170 mA
+                                        Upper limit yellow: 850 mA
+                                        Upper limit red: 1400 mA"
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:I_5"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = REAL
+  UNIT_ID = MA
+  STANDARD_VALUE_TYPE = RANGE
+  MINIMUM = -9999.99
+  MAXIMUM = 9999.999
+  DESCRIPTION = "
+     Name: C5FEE
+                                        Location: PCU
+                                        H/K Sensor: PCU Current Monitor
+                                        Sensor Type: Current Sensor
+                                        Gain: 0.05
+                                        Offset: 0
+                                        Sensor Offset FC1: 0
+                                        Sensor Offset FC2: 0
+      
+                                        I_2_5 = DN * Gain + Offset
+                                                + Sensor Offset [mA]
+      
+                                        Lower limit red: 100 mA
+                                        Lower limit yellow: 250 mA
+                                        Upper limit yellow: 350 mA
+                                        Upper limit red: 400 mA"
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:I_5_ANALOG"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = REAL
+  UNIT_ID = MA
+  STANDARD_VALUE_TYPE = RANGE
+  MINIMUM = -9999.99
+  MAXIMUM = 9999.999
+  DESCRIPTION = "
+     MDIS CCD temperature in raw counts. The
+        DESCRIPTION                   = Name: C5AN"
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:I_M5"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = REAL
+  UNIT_ID = MA
+  STANDARD_VALUE_TYPE = RANGE
+  MINIMUM = -9999.99
+  MAXIMUM = 9999.999
+  DESCRIPTION = "
+     Name: C-5FEE
+                                        Location: PCU
+                                        H/K Sensor: PCU Current Monitor
+                                        Sensor Type: Current Sensor
+                                        Gain: -0.015
+                                        Offset: 0
+                                        Sensor Offset FC1: 0
+                                        Sensor Offset FC2: 0
+      
+                                        I_M5 = DN * Gain + Offset
+                                               + Sensor Offset [mA]
+      
+                                        Lower limit red: -200 mA
+                                        Lower limit yellow: -120 mA
+                                        Upper limit yellow: -60 mA
+                                        Upper limit red: -30 mA"
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:I_M5_ANALOG"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = REAL
+  UNIT_ID = MA
+  STANDARD_VALUE_TYPE = RANGE
+  MINIMUM = -9999.99
+  MAXIMUM = 9999.999
+  DESCRIPTION = "
+     Name: C-5AN
+                                        Location: PCU
+                                        H/K Sensor: PCU Current Monitor
+                                        Sensor Type: Current Sensor
+                                        Gain: -0.015
+                                        Offset: 0
+                                        Sensor Offset FC1: 0
+                                        Sensor Offset FC2: 0
+      
+                                        I_M5_ANALOG = DN * Gain + Offset
+                                                      + Sensor Offset [mA]
+      
+                                        Lower limit red: -100 mA
+                                        Lower limit yellow: -60 mA
+                                        Upper limit yellow: -20 mA
+                                        Upper limit red: -10 mA"
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:IMAGE_ACQUIRE_MODE"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = CHARACTER
+  UNIT_ID = 'N/A'
+  STANDARD_VALUE_TYPE = STATIC
+  MINIMUM_LENGTH = 4
+  MAXIMUM_LENGTH = 9
+  DESCRIPTION = "
+     This keyword describes the mode of image
+                                      acquisition.
+      
+                                      NORMAL = The image was acquired with Front
+                                      Door open.
+      
+                                      DARK = The image was acquired with
+                                      Front Door closed and the Callamp off.
+      
+                                      FLATFIELD = The image was acquired with
+                                      Front Door closed and the Callamp on.
+      
+                                      STORAGE = The image shows the readout of the
+                                      storage area of the CCD.
+      
+                                      SERIAL = The artificial image shows the
+                                      readout of the serial register.
+      
+                                      TEST_CH = The artificial iamge shows a test
+                                      pattern with DNs from 0 to 16382."
+  STANDARD_VALUE_SET = {
+     "DARK",
+     "FLATFIELD",
+     "NORMAL",
+     "SERIAL",
+     "STORAGE",
+     "TEST_CH"}
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:INSTRUMENT_TEMPERATURE_UNIT"
+  STATUS_TYPE = APPROVED
+  GENERAL_DATA_TYPE = CHARACTER
+  UNIT_ID = NONE
+  STANDARD_VALUE_TYPE = STATIC
+  MAXIMUM_LENGTH = 30
+  DESCRIPTION = "
+     This keyword defines the units
+       of instrument or some part of an instrument; for example:
+        FOCAL PLANE
+        TELESCOPE
+        SPECTROMETER,CRYOCOOLER"
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:MCU_FLAG"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = CHARACTER
+  UNIT_ID = 'N/A'
+  STANDARD_VALUE_TYPE = STATIC
+  MINIMUM_LENGTH = 2
+  MAXIMUM_LENGTH = 3
+  DESCRIPTION = "
+     OFF  MCU is disabled, mechanisms cannot
+                                         be moved
+      
+                                         ON = MCU is enabled, mechanisms
+                                         (filterwheel and front door) can be moved"
+  STANDARD_VALUE_SET = {
+     "OFF",
+     "ON"}
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:MCU_HARDWARE_ID"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = CHARACTER
+  UNIT_ID = 'N/A'
+  STANDARD_VALUE_TYPE = STATIC
+  MINIMUM_LENGTH = 2
+  MAXIMUM_LENGTH = 2
+  DESCRIPTION = "
+     10  MCU ID of FC1 (FS1)
+      
+                                        12 = MCU ID of FC2 (FM2)"
+  STANDARD_VALUE_SET = {
+     "10",
+     "12"}
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:MCU_MOTOR_POWER_FLAG"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = CHARACTER
+  UNIT_ID = 'N/A'
+  STANDARD_VALUE_TYPE = STATIC
+  MINIMUM_LENGTH = 2
+  MAXIMUM_LENGTH = 3
+  DESCRIPTION = "
+     OFF  Both motors (Front Door and
+                                               Filterwheel) are unpowered.
+      
+                                         ON = Both motors are powered. Either to
+                                              hold their position or to move to
+                                              another position."
+  STANDARD_VALUE_SET = {
+     "OFF",
+     "ON"}
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:OPERATOR"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = CHARACTER
+  UNIT_ID = 'N/A'
+  STANDARD_VALUE_TYPE = TEXT
+  DESCRIPTION = "
+     This keyword was used during ground
+                                         tests to indicate the responsible
+                                         operator of the test."
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:PCU_HARDWARE_ID"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = CHARACTER
+  UNIT_ID = 'N/A'
+  STANDARD_VALUE_TYPE = STATIC
+  MINIMUM_LENGTH = 4
+  MAXIMUM_LENGTH = 4
+  DESCRIPTION = "
+     3.05  PCU ID of FC1 (FS1)
+      
+                                        2.04 = PCU ID of FC2 (FM2)"
+  STANDARD_VALUE_SET = {
+     "2.04",
+     "3.05"}
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:PURPOSE"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = CHARACTER
+  UNIT_ID = 'N/A'
+  STANDARD_VALUE_TYPE = TEXT
+  DESCRIPTION = "
+     This keyword was used during ground tests
+                                         to describe the purpose of the test."
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:SCAN_PARAMETER_UNIT"
+  STATUS_TYPE = APPROVED
+  GENERAL_DATA_TYPE = CHARACTER
+  UNIT_ID = NONE
+  STANDARD_VALUE_TYPE = STATIC
+  MAXIMUM_LENGTH = 30
+  DESCRIPTION = "
+     This keyword defines the units
+       of SCAN_PARAMETER which lists individual parameters of a scanning
+       instrument. The parameters are explained in
+       SCAN_PARAMETER_DESC = ('SCAN_START_ANGLE', 'SCAN_STOP_ANGLE',
+       'SCAN_STEP_ANGLE', 'SCAN_STEP_NUMBER')"
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:SUBJECT"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = CHARACTER
+  UNIT_ID = 'N/A'
+  STANDARD_VALUE_TYPE = TEXT
+  DESCRIPTION = "
+     This keyword was used during ground tests
+                                         to describe the subject used during the
+                                         test."
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:T_BAFFLE"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = REAL
+  UNIT_ID = K
+  STANDARD_VALUE_TYPE = RANGE
+  MINIMUM = -999.999
+  MAXIMUM = 999.999
+  DESCRIPTION = "
+     Name: TBF
+                                        Location: Baffle
+                                        H/K Sensor: Baffle Thermistor
+                                        Sensor Type: AD590
+                                        Gain: 0.9975
+                                        Offset: -129.5
+                                        Sensor Offset FC1: -2.1
+                                        Sensor Offset FC2: -3.1
+      
+                                        T_BAFFLE = DN * Gain + Offset
+                                                 + Sensor Offset + 273.150 [deg C]
+                                        T_BAFFLE = DN * Gain + Offset
+                                                   + Sensor Offset [Kelvin]
+      
+                                        Lower limit red: -55.0 deg C
+                                        Lower limit yellow: -50.0 deg C
+                                        Upper limit yellow: +40.0 deg C
+                                        Upper limit red: +45.0 deg C"
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:T_CCD"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = REAL
+  UNIT_ID = K
+  STANDARD_VALUE_TYPE = RANGE
+  MINIMUM = -999.999
+  MAXIMUM = 999.999
+  DESCRIPTION = "
+     Name: HK-Tccd
+                                      Location: DPU
+                                      H/K Sensor: FEE CCD Thermistor
+                                      Sensor Type: AD590
+                                      Gain: 0.0373
+                                      Offset: -273
+                                      Sensor Offset FC1: -5.240
+                                      Sensor Offset FC2: -3.960
+      
+                                      T_CCD = DN * Gain + Offset + Sensor Offset
+                                                 [deg C]
+                                      T_CCD = DN * Gain + Offset + Sensor Offset
+                                                 + 273.150 [Kelvin]
+      
+                                      The CCD is passively cooled, the CCD-heaters
+                                      are for non-operation mode only.
+      
+                                      Lower limit red: -95.0 deg C
+                                      Lower limit yellow: -75.0 deg C
+                                      Upper limit yellow: +35.0 deg C
+                                      Upper limit red: +40.0 deg C"
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:T_COVER_MOTOR"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = REAL
+  UNIT_ID = K
+  STANDARD_VALUE_TYPE = RANGE
+  MINIMUM = -999.999
+  MAXIMUM = 999.999
+  DESCRIPTION = "
+     Name: TCM
+                                        Location: Front Door
+                                        H/K Sensor: FD Motor Thermistor
+                                        Sensor Type: AD590
+                                        Gain: 0.9975
+                                        Offset: -129.5
+                                        Sensor Offset FC1: -2.1
+                                        Sensor Offset FC2: -1.1
+      
+                                        T_COVER_MOTOR = DN * Gain + Offset
+                                        + Sensor Offset [deg C]
+                                        T_COVER_MOTOR = DN * Gain + Offset
+                                        + Sensor Offset + 273.150 [Kelvin]
+      
+                                        Lower limit red: -55.0 deg C
+                                        Lower limit yellow: -50.0 deg C
+                                        Upper limit yellow: +50.0 deg C
+                                        Upper limit red: +60.0 deg C"
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:T_CSC"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = REAL
+  UNIT_ID = K
+  STANDARD_VALUE_TYPE = RANGE
+  MINIMUM = -999.999
+  MAXIMUM = 999.999
+  DESCRIPTION = "
+     Name: HK-Tpcu3
+                                      Location: PCU
+                                      H/K Sensor: PCU Board Thermistor 1
+                                      (PCU Center Screw Thermistor)
+                                      Sensor Type: AD590
+                                      Gain: 0.0373
+                                      Offset: -273
+                                      Sensor Offset FC1: -3.210
+                                      Sensor Offset FC2: -3.210
+      
+                                      T_CSC = DN * Gain + Offset + Sensor Offset
+                                                 [deg C]
+                                      T_CSC = DN * Gain + Offset + Sensor Offset
+                                                 + 273.150 [Kelvin]
+      
+                                      The CCD is passively cooled, the CCD-heaters
+                                      are for non-operation mode only.
+      
+                                      Lower limit red: -40.0 deg C
+                                      Lower limit yellow: -35.0 deg C
+                                      Upper limit yellow: +70.0 deg C
+                                      Upper limit red: +80.0 deg C"
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:T_DCDC"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = REAL
+  UNIT_ID = K
+  STANDARD_VALUE_TYPE = RANGE
+  MINIMUM = -999.999
+  MAXIMUM = 999.999
+  DESCRIPTION = "
+     Name: HK-Tpcu1
+                                        Location: PCU
+                                        H/K Sensor: PCU Converter Board Thermistor
+                                        Sensor Type: AD590
+                                        Gain: 0.0373
+                                        Offset: -273
+                                        Sensor Offset FC1: -1.980
+                                        Sensor Offset FC2: -1.980
+      
+                                        T_DCDC = DN * Gain + Offset + Sensor Offset
+                                                 [deg C]
+                                        T_DCDC = DN * Gain + Offset + Sensor Offset
+                                                 + 273.150 [Kelvin]
+      
+                                        Lower limit red: -40.0 deg C
+                                        Lower limit yellow: -35.0 deg C
+                                        Upper limit yellow: +70.0 deg C
+                                        Upper limit red: +80.0 deg C"
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:T_DPU"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = REAL
+  UNIT_ID = K
+  STANDARD_VALUE_TYPE = RANGE
+  MINIMUM = -999.999
+  MAXIMUM = 999.999
+  DESCRIPTION = "
+     Name: HK-Tdpu
+                                        Location: DPU
+                                        H/K Sensor: DPU Board Thermistor
+                                        Sensor Type: AD590
+                                        Gain: 0.0373
+                                        Offset: -273
+                                        Sensor Offset FC1: -7.960
+                                        Sensor Offset FC2: -3.960
+      
+                                        T_DPU = DN * Gain + Offset + Sensor Offset
+                                                [deg C]
+                                        T_DPU = DN * Gain + Offset + Sensor Offset
+                                                + 273.150 [Kelvin]
+      
+                                        Lower limit red: -40.0 deg C
+                                        Lower limit yellow: -35.0 deg C
+                                        Upper limit yellow: +80.0 deg C
+                                        Upper limit red: +90.0 deg C"
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:T_F12"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = REAL
+  UNIT_ID = K
+  STANDARD_VALUE_TYPE = RANGE
+  MINIMUM = -999.999
+  MAXIMUM = 999.999
+  DESCRIPTION = "
+     Name: HK-Tpcu2
+                                        Location: PCU
+                                        H/K Sensor: PCU Board Thermistor 1
+                                        (PCU FEE 12 V I/F Thermistor)
+                                        Sensor Type: AD590
+                                        Gain: 0.0373
+                                        Offset: -273
+                                        Sensor Offset FC1: -2.580
+                                        Sensor Offset FC2: -2.580
+      
+                                        T_F12 = DN * Gain + Offset + Sensor Offset
+                                                [deg C]
+                                        T_F12 = DN * Gain + Offset + Sensor Offset
+                                                + 273.150 [Kelvin]
+      
+                                        Lower limit red: -40.0 deg C
+                                        Lower limit yellow: -35.0 deg C
+                                        Upper limit yellow: +70.0 deg C
+                                        Upper limit red: +80.0 deg C"
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:T_FILTER_MOTOR"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = REAL
+  UNIT_ID = K
+  STANDARD_VALUE_TYPE = RANGE
+  MINIMUM = -999.999
+  MAXIMUM = 999.999
+  DESCRIPTION = "
+     Name: TFM
+                                        Location: Filter Wheel
+                                        H/K Sensor: Filter Motor Thermistor
+                                        Sensor Type: AD590
+                                        Gain: 0.9975
+                                        Offset: -129.5
+                                        Sensor Offset FC1: -3.1
+                                        Sensor Offset FC2: -2.1
+      
+                                        T_FILTER_MOTOR = DN * Gain + Offset
+                                        + Sensor Offset [deg C]
+                                        T_FILTER_MOTOR = DN * Gain + Offset\
+                                        + Sensor Offset + 273.150 [Kelvin]
+      
+                                        Lower limit red: -55.0 deg C
+                                        Lower limit yellow: -50.0 deg C
+                                        Upper limit yellow: +50.0 deg C
+                                        Upper limit red: +60.0 deg C"
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:T_LENS_BARREL"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = REAL
+  UNIT_ID = K
+  STANDARD_VALUE_TYPE = RANGE
+  MINIMUM = -999.999
+  MAXIMUM = 999.999
+  DESCRIPTION = "
+     Name: TLB
+                                        Location: Lens Barrel
+                                        H/K Sensor: Lens Barrel Thermistor
+                                        Sensor Type: AD590
+                                        Gain: 0.9975
+                                        Offset: -129.5
+                                        Sensor Offset FC1: -1.1
+                                        Sensor Offset FC2: -1.1
+      
+                                        T_LENS_BARREL = DN * Gain + Offset
+                                        + Sensor Offset [deg C]
+                                        T_LENS_BARREL = DN * Gain + Offset
+                                        + Sensor Offset + 273.150 [Kelvin]
+      
+                                        Lower limit red: -55.0 deg C
+                                        Lower limit yellow: -50.0 deg C
+                                        Upper limit yellow: +40.0 deg C
+                                        Upper limit red: +45.0 deg C"
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:T_RAD_MOTOR"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = REAL
+  UNIT_ID = K
+  STANDARD_VALUE_TYPE = RANGE
+  MINIMUM = -999.999
+  MAXIMUM = 999.999
+  DESCRIPTION = "
+     Name: TRD
+                                        Location: Radiator
+                                        H/K Sensor: Radiator Thermistor
+                                        Sensor Type: AD590
+                                        Gain: 0.9975
+                                        Offset: -129.5
+                                        Sensor Offset FC1: -1.1
+                                        Sensor Offset FC2: -1.1
+      
+                                        T_RAD_MOTOR = DN * Gain + Offset
+                                        + Sensor Offset [deg C]
+                                        T_RAD_MOTOR = DN * Gain + Offset
+                                        + Sensor Offset + 273.150 [Kelvin]
+      
+                                        Lower limit red: -115.0 deg C
+                                        Lower limit yellow: -95.0 deg C
+                                        Upper limit yellow: +35.0 deg C
+                                        Upper limit red: +40.0 deg C
+      
+                                        Note: This is not a motor temperature!"
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:T_STRUCTURE"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = REAL
+  UNIT_ID = K
+  STANDARD_VALUE_TYPE = RANGE
+  MINIMUM = -999.999
+  MAXIMUM = 999.999
+  DESCRIPTION = "
+     Name: TCS
+                                        Location: Camera Head
+                                        H/K Sensor: CH Structure Thermistor
+                                        Sensor Type: AD590
+                                        Gain: 0.9975
+                                        Offset: -129.5
+                                        Sensor Offset FC1: -3.1
+                                        Sensor Offset FC2: -4.1
+      
+                                        T_STRUCTURE = DN * Gain + Offset
+                                        + Sensor Offset [deg C]
+                                        T_STRUCTURE = DN * Gain + Offset
+                                        + Sensor Offset + 273.150 [Kelvin]
+      
+                                        Lower limit red: -55.0 deg C
+                                        Lower limit yellow: -50.0 deg C
+                                        Upper limit yellow: +40.0 deg C
+                                        Upper limit red: +45.0 deg C"
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:TARGET"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = CHARACTER
+  UNIT_ID = 'N/A'
+  STANDARD_VALUE_TYPE = TEXT
+  DESCRIPTION = "
+     This keyword was used during ground
+                                         tests to describe the target the FC
+                                         was pointing at during the test"
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:TEST_LAMP"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = CHARACTER
+  UNIT_ID = 'N/A'
+  STANDARD_VALUE_TYPE = TEXT
+  DESCRIPTION = "
+     This keyword was used during ground
+                                         tests to define the lamp that was
+                                         used during the test."
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:UDPLIB_SOFTWARE_VERSION"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = CHARACTER
+  UNIT_ID = 'N/A'
+  STANDARD_VALUE_TYPE = TEXT
+  MINIMUM_LENGTH = 7
+  MAXIMUM_LENGTH = 7
+  DESCRIPTION = "
+     Current version of the FC UDP library"
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:USE_PRE_CLEAR"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = CHARACTER
+  UNIT_ID = 'N/A'
+  STANDARD_VALUE_TYPE = STATIC
+  MINIMUM_LENGTH = 2
+  MAXIMUM_LENGTH = 3
+  DESCRIPTION = "
+     OFF  No pre-clear of the CCD prior to an
+                                         image acquisition.
+      
+                                         ON = A pre-clear of the CCD, 193 ms prior
+                                         to an image acquisition, removes all
+                                         charge that is on the CCD at this moment"
+  STANDARD_VALUE_SET = {
+     "OFF",
+     "ON"}
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:V_12"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = REAL
+  UNIT_ID = V
+  STANDARD_VALUE_TYPE = RANGE
+  MINIMUM = -9999.99
+  MAXIMUM = 9999.999
+  DESCRIPTION = "
+     Name: V12FEE
+                                        Location: PCU
+                                        H/K Sensor: PCU Voltage Monitor
+                                        Sensor Type: Voltage Sensor
+                                        Gain: 0.0012
+                                        Offset: 0
+                                        Sensor Offset FC1: 0
+                                        Sensor Offset FC2: 0
+      
+                                        V_12 = DN * Gain + Offset + Sensor Offset
+                                               [V]
+      
+                                        Lower limit red: 11.0 V
+                                        Lower limit yellow: 11.7 V
+                                        Upper limit yellow: 12.5 V
+                                        Upper limit red: 13.0 V"
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:V_16"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = REAL
+  UNIT_ID = V
+  STANDARD_VALUE_TYPE = RANGE
+  MINIMUM = -9999.99
+  MAXIMUM = 9999.999
+  DESCRIPTION = "
+     Name: V16V15
+                                        Location: PCU
+                                        H/K Sensor: PCU Voltage Monitor
+                                        Sensor Type: Voltage Sensor
+                                        Gain: 0.000165
+                                        Offset: 0
+                                        Sensor Offset FC1: 0
+                                        Sensor Offset FC2: 0
+      
+                                        V_16 = DN * Gain + Offset + Sensor Offset
+                                               [V]
+      
+                                        Lower limit red: 14.7 V
+                                        Lower limit yellow: 15.2 V
+                                        Upper limit yellow: 16.5 V
+                                        Upper limit red: 17.0 V"
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:V_28"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = REAL
+  UNIT_ID = V
+  STANDARD_VALUE_TYPE = RANGE
+  MINIMUM = -9999.99
+  MAXIMUM = 9999.999
+  DESCRIPTION = "
+     Name: V28M
+                                        Location: PCU
+                                        H/K Sensor: Main +28V Voltage Monitor
+                                        Sensor Type: Voltage Sensor
+                                        Gain: 0.04
+                                        Offset: 0
+                                        Sensor Offset FC1: 0
+                                        Sensor Offset FC2: 0
+      
+                                        V_28 = DN * Gain + Offset + Sensor Offset
+                                               [V]
+      
+                                        Lower limit red: 20.0 V
+                                        Lower limit yellow: 21.5 V
+                                        Upper limit yellow: 35.5 V
+                                        Upper limit red: 37.0 V"
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:V_2_5"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = REAL
+  UNIT_ID = V
+  STANDARD_VALUE_TYPE = RANGE
+  MINIMUM = -9999.99
+  MAXIMUM = 9999.999
+  DESCRIPTION = "
+     Name: V2.5AN
+                                        Location: PCU
+                                        H/K Sensor: PCU Voltage Monitor
+                                        Sensor Type: Voltage Sensor
+                                        Gain: 0.00025
+                                        Offset: 0
+                                        Sensor Offset FC1: 0
+                                        Sensor Offset FC2: 0
+      
+                                        V_2_5 = DN * Gain + Offset + Sensor Offset
+                                                [V]
+      
+                                        Lower limit red: 2.1 V
+                                        Lower limit yellow: 2.3 V
+                                        Upper limit yellow: 2.8 V
+                                        Upper limit red: 3.0 V"
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:V_3_3"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = REAL
+  UNIT_ID = V
+  STANDARD_VALUE_TYPE = RANGE
+  MINIMUM = -9999.99
+  MAXIMUM = 9999.999
+  DESCRIPTION = "
+     Name: V3.3AN
+                                        Location: PCU
+                                        H/K Sensor: PCU Voltage Monitor
+                                        Sensor Type: Voltage Sensor
+                                        Gain: 0.00033
+                                        Offset: 0
+                                        Sensor Offset FC1: 0
+                                        Sensor Offset FC2: 0
+      
+                                        V_3_3 = DN * Gain + Offset + Sensor Offset
+                                                [V]
+      
+                                        Lower limit red: 3.0 V
+                                        Lower limit yellow: 3.2 V
+                                        Upper limit yellow: 3.7 V
+                                        Upper limit red: 3.9 V"
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:V_5"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = REAL
+  UNIT_ID = V
+  STANDARD_VALUE_TYPE = RANGE
+  MINIMUM = -9999.99
+  MAXIMUM = 9999.999
+  DESCRIPTION = "
+     Name: V5FEE
+                                        Location: PCU
+                                        H/K Sensor: PCU Voltage Monitor
+                                        Sensor Type: Voltage Sensor
+                                        Gain: 0.00052
+                                        Offset: 0
+                                        Sensor Offset FC1: 0
+                                        Sensor Offset FC2: 0
+      
+                                      V_5 = DN * Gain + Offset + Sensor Offset [V]
+      
+                                        Lower limit red: 4.5 V
+                                        Lower limit yellow: 4.7 V
+                                        Upper limit yellow: 5.5 V
+                                        Upper limit red: 5.8 V"
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:V_5_ANALOG"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = REAL
+  UNIT_ID = V
+  STANDARD_VALUE_TYPE = RANGE
+  MINIMUM = -9999.99
+  MAXIMUM = 9999.999
+  DESCRIPTION = "
+     Name: V5AN
+                                        Location: PCU
+                                        H/K Sensor: PCU Voltage Monitor
+                                        Sensor Type: Voltage Sensor
+                                        Gain: 0.00052
+                                        Offset: 0
+                                        Sensor Offset FC1: 0
+                                        Sensor Offset FC2: 0
+      
+                                        V_5_ANALOG = DN * Gain + Offset
+                                        + Sensor Offset [V]
+      
+                                        Lower limit red: 4.5 V
+                                        Lower limit yellow: 4.7 V
+                                        Upper limit yellow: 5.5 V
+                                        Upper limit red: 5.8 V"
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:V_M5"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = REAL
+  UNIT_ID = V
+  STANDARD_VALUE_TYPE = RANGE
+  MINIMUM = -9999.99
+  MAXIMUM = 9999.999
+  DESCRIPTION = "
+     Name: V-5FEE
+                                        Location: PCU
+                                        H/K Sensor: PCU Voltage Monitor
+                                        Sensor Type: Voltage Sensor
+                                        Gain: -0.0005
+                                        Offset: 0
+                                        Sensor Offset FC1: 0
+                                        Sensor Offset FC2: 0
+      
+                                        V_M5 = DN * Gain + Offset + Sensor Offset
+                                               [V]
+      
+                                        Lower limit red: -5.8 V
+                                        Lower limit yellow: -5.5 V
+                                        Upper limit yellow: -4.7 V
+                                        Upper limit red: -4.5 V"
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:V_M5_ANALOG"
+  STATUS_TYPE = PROPOSED
+  GENERAL_DATA_TYPE = REAL
+  UNIT_ID = V
+  STANDARD_VALUE_TYPE = RANGE
+  MINIMUM = -9999.99
+  MAXIMUM = 9999.999
+  DESCRIPTION = "
+     Name: V-5AN
+                                        Location: PCU
+                                        H/K Sensor: PCU Voltage Monitor
+                                        Sensor Type: Voltage Sensor
+                                        Gain: -0.0005
+                                        Offset: 0
+                                        Sensor Offset FC1: 0
+                                        Sensor Offset FC2: 0
+      
+                                        V_M5_ANALOG = DN * Gain + Offset
+                                        + Sensor Offset [V]
+      
+                                        Lower limit red: -5.8 V
+                                        Lower limit yellow: -5.5 V
+                                        Upper limit yellow: -4.7 V
+                                        Upper limit red: -4.5 V"
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:VIR_IR_DATA_FILE_NAME"
+  STATUS_TYPE = APPROVED
+  GENERAL_DATA_TYPE = CHARACTER
+  UNIT_ID = NONE
+  STANDARD_VALUE_TYPE = STATIC
+  MAXIMUM_LENGTH = 40
+  DESCRIPTION = "
+     This local keyword specifies
+       the name of the file containing the data acquired in the same
+       timeframe by the VIS data channel."
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:VIR_IR_START_X_POSITION"
+  STATUS_TYPE = APPROVED
+  GENERAL_DATA_TYPE = REAL
+  UNIT_ID = NONE
+  STANDARD_VALUE_TYPE = STATIC
+  MINIMUM = 7
+  MAXIMUM = 1
+  MAXIMUM_LENGTH = 2
+  DESCRIPTION = "
+     This keyword gives the X
+       coordinate of the first CCD pixel used on the IR FPA.
+       This quantity determines the correspondence between wavelength and
+       spectral channels."
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:VIR_IR_START_Y_POSITION"
+  STATUS_TYPE = APPROVED
+  GENERAL_DATA_TYPE = REAL
+  UNIT_ID = NONE
+  STANDARD_VALUE_TYPE = STATIC
+  MAXIMUM_LENGTH = 4
+  DESCRIPTION = "
+     This keyword gives the Y
+       coordinate of the first CCD pixel used on the IR FPA.
+       This quantity determines the correspondence between wavelength and
+       spectral channels."
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:VIR_VIS_START_X_POSITION"
+  STATUS_TYPE = APPROVED
+  GENERAL_DATA_TYPE = REAL
+  UNIT_ID = NONE
+  STANDARD_VALUE_TYPE = STATIC
+  MAXIMUM_LENGTH = 4
+  DESCRIPTION = "
+     This keyword gives the X
+       coordinate of the first CCD pixel used on the VIS FPA.
+       This quantity determines the correspondence between wavelength and
+       spectral channels."
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
+  NAME = "DAWN:VIR_VIS_START_Y_POSITION"
+  STATUS_TYPE = APPROVED
+  GENERAL_DATA_TYPE = REAL
+  UNIT_ID = NONE
+  STANDARD_VALUE_TYPE = STATIC
+  MAXIMUM_LENGTH = 4
+  DESCRIPTION = "
+     This keyword gives the Y
+       coordinate of the first CCD pixel used on the VIS FPA.
+       This quantity determines the correspondence between wavelength and
+       spectral channels."
+END_OBJECT = ELEMENT_DEFINITION
+END 
+OBJECT = ELEMENT_DEFINITION
   NAME = DD_VERSION_ID
   STATUS_TYPE = APPROVED
   GENERAL_DATA_TYPE = CHARACTER
@@ -11608,6 +13149,7 @@ OBJECT = ELEMENT_DEFINITION
      "HFM1",
      "HFM2",
      "HFM3",
+     "HPGE",
      "ISSN",
      "ISSW",
      "LECP",
@@ -11957,6 +13499,7 @@ OBJECT = ELEMENT_DEFINITION
      "GEOLOGY OF VENUS",
      "GRSFE",
      "HTML NAVIGATION",
+     "ICD",
      "IHW LSPN ATLAS",
      "IHW STUDY",
      "IMAGE PROCESSING",
@@ -12744,6 +14287,7 @@ OBJECT = ELEMENT_DEFINITION
      "JP2",
      "N/A",
      "PDF-ADOBE-1.1",
+     "PDF-ADOBE-1.4",
      "PNG",
      "PREVIOUS PIXEL",
      "PS-ADOBE-1.0",
@@ -16339,6 +17883,7 @@ OBJECT = ELEMENT_DEFINITION
      "OBS325T2",
      "OBS327T1",
      "OBS333T1",
+     "OBS3340T1",
      "OBS347T3",
      "OBS376T1",
      "OBS376T2",
@@ -16365,6 +17910,7 @@ OBJECT = ELEMENT_DEFINITION
      "S229",
      "SAKIG",
      "SDU",
+     "SOHO",
      "SPEC",
      "SUISEI",
      "TRRLAB",
@@ -16548,6 +18094,7 @@ OBJECT = ELEMENT_DEFINITION
      "ROSETTA-ORBITER",
      "SAKIGAKE",
      "SL9 EARTH-BASED OBSERVATORIES",
+     "SOLAR AND HELIOSPHERIC OBSERVATORY",
      "STARDUST",
      "SUBMILLIMETER TELESCOPE OBSERVATORY 10-M HEINRICH HERTZ SUBMILLIMETER TELESCOPE (SMT)",
      "SUISEI",
@@ -16559,6 +18106,7 @@ OBJECT = ELEMENT_DEFINITION
      "UNIVERSITY OF HAWAII 2.2-METER TELESCOPE",
      "UNKNOWN",
      "USGS RESTON SPECTROSCOPY LABORATORY",
+     "UWO METEOR RADAR COMPLEX CANADIAN METEOR ORBIT RADAR",
      "VARIOUS GROUND-BASED TELESCOPES",
      "VARIOUS TELESCOPE HOSTS",
      "VEGA 1",
@@ -16761,10 +18309,12 @@ OBJECT = ELEMENT_DEFINITION
      "I0387",
      "I0390",
      "I0391",
+     "I0576",
      "I0679",
      "I0680",
      "I0681",
      "I0682",
+     "I0688",
      "ICI",
      "IDS",
      "IGI",
@@ -16797,6 +18347,7 @@ OBJECT = ELEMENT_DEFINITION
      "JPA",
      "KECK1LWS",
      "LAMP",
+     "LASCO",
      "LCS",
      "LECP",
      "LEISA",
@@ -17223,6 +18774,7 @@ OBJECT = ELEMENT_DEFINITION
      "BOLLER & CHIVENS SPECTROGRAPH",
      "CAMERA 1",
      "CAMERA 2",
+     "CANADIAN METEOR ORBIT RADAR (CMOR)",
      "CASSEGRAIN FOCUS DIRECT IMAGE CCD CAMERA",
      "CASSEGRAIN IR CAMERA",
      "CASSEGRAIN SPECTROMETER",
@@ -17367,6 +18919,7 @@ OBJECT = ELEMENT_DEFINITION
      "KPNO SINGLE CHANNEL POLARIMETER",
      "LA RUCA SITE 1K IMAGER",
      "LABELED RELEASE",
+     "LARGE ANGLE SPECTROMETRIC CORONAGRAPH",
      "LARGE CASSEGRAIN SPECTROGRAPH",
      "LARGE CASSEGRAIN SPECTROMETER",
      "LARSON FOURIER TRANSFORM SPECTROMETER",
@@ -17519,6 +19072,7 @@ OBJECT = ELEMENT_DEFINITION
      "STOVER CCD SPECTROGRAPH CAMERA",
      "STUDENT DUST COUNTER",
      "SUPERB SEEING IMAGER",
+     "SUPERNOVA INTEGRAL FIELD SPECTROGRAPH (SNIFS)",
      "SURFACE SCIENCE PACKAGE",
      "SURFACE STEREO IMAGER",
      "TEKTRONIX 2048X2048 CCD",
@@ -17915,6 +19469,7 @@ OBJECT = ELEMENT_DEFINITION
      "RADAR",
      "RADAR ANTENNA",
      "RADAR MAPPER",
+     "RADAR TRANSMITTER/RECEIVER",
      "RADIO AND PLASMA WAVE SCIENCE",
      "RADIO SCIENCE",
      "RADIO SPECTROMETER",
@@ -17923,8 +19478,10 @@ OBJECT = ELEMENT_DEFINITION
      "REFERENCE DATA",
      "RELFECTANCE SPECTROMETER",
      "RETARDING POTENTIAL ANALYZER",
+     "SPECTRAL IMAGER",
      "SPECTROGRAPH",
      "SPECTROMETER",
+     "SPECTROMETRIC CORONAGRAPH",
      "SPECTROREFLECTOMETER",
      "STAR SCANNER",
      "SYNTHESIZED ARRAY",
@@ -23200,6 +24757,7 @@ OBJECT = ELEMENT_DEFINITION
      "SATURN OCCULTATION OF 28 SAGITTARIUS 1989",
      "SATURN RING PLANE CROSSING 1995",
      "SATURN SMALL SATELLITE ASTROMETRY",
+     "SOLAR AND HELIOSPHERIC OBSERVATORY",
      "STARDUST",
      "SUISEI",
      "SUPPORT ARCHIVES",
@@ -23325,6 +24883,7 @@ OBJECT = ELEMENT_DEFINITION
      "EUROPA 6 ENCOUNTER",
      "EUROPA 6 ORBIT",
      "EXTENDED MISSION",
+     "EXTENDED SCIENCE PHASE",
      "EXTENDED-EXTENDED MISSION",
      "GANYMEDE 1 ENCOUNTER",
      "GANYMEDE 1 ORBIT",
@@ -27505,11 +29064,11 @@ OBJECT = ELEMENT_DEFINITION
   MINIMUM = -90
   MAXIMUM = 180
   DESCRIPTION = "
-     The orbital_inclination element provides the value of the
-     angle between the orbital plane of a target body and the
-     ecliptic.  The body's orbit direction is prograde if 0 < i
-      90 degrees, where i is the value of orbital inclination.
-     The orbit direction is retrograde if 90 < i < 180 degrees."
+       The orbital_inclination element provides the value of the angle
+       between the orbital plane of a target body and the ecliptic.
+       The body's orbit direction is prograde if 0 < i < 90 degrees,
+       where i is the value of orbital inclination.  The orbit
+       direction is retrograde if 90 < i < 180 degrees."
 END_OBJECT = ELEMENT_DEFINITION
 END 
 OBJECT = ELEMENT_DEFINITION
@@ -29027,10 +30586,14 @@ OBJECT = ELEMENT_DEFINITION
      EDR, DOCUMENT, CALIBRATION_IMAGE, SPICE_SP_KERNEL,
      TRAJECTORY."
   STANDARD_VALUE_SET = {
+     "AD_TEMP",
      "AEDR",
      "AGK",
      "AMD",
      "ANCILLARY",
+     "ANNEAL_PRI_I",
+     "ANNEAL_PRI_VOLT",
+     "ANNEAL_SEC_I",
      "ANNOTATED_TIFF",
      "APXS_EDR",
      "APXS_XRC",
@@ -29052,6 +30615,7 @@ OBJECT = ELEMENT_DEFINITION
      "CALIBRATED_QUALITY_MASK",
      "CALIBRATION",
      "CALIBRATION_MODEL",
+     "CAL_AVG_DET_TEMP",
      "CATALOG",
      "CCL",
      "CDR",
@@ -29093,7 +30657,17 @@ OBJECT = ELEMENT_DEFINITION
      "CHAN_RPC_8_VLT",
      "CHAN_RPC_9_CUR",
      "CLEANED_IMAGE",
+     "CMD_HPGE_HV",
+     "CMD_SCIENCE_MODE",
+     "CMD_SHIELD_HV",
      "COMMAND_LIST",
+     "CONTROL_BOARD_TEMP",
+     "COOLER_POWER_BOARD_TEMP",
+     "COOLER_PRI_I",
+     "COOLER_PRI_VOLT",
+     "COOLER_SEC_I",
+     "COOLER_TEMP",
+     "COOLER_TEMP_SETPOINT",
      "CORRECTED_GAMMA_SPECTRA",
      "CPT",
      "CSV",
@@ -29152,6 +30726,15 @@ OBJECT = ELEMENT_DEFINITION
      "GTDR",
      "HCK",
      "HEA",
+     "HPGE_DET_LEAK",
+     "HPGE_HV_SAFING_LVL",
+     "HPGE_TEMP_1",
+     "HPGE_TEMP_2",
+     "HVPS_REF_VOLT",
+     "HVPS_TEMP",
+     "HVPS_TEMP_2",
+     "HVPS_VOLT",
+     "HV_MONITOR",
      "IDD_REACH_RDR",
      "ILUT_RDR",
      "IMAGE_SCAN",
@@ -29166,6 +30749,17 @@ OBJECT = ELEMENT_DEFINITION
      "LOG",
      "LOS",
      "LSK",
+     "LVPS_NEG12V",
+     "LVPS_NEG12V_I",
+     "LVPS_NEG5V",
+     "LVPS_NEG5V_I",
+     "LVPS_PLUS12V",
+     "LVPS_PLUS12V_I",
+     "LVPS_PLUS5V",
+     "LVPS_PLUS5V_I",
+     "LVPS_PRI_I",
+     "LVPS_SEC_I",
+     "LVPS_TEMP",
      "MAP_PROJECTED_MULTISPECTRAL_RDR",
      "MB_DSC",
      "MB_EDR",
@@ -29194,6 +30788,7 @@ OBJECT = ELEMENT_DEFINITION
      "PCK",
      "PEDR",
      "PRD",
+     "PREAMP_TEMP",
      "PROFILE",
      "RAD_CORR_RDR",
      "RANGE_RDR",
@@ -29205,6 +30800,9 @@ OBJECT = ELEMENT_DEFINITION
      "RDR",
      "REDR",
      "REFDR",
+     "REF_2_5V",
+     "REF_2_5V_DIV2",
+     "REF_2_5V_DIV3",
      "RING_PROFILE",
      "RSR",
      "SAK",
@@ -29212,7 +30810,9 @@ OBJECT = ELEMENT_DEFINITION
      "SDP",
      "SFO",
      "SHA",
+     "SHAPER_TEMP",
      "SHB",
+     "SHLD_SAFING_LVL",
      "SIMULATED_DATA",
      "SLOPE_RDR",
      "SOE",
@@ -36968,6 +38568,7 @@ OBJECT = ELEMENT_DEFINITION
      "1999 DE9",
      "1999 HIRAYAMA",
      "1999 KR16",
+     "1999 RE",
      "19P/BORRELLY 1 (1904 Y2)",
      "1P/HALLEY 1 (1682 Q1)",
      "2 PALLAS",
@@ -36976,6 +38577,8 @@ OBJECT = ELEMENT_DEFINITION
      "2000 AT44",
      "2000 EB173",
      "2000 GN171",
+     "2000 RO76",
+     "2000 UP66",
      "2001 CZ31",
      "2001 EINSTEIN",
      "2001 FZ173",
@@ -38217,6 +39820,7 @@ OBJECT = ELEMENT_DEFINITION
      "5485 KAULA",
      "549 JESSONDA",
      "5492 THOMA",
+     "5498 GUSTAFSSON",
      "55 PANDORA",
      "550 SENTA",
      "551 ORTRUD",
@@ -38466,6 +40070,7 @@ OBJECT = ELEMENT_DEFINITION
      "753 TIFLIS",
      "754 MALABAR",
      "755 QUINTILLA",
+     "7558 YURLOV",
      "756 LILLIANA",
      "7562 KAGIROINO-OKA",
      "757 PORTLANDIA",
@@ -38612,6 +40217,7 @@ OBJECT = ELEMENT_DEFINITION
      "912 MARITIMA",
      "913 OTILA",
      "914 PALISANA",
+     "9147 KOURAKUEN",
      "915 COSETTE",
      "917 LYKA",
      "918 ITHA",
@@ -38621,6 +40227,7 @@ OBJECT = ELEMENT_DEFINITION
      "923 HERLUGA",
      "924 TONI",
      "925 ALPHONSINA",
+     "9254 SHUNKAI",
      "928 HILDRUM",
      "929 ALGUNDE",
      "93 MINERVA",
@@ -38639,6 +40246,7 @@ OBJECT = ELEMENT_DEFINITION
      "945 BARCELONA",
      "946 POESIA",
      "947 MONTEROSA",
+     "9481 MENCHU",
      "949 HEL",
      "95 ARETHUSA",
      "950 AHRENSA",
@@ -38647,6 +40255,7 @@ OBJECT = ELEMENT_DEFINITION
      "953 PAINLEVA",
      "954 LI",
      "955 ALSTEDE",
+     "9553 COLAS",
      "956 ELISA",
      "957 CAMELIA",
      "958 ASPLINDA",
@@ -38692,6 +40301,7 @@ OBJECT = ELEMENT_DEFINITION
      "ACHERNAR",
      "ADRASTEA",
      "AEGAEON",
+     "AEGIR",
      "ALAIS",
      "ALFIANELLO",
      "ALLEGAN",
@@ -38714,23 +40324,35 @@ OBJECT = ELEMENT_DEFINITION
      "ASTEROID 10007",
      "ASTEROID 10473",
      "ASTEROID 10504",
+     "ASTEROID 10537",
      "ASTEROID 105685",
      "ASTEROID 11089",
      "ASTEROID 111113",
+     "ASTEROID 111515",
      "ASTEROID 11351",
+     "ASTEROID 113844",
+     "ASTEROID 114544",
      "ASTEROID 11488",
      "ASTEROID 11663",
      "ASTEROID 11785",
      "ASTEROID 11906",
      "ASTEROID 120453",
+     "ASTEROID 122357",
+     "ASTEROID 122633",
+     "ASTEROID 122636",
      "ASTEROID 12281",
      "ASTEROID 124729",
+     "ASTEROID 12543",
      "ASTEROID 12921",
+     "ASTEROID 131010",
+     "ASTEROID 134455",
      "ASTEROID 13651",
      "ASTEROID 13862",
      "ASTEROID 139359",
      "ASTEROID 14465",
      "ASTEROID 14707",
+     "ASTEROID 147311",
+     "ASTEROID 150781",
      "ASTEROID 15502",
      "ASTEROID 15977",
      "ASTEROID 163135",
@@ -38757,9 +40379,13 @@ OBJECT = ELEMENT_DEFINITION
      "ASTEROID 24426",
      "ASTEROID 24452",
      "ASTEROID 24467",
+     "ASTEROID 24941",
      "ASTEROID 25347",
      "ASTEROID 26209",
      "ASTEROID 26760",
+     "ASTEROID 26886",
+     "ASTEROID 28034",
+     "ASTEROID 28517",
      "ASTEROID 28958",
      "ASTEROID 29075",
      "ASTEROID 29981",
@@ -38772,8 +40398,11 @@ OBJECT = ELEMENT_DEFINITION
      "ASTEROID 35107",
      "ASTEROID 3579",
      "ASTEROID 3635",
+     "ASTEROID 36840",
+     "ASTEROID 37304",
      "ASTEROID 3757",
      "ASTEROID 3788",
+     "ASTEROID 38070",
      "ASTEROID 3844",
      "ASTEROID 3865",
      "ASTEROID 39285",
@@ -38782,11 +40411,13 @@ OBJECT = ELEMENT_DEFINITION
      "ASTEROID 4156",
      "ASTEROID 4197",
      "ASTEROID 43212",
+     "ASTEROID 44447",
      "ASTEROID 4479",
      "ASTEROID 4489",
      "ASTEROID 4523",
      "ASTEROID 4536",
      "ASTEROID 4604",
+     "ASTEROID 46690",
      "ASTEROID 4688",
      "ASTEROID 4695",
      "ASTEROID 4706",
@@ -38813,6 +40444,7 @@ OBJECT = ELEMENT_DEFINITION
      "ASTEROID 5227",
      "ASTEROID 5230",
      "ASTEROID 5253",
+     "ASTEROID 53143",
      "ASTEROID 5318",
      "ASTEROID 5329",
      "ASTEROID 53469",
@@ -38831,10 +40463,12 @@ OBJECT = ELEMENT_DEFINITION
      "ASTEROID 5587",
      "ASTEROID 5588",
      "ASTEROID 5600",
+     "ASTEROID 56026",
      "ASTEROID 5622",
      "ASTEROID 5639",
      "ASTEROID 5647",
      "ASTEROID 5648",
+     "ASTEROID 56570",
      "ASTEROID 5690",
      "ASTEROID 56968",
      "ASTEROID 5732",
@@ -38846,8 +40480,11 @@ OBJECT = ELEMENT_DEFINITION
      "ASTEROID 5965",
      "ASTEROID 6005",
      "ASTEROID 6053",
+     "ASTEROID 60669",
      "ASTEROID 6086",
+     "ASTEROID 61207",
      "ASTEROID 6192",
+     "ASTEROID 61928",
      "ASTEROID 6211",
      "ASTEROID 6230",
      "ASTEROID 6283",
@@ -38894,6 +40531,7 @@ OBJECT = ELEMENT_DEFINITION
      "ASTEROID 7888",
      "ASTEROID 7889",
      "ASTEROID 8008",
+     "ASTEROID 81550",
      "ASTEROID 8201",
      "ASTEROID 8333",
      "ASTEROID 8334",
@@ -38903,9 +40541,12 @@ OBJECT = ELEMENT_DEFINITION
      "ASTEROID 8516",
      "ASTEROID 8518",
      "ASTEROID 85490",
+     "ASTEROID 87239",
      "ASTEROID 8795",
+     "ASTEROID 88187",
      "ASTEROID 9030",
      "ASTEROID 9219",
+     "ASTEROID 94005",
      "ASTEROID 99328",
      "ASTEROID 9970",
      "ASTEROID 99907",
@@ -38916,7 +40557,10 @@ OBJECT = ELEMENT_DEFINITION
      "BABBS MILL (TROOSTS IRON)",
      "BALD MOUNTAIN",
      "BARWISE",
+     "BEBHIONN",
      "BEREBA",
+     "BERGELMIR",
+     "BESTIA",
      "BET HYI",
      "BETA ANDROMEDAE",
      "BETA ARIETIS",
@@ -38946,6 +40590,919 @@ OBJECT = ELEMENT_DEFINITION
      "C/PANTHER (1980 Y2)",
      "C/SEARGENT (1978 T1)",
      "C/SHOEMAKER-LEVY (1991 T2)",
+     "C/SOHO (1996 A2)",
+     "C/SOHO (1996 B3)",
+     "C/SOHO (1996 B4)",
+     "C/SOHO (1996 B5)",
+     "C/SOHO (1996 D1)",
+     "C/SOHO (1996 E2)",
+     "C/SOHO (1996 F2)",
+     "C/SOHO (1996 H1)",
+     "C/SOHO (1996 L1)",
+     "C/SOHO (1996 L2)",
+     "C/SOHO (1996 M1)",
+     "C/SOHO (1996 M2)",
+     "C/SOHO (1996 M3)",
+     "C/SOHO (1996 O1)",
+     "C/SOHO (1996 O2)",
+     "C/SOHO (1996 O3)",
+     "C/SOHO (1996 O4)",
+     "C/SOHO (1996 Q2)",
+     "C/SOHO (1996 Q3)",
+     "C/SOHO (1996 R4)",
+     "C/SOHO (1996 R5)",
+     "C/SOHO (1996 S3)",
+     "C/SOHO (1996 V1)",
+     "C/SOHO (1996 X1)",
+     "C/SOHO (1996 X2)",
+     "C/SOHO (1996 Y1)",
+     "C/SOHO (1996 Y2)",
+     "C/SOHO (1997 B2)",
+     "C/SOHO (1997 B3)",
+     "C/SOHO (1997 E2)",
+     "C/SOHO (1997 G3)",
+     "C/SOHO (1997 G4)",
+     "C/SOHO (1997 G5)",
+     "C/SOHO (1997 G6)",
+     "C/SOHO (1997 H3)",
+     "C/SOHO (1997 J3)",
+     "C/SOHO (1997 J4)",
+     "C/SOHO (1997 J5)",
+     "C/SOHO (1997 K1)",
+     "C/SOHO (1997 K3)",
+     "C/SOHO (1997 K4)",
+     "C/SOHO (1997 K5)",
+     "C/SOHO (1997 K6)",
+     "C/SOHO (1997 K7)",
+     "C/SOHO (1997 L3)",
+     "C/SOHO (1997 L4)",
+     "C/SOHO (1997 L5)",
+     "C/SOHO (1997 M1)",
+     "C/SOHO (1997 M3)",
+     "C/SOHO (1997 M4)",
+     "C/SOHO (1997 M5)",
+     "C/SOHO (1997 N3)",
+     "C/SOHO (1997 O3)",
+     "C/SOHO (1997 P1)",
+     "C/SOHO (1997 P3)",
+     "C/SOHO (1997 P4)",
+     "C/SOHO (1997 P5)",
+     "C/SOHO (1997 Q1)",
+     "C/SOHO (1997 Q2)",
+     "C/SOHO (1997 R1)",
+     "C/SOHO (1997 R2)",
+     "C/SOHO (1997 R3)",
+     "C/SOHO (1997 S1)",
+     "C/SOHO (1997 S2)",
+     "C/SOHO (1997 S3)",
+     "C/SOHO (1997 S5)",
+     "C/SOHO (1997 T2)",
+     "C/SOHO (1997 T4)",
+     "C/SOHO (1997 T5)",
+     "C/SOHO (1997 T6)",
+     "C/SOHO (1997 T7)",
+     "C/SOHO (1997 T8)",
+     "C/SOHO (1997 U1)",
+     "C/SOHO (1997 U2)",
+     "C/SOHO (1997 U3)",
+     "C/SOHO (1997 U4)",
+     "C/SOHO (1997 U5)",
+     "C/SOHO (1997 U6)",
+     "C/SOHO (1997 U7)",
+     "C/SOHO (1997 V2)",
+     "C/SOHO (1997 V3)",
+     "C/SOHO (1997 V4)",
+     "C/SOHO (1997 V5)",
+     "C/SOHO (1997 V6)",
+     "C/SOHO (1997 W1)",
+     "C/SOHO (1997 W2)",
+     "C/SOHO (1997 W3)",
+     "C/SOHO (1997 X1)",
+     "C/SOHO (1997 X3)",
+     "C/SOHO (1997 X4)",
+     "C/SOHO (1997 X5)",
+     "C/SOHO (1997 X6)",
+     "C/SOHO (1997 Y1)",
+     "C/SOHO (1997 Y2)",
+     "C/SOHO (1997 Y3)",
+     "C/SOHO (1998 A1)",
+     "C/SOHO (1998 B2)",
+     "C/SOHO (1998 E1)",
+     "C/SOHO (1998 F1)",
+     "C/SOHO (1998 F2)",
+     "C/SOHO (1998 G2)",
+     "C/SOHO (1998 G4)",
+     "C/SOHO (1998 G5)",
+     "C/SOHO (1998 G6)",
+     "C/SOHO (1998 G7)",
+     "C/SOHO (1998 G8)",
+     "C/SOHO (1998 H2)",
+     "C/SOHO (1998 H3)",
+     "C/SOHO (1998 H4)",
+     "C/SOHO (1998 H5)",
+     "C/SOHO (1998 H6)",
+     "C/SOHO (1998 J2)",
+     "C/SOHO (1998 J3)",
+     "C/SOHO (1998 J4)",
+     "C/SOHO (1998 K10)",
+     "C/SOHO (1998 K11)",
+     "C/SOHO (1998 K12)",
+     "C/SOHO (1998 K13)",
+     "C/SOHO (1998 K14)",
+     "C/SOHO (1998 K15)",
+     "C/SOHO (1998 K16)",
+     "C/SOHO (1998 K17)",
+     "C/SOHO (1998 K7)",
+     "C/SOHO (1998 K8)",
+     "C/SOHO (1998 K9)",
+     "C/SOHO (1998 L1)",
+     "C/SOHO (1998 L2)",
+     "C/SOHO (1998 L3)",
+     "C/SOHO (1998 L4)",
+     "C/SOHO (1998 L5)",
+     "C/SOHO (1998 L6)",
+     "C/SOHO (1998 L7)",
+     "C/SOHO (1998 L8)",
+     "C/SOHO (1998 L9)",
+     "C/SOHO (1998 M10)",
+     "C/SOHO (1998 M7)",
+     "C/SOHO (1998 M8)",
+     "C/SOHO (1998 M9)",
+     "C/SOHO (1998 U6)",
+     "C/SOHO (1998 U7)",
+     "C/SOHO (1998 V1)",
+     "C/SOHO (1998 V2)",
+     "C/SOHO (1998 V3)",
+     "C/SOHO (1998 V4)",
+     "C/SOHO (1998 V5)",
+     "C/SOHO (1998 V6)",
+     "C/SOHO (1998 V7)",
+     "C/SOHO (1998 V9)",
+     "C/SOHO (1998 W4)",
+     "C/SOHO (1998 W5)",
+     "C/SOHO (1998 W6)",
+     "C/SOHO (1998 X10)",
+     "C/SOHO (1998 X11)",
+     "C/SOHO (1998 X12)",
+     "C/SOHO (1998 X3)",
+     "C/SOHO (1998 X4)",
+     "C/SOHO (1998 X5)",
+     "C/SOHO (1998 X6)",
+     "C/SOHO (1998 X7)",
+     "C/SOHO (1998 X8)",
+     "C/SOHO (1998 X9)",
+     "C/SOHO (1999 C1)",
+     "C/SOHO (1999 C2)",
+     "C/SOHO (1999 E2)",
+     "C/SOHO (1999 G2)",
+     "C/SOHO (1999 G3)",
+     "C/SOHO (1999 G4)",
+     "C/SOHO (1999 G5)",
+     "C/SOHO (1999 H2)",
+     "C/SOHO (1999 H4)",
+     "C/SOHO (1999 H5)",
+     "C/SOHO (1999 H6)",
+     "C/SOHO (1999 H7)",
+     "C/SOHO (1999 H8)",
+     "C/SOHO (1999 H9)",
+     "C/SOHO (1999 J1)",
+     "C/SOHO (1999 J10)",
+     "C/SOHO (1999 J11)",
+     "C/SOHO (1999 J12)",
+     "C/SOHO (1999 J13)",
+     "C/SOHO (1999 J7)",
+     "C/SOHO (1999 J8)",
+     "C/SOHO (1999 J9)",
+     "C/SOHO (1999 K1)",
+     "C/SOHO (1999 K10)",
+     "C/SOHO (1999 K11)",
+     "C/SOHO (1999 K12)",
+     "C/SOHO (1999 K13)",
+     "C/SOHO (1999 K14)",
+     "C/SOHO (1999 K15)",
+     "C/SOHO (1999 K17)",
+     "C/SOHO (1999 K9)",
+     "C/SOHO (1999 L1)",
+     "C/SOHO (1999 L4)",
+     "C/SOHO (1999 L5)",
+     "C/SOHO (1999 L6)",
+     "C/SOHO (1999 L7)",
+     "C/SOHO (1999 L8)",
+     "C/SOHO (1999 M1)",
+     "C/SOHO (1999 M2)",
+     "C/SOHO (1999 M4)",
+     "C/SOHO (1999 N1)",
+     "C/SOHO (1999 N3)",
+     "C/SOHO (1999 O1)",
+     "C/SOHO (1999 O2)",
+     "C/SOHO (1999 O3)",
+     "C/SOHO (1999 P2)",
+     "C/SOHO (1999 P3)",
+     "C/SOHO (1999 P4)",
+     "C/SOHO (1999 P5)",
+     "C/SOHO (1999 Q1)",
+     "C/SOHO (1999 Q2)",
+     "C/SOHO (1999 Q3)",
+     "C/SOHO (1999 R3)",
+     "C/SOHO (1999 R4)",
+     "C/SOHO (1999 S1)",
+     "C/SOHO (1999 S5)",
+     "C/SOHO (1999 S6)",
+     "C/SOHO (1999 S7)",
+     "C/SOHO (1999 U5)",
+     "C/SOHO (1999 U6)",
+     "C/SOHO (1999 U7)",
+     "C/SOHO (1999 U8)",
+     "C/SOHO (1999 U9)",
+     "C/SOHO (1999 V2)",
+     "C/SOHO (1999 V3)",
+     "C/SOHO (1999 V4)",
+     "C/SOHO (1999 W1)",
+     "C/SOHO (1999 W2)",
+     "C/SOHO (1999 X2)",
+     "C/SOHO (1999 Y3)",
+     "C/SOHO (2000 A2)",
+     "C/SOHO (2000 B1)",
+     "C/SOHO (2000 B5)",
+     "C/SOHO (2000 B6)",
+     "C/SOHO (2000 B7)",
+     "C/SOHO (2000 C6)",
+     "C/SOHO (2000 D1)",
+     "C/SOHO (2000 D3)",
+     "C/SOHO (2000 E1)",
+     "C/SOHO (2000 F1)",
+     "C/SOHO (2000 F2)",
+     "C/SOHO (2000 F3)",
+     "C/SOHO (2000 G3)",
+     "C/SOHO (2000 H2)",
+     "C/SOHO (2000 H3)",
+     "C/SOHO (2000 H4)",
+     "C/SOHO (2000 H5)",
+     "C/SOHO (2000 H6)",
+     "C/SOHO (2000 H7)",
+     "C/SOHO (2000 J3)",
+     "C/SOHO (2000 J4)",
+     "C/SOHO (2000 J5)",
+     "C/SOHO (2000 J6)",
+     "C/SOHO (2000 J7)",
+     "C/SOHO (2000 K3)",
+     "C/SOHO (2000 K4)",
+     "C/SOHO (2000 K5)",
+     "C/SOHO (2000 K6)",
+     "C/SOHO (2000 K7)",
+     "C/SOHO (2000 K8)",
+     "C/SOHO (2000 L1)",
+     "C/SOHO (2000 L2)",
+     "C/SOHO (2000 L3)",
+     "C/SOHO (2000 L4)",
+     "C/SOHO (2000 L5)",
+     "C/SOHO (2000 L6)",
+     "C/SOHO (2000 M1)",
+     "C/SOHO (2000 M2)",
+     "C/SOHO (2000 M3)",
+     "C/SOHO (2000 M4)",
+     "C/SOHO (2000 M5)",
+     "C/SOHO (2000 M6)",
+     "C/SOHO (2000 M7)",
+     "C/SOHO (2000 M8)",
+     "C/SOHO (2000 M9)",
+     "C/SOHO (2000 N1)",
+     "C/SOHO (2000 N2)",
+     "C/SOHO (2000 N3)",
+     "C/SOHO (2000 P1)",
+     "C/SOHO (2000 P2)",
+     "C/SOHO (2000 S6)",
+     "C/SOHO (2000 T1)",
+     "C/SOHO (2000 T3)",
+     "C/SOHO (2000 T4)",
+     "C/SOHO (2000 T5)",
+     "C/SOHO (2000 T6)",
+     "C/SOHO (2000 U1)",
+     "C/SOHO (2000 U2)",
+     "C/SOHO (2000 U3)",
+     "C/SOHO (2000 U4)",
+     "C/SOHO (2000 V1)",
+     "C/SOHO (2000 V2)",
+     "C/SOHO (2000 V3)",
+     "C/SOHO (2000 W2)",
+     "C/SOHO (2000 W3)",
+     "C/SOHO (2000 W4)",
+     "C/SOHO (2000 W5)",
+     "C/SOHO (2000 X1)",
+     "C/SOHO (2000 X2)",
+     "C/SOHO (2000 X3)",
+     "C/SOHO (2000 X4)",
+     "C/SOHO (2000 X5)",
+     "C/SOHO (2000 X6)",
+     "C/SOHO (2000 X7)",
+     "C/SOHO (2000 X8)",
+     "C/SOHO (2000 Y4)",
+     "C/SOHO (2000 Y5)",
+     "C/SOHO (2000 Y8)",
+     "C/SOHO (2000 Y9)",
+     "C/SOHO (2001 A3)",
+     "C/SOHO (2001 A4)",
+     "C/SOHO (2001 B3)",
+     "C/SOHO (2001 C2)",
+     "C/SOHO (2001 C3)",
+     "C/SOHO (2001 C4)",
+     "C/SOHO (2001 C6)",
+     "C/SOHO (2001 F2)",
+     "C/SOHO (2001 G2)",
+     "C/SOHO (2001 G3)",
+     "C/SOHO (2001 H1)",
+     "C/SOHO (2001 H2)",
+     "C/SOHO (2001 H3)",
+     "C/SOHO (2001 H4)",
+     "C/SOHO (2001 H6)",
+     "C/SOHO (2001 H7)",
+     "C/SOHO (2001 H8)",
+     "C/SOHO (2001 J2)",
+     "C/SOHO (2001 J3)",
+     "C/SOHO (2001 J4)",
+     "C/SOHO (2001 J5)",
+     "C/SOHO (2001 K10)",
+     "C/SOHO (2001 K2)",
+     "C/SOHO (2001 K4)",
+     "C/SOHO (2001 K6)",
+     "C/SOHO (2001 K7)",
+     "C/SOHO (2001 K8)",
+     "C/SOHO (2001 K9)",
+     "C/SOHO (2001 L1)",
+     "C/SOHO (2001 L11)",
+     "C/SOHO (2001 L2)",
+     "C/SOHO (2001 L3)",
+     "C/SOHO (2001 L4)",
+     "C/SOHO (2001 L5)",
+     "C/SOHO (2001 L6)",
+     "C/SOHO (2001 L7)",
+     "C/SOHO (2001 L8)",
+     "C/SOHO (2001 L9)",
+     "C/SOHO (2001 M11)",
+     "C/SOHO (2001 M2)",
+     "C/SOHO (2001 M3)",
+     "C/SOHO (2001 M4)",
+     "C/SOHO (2001 M5)",
+     "C/SOHO (2001 M6)",
+     "C/SOHO (2001 M7)",
+     "C/SOHO (2001 M8)",
+     "C/SOHO (2001 M9)",
+     "C/SOHO (2001 O1)",
+     "C/SOHO (2001 P2)",
+     "C/SOHO (2001 Q9)",
+     "C/SOHO (2001 R2)",
+     "C/SOHO (2001 R3)",
+     "C/SOHO (2001 R4)",
+     "C/SOHO (2001 R5)",
+     "C/SOHO (2001 S2)",
+     "C/SOHO (2001 S3)",
+     "C/SOHO (2001 T2)",
+     "C/SOHO (2001 T6)",
+     "C/SOHO (2001 T7)",
+     "C/SOHO (2001 U1)",
+     "C/SOHO (2001 U10)",
+     "C/SOHO (2001 U2)",
+     "C/SOHO (2001 U3)",
+     "C/SOHO (2001 U4)",
+     "C/SOHO (2001 U5)",
+     "C/SOHO (2001 U7)",
+     "C/SOHO (2001 U8)",
+     "C/SOHO (2001 U9)",
+     "C/SOHO (2001 V1)",
+     "C/SOHO (2001 V2)",
+     "C/SOHO (2001 V3)",
+     "C/SOHO (2001 V4)",
+     "C/SOHO (2001 V5)",
+     "C/SOHO (2001 W3)",
+     "C/SOHO (2001 W4)",
+     "C/SOHO (2001 X4)",
+     "C/SOHO (2001 X5)",
+     "C/SOHO (2001 X6)",
+     "C/SOHO (2001 X7)",
+     "C/SOHO (2001 X9)",
+     "C/SOHO (2001 Y2)",
+     "C/SOHO (2001 Y3)",
+     "C/SOHO (2001 Y4)",
+     "C/SOHO (2001 Y5)",
+     "C/SOHO (2002 C3)",
+     "C/SOHO (2002 C4)",
+     "C/SOHO (2002 D1)",
+     "C/SOHO (2002 E1)",
+     "C/SOHO (2002 E3)",
+     "C/SOHO (2002 F2)",
+     "C/SOHO (2002 F3)",
+     "C/SOHO (2002 G2)",
+     "C/SOHO (2002 G4)",
+     "C/SOHO (2002 G5)",
+     "C/SOHO (2002 H1)",
+     "C/SOHO (2002 H3)",
+     "C/SOHO (2002 H4)",
+     "C/SOHO (2002 H5)",
+     "C/SOHO (2002 H6)",
+     "C/SOHO (2002 H7)",
+     "C/SOHO (2002 J1)",
+     "C/SOHO (2002 J2)",
+     "C/SOHO (2002 J3)",
+     "C/SOHO (2002 J6)",
+     "C/SOHO (2002 J7)",
+     "C/SOHO (2002 J8)",
+     "C/SOHO (2002 K10)",
+     "C/SOHO (2002 K11)",
+     "C/SOHO (2002 K3)",
+     "C/SOHO (2002 K5)",
+     "C/SOHO (2002 K6)",
+     "C/SOHO (2002 K7)",
+     "C/SOHO (2002 K8)",
+     "C/SOHO (2002 K9)",
+     "C/SOHO (2002 L1)",
+     "C/SOHO (2002 L2)",
+     "C/SOHO (2002 L3)",
+     "C/SOHO (2002 L4)",
+     "C/SOHO (2002 L5)",
+     "C/SOHO (2002 L6)",
+     "C/SOHO (2002 L7)",
+     "C/SOHO (2002 L8)",
+     "C/SOHO (2002 M1)",
+     "C/SOHO (2002 M2)",
+     "C/SOHO (2002 M3)",
+     "C/SOHO (2002 M4)",
+     "C/SOHO (2002 M5)",
+     "C/SOHO (2002 M6)",
+     "C/SOHO (2002 M7)",
+     "C/SOHO (2002 M8)",
+     "C/SOHO (2002 N1)",
+     "C/SOHO (2002 O1)",
+     "C/SOHO (2002 O2)",
+     "C/SOHO (2002 O3)",
+     "C/SOHO (2002 P2)",
+     "C/SOHO (2002 Q11)",
+     "C/SOHO (2002 Q12)",
+     "C/SOHO (2002 Q13)",
+     "C/SOHO (2002 Q14)",
+     "C/SOHO (2002 Q7)",
+     "C/SOHO (2002 R6)",
+     "C/SOHO (2002 R7)",
+     "C/SOHO (2002 S10)",
+     "C/SOHO (2002 S2)",
+     "C/SOHO (2002 S3)",
+     "C/SOHO (2002 S6)",
+     "C/SOHO (2002 S8)",
+     "C/SOHO (2002 S9)",
+     "C/SOHO (2002 T3)",
+     "C/SOHO (2002 U1)",
+     "C/SOHO (2002 U3)",
+     "C/SOHO (2002 U4)",
+     "C/SOHO (2002 U5)",
+     "C/SOHO (2002 U7)",
+     "C/SOHO (2002 U8)",
+     "C/SOHO (2002 U9)",
+     "C/SOHO (2002 V3)",
+     "C/SOHO (2002 V6)",
+     "C/SOHO (2002 V7)",
+     "C/SOHO (2002 W1)",
+     "C/SOHO (2002 W10)",
+     "C/SOHO (2002 W11)",
+     "C/SOHO (2002 W12)",
+     "C/SOHO (2002 W13)",
+     "C/SOHO (2002 W14)",
+     "C/SOHO (2002 W15)",
+     "C/SOHO (2002 W16)",
+     "C/SOHO (2002 W17)",
+     "C/SOHO (2002 W2)",
+     "C/SOHO (2002 W3)",
+     "C/SOHO (2002 W4)",
+     "C/SOHO (2002 W5)",
+     "C/SOHO (2002 W6)",
+     "C/SOHO (2002 W7)",
+     "C/SOHO (2002 W8)",
+     "C/SOHO (2002 W9)",
+     "C/SOHO (2002 X10)",
+     "C/SOHO (2002 X11)",
+     "C/SOHO (2002 X12)",
+     "C/SOHO (2002 X13)",
+     "C/SOHO (2002 X14)",
+     "C/SOHO (2002 X15)",
+     "C/SOHO (2002 X16)",
+     "C/SOHO (2002 X3)",
+     "C/SOHO (2002 X4)",
+     "C/SOHO (2002 X7)",
+     "C/SOHO (2002 X8)",
+     "C/SOHO (2002 X9)",
+     "C/SOHO (2002 Y3)",
+     "C/SOHO (2002 Y4)",
+     "C/SOHO (2003 A3)",
+     "C/SOHO (2003 A4)",
+     "C/SOHO (2003 A5)",
+     "C/SOHO (2003 B2)",
+     "C/SOHO (2003 C1)",
+     "C/SOHO (2003 C2)",
+     "C/SOHO (2003 C3)",
+     "C/SOHO (2003 C4)",
+     "C/SOHO (2003 C5)",
+     "C/SOHO (2003 D1)",
+     "C/SOHO (2003 E2)",
+     "C/SOHO (2003 E3)",
+     "C/SOHO (2003 E4)",
+     "C/SOHO (2003 F3)",
+     "C/SOHO (2003 F4)",
+     "C/SOHO (2003 F5)",
+     "C/SOHO (2003 G4)",
+     "C/SOHO (2003 H10)",
+     "C/SOHO (2003 H11)",
+     "C/SOHO (2003 H12)",
+     "C/SOHO (2003 H8)",
+     "C/SOHO (2003 H9)",
+     "C/SOHO (2003 J2)",
+     "C/SOHO (2003 J3)",
+     "C/SOHO (2003 J4)",
+     "C/SOHO (2003 J5)",
+     "C/SOHO (2003 J6)",
+     "C/SOHO (2003 J7)",
+     "C/SOHO (2003 J8)",
+     "C/SOHO (2003 J9)",
+     "C/SOHO (2003 K10)",
+     "C/SOHO (2003 K11)",
+     "C/SOHO (2003 K12)",
+     "C/SOHO (2003 K13)",
+     "C/SOHO (2003 K7)",
+     "C/SOHO (2003 K8)",
+     "C/SOHO (2003 K9)",
+     "C/SOHO (2003 L3)",
+     "C/SOHO (2003 L4)",
+     "C/SOHO (2003 L5)",
+     "C/SOHO (2003 L6)",
+     "C/SOHO (2003 L7)",
+     "C/SOHO (2003 L8)",
+     "C/SOHO (2003 M1)",
+     "C/SOHO (2003 M10)",
+     "C/SOHO (2003 M11)",
+     "C/SOHO (2003 M12)",
+     "C/SOHO (2003 M2)",
+     "C/SOHO (2003 M3)",
+     "C/SOHO (2003 M4)",
+     "C/SOHO (2003 M5)",
+     "C/SOHO (2003 M6)",
+     "C/SOHO (2003 M7)",
+     "C/SOHO (2003 M8)",
+     "C/SOHO (2003 M9)",
+     "C/SOHO (2003 N1)",
+     "C/SOHO (2003 N2)",
+     "C/SOHO (2003 O4)",
+     "C/SOHO (2003 O5)",
+     "C/SOHO (2003 O6)",
+     "C/SOHO (2003 O7)",
+     "C/SOHO (2003 O8)",
+     "C/SOHO (2003 P1)",
+     "C/SOHO (2003 P2)",
+     "C/SOHO (2003 P3)",
+     "C/SOHO (2003 Q10)",
+     "C/SOHO (2003 Q2)",
+     "C/SOHO (2003 Q3)",
+     "C/SOHO (2003 Q4)",
+     "C/SOHO (2003 Q5)",
+     "C/SOHO (2003 Q7)",
+     "C/SOHO (2003 Q8)",
+     "C/SOHO (2003 Q9)",
+     "C/SOHO (2003 R2)",
+     "C/SOHO (2003 R3)",
+     "C/SOHO (2003 S5)",
+     "C/SOHO (2003 S6)",
+     "C/SOHO (2003 S7)",
+     "C/SOHO (2003 S8)",
+     "C/SOHO (2003 T10)",
+     "C/SOHO (2003 T11)",
+     "C/SOHO (2003 T5)",
+     "C/SOHO (2003 T6)",
+     "C/SOHO (2003 T7)",
+     "C/SOHO (2003 T8)",
+     "C/SOHO (2003 T9)",
+     "C/SOHO (2003 U5)",
+     "C/SOHO (2003 U6)",
+     "C/SOHO (2003 U7)",
+     "C/SOHO (2003 U8)",
+     "C/SOHO (2003 U9)",
+     "C/SOHO (2003 V2)",
+     "C/SOHO (2003 V3)",
+     "C/SOHO (2003 V4)",
+     "C/SOHO (2003 V5)",
+     "C/SOHO (2003 V6)",
+     "C/SOHO (2003 V7)",
+     "C/SOHO (2003 V8)",
+     "C/SOHO (2003 W3)",
+     "C/SOHO (2003 W4)",
+     "C/SOHO (2003 W5)",
+     "C/SOHO (2003 W6)",
+     "C/SOHO (2003 W7)",
+     "C/SOHO (2003 W8)",
+     "C/SOHO (2003 X1)",
+     "C/SOHO (2003 X10)",
+     "C/SOHO (2003 X11)",
+     "C/SOHO (2003 X2)",
+     "C/SOHO (2003 X3)",
+     "C/SOHO (2003 X4)",
+     "C/SOHO (2003 X5)",
+     "C/SOHO (2003 X6)",
+     "C/SOHO (2003 X7)",
+     "C/SOHO (2003 X8)",
+     "C/SOHO (2003 X9)",
+     "C/SOHO (2003 Y10)",
+     "C/SOHO (2003 Y11)",
+     "C/SOHO (2003 Y12)",
+     "C/SOHO (2003 Y13)",
+     "C/SOHO (2003 Y14)",
+     "C/SOHO (2003 Y15)",
+     "C/SOHO (2003 Y2)",
+     "C/SOHO (2003 Y3)",
+     "C/SOHO (2003 Y4)",
+     "C/SOHO (2003 Y5)",
+     "C/SOHO (2003 Y6)",
+     "C/SOHO (2003 Y7)",
+     "C/SOHO (2003 Y8)",
+     "C/SOHO (2003 Y9)",
+     "C/SOHO (2004 A2)",
+     "C/SOHO (2004 B10)",
+     "C/SOHO (2004 B4)",
+     "C/SOHO (2004 B5)",
+     "C/SOHO (2004 B6)",
+     "C/SOHO (2004 B7)",
+     "C/SOHO (2004 B8)",
+     "C/SOHO (2004 B9)",
+     "C/SOHO (2004 C3)",
+     "C/SOHO (2004 C4)",
+     "C/SOHO (2004 C5)",
+     "C/SOHO (2004 C6)",
+     "C/SOHO (2004 C7)",
+     "C/SOHO (2004 C8)",
+     "C/SOHO (2004 D2)",
+     "C/SOHO (2004 D3)",
+     "C/SOHO (2004 D4)",
+     "C/SOHO (2004 E1)",
+     "C/SOHO (2004 E3)",
+     "C/SOHO (2004 E4)",
+     "C/SOHO (2004 F5)",
+     "C/SOHO (2004 F6)",
+     "C/SOHO (2004 F7)",
+     "C/SOHO (2004 G3)",
+     "C/SOHO (2004 G4)",
+     "C/SOHO (2004 G5)",
+     "C/SOHO (2004 G6)",
+     "C/SOHO (2004 G7)",
+     "C/SOHO (2004 G8)",
+     "C/SOHO (2004 G9)",
+     "C/SOHO (2004 H10)",
+     "C/SOHO (2004 H7)",
+     "C/SOHO (2004 H8)",
+     "C/SOHO (2004 H9)",
+     "C/SOHO (2004 J1)",
+     "C/SOHO (2004 J10)",
+     "C/SOHO (2004 J11)",
+     "C/SOHO (2004 J14)",
+     "C/SOHO (2004 J19)",
+     "C/SOHO (2004 J2)",
+     "C/SOHO (2004 J3)",
+     "C/SOHO (2004 J5)",
+     "C/SOHO (2004 J6)",
+     "C/SOHO (2004 J7)",
+     "C/SOHO (2004 J8)",
+     "C/SOHO (2004 J9)",
+     "C/SOHO (2004 K10)",
+     "C/SOHO (2004 K11)",
+     "C/SOHO (2004 K12)",
+     "C/SOHO (2004 K4)",
+     "C/SOHO (2004 K5)",
+     "C/SOHO (2004 K6)",
+     "C/SOHO (2004 K7)",
+     "C/SOHO (2004 K8)",
+     "C/SOHO (2004 K9)",
+     "C/SOHO (2004 L11)",
+     "C/SOHO (2004 L3)",
+     "C/SOHO (2004 L4)",
+     "C/SOHO (2004 L5)",
+     "C/SOHO (2004 L6)",
+     "C/SOHO (2004 L7)",
+     "C/SOHO (2004 L8)",
+     "C/SOHO (2004 L9)",
+     "C/SOHO (2004 M1)",
+     "C/SOHO (2004 M2)",
+     "C/SOHO (2004 M3)",
+     "C/SOHO (2004 M4)",
+     "C/SOHO (2004 M5)",
+     "C/SOHO (2004 M6)",
+     "C/SOHO (2004 M7)",
+     "C/SOHO (2004 N1)",
+     "C/SOHO (2004 N2)",
+     "C/SOHO (2004 N3)",
+     "C/SOHO (2004 N4)",
+     "C/SOHO (2004 N5)",
+     "C/SOHO (2004 N6)",
+     "C/SOHO (2004 O1)",
+     "C/SOHO (2004 O2)",
+     "C/SOHO (2004 O3)",
+     "C/SOHO (2004 P2)",
+     "C/SOHO (2004 P3)",
+     "C/SOHO (2004 P4)",
+     "C/SOHO (2004 P5)",
+     "C/SOHO (2004 P6)",
+     "C/SOHO (2004 P7)",
+     "C/SOHO (2004 Q3)",
+     "C/SOHO (2004 Q4)",
+     "C/SOHO (2004 Q5)",
+     "C/SOHO (2004 Q6)",
+     "C/SOHO (2004 R4)",
+     "C/SOHO (2004 R5)",
+     "C/SOHO (2004 R6)",
+     "C/SOHO (2004 R7)",
+     "C/SOHO (2004 S2)",
+     "C/SOHO (2004 S3)",
+     "C/SOHO (2004 S4)",
+     "C/SOHO (2004 T4)",
+     "C/SOHO (2004 T5)",
+     "C/SOHO (2004 T6)",
+     "C/SOHO (2004 T7)",
+     "C/SOHO (2004 T8)",
+     "C/SOHO (2004 U10)",
+     "C/SOHO (2004 U11)",
+     "C/SOHO (2004 U12)",
+     "C/SOHO (2004 U4)",
+     "C/SOHO (2004 U5)",
+     "C/SOHO (2004 U6)",
+     "C/SOHO (2004 U7)",
+     "C/SOHO (2004 U8)",
+     "C/SOHO (2004 U9)",
+     "C/SOHO (2004 V11)",
+     "C/SOHO (2004 V12)",
+     "C/SOHO (2004 V14)",
+     "C/SOHO (2004 V15)",
+     "C/SOHO (2004 V6)",
+     "C/SOHO (2004 V7)",
+     "C/SOHO (2004 V8)",
+     "C/SOHO (2004 W1)",
+     "C/SOHO (2004 W11)",
+     "C/SOHO (2004 W2)",
+     "C/SOHO (2004 W3)",
+     "C/SOHO (2004 W4)",
+     "C/SOHO (2004 W5)",
+     "C/SOHO (2004 W6)",
+     "C/SOHO (2004 W7)",
+     "C/SOHO (2004 W8)",
+     "C/SOHO (2004 W9)",
+     "C/SOHO (2004 X10)",
+     "C/SOHO (2004 X11)",
+     "C/SOHO (2004 X4)",
+     "C/SOHO (2004 X5)",
+     "C/SOHO (2004 X6)",
+     "C/SOHO (2004 X8)",
+     "C/SOHO (2004 X9)",
+     "C/SOHO (2004 Y11)",
+     "C/SOHO (2004 Y12)",
+     "C/SOHO (2004 Y2)",
+     "C/SOHO (2004 Y3)",
+     "C/SOHO (2004 Y5)",
+     "C/SOHO (2004 Y6)",
+     "C/SOHO (2004 Y7)",
+     "C/SOHO (2004 Y8)",
+     "C/SOHO (2004 Y9)",
+     "C/SOHO (2005 A2)",
+     "C/SOHO (2005 A3)",
+     "C/SOHO (2005 A4)",
+     "C/SOHO (2005 A5)",
+     "C/SOHO (2005 B2)",
+     "C/SOHO (2005 B3)",
+     "C/SOHO (2005 C2)",
+     "C/SOHO (2005 C3)",
+     "C/SOHO (2005 D2)",
+     "C/SOHO (2005 D3)",
+     "C/SOHO (2005 D4)",
+     "C/SOHO (2005 D5)",
+     "C/SOHO (2005 E3)",
+     "C/SOHO (2005 E5)",
+     "C/SOHO (2005 E6)",
+     "C/SOHO (2005 E7)",
+     "C/SOHO (2005 E8)",
+     "C/SOHO (2005 E9)",
+     "C/SOHO (2005 F1)",
+     "C/SOHO (2005 F2)",
+     "C/SOHO (2005 F3)",
+     "C/SOHO (2005 F4)",
+     "C/SOHO (2005 F5)",
+     "C/SOHO (2005 G3)",
+     "C/SOHO (2005 G4)",
+     "C/SOHO (2005 G5)",
+     "C/SOHO (2005 G6)",
+     "C/SOHO (2005 G7)",
+     "C/SOHO (2005 H3)",
+     "C/SOHO (2005 H4)",
+     "C/SOHO (2005 H5)",
+     "C/SOHO (2005 H6)",
+     "C/SOHO (2005 H8)",
+     "C/SOHO (2005 J10)",
+     "C/SOHO (2005 J11)",
+     "C/SOHO (2005 J12)",
+     "C/SOHO (2005 J3)",
+     "C/SOHO (2005 J4)",
+     "C/SOHO (2005 J5)",
+     "C/SOHO (2005 J6)",
+     "C/SOHO (2005 J7)",
+     "C/SOHO (2005 J8)",
+     "C/SOHO (2005 J9)",
+     "C/SOHO (2005 K10)",
+     "C/SOHO (2005 K5)",
+     "C/SOHO (2005 K6)",
+     "C/SOHO (2005 K7)",
+     "C/SOHO (2005 K8)",
+     "C/SOHO (2005 L10)",
+     "C/SOHO (2005 L11)",
+     "C/SOHO (2005 L12)",
+     "C/SOHO (2005 L13)",
+     "C/SOHO (2005 L14)",
+     "C/SOHO (2005 L15)",
+     "C/SOHO (2005 L5)",
+     "C/SOHO (2005 L6)",
+     "C/SOHO (2005 L7)",
+     "C/SOHO (2005 L8)",
+     "C/SOHO (2005 L9)",
+     "C/SOHO (2005 M10)",
+     "C/SOHO (2005 M2)",
+     "C/SOHO (2005 M4)",
+     "C/SOHO (2005 M5)",
+     "C/SOHO (2005 M6)",
+     "C/SOHO (2005 M7)",
+     "C/SOHO (2005 M8)",
+     "C/SOHO (2005 M9)",
+     "C/SOHO (2005 N10)",
+     "C/SOHO (2005 N6)",
+     "C/SOHO (2005 N7)",
+     "C/SOHO (2005 N8)",
+     "C/SOHO (2005 N9)",
+     "C/SOHO (2005 O3)",
+     "C/SOHO (2005 O4)",
+     "C/SOHO (2005 O6)",
+     "C/SOHO (2005 P1)",
+     "C/SOHO (2005 P2)",
+     "C/SOHO (2005 P4)",
+     "C/SOHO (2005 P5)",
+     "C/SOHO (2005 P6)",
+     "C/SOHO (2005 Q10)",
+     "C/SOHO (2005 Q5)",
+     "C/SOHO (2005 Q7)",
+     "C/SOHO (2005 Q9)",
+     "C/SOHO (2005 R5)",
+     "C/SOHO (2005 R6)",
+     "C/SOHO (2005 R7)",
+     "C/SOHO (2005 S1)",
+     "C/SOHO (2005 S10)",
+     "C/SOHO (2005 S11)",
+     "C/SOHO (2005 S12)",
+     "C/SOHO (2005 S13)",
+     "C/SOHO (2005 S5)",
+     "C/SOHO (2005 S6)",
+     "C/SOHO (2005 S7)",
+     "C/SOHO (2005 S8)",
+     "C/SOHO (2005 S9)",
+     "C/SOHO (2005 T10)",
+     "C/SOHO (2005 T11)",
+     "C/SOHO (2005 T6)",
+     "C/SOHO (2005 T7)",
+     "C/SOHO (2005 T8)",
+     "C/SOHO (2005 U2)",
+     "C/SOHO (2005 U3)",
+     "C/SOHO (2005 U4)",
+     "C/SOHO (2005 U5)",
+     "C/SOHO (2005 U6)",
+     "C/SOHO (2005 U7)",
+     "C/SOHO (2005 U8)",
+     "C/SOHO (2005 V2)",
+     "C/SOHO (2005 V3)",
+     "C/SOHO (2005 V4)",
+     "C/SOHO (2005 V5)",
+     "C/SOHO (2005 V6)",
+     "C/SOHO (2005 V7)",
+     "C/SOHO (2005 V9)",
+     "C/SOHO (2005 W10)",
+     "C/SOHO (2005 W12)",
+     "C/SOHO (2005 W13)",
+     "C/SOHO (2005 W14)",
+     "C/SOHO (2005 W15)",
+     "C/SOHO (2005 W16)",
+     "C/SOHO (2005 W17)",
+     "C/SOHO (2005 W6)",
+     "C/SOHO (2005 W7)",
+     "C/SOHO (2005 W8)",
+     "C/SOHO (2005 X2)",
+     "C/SOHO (2005 X3)",
+     "C/SOHO (2005 X4)",
+     "C/SOHO (2005 X5)",
+     "C/SOHO (2005 X6)",
+     "C/SOHO (2005 X7)",
+     "C/SOHO (2005 X8)",
+     "C/SOHO (2005 X9)",
+     "C/SOHO (2005 Y10)",
+     "C/SOHO (2005 Y3)",
+     "C/SOHO (2005 Y4)",
+     "C/SOHO (2005 Y5)",
+     "C/SOHO (2005 Y6)",
+     "C/SOHO (2005 Y7)",
+     "C/SOHO (2005 Y9)",
      "C/SUGA-SAIGUSA-FUJIKAWA (1983 J1)",
      "C/TABUR (1996 Q1)",
      "C/WILSON (1986 P1)",
@@ -38997,12 +41554,16 @@ OBJECT = ELEMENT_DEFINITION
      "EPIMETHEUS",
      "EPS AQR",
      "EROS",
+     "ERRIAPUS",
      "ETA-AQUARID",
      "EUROPA",
+     "FARBAUTI",
      "FARMINGTON",
      "FELIX",
+     "FENRIR",
      "FOMALHAUT",
      "FOREST CITY",
+     "FORNJOT",
      "FRANKFORT (STONE)",
      "GALATEA",
      "GAMMA ORIONIS",
@@ -39013,6 +41574,7 @@ OBJECT = ELEMENT_DEFINITION
      "GIRGENTI",
      "GJ 436",
      "GLL PCT",
+     "GREIP",
      "GRIGG SKJELLERUP",
      "GROSNAJA",
      "GRUENEBERG",
@@ -39023,6 +41585,7 @@ OBJECT = ELEMENT_DEFINITION
      "HARAIYA",
      "HAT-P-4",
      "HAT-P-7",
+     "HATI",
      "HD 60753",
      "HD 79447",
      "HD 92044",
@@ -39033,10 +41596,12 @@ OBJECT = ELEMENT_DEFINITION
      "HVITTIS",
      "HYDRA",
      "HYPERION",
+     "HYRROKKIN",
      "IAPETUS",
      "IC 2391",
      "IC 433",
      "IDA",
+     "IJIRAQ",
      "INDARCH",
      "INTERSTELLAR PARTICLES",
      "INTERSTELLAR_PARTICLES",
@@ -39064,6 +41629,7 @@ OBJECT = ELEMENT_DEFINITION
      "J8 PASIPHAE",
      "J9 SINOPE",
      "JANUS",
+     "JARNSAXA",
      "JELICA",
      "JOHNSTOWN",
      "JONZAC",
@@ -39071,6 +41637,7 @@ OBJECT = ELEMENT_DEFINITION
      "JUVINAS",
      "K07S4",
      "KAINSAZ",
+     "KARI",
      "KAROONDA",
      "KHAIRPUR",
      "KNYAHINA",
@@ -39089,6 +41656,7 @@ OBJECT = ELEMENT_DEFINITION
      "LEOVILLE",
      "LL3 CHONDRITES",
      "LL6 CHONDRITES",
+     "LOGE",
      "LYSITHEA",
      "M 1",
      "M 31",
@@ -39116,6 +41684,7 @@ OBJECT = ELEMENT_DEFINITION
      "MIRZAM",
      "MOKOIA",
      "MOON",
+     "MUNDILFARI",
      "MURCHISON",
      "MURRAY",
      "N RINGS",
@@ -39125,6 +41694,7 @@ OBJECT = ELEMENT_DEFINITION
      "NAIAD",
      "NAKHLA",
      "NANJEMOY",
+     "NARVI",
      "NEPTUNE",
      "NEREID",
      "NERFT",
@@ -39202,10 +41772,13 @@ OBJECT = ELEMENT_DEFINITION
      "SEVRUKOVO",
      "SHALKA",
      "SHELBURNE",
+     "SIARNAQ",
      "SIGMA SGR",
      "SINOPE",
      "SIOUX COUNTY",
      "SIRIUS",
+     "SKADI",
+     "SKOLL",
      "SKY",
      "SL9",
      "SOKO-BANJA",
@@ -39222,13 +41795,17 @@ OBJECT = ELEMENT_DEFINITION
      "STARFIELD",
      "STIM LAMP",
      "SUN",
+     "SURTUR",
+     "SUTTUNG",
      "SYSTEM",
+     "TARQEQ",
      "TATAHOUINE",
      "TAU CETI",
      "TELESTO",
      "TETHYS",
      "THALASSA",
      "THEBE",
+     "THRYM",
      "TIESCHITZ",
      "TITAN",
      "TITANIA",
@@ -41058,12 +43635,14 @@ OBJECT = ELEMENT_DEFINITION
      "CONTOUR MISSION PROJECT",
      "DEEP IMPACT",
      "DEEP IMPACT SUPPORT ARCHIVE",
+     "DEEP IMPACT/EPOXI MISSIONS",
      "DEEP SPACE 1",
      "DEEP SPACE 1 MISSION",
      "DI GROUND-BASED SUPPORT ARCHIVES",
      "DIS_VOLUME_SER_NAME_AA_0001",
      "DS1 DATA",
      "EARTH-BASED RING OCCULTATIONS",
+     "EPOXI MISSION DATA",
      "GIANT PLANET SATELLITE ASTROMETRY",
      "GIOTTO EXTENDED MISSION PROJECT",
      "GROUND BASED ATMOSPHERIC OBSERVATIONS",
@@ -41123,6 +43702,7 @@ OBJECT = ELEMENT_DEFINITION
      "FR_IPSLCNRS_MEXSPI_1000",
      "IT_URM1_DINF_MEXMDS_1000",
      "N/A",
+     "NULL",
      "SE_IRF_IRFK_MEXASP_1000",
      "SE_IRF_IRFK_MEXASP_3000",
      "UK_ESA_PSA_HPSSP_0001",
@@ -41244,6 +43824,22 @@ OBJECT = ELEMENT_DEFINITION
      "USA_NASA_JPL_CORADR_0165",
      "USA_NASA_JPL_CORADR_0166",
      "USA_NASA_JPL_CORADR_0167",
+     "USA_NASA_JPL_CORADR_0168",
+     "USA_NASA_JPL_CORADR_0169",
+     "USA_NASA_JPL_CORADR_0170",
+     "USA_NASA_JPL_CORADR_0171",
+     "USA_NASA_JPL_CORADR_0172",
+     "USA_NASA_JPL_CORADR_0173",
+     "USA_NASA_JPL_CORADR_0174",
+     "USA_NASA_JPL_CORADR_0175",
+     "USA_NASA_JPL_CORADR_0176",
+     "USA_NASA_JPL_CORADR_0177",
+     "USA_NASA_JPL_CORADR_0178",
+     "USA_NASA_JPL_CORADR_0179",
+     "USA_NASA_JPL_CORADR_0181",
+     "USA_NASA_JPL_CORADR_0182",
+     "USA_NASA_JPL_CORADR_0183",
+     "USA_NASA_JPL_CORADR_0185",
      "USA_NASA_JPL_CORS_0001_TO_CORS_0010",
      "USA_NASA_JPL_CORS_0021_TO_CORS_0028",
      "USA_NASA_JPL_CORS_0041_TO_CORS_0050",
@@ -41292,9 +43888,18 @@ OBJECT = ELEMENT_DEFINITION
      "USA_NASA_JPL_CORS_0240",
      "USA_NASA_JPL_CORS_0241_TO_CORS_0243",
      "USA_NASA_JPL_CORS_0244_TO_CORS_0252",
+     "USA_NASA_JPL_CORS_0253",
+     "USA_NASA_JPL_CORS_0254",
+     "USA_NASA_JPL_CORS_0255",
+     "USA_NASA_JPL_CORS_0256_TO_CORS_0260",
+     "USA_NASA_JPL_CORS_0261_TO_CORS_0262",
+     "USA_NASA_JPL_CORS_0263",
+     "USA_NASA_JPL_CORS_0264_TO_CORS_0266",
+     "USA_NASA_JPL_CORS_0264_TO_CORS_0268",
      "USA_NASA_JPL_COSP_1000",
      "USA_NASA_JPL_DISP_1000",
      "USA_NASA_JPL_DS1SP_1000",
+     "USA_NASA_JPL_EPXSP_1000",
      "USA_NASA_JPL_GOPR_500X",
      "USA_NASA_JPL_GORS_0801",
      "USA_NASA_JPL_GO_0001_TO_0023",
@@ -41888,7 +44493,37 @@ OBJECT = ELEMENT_DEFINITION
      "USA_NASA_PDS_CL_60XX",
      "USA_NASA_PDS_CL_7XXX",
      "USA_NASA_PDS_COCAPS_1XXX",
+     "USA_NASA_PDS_COCIRS_0010",
+     "USA_NASA_PDS_COCIRS_0011",
+     "USA_NASA_PDS_COCIRS_0012",
      "USA_NASA_PDS_COCIRS_0101",
+     "USA_NASA_PDS_COCIRS_0102",
+     "USA_NASA_PDS_COCIRS_0103",
+     "USA_NASA_PDS_COCIRS_0104",
+     "USA_NASA_PDS_COCIRS_0107",
+     "USA_NASA_PDS_COCIRS_0110",
+     "USA_NASA_PDS_COCIRS_0201",
+     "USA_NASA_PDS_COCIRS_0205",
+     "USA_NASA_PDS_COCIRS_0207",
+     "USA_NASA_PDS_COCIRS_0209",
+     "USA_NASA_PDS_COCIRS_0210",
+     "USA_NASA_PDS_COCIRS_0301",
+     "USA_NASA_PDS_COCIRS_0304",
+     "USA_NASA_PDS_COCIRS_0306",
+     "USA_NASA_PDS_COCIRS_0401",
+     "USA_NASA_PDS_COCIRS_0402",
+     "USA_NASA_PDS_COCIRS_0403",
+     "USA_NASA_PDS_COCIRS_0404",
+     "USA_NASA_PDS_COCIRS_0405",
+     "USA_NASA_PDS_COCIRS_0406",
+     "USA_NASA_PDS_COCIRS_0407",
+     "USA_NASA_PDS_COCIRS_0408",
+     "USA_NASA_PDS_COCIRS_0409",
+     "USA_NASA_PDS_COCIRS_0410",
+     "USA_NASA_PDS_COCIRS_0411",
+     "USA_NASA_PDS_COCIRS_0501",
+     "USA_NASA_PDS_COCIRS_0502",
+     "USA_NASA_PDS_COCIRS_0503",
      "USA_NASA_PDS_COCIRS_0504",
      "USA_NASA_PDS_COCIRS_0505",
      "USA_NASA_PDS_COCIRS_0506",
@@ -41931,6 +44566,9 @@ OBJECT = ELEMENT_DEFINITION
      "USA_NASA_PDS_COCIRS_0807",
      "USA_NASA_PDS_COCIRS_0808",
      "USA_NASA_PDS_COCIRS_0809",
+     "USA_NASA_PDS_COCIRS_0810",
+     "USA_NASA_PDS_COCIRS_0811",
+     "USA_NASA_PDS_COCIRS_0812",
      "USA_NASA_PDS_COINMS_0XXX",
      "USA_NASA_PDS_COINMS_3XXX",
      "USA_NASA_PDS_COISS_0XXX",
@@ -41970,7 +44608,13 @@ OBJECT = ELEMENT_DEFINITION
      "USA_NASA_PDS_COVIMS_0028",
      "USA_NASA_PDS_COVIMS_0029",
      "USA_NASA_PDS_COVIMS_0030",
+     "USA_NASA_PDS_COVIMS_0031",
+     "USA_NASA_PDS_COVIMS_0032",
+     "USA_NASA_PDS_COVIMS_0033",
+     "USA_NASA_PDS_COVIMS_0034",
+     "USA_NASA_PDS_COVIMS_0035",
      "USA_NASA_PDS_DIDOC_0001",
+     "USA_NASA_PDS_DIDOC_0002",
      "USA_NASA_PDS_DIFB_0001",
      "USA_NASA_PDS_DIHI9P_1XXX",
      "USA_NASA_PDS_DIHI9P_2XXX",
@@ -42052,6 +44696,16 @@ OBJECT = ELEMENT_DEFINITION
      "USA_NASA_PDS_DS1PE_0001",
      "USA_NASA_PDS_EBROCC_0001",
      "USA_NASA_PDS_ED_0001",
+     "USA_NASA_PDS_EPXCAL_0001",
+     "USA_NASA_PDS_EPXCAL_0002",
+     "USA_NASA_PDS_EPXCAL_0003",
+     "USA_NASA_PDS_EPXEAR_0003",
+     "USA_NASA_PDS_EPXEAR_0004",
+     "USA_NASA_PDS_EPXEAR_0005",
+     "USA_NASA_PDS_EPXEAR_0006",
+     "USA_NASA_PDS_EPXEXO_0001",
+     "USA_NASA_PDS_EPXEXO_0002",
+     "USA_NASA_PDS_EPXTMP_0001",
      "USA_NASA_PDS_GBAT_0001",
      "USA_NASA_PDS_GOMW_500X",
      "USA_NASA_PDS_GP_0001",
@@ -42484,6 +45138,7 @@ OBJECT = ELEMENT_DEFINITION
      "USA_NASA_PDS_MGST_0014",
      "USA_NASA_PDS_MGST_0015",
      "USA_NASA_PDS_MGST_0016",
+     "USA_NASA_PDS_MGST_9001",
      "USA_NASA_PDS_MG_1001",
      "USA_NASA_PDS_MG_2214",
      "USA_NASA_PDS_MG_22XX",
@@ -42683,6 +45338,7 @@ OBJECT = ELEMENT_DEFINITION
      "USA_NASA_PDS_SA0603_XXXX",
      "USA_NASA_PDS_SA0605_XXXX",
      "USA_NASA_PDS_SA0701_XXXX",
+     "USA_NASA_PDS_SA0907_0001",
      "USA_NASA_PDS_SAYYMM_XXXX",
      "USA_NASA_PDS_SBN05_0003",
      "USA_NASA_PDS_SBN05_0004",
@@ -42706,6 +45362,8 @@ OBJECT = ELEMENT_DEFINITION
      "USA_NASA_PDS_SBN_DELIV_0063",
      "USA_NASA_PDS_SBN_DELIV_0064",
      "USA_NASA_PDS_SBN_DELIV_0065",
+     "USA_NASA_PDS_SBN_DELIV_0068",
+     "USA_NASA_PDS_SBN_DELIV_0069",
      "USA_NASA_PDS_SBN_DELIV_0074",
      "USA_NASA_PDS_SBN_DELIV_0075",
      "USA_NASA_PDS_SBN_DELIV_0076",
@@ -42735,12 +45393,20 @@ OBJECT = ELEMENT_DEFINITION
      "USA_NASA_PDS_SBN_DELIV_0103",
      "USA_NASA_PDS_SBN_DELIV_0104",
      "USA_NASA_PDS_SBN_DELIV_0105",
+     "USA_NASA_PDS_SBN_DELIV_0107",
+     "USA_NASA_PDS_SBN_DELIV_0108",
      "USA_NASA_PDS_SBN_DELIV_0109",
+     "USA_NASA_PDS_SBN_DELIV_0111",
      "USA_NASA_PDS_SBN_DELIV_0112",
+     "USA_NASA_PDS_SBN_DELIV_0114",
+     "USA_NASA_PDS_SBN_DELIV_0115",
+     "USA_NASA_PDS_SBN_DELIV_0116",
      "USA_NASA_PDS_SBN_DELIV_0117",
      "USA_NASA_PDS_SBN_DELIV_0119",
+     "USA_NASA_PDS_SBN_DELIV_0121",
      "USA_NASA_PDS_SBN_DELIV_0895",
      "USA_NASA_PDS_SBN_SA0801_0001",
+     "USA_NASA_PDS_SBN_SA0906_0001",
      "USA_NASA_PDS_SDSRC_000X",
      "USA_NASA_PDS_SL9_0001",
      "USA_NASA_PDS_SL9_0002",

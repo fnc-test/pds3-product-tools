@@ -105,7 +105,9 @@ public class Dictionary implements Serializable {
         final String info = this.getInformation();
         final Matcher matcher = VERSION_REGEX.matcher(info);
         if (matcher.find()) {
-            return matcher.group(1);
+            String rawVersion = matcher.group(1);
+            // version looks like 1r77, switch to 1.77
+            return rawVersion.replaceFirst("r", "."); //$NON-NLS-1$ //$NON-NLS-2$
         }
         return null;
 
