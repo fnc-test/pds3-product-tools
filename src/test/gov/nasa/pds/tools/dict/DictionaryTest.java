@@ -158,6 +158,6 @@ public class DictionaryTest extends BaseTestCase {
     public void testVersion() throws LabelParserException, IOException {
         Dictionary dictionary = DictionaryParser.parse(new File(TEST_DIR,
                 "pdsdd.full"));
-        assertEquals("1.75", dictionary.getVersion());
+        assertEquals("1.77", dictionary.getVersion());
     }
 }
