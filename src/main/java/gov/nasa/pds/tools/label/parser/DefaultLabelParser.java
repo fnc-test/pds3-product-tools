@@ -30,7 +30,6 @@ import gov.nasa.pds.tools.label.validate.Validator;
 import gov.nasa.pds.tools.util.MessageUtils;
 import gov.nasa.pds.tools.util.VersionInfo;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -119,8 +118,8 @@ public class DefaultLabelParser implements LabelParser {
 
     public Label parseLabel(final URL url, final boolean forceParse)
             throws LabelParserException, IOException {
-        final BufferedInputStream inputStream = new BufferedInputStream(url
-                .openStream());
+        final CustomAntlrInputStream inputStream = new CustomAntlrInputStream(
+                url.openStream());
         inputStream.mark(100);
         URI labelURI = null;
         try {
@@ -139,9 +138,9 @@ public class DefaultLabelParser implements LabelParser {
 
     public Label parseLabel(final File file, final boolean forceParse)
             throws LabelParserException, IOException {
-        BufferedInputStream inputStream;
+        CustomAntlrInputStream inputStream;
         try {
-            inputStream = new BufferedInputStream(new FileInputStream(file));
+            inputStream = new CustomAntlrInputStream(new FileInputStream(file));
             inputStream.mark(100);
         } catch (FileNotFoundException e) {
             throw new LabelParserException(file, null, null,
@@ -154,7 +153,7 @@ public class DefaultLabelParser implements LabelParser {
         return parseLabel(inputStream, label, forceParse);
     }
 
-    private Label parseLabel(final BufferedInputStream inputStream,
+    private Label parseLabel(final CustomAntlrInputStream inputStream,
             final Label label, final boolean forceParse)
             throws LabelParserException, IOException {
 
@@ -229,7 +228,7 @@ public class DefaultLabelParser implements LabelParser {
         return label;
     }
 
-    private Label parseLabel(final BufferedInputStream inputStream,
+    private Label parseLabel(final CustomAntlrInputStream inputStream,
             final Label label, final int sfdusConsumed)
             throws LabelParserException, IOException {
 
@@ -341,9 +340,9 @@ public class DefaultLabelParser implements LabelParser {
     public Label parsePartial(final File file, final Label parent,
             final boolean captureProbs, final boolean allowExternalProbs)
             throws IOException, LabelParserException {
-        BufferedInputStream inputStream;
+        CustomAntlrInputStream inputStream;
         try {
-            inputStream = new BufferedInputStream(new FileInputStream(file));
+            inputStream = new CustomAntlrInputStream(new FileInputStream(file));
             inputStream.mark(100);
         } catch (FileNotFoundException e) {
             // TODO: handle exception more appropriately
@@ -371,8 +370,8 @@ public class DefaultLabelParser implements LabelParser {
     public Label parsePartial(final URL url, final Label parent,
             final boolean captureProbs, final boolean allowExternalProbs)
             throws IOException, LabelParserException {
-        final BufferedInputStream inputStream = new BufferedInputStream(url
-                .openStream());
+        final CustomAntlrInputStream inputStream = new CustomAntlrInputStream(
+                url.openStream());
         inputStream.mark(100);
         URI labelURI = null;
         try {
@@ -396,7 +395,7 @@ public class DefaultLabelParser implements LabelParser {
      * gov.nasa.pds.tools.label.parser.LabelParser#parsePartial(java.net.URL,
      * boolean)
      */
-    public Label parsePartial(final BufferedInputStream inputStream,
+    public Label parsePartial(final CustomAntlrInputStream inputStream,
             final Label label, final Label parent) throws IOException,
             LabelParserException {
 
