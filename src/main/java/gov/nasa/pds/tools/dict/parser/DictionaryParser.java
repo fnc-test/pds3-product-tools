@@ -244,7 +244,7 @@ public class DictionaryParser {
      * @throws IOException
      *             thrown when dictionary can not be accessed
      */
-    private static Dictionary parse(final InputStream input,
+    public static Dictionary parse(final InputStream input,
             final Dictionary dictionary, boolean aliasing, boolean storeProblems)
             throws LabelParserException, IOException {
 

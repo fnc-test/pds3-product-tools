@@ -24,10 +24,9 @@ import gov.nasa.pds.tools.label.Label;
 import gov.nasa.pds.tools.label.ObjectStatement;
 import gov.nasa.pds.tools.label.Statement;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -64,17 +63,17 @@ public class Validator {
 
     protected static synchronized void initDefaultDictionary() {
         if (DEFAULT_DICTIONARY == null) {
-            File dataDictionaryFile;
-            URL dictionaryURL = Validator.class.getClassLoader().getResource(
-                    "pdsdd.full"); //$NON-NLS-1$
+            InputStream dictionaryStream = Validator.class.getClassLoader()
+                    .getResourceAsStream("pdsdd.full"); //$NON-NLS-1$
             try {
-                dataDictionaryFile = new File(dictionaryURL.toURI());
-            } catch (URISyntaxException e) {
-                dataDictionaryFile = new File(dictionaryURL.getPath());
-            }
-
-            try {
-                DEFAULT_DICTIONARY = DictionaryParser.parse(dataDictionaryFile);
+                try {
+                    DEFAULT_DICTIONARY = DictionaryParser.parse(
+                            dictionaryStream, new Dictionary(Validator.class
+                                    .getClassLoader().getResource("pdsdd.full") //$NON-NLS-1$
+                                    .toURI()), false, false);
+                } catch (URISyntaxException e) {
+                    e.printStackTrace();
+                }
             } catch (LabelParserException e) {
                 // TODO: consider what to do with parse issues, note that won't
                 // be thrown in figure, just added to container
@@ -87,7 +86,9 @@ public class Validator {
     }
 
     public void validate(final Label label) {
-        initDefaultDictionary();
+        if (performsDictionaryCheck()) {
+            initDefaultDictionary();
+        }
         validate(label, DEFAULT_DICTIONARY);
     }
 
