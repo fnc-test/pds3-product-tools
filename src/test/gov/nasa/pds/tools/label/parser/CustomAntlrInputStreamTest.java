@@ -16,6 +16,36 @@ public class CustomAntlrInputStreamTest extends BaseTestCase {
 
     final File sampleDir = new File(TEST_DIR, "labels");
 
+    public void testReadByte() throws IOException {
+        final File testFile = new File(this.sampleDir, "attachedBlankFill.lbl");
+
+        FileInputStream inputStream = new FileInputStream(testFile);
+        BufferedInputStream bis = new BufferedInputStream(inputStream);
+
+        final CustomAntlrInputStream is = new CustomAntlrInputStream(bis);
+        byte b = (byte) is.read();
+        String expected = "P";
+
+        String result = new String(new byte[] { b });
+
+        assertEquals(expected, result);
+    }
+
+    public void testReadBytes() throws IOException {
+        final File testFile = new File(this.sampleDir, "attachedBlankFill.lbl");
+
+        FileInputStream inputStream = new FileInputStream(testFile);
+        BufferedInputStream bis = new BufferedInputStream(inputStream);
+
+        final CustomAntlrInputStream is = new CustomAntlrInputStream(bis);
+        byte[] b = new byte[21];
+        is.read(b);
+        String expected = "PDS_VERSION_ID = PDS3";
+        String result = new String(b);
+
+        assertEquals(expected, result);
+    }
+
     public void testParseValid() throws LabelParserException, IOException {
         final File testFile = new File(this.sampleDir, "attachedBlankFill.lbl");
 
@@ -31,12 +61,10 @@ public class CustomAntlrInputStreamTest extends BaseTestCase {
     public void testValidPadded() throws Exception {
         final File testFile = new File(this.sampleDir, "attachedBlankFill.lbl");
 
-        BufferedInputStream inputStream;
-        inputStream = new BufferedInputStream(new FileInputStream(testFile));
-        inputStream.mark(100);
+        FileInputStream inputStream = new FileInputStream(testFile);
+        BufferedInputStream bis = new BufferedInputStream(inputStream);
 
-        final CustomAntlrInputStream is = new CustomAntlrInputStream(
-                inputStream);
+        final CustomAntlrInputStream is = new CustomAntlrInputStream(bis);
         final String contents = StrUtils.toString(is);
         // subtract num lines in this case since StrUtils.toString(is) converts
         // any newline sequences to '\n'
