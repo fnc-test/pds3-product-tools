@@ -94,6 +94,8 @@ public class Constants {
         UNKNOWN_VALUE(Severity.WARNING), // id doesn't exist (yet?)
         TYPE_MISMATCH(Severity.ERROR), // type of found value is not correct
         // TODO: use? needed?
+        INVALID_DEFINITION(Severity.ERROR), // dictionary definition could not
+                                            // be created
         NEW_VALUE(Severity.INFO), // value to add to dictionary
         INVALID_VALUE(Severity.ERROR), // value doesn't exist, likely a mistake
         MANIPULATED_VALUE(Severity.WARNING), // value valid only if modified
@@ -119,7 +121,8 @@ public class Constants {
         CIRCULAR_POINTER_REF(Severity.ERROR), // circular file ref
         BAD_CATALOG_NAME(Severity.ERROR), // bad catalog pointer name
         DUPLICATE_IDENTIFIER(Severity.ERROR), // duplicate identifier
-        PLACEHOLDER_VALUE(Severity.INFO), // placeholder 'NULL' instead of 'UNK'
+        PLACEHOLDER_VALUE(Severity.INFO), // placeholder 'NULL' instead of
+                                            // 'UNK'
         // pointer val != actual start byte
         ATTACHED_START_BYTE_MISMATCH(Severity.ERROR), // 
         START_BYTE_POSSIBLE_MISMATCH(Severity.WARNING), // WS start?

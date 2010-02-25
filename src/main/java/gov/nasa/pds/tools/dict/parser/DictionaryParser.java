@@ -301,9 +301,17 @@ public class DictionaryParser {
                                     .getIdentifier())) {
                                 units = generateUnits((ObjectStatement) statement);
                             } else {
-                                definitions.add(DefinitionFactory
-                                        .createDefinition(dictionary,
-                                                (ObjectStatement) statement));
+                                try {
+                                    definitions
+                                            .add(DefinitionFactory
+                                                    .createDefinition(
+                                                            dictionary,
+                                                            (ObjectStatement) statement));
+                                } catch (UnknownDefinitionException e) {
+                                    if (storeProblems) {
+                                        dictionary.addProblem(e);
+                                    }
+                                }
                             }
                         }
                     }

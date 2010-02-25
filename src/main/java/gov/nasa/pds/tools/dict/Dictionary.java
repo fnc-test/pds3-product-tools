@@ -666,6 +666,10 @@ public class Dictionary implements Serializable {
         return this.mergeChanges;
     }
 
+    public void addProblem(LabelParserException exception) {
+        this.problems.add(exception);
+    }
+
     public void addProblems(final List<LabelParserException> exceptions) {
         this.problems.addAll(exceptions);
     }

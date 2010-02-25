@@ -15,6 +15,10 @@
 
 package gov.nasa.pds.tools.dict.parser;
 
+import gov.nasa.pds.tools.LabelParserException;
+import gov.nasa.pds.tools.constants.Constants.ProblemType;
+import gov.nasa.pds.tools.dict.Dictionary;
+
 /**
  * This exception will be thrown when the type of definition can not be
  * determined.
@@ -24,11 +28,12 @@ package gov.nasa.pds.tools.dict.parser;
  * @version $Revision$
  * 
  */
-public class UnknownDefinitionException extends Exception {
+public class UnknownDefinitionException extends LabelParserException {
     private static final long serialVersionUID = 3768577117762341629L;
 
-    public UnknownDefinitionException(String message) {
-        super(message);
+    public UnknownDefinitionException(final Dictionary sourceDictionary,
+            final Integer lineNumber, final Integer column, final String key,
+            final ProblemType type, final Object... arguments) {
+        super(sourceDictionary, lineNumber, column, key, type, arguments);
     }
-
 }

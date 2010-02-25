@@ -24,6 +24,7 @@ import static gov.nasa.pds.tools.dict.DictionaryTokens.OBJECT_TYPE_SPECIFIC;
 import static gov.nasa.pds.tools.dict.DictionaryTokens.OBJECT_TYPE_SPECIFIC_GROUP;
 import static gov.nasa.pds.tools.dict.DictionaryTokens.SPECIFIC_OBJECT;
 import gov.nasa.pds.tools.constants.Constants.DictionaryType;
+import gov.nasa.pds.tools.constants.Constants.ProblemType;
 import gov.nasa.pds.tools.dict.Alias;
 import gov.nasa.pds.tools.dict.Definition;
 import gov.nasa.pds.tools.dict.DictIdentifier;
@@ -99,8 +100,10 @@ public class DefinitionFactory {
         }
 
         if (definition == null) {
-            throw new UnknownDefinitionException("Can not resolve entry " //$NON-NLS-1$
-                    + object.getIdentifier());
+            throw new UnknownDefinitionException(sourceDictionary,
+                    (Integer) object.getLineNumber(), null,
+                    "parser.error.unresolvedEntry",
+                    ProblemType.INVALID_DEFINITION, object.getIdentifier());
         }
 
         return definition;
@@ -202,9 +205,16 @@ public class DefinitionFactory {
             }
         }
 
-        if (definition == null)
-            throw new UnknownDefinitionException(object.getIdentifier()
-                    + " is not an object definition"); //$NON-NLS-1$
+        if (definition == null) {
+            DictIdentifier id = DictIDFactory.createElementDefId(object
+                    .getAttribute(DictionaryParser.NAME_ID).getValue()
+                    .toString());
+            Object[] arguments = { "object", id };
+            throw new UnknownDefinitionException(sourceDictionary,
+                    (Integer) object.getLineNumber(), null,
+                    "parser.error.badDefinition",
+                    ProblemType.INVALID_DEFINITION, arguments);
+        }
 
         return definition;
     }
@@ -232,7 +242,7 @@ public class DefinitionFactory {
         GroupDefinition definition = null;
 
         if ((object.getIdentifier().equals(DictionaryParser.GENERIC_OBJECT_ID) || object
-                .getIdentifier().equals(DictionaryParser.GENERIC_OBJECT_ID))
+                .getIdentifier().equals(DictionaryParser.SPECIFIC_OBJECT_ID))
                 && (OBJECT_TYPE_GENERIC_GROUP.equals(object.getAttribute(
                         DictionaryParser.OBJECT_TYPE_ID).getValue().toString()) || OBJECT_TYPE_SPECIFIC_GROUP
                         .equals(object.getAttribute(
@@ -283,9 +293,16 @@ public class DefinitionFactory {
             }
         }
 
-        if (definition == null)
-            throw new UnknownDefinitionException(object.getIdentifier()
-                    + " is not an group definition"); //$NON-NLS-1$
+        if (definition == null) {
+            DictIdentifier id = DictIDFactory.createElementDefId(object
+                    .getAttribute(DictionaryParser.NAME_ID).getValue()
+                    .toString());
+            Object[] arguments = { "group", id };
+            throw new UnknownDefinitionException(sourceDictionary,
+                    (Integer) object.getLineNumber(), null,
+                    "parser.error.badDefinition",
+                    ProblemType.INVALID_DEFINITION, arguments);
+        }
 
         return definition;
     }
@@ -428,7 +445,6 @@ public class DefinitionFactory {
                                     e1.printStackTrace();
                                 }
                             }
-                            e.printStackTrace();
                         }
                         if (number != null) {
                             definition.setMaximum(number);
@@ -460,9 +476,16 @@ public class DefinitionFactory {
 
         }
 
-        if (definition == null)
-            throw new UnknownDefinitionException(object.getIdentifier()
-                    + " is not an element definition"); //$NON-NLS-1$
+        if (definition == null) {
+            DictIdentifier id = DictIDFactory.createElementDefId(object
+                    .getAttribute(DictionaryParser.NAME_ID).getValue()
+                    .toString());
+            Object[] arguments = { "element", id };
+            throw new UnknownDefinitionException(sourceDictionary,
+                    (Integer) object.getLineNumber(), null,
+                    "parser.error.badDefinition",
+                    ProblemType.INVALID_DEFINITION, arguments);
+        }
 
         return definition;
     }
