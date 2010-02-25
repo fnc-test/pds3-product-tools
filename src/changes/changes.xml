@@ -26,9 +26,6 @@
 		<action dev="jagander" type="update">
 			Correcting a typo in wrong line length message (RECORD_LENGTH vs RECORD_BYTES) and expanding the message to indicate that CRLF chars are not counted.
 		</action>
-		<action dev="jagander" type="fix">
-			PDSEN-259 - Wrapping BufferedInputStream in a custom stream that returns EOF after the first non-whitespace character is found following the END statement. This was done in an effort to prevent memory overflow issues with large attached labels.
-		</action>
 		<action dev="jagander" type="update">
 			Updating included dictionary to current release.
 		</action>
@@ -38,6 +35,15 @@
 		<action dev="jagander" type="update">
 			Updating version display to be in X.XX format rather than XrXX format to match standard and published materials.
 		</action>
+		<action dev="jagander" type="fix">
+			PDSEN-259 - Wrapping BufferedInputStream in a custom stream that returns EOF after the first non-whitespace character is found following the END statement. This was done in an effort to prevent memory overflow issues with large attached labels.
+		</action>
+		<action dev="mcayanan" type="fix">
+			PDSEN-297 - Fixed dictionary parser to support reading a default dictionary located inside the product tools jar file.
+		</action>
+		<action dev="mcayanan" type="fix">
+		    PDEN-300 - Fixed dictionary parser to support SPECIFIC_GROUP definitions and when MAXIMUM attribute statements have a UNK value.
+		</action>			
     </release>
 
     <release version="3.0.1" date="2010-02-05" description="This release of the Product Tools software supports the beta release of the Validation Tool and includes a number of updates and corrections.">
