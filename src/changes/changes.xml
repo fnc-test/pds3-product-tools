@@ -42,7 +42,10 @@
 			PDSEN-297 - Fixed dictionary parser to support reading a default dictionary located inside the product tools jar file.
 		</action>
 		<action dev="mcayanan" type="fix">
-		    PDSEN-300 - Fixed dictionary parser to support SPECIFIC_GROUP definitions and when MAXIMUM attribute statements have a UNK value.
+		    PDSEN-298 - Fixed dictionary parser to support dictionary definitions where the MAXIMUM attribute is set to UNK.
+		</action>
+		<action dev="mcayanan" type="fix">
+		    PDSEN-300 - Fixed dictionary parser to support SPECIFIC_GROUP definitions.
 		</action>
 		<action dev="mcayanan" type="fix">
 		    PDSEN-303 - Fixed parser to correctly throw the referenced file name when it cannot be found.  This bug only occurred in pointer statements that contained multiple referenced files (Example: ^DATA_SET_CATALOG = {"L0_DS.CAT", "L1B_DS.CAT"}).
