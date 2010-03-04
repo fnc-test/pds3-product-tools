@@ -156,10 +156,12 @@ public class ObjectValidator {
             // Check to make sure object is allowed within this definition
             if (definition != null
                     && !definition.isAllowed(obj.getIdentifier())) {
-                // Next check to see if the object is allowed as an alias
-                // Lookup definition object by its alias
+                // Next check to see if the object is allowed by getting its
+                // class name. This method call will also lookup a definition
+                // by its alias, assuming the dictionary was parsed with
+                // aliasing turned on.
                 ObjectDefinition objectDefinition = dictionary
-                        .getObjectDefinition(obj.getIdentifier());
+                        .findObjectClassDefinition(obj.getIdentifier());
                 if (objectDefinition == null
                         || !definition.isAllowed(objectDefinition
                                 .getIdentifier())) {
@@ -183,10 +185,12 @@ public class ObjectValidator {
             // Check to make sure object is allowed within this definition
             if (definition != null
                     && !definition.isAllowed(group.getIdentifier())) {
-                // Next check to see if the object is allowed as an alias
-                // Lookup definition object by its alias
+                // Next check to see if the group is allowed by getting its
+                // class name. This method call will also lookup a definition
+                // by its alias, assuming the dictionary was parsed with
+                // aliasing turned on.
                 GroupDefinition groupDefinition = dictionary
-                        .getGroupDefinition(group.getIdentifier());
+                        .findGroupClassDefinition(group.getIdentifier());
                 if (groupDefinition == null
                         || !definition.isAllowed(groupDefinition
                                 .getIdentifier())) {
