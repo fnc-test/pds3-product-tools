@@ -35,6 +35,9 @@
 		<action dev="jagander" type="update">
 			Updating version display to be in X.XX format rather than XrXX format to match standard and published materials.
 		</action>
+		<action dev="mcayanan" type ="update">
+		    Throw a warning instead of an error message when reporting files that do not contain a PDS_VERSION_ID.
+		</action>
 		<action dev="jagander" type="fix">
 			PDSEN-259 - Wrapping BufferedInputStream in a custom stream that returns EOF after the first non-whitespace character is found following the END statement. This was done in an effort to prevent memory overflow issues with large attached labels.
 		</action>
@@ -49,6 +52,9 @@
 		</action>
 		<action dev="mcayanan" type="fix">
 		    PDSEN-303 - Fixed parser to correctly throw the referenced file name when it cannot be found.  This bug only occurred in pointer statements that contained multiple referenced files (Example: ^DATA_SET_CATALOG = {"L0_DS.CAT", "L1B_DS.CAT"}).
+		</action>
+		<action dev="mcayanan" type="fix">
+		    PDSEN-304 - Fixed to support proper checking of required/optional nested objects with descriptor names.
 		</action>			
     </release>
 
