@@ -23,6 +23,12 @@
   </properties>
   <body>
     <release version="3.0.2-dev" date="TBD" description="TBD">
+        <action dev="mcayanan" type="update">
+           PDSEN-307 - Update to truncate long values when error messages get thrown for exceeding the acceptable maximum length of an element definition.
+        </action>
+		<action dev="mcayanan" type ="update">
+		    Throw a warning instead of an error message when reporting files that do not contain a PDS_VERSION_ID.
+		</action>        
 		<action dev="jagander" type="update">
 			Correcting a typo in wrong line length message (RECORD_LENGTH vs RECORD_BYTES) and expanding the message to indicate that CRLF chars are not counted.
 		</action>
@@ -34,9 +40,6 @@
 		</action>
 		<action dev="jagander" type="update">
 			Updating version display to be in X.XX format rather than XrXX format to match standard and published materials.
-		</action>
-		<action dev="mcayanan" type ="update">
-		    Throw a warning instead of an error message when reporting files that do not contain a PDS_VERSION_ID.
 		</action>
 		<action dev="jagander" type="fix">
 			PDSEN-259 - Wrapping BufferedInputStream in a custom stream that returns EOF after the first non-whitespace character is found following the END statement. This was done in an effort to prevent memory overflow issues with large attached labels.
