@@ -56,7 +56,7 @@ public class LengthChecker {
             AttributeStatement attribute) throws InvalidLengthException {
         final int max = def.getMaxLength();
         final String compressedVal = StrUtils.stripPadding(value);
-        int cutOffLength = 65;
+        int cutOffLength = 64;
         if (compressedVal.length() > max) {
             String truncatedVal = null;
             // Perform truncation so that a really long value does not have to
