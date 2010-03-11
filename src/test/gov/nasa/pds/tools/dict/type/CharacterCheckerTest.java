@@ -68,7 +68,7 @@ public class CharacterCheckerTest extends BaseTestCase {
         LabelParserException lpe = assertHasProblem(label,
                 ProblemType.EXCESSIVE_VALUE_LENGTH);
         assertProblemEquals(lpe, 3, null, "parser.error.tooLong",
-                ProblemType.EXCESSIVE_VALUE_LENGTH, " XXXXX ", "5", "4",
+                ProblemType.EXCESSIVE_VALUE_LENGTH, "XXXXX", "5", "4",
                 "RELEASE_ID", "CHARACTER");
     }
 

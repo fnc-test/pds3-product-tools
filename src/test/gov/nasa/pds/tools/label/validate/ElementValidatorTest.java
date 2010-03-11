@@ -279,8 +279,8 @@ public class ElementValidatorTest extends BaseTestCase {
                 ProblemType.EXCESSIVE_VALUE_LENGTH);
         assertProblemEquals(lpe, 4, null, "parser.error.tooLong",
                 ProblemType.EXCESSIVE_VALUE_LENGTH,
-                "\r\nI am more than 30 chars long, just so you know\r\n", "47",
-                "30", "DELIMITING_PARAMETER_NAME", "CHARACTER");
+                "I am more than 30 chars long, just so you know ", "47", "30",
+                "DELIMITING_PARAMETER_NAME", "CHARACTER");
         assertEquals(1, label.getProblems().size());
     }
 
