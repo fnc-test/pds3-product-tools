@@ -72,4 +72,18 @@ public class CustomAntlrInputStreamTest extends BaseTestCase {
         assertEquals(569 - numLines, contents.length());
     }
 
+    public void testBinaryAttached() throws Exception {
+        final File testFile = new File(this.sampleDir,
+                "attachedBlankBinary.img");
+
+        StandardPathResolver resolver = new StandardPathResolver();
+        DefaultLabelParser parser = new DefaultLabelParser(resolver);
+        Label label = parser.parseLabel(testFile);
+        assertTrue(label.isValid());
+
+        assertTrue(label.hasAttachedContent());
+        assertEquals(label.getAttachedStartByte(), 20481);
+        assertEquals(0, label.getProblems().size());
+
+    }
 }

@@ -256,8 +256,8 @@ public class DefaultLabelParser implements LabelParser {
 
         inputStream.close();
 
-        label.setAttachedStartByte(lexer.getAttachedContentStartByte());
-        label.setHasBlankFill(lexer.hasBlankFill());
+        label.setAttachedStartByte(customIs.getAttachedContentStartByte());
+        label.setHasBlankFill(customIs.hasBlankFill());
 
         return label;
     }
@@ -394,8 +394,9 @@ public class DefaultLabelParser implements LabelParser {
     /*
      * (non-Javadoc)
      * 
-     * @see gov.nasa.pds.tools.label.parser.LabelParser#parsePartial(java.net.URL,
-     *      boolean)
+     * @see
+     * gov.nasa.pds.tools.label.parser.LabelParser#parsePartial(java.net.URL,
+     * boolean)
      */
     public Label parsePartial(final BufferedInputStream inputStream,
             final Label label, final Label parent) throws IOException,

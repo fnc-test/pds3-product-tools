@@ -31,6 +31,10 @@ public class CustomAntlrInputStream extends FilterInputStream {
     // location of either EOF or first non-whitespace char after END statement
     private int endOfLabel = -1;
 
+    private Integer attachedContentStartByte = null;
+
+    private boolean hasBlankFill = false;
+
     // current state of the read
     private State state = State.NORMAL;
 
@@ -39,6 +43,14 @@ public class CustomAntlrInputStream extends FilterInputStream {
     public CustomAntlrInputStream(BufferedInputStream in) {
         super(in);
         this.in = in;
+    }
+
+    public Integer getAttachedContentStartByte() {
+        return this.attachedContentStartByte;
+    }
+
+    public boolean hasBlankFill() {
+        return this.hasBlankFill;
     }
 
     @Override
@@ -111,6 +123,13 @@ public class CustomAntlrInputStream extends FilterInputStream {
         } else if (this.state == State.FOUND_END) {
             if (!Character.isWhitespace(b)) {
                 this.endOfLabel = this.pos;
+                // if end of label is not EOF, this is attached data start byte
+                if (b != -1) {
+                    this.attachedContentStartByte = this.pos;
+                }
+                // 32 == ' '
+            } else if (b == 32) {
+                this.hasBlankFill = true;
             }
         } else if (b == -1) {
             // missing END back up one space

@@ -23,6 +23,9 @@
   </properties>
   <body>
     <release version="3.0.2-dev" date="TBD" description="TBD">
+		<action dev="jagander" type="fix">
+           PDSEN-306 - Getting attached data start byte from custom input stream instead of lexer due to tokenization and error recovery issues skipping until start of next line when encountering non-parseable binary data.
+        </action>
         <action dev="mcayanan" type="update">
            PDSEN-307 - Update to truncate long values when error messages get thrown for exceeding the acceptable maximum length of an element definition.
         </action>
