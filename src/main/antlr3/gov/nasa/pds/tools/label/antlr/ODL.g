@@ -108,9 +108,7 @@ import gov.nasa.pds.tools.constants.Constants.ProblemType;
 
 	private boolean stopAtEND = true;
 	private boolean foundEND = false;
-	private boolean hasBlankFill = false;
 	private boolean pastEndLine = false;
-	private Integer attachedContentStartByte;
 	
 	private Stack<String> paraphrase = new Stack<String>();
 
@@ -120,41 +118,17 @@ import gov.nasa.pds.tools.constants.Constants.ProblemType;
 		this.stopAtEND = stopAtEND;
 	}
 	
-	public Integer getAttachedContentStartByte() {
-		if (this.attachedContentStartByte == null) {
-            return null;
-        }
-		//TODO: determine why off by two...
-		return this.attachedContentStartByte + 2;
-	}
-	
-	public boolean hasBlankFill() {
-		return this.hasBlankFill;
-	}
-	
 	@Override
 	public Token nextToken() {
 		final Token tok = super.nextToken();
-		
-		// if found attached content, stop parsing
-		if(this.attachedContentStartByte != null) {
-			return Token.EOF_TOKEN;
-		}
-		
+
 		final int type = tok.getType();
 		if (this.stopAtEND && this.foundEND) {
 			// only say has attached if there's actual content
 			if(type == EOL) {
 				this.pastEndLine = true;
-			} else if (type == WS) {
-				if(this.pastEndLine) {
-					this.hasBlankFill = true;
-				}
 			} else if(type != COMMENT && type != EOF) {
-				if(this.attachedContentStartByte == null) {
-					// can't get at tok.start so doing it the hard way
-					this.attachedContentStartByte = super.input.index() - tok.getText().length() - 1;
-				}
+				// should only occur once at most since custom stream does not surface more than one byte of attached content
 				return Token.EOF_TOKEN;
 			}
 		}
