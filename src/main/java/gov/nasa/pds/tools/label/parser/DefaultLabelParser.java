@@ -188,11 +188,9 @@ public class DefaultLabelParser implements LabelParser {
 
         if (line.length != 2) {
             label.setInvalid();
-            final LabelParserException lpe = new LabelParserException(
-                    label,
-                    null,
-                    null,
-                    "parser.warning.missingVersion", ProblemType.INVALID_LABEL_WARNING, //$NON-NLS-1$
+            final LabelParserException lpe = new LabelParserException(label,
+                    null, null,
+                    "parser.error.missingVersion", ProblemType.INVALID_LABEL, //$NON-NLS-1$
                     label.getSourceNameString());
             if (!forceParse) {
                 throw lpe;
@@ -394,9 +392,8 @@ public class DefaultLabelParser implements LabelParser {
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * gov.nasa.pds.tools.label.parser.LabelParser#parsePartial(java.net.URL,
-     * boolean)
+     * @see gov.nasa.pds.tools.label.parser.LabelParser#parsePartial(java.net.URL,
+     *      boolean)
      */
     public Label parsePartial(final BufferedInputStream inputStream,
             final Label label, final Label parent) throws IOException,
