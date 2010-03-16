@@ -133,10 +133,9 @@ public class ManualPathResolver implements PointerResolver {
         }
 
         // The file just can not be found so now report it
-        pointer.label
-                .addProblem(new LabelParserException(pointer, null,
-                        "parser.error.missingFile",
-                        ProblemType.MISSING_RESOURCE, path));
+        pointer.label.addProblem(new LabelParserException(pointer, null,
+                "parser.error.missingRefFile", ProblemType.MISSING_RESOURCE,
+                path));
         return null;
     }
 
