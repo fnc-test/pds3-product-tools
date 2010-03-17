@@ -71,6 +71,15 @@ public abstract class Statement implements Comparable<Object> {
     }
 
     /**
+     * Retrieves the label associated with this statement
+     * 
+     * @return label
+     */
+    public Label getLabel() {
+        return this.label;
+    }
+
+    /**
      * Retrieves the line for this statement
      * 
      * @return The line on which the statement starts
