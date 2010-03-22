@@ -82,9 +82,14 @@ public abstract class IncludePointer extends SpecialPointer {
             // from check if in labels list
             if (!parentLabel.hasIncludePointer(foundFile)) {
                 parentLabel.addIncludePointer(foundFile);
-                LabelParser parser = new DefaultLabelParser(true, parentLabel
-                        .getCaptureProblems(), parentLabel
-                        .getAllowExternalProblems(), resolver);
+                LabelParser parser = null;
+                if (parentLabel.getAllowExternalProblems()) {
+                    parser = new DefaultLabelParser(true, parentLabel
+                            .getCaptureProblems(), true, resolver);
+                } else {
+                    parser = new DefaultLabelParser(true, false, false,
+                            resolver);
+                }
                 // pass label into parsePartial
                 Label partial = parser.parsePartial(foundFile, parentLabel);
                 synchLabels(partial, parentLabel);
@@ -122,9 +127,14 @@ public abstract class IncludePointer extends SpecialPointer {
                 // from check if in labels list
                 if (!parentLabel.hasIncludePointer(foundFile)) {
                     parentLabel.addIncludePointer(foundFile);
-                    LabelParser parser = new DefaultLabelParser(true,
-                            parentLabel.getCaptureProblems(), parentLabel
-                                    .getAllowExternalProblems(), resolver);
+                    LabelParser parser = null;
+                    if (parentLabel.getAllowExternalProblems()) {
+                        parser = new DefaultLabelParser(true, parentLabel
+                                .getCaptureProblems(), true, resolver);
+                    } else {
+                        parser = new DefaultLabelParser(true, false, false,
+                                resolver);
+                    }
                     // pass label into parsePartial
                     Label partial = parser.parsePartial(foundFile.toURL(),
                             parentLabel);
