@@ -58,7 +58,10 @@
 		</action>
 		<action dev="mcayanan" type="fix">
 		    PDSEN-304 - Fixed to support proper checking of required/optional nested objects with descriptor names.
-		</action>			
+		</action>
+		<action dev="mcayanan" type="fix">
+		    PDSEN-310 - Fixed to capture problems if errors occurred in a nested fragment file.
+		</action>
     </release>
 
     <release version="3.0.1" date="2010-02-05" description="This release of the Product Tools software supports the beta release of the Validation Tool and includes a number of updates and corrections.">
