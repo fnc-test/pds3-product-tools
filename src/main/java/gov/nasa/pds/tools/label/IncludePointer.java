@@ -82,8 +82,9 @@ public abstract class IncludePointer extends SpecialPointer {
             // from check if in labels list
             if (!parentLabel.hasIncludePointer(foundFile)) {
                 parentLabel.addIncludePointer(foundFile);
-                LabelParser parser = new DefaultLabelParser(true, false,
-                        resolver);
+                LabelParser parser = new DefaultLabelParser(true, parentLabel
+                        .getCaptureProblems(), parentLabel
+                        .getAllowExternalProblems(), resolver);
                 // pass label into parsePartial
                 Label partial = parser.parsePartial(foundFile, parentLabel);
                 synchLabels(partial, parentLabel);
@@ -121,8 +122,9 @@ public abstract class IncludePointer extends SpecialPointer {
                 // from check if in labels list
                 if (!parentLabel.hasIncludePointer(foundFile)) {
                     parentLabel.addIncludePointer(foundFile);
-                    LabelParser parser = new DefaultLabelParser(true, false,
-                            resolver);
+                    LabelParser parser = new DefaultLabelParser(true,
+                            parentLabel.getCaptureProblems(), parentLabel
+                                    .getAllowExternalProblems(), resolver);
                     // pass label into parsePartial
                     Label partial = parser.parsePartial(foundFile.toURL(),
                             parentLabel);

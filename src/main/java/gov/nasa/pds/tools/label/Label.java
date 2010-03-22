@@ -110,8 +110,16 @@ public class Label {
         this.captureProblems = captureProblems;
     }
 
+    public boolean getCaptureProblems() {
+        return this.captureProblems;
+    }
+
     public void setAllowExternalProblems(final boolean allowExternalProblems) {
         this.allowExternalProblems = allowExternalProblems;
+    }
+
+    public boolean getAllowExternalProblems() {
+        return this.allowExternalProblems;
     }
 
     public void setHasBlankFill(final boolean hasBlankFill) {
