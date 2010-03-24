@@ -22,46 +22,46 @@
     <author email="Sean.Hardman@jpl.nasa.gov">Sean Hardman</author>
   </properties>
   <body>
-    <release version="3.0.2-dev" date="TBD" description="TBD">
-		<action dev="jagander" type="fix">
-           PDSEN-306 - Getting attached data start byte from custom input stream instead of lexer due to tokenization and error recovery issues skipping until start of next line when encountering non-parseable binary data.
-        </action>
-        <action dev="mcayanan" type="update">
-           PDSEN-307 - Update to truncate long values when error messages get thrown for exceeding the acceptable maximum length of an element definition.
-        </action>    
-		<action dev="jagander" type="update">
-			Correcting a typo in wrong line length message (RECORD_LENGTH vs RECORD_BYTES) and expanding the message to indicate that CRLF chars are not counted.
-		</action>
-		<action dev="jagander" type="update">
-			Updating included dictionary to current release.
-		</action>
-		<action dev="jagander" type="update">
-			Updating a message for start byte mismatch to be more clear 
-		</action>
-		<action dev="jagander" type="update">
-			Updating version display to be in X.XX format rather than XrXX format to match standard and published materials.
-		</action>
-		<action dev="jagander" type="fix">
-			PDSEN-259 - Wrapping BufferedInputStream in a custom stream that returns EOF after the first non-whitespace character is found following the END statement. This was done in an effort to prevent memory overflow issues with large attached labels.
-		</action>
-		<action dev="mcayanan" type="fix">
-			PDSEN-297 - Fixed dictionary parser to support reading a default dictionary located inside the product tools jar file.
-		</action>
-		<action dev="mcayanan" type="fix">
-		    PDSEN-298 - Fixed dictionary parser to support dictionary definitions where the MAXIMUM attribute is set to UNK.
-		</action>
-		<action dev="mcayanan" type="fix">
-		    PDSEN-300 - Fixed dictionary parser to support SPECIFIC_GROUP definitions.
-		</action>
-		<action dev="mcayanan" type="fix">
-		    PDSEN-303 - Fixed parser to correctly throw the referenced file name when it cannot be found.  This bug only occurred in pointer statements that contained multiple referenced files (Example: ^DATA_SET_CATALOG = {"L0_DS.CAT", "L1B_DS.CAT"}).
-		</action>
-		<action dev="mcayanan" type="fix">
-		    PDSEN-304 - Fixed to support proper checking of required/optional nested objects with descriptor names.
-		</action>
-		<action dev="mcayanan" type="fix">
-		    PDSEN-310 - Fixed to capture problems if errors occurred in a nested fragment file.
-		</action>
+    <release version="3.0.2" date="2010-03-23" description="This release of the Product Tools software includes corrections and modifications resulting from the beta test results of the Validation Tool integration.">
+      <action dev="mcayanan" type="update">
+        PDSEN-307 - Update to truncate long values when error messages get thrown for exceeding the acceptable maximum length of an element definition.
+      </action>    
+      <action dev="jagander" type="update">
+        Correcting a typo in wrong line length message (RECORD_LENGTH vs RECORD_BYTES) and expanding the message to indicate that CRLF chars are not counted.
+      </action>
+      <action dev="jagander" type="update">
+        Updating included dictionary to current release.
+      </action>
+      <action dev="jagander" type="update">
+        Updating a message for start byte mismatch to be more clear 
+      </action>
+      <action dev="jagander" type="update">
+        Updating version display to be in X.XX format rather than XrXX format to match standard and published materials.
+      </action>
+      <action dev="jagander" type="fix">
+        PDSEN-259 - Wrapping BufferedInputStream in a custom stream that returns EOF after the first non-whitespace character is found following the END statement. This was done in an effort to prevent memory overflow issues with large attached labels.
+      </action>
+      <action dev="mcayanan" type="fix">
+        PDSEN-297 - Fixed dictionary parser to support reading a default dictionary located inside the product tools jar file.
+      </action>
+      <action dev="mcayanan" type="fix">
+        PDSEN-298 - Fixed dictionary parser to support dictionary definitions where the MAXIMUM attribute is set to UNK.
+      </action>
+      <action dev="mcayanan" type="fix">
+        PDSEN-300 - Fixed dictionary parser to support SPECIFIC_GROUP definitions.
+      </action>
+      <action dev="mcayanan" type="fix">
+        PDSEN-303 - Fixed parser to correctly throw the referenced file name when it cannot be found. This bug only occurred in pointer statements that contained multiple referenced files (Example: ^DATA_SET_CATALOG = {"L0_DS.CAT", "L1B_DS.CAT"}).
+      </action>
+      <action dev="mcayanan" type="fix">
+        PDSEN-304 - Fixed to support proper checking of required/optional nested objects with descriptor names.
+      </action>
+      <action dev="jagander" type="fix">
+        PDSEN-306 - Getting attached data start byte from custom input stream instead of lexer due to tokenization and error recovery issues skipping until start of next line when encountering non-parseable binary data.
+      </action>
+      <action dev="mcayanan" type="fix">
+        PDSEN-310 - Fixed to capture problems if errors occurred in a nested fragment file.
+      </action>
     </release>
 
     <release version="3.0.1" date="2010-02-05" description="This release of the Product Tools software supports the beta release of the Validation Tool and includes a number of updates and corrections.">

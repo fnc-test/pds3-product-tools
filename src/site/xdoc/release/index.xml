@@ -28,9 +28,28 @@
       </p>
     </section>
 
-    <section name="Release 3.0.2-dev">
-      <p>TBD
+    <section name="Release 3.0.2">
+      <p>This release of the Product Tools software includes corrections and modifications resulting from the beta test results of the Validation Tool integration. These include:
       </p>
+
+      <ul>
+        <li>Truncate long values when error messages get thrown for exceeding the acceptable maximum length of an element definition.</li>
+        <li>Corrected the issue where memory overflows occurred with large attached labels.</li>
+        <li>Corrected dictionary handling to support SPECIFIC_GROUPs and MAXIMUM values of UNK. </li>
+        <li>Corrected handling of pointer statements that contain multiple file references.</li>
+        <li>Corrected handling of required/optional nested objects with descriptor names.</li>
+        <li>Corrected an issue calculating the start byte of the data in attached labels.</li>
+        <li>Corrected to capture errors in nested fragment labels.</li>
+        <li>Cleaned up some messages.</li>
+      </ul>
+
+      <p>The liens for this release are as follows:
+      </p>
+
+      <ul>
+        <li>Plural forms of valid unit names are not supported.</li>
+        <li>Full checking of file characteristics not supported as of yet.</li>
+      </ul>
     </section>
 
     <section name="Release 3.0.1">
