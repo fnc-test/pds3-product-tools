@@ -2,13 +2,14 @@
 PDS_VERSION_ID                    = PDS3
 RECORD_TYPE                       = STREAM
 LABEL_REVISION_NOTE               = "
-2010-02-05, SH(EN) V3.0.1;
- This release of the Product Tools software supports the beta release of 
- the Validation Tool and includes a number of updates and corrections."
+2010-03-23, SH(EN) V3.0.2;
+ This release of the Product Tools software includes corrections and 
+ modifications resulting from the beta test results of the Validation 
+ Tool integration."
 
 OBJECT                            = SOFTWARE
   SOFTWARE_ID                     = "product-tools"
-  SOFTWARE_VERSION_ID             = "3.0.1"
+  SOFTWARE_VERSION_ID             = "3.0.2"
 
   OBJECT                          = SOFTWARE_INFORMATION
     SOFTWARE_NAME                 = "PDS Product Tools"
