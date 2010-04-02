@@ -633,7 +633,7 @@ EOL
               label.addLineLength($line, startColumn);
           }
         }
-    | {startColumn = getCharPositionInLine();} ('\n\r' | '\r' | '\n')
+    | {startColumn = getCharPositionInLine();} ('\r' | '\n')
         {
           if (label != null && this.pastEndLine == false) {
               label.addLineLength($line, startColumn);

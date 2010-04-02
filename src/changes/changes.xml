@@ -26,6 +26,9 @@
     </release>
 
     <release version="3.0.2" date="2010-03-23" description="This release of the Product Tools software includes corrections and modifications resulting from the beta test results of the Validation Tool integration.">
+      <action dev="jagander" type="fix">
+        PDSEN-314 - Fixed issue where lines containing only a CRLF preceded by a line ending with only an LF falsely reported a bad line ending.
+      </action>   
       <action dev="mcayanan" type="update">
         PDSEN-307 - Update to truncate long values when error messages get thrown for exceeding the acceptable maximum length of an element definition.
       </action>    
