@@ -23,9 +23,13 @@
   </properties>
   <body>
     <release version="3.0.3-dev" date="TBD" description="TBD">
+    	<action dev="jagander" type="fix">
+      	 Made Alias and Identifier serializable so that they can be used in dictionary change results for the volume validator.
+      	</action>   
     </release>
 
     <release version="3.0.2" date="2010-03-23" description="This release of the Product Tools software includes corrections and modifications resulting from the beta test results of the Validation Tool integration.">
+      
       <action dev="jagander" type="fix">
         PDSEN-314 - Fixed issue where lines containing only a CRLF preceded by a line ending with only an LF falsely reported a bad line ending.
       </action>   

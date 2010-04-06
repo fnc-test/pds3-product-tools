@@ -15,13 +15,17 @@
 
 package gov.nasa.pds.tools.label;
 
+import java.io.Serializable;
+
 /**
  * @author pramirez
  * @author jagander
  * @version $Revision$
  * 
  */
-public class Identifier {
+public class Identifier implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private String namespace;
 

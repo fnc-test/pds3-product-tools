@@ -17,6 +17,8 @@ package gov.nasa.pds.tools.dict;
 
 import gov.nasa.pds.tools.label.Identifier;
 
+import java.io.Serializable;
+
 /**
  * This class represents an Alias to a Definition. The alias is valid within the
  * context of some object or group.
@@ -26,7 +28,9 @@ import gov.nasa.pds.tools.label.Identifier;
  * @version $Revision$
  * 
  */
-public class Alias {
+public class Alias implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private String context;
 
