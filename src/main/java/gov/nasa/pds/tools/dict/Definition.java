@@ -48,7 +48,7 @@ public abstract class Definition implements Serializable {
 
     protected String objectType;
 
-    private Dictionary sourceDictionary;
+    private transient Dictionary sourceDictionary;
 
     /*
      * public Definition(final int lineNumber, DictIdentifier identifier) {

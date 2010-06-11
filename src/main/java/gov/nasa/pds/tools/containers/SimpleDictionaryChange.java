@@ -39,9 +39,11 @@ public class SimpleDictionaryChange implements Serializable {
 
     private final Object[] arguments;
 
-    private final Dictionary sourceDictionary;
+    private final transient Dictionary sourceDictionary;
 
     private final Definition definition;
+
+    private final String sourceString;
 
     // file needed? all going to be to the same file...
     // send in type? or just have different messages
@@ -49,6 +51,7 @@ public class SimpleDictionaryChange implements Serializable {
             final String messageKey, final Object... arguments) {
         this.definition = definition;
         this.sourceDictionary = definition.getSourceDictionary();
+        this.sourceString = this.sourceDictionary.getSourceString();
         this.lineNumber = definition.getLineNumber();
         this.id = definition.getIdentifier();
         this.arguments = arguments;
@@ -73,6 +76,10 @@ public class SimpleDictionaryChange implements Serializable {
 
     public Dictionary getDictionary() {
         return this.sourceDictionary;
+    }
+
+    public String getSourceString() {
+        return this.sourceString;
     }
 
     public Definition getDefinition() {
