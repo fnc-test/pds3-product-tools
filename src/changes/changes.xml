@@ -23,6 +23,9 @@
   </properties>
   <body>
     <release version="3.0.3-dev" date="TBD" description="TBD">
+    	<action dev="jagander" type="fix">
+      	 Making parsing of a label fragment as robust as parsing a label when a FileNotFoundException is thrown. Also differentiated between missing file and insufficient permissions. Did not add a test on permissions due issues of correctly storing file permissions in svn.
+      	</action>   
 		<action dev="jagander" type="fix">
       	 Made Dictionary transient in SimpleDictionaryChange and Definition as unnecessary when serializing. Added source string property to SimpleDictionaryChange as simple alternative to getting path to file (used to be from Dictionary instance)
       	</action>   

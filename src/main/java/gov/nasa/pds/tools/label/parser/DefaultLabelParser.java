@@ -144,6 +144,14 @@ public class DefaultLabelParser implements LabelParser {
             inputStream = new BufferedInputStream(new FileInputStream(file));
             inputStream.mark(100);
         } catch (FileNotFoundException e) {
+            if (file.exists()) {
+                throw new LabelParserException(
+                        file,
+                        null,
+                        null,
+                        "parser.error.unableToRead", ProblemType.INVALID_LABEL, file //$NON-NLS-1$
+                                .toString());
+            }
             throw new LabelParserException(file, null, null,
                     "parser.error.missingFile", ProblemType.INVALID_LABEL, file //$NON-NLS-1$
                             .getName());
@@ -346,9 +354,17 @@ public class DefaultLabelParser implements LabelParser {
             inputStream = new BufferedInputStream(new FileInputStream(file));
             inputStream.mark(100);
         } catch (FileNotFoundException e) {
-            // TODO: handle exception more appropriately
-            System.out.println(file.toString() + " not found."); //$NON-NLS-1$
-            return null;
+            if (file.exists()) {
+                throw new LabelParserException(
+                        file,
+                        null,
+                        null,
+                        "parser.error.unableToRead", ProblemType.INVALID_LABEL, file //$NON-NLS-1$
+                                .toString());
+            }
+            throw new LabelParserException(file, null, null,
+                    "parser.error.missingFile", ProblemType.INVALID_LABEL, file //$NON-NLS-1$
+                            .getName());
         }
         final Label label = new Label(file);
         label.setCaptureProblems(captureProbs);
@@ -392,8 +408,9 @@ public class DefaultLabelParser implements LabelParser {
     /*
      * (non-Javadoc)
      * 
-     * @see gov.nasa.pds.tools.label.parser.LabelParser#parsePartial(java.net.URL,
-     *      boolean)
+     * @see
+     * gov.nasa.pds.tools.label.parser.LabelParser#parsePartial(java.net.URL,
+     * boolean)
      */
     public Label parsePartial(final BufferedInputStream inputStream,
             final Label label, final Label parent) throws IOException,
