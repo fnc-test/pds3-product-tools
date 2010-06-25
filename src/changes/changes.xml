@@ -24,6 +24,12 @@
   <body>
     <release version="3.0.3-dev" date="TBD" description="TBD">
     	<action dev="jagander" type="fix">
+      	 Setting dictionary source string at instantiation so that the string can be serialized. Required for working with dictionary changes in the volume validator.
+      	</action>  
+    	<action dev="jagander" type="fix">
+      	 Making sure key is never null for LabelParserException, defaulting to exception message as is done elsewhere.
+      	</action>  
+    	<action dev="jagander" type="fix">
       	 Making parsing of a label fragment as robust as parsing a label when a FileNotFoundException is thrown. Also differentiated between missing file and insufficient permissions. Did not add a test on permissions due issues of correctly storing file permissions in svn.
       	</action>   
 		<action dev="jagander" type="fix">

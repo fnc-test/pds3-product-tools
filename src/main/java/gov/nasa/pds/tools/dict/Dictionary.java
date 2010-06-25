@@ -60,6 +60,8 @@ public class Dictionary implements Serializable {
 
     private final File dictionaryFile;
 
+    private final String sourceString;
+
     private Map<String, String> units = new HashMap<String, String>();
 
     private final List<SimpleDictionaryChange> mergeChanges = new ArrayList<SimpleDictionaryChange>();
@@ -69,15 +71,18 @@ public class Dictionary implements Serializable {
     public Dictionary() {
         this.dictionaryURI = null;
         this.dictionaryFile = null;
+        this.sourceString = null;
     }
 
     public Dictionary(URI dictionaryURI) {
         this.dictionaryURI = dictionaryURI;
+        this.sourceString = this.dictionaryURI.toString();
         this.dictionaryFile = null;
     }
 
     public Dictionary(final File dictionaryFile) {
         this.dictionaryFile = dictionaryFile;
+        this.sourceString = this.dictionaryFile.toString();
         this.dictionaryURI = null;
     }
 
@@ -90,13 +95,7 @@ public class Dictionary implements Serializable {
     }
 
     public String getSourceString() {
-        if (this.dictionaryFile != null) {
-            return this.dictionaryFile.toString();
-        }
-        if (this.dictionaryURI != null) {
-            return this.dictionaryURI.toString();
-        }
-        return null;
+        return this.sourceString;
     }
 
     public String getVersion() {

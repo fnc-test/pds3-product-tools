@@ -71,6 +71,7 @@ import java.util.Map;
 import org.antlr.runtime.ANTLRInputStream;
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.CommonTokenStream;
+import org.antlr.runtime.RecognitionException;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Logger;
@@ -336,9 +337,9 @@ public class DictionaryParser {
                 dictionary.addDefinitions(definitions);
             }
             // TODO: Update to catch thrown exception not all exceptions
-        } catch (Exception ex) {
+        } catch (RecognitionException ex) {
             log.error(ex.getMessage());
-            throw new LabelParserException(ex, null, null,
+            throw new LabelParserException(ex, ex.line, ex.charPositionInLine,
                     ProblemType.PARSE_ERROR);
         }
 

@@ -50,6 +50,8 @@ public abstract class Definition implements Serializable {
 
     private transient Dictionary sourceDictionary;
 
+    private final String sourceString;
+
     /*
      * public Definition(final int lineNumber, DictIdentifier identifier) {
      * this(null, lineNumber, identifier); }
@@ -58,12 +60,17 @@ public abstract class Definition implements Serializable {
     public Definition(final Dictionary sourceDictionary, final int lineNumber,
             DictIdentifier identifier) {
         this.sourceDictionary = sourceDictionary;
+        this.sourceString = sourceDictionary.getSourceString();
         this.lineNumber = lineNumber;
         this.identifier = identifier;
     }
 
     public Dictionary getSourceDictionary() {
         return this.sourceDictionary;
+    }
+
+    public String getSourceString() {
+        return this.sourceString;
     }
 
     /**

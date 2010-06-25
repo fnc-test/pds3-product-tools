@@ -51,7 +51,7 @@ public class SimpleDictionaryChange implements Serializable {
             final String messageKey, final Object... arguments) {
         this.definition = definition;
         this.sourceDictionary = definition.getSourceDictionary();
-        this.sourceString = this.sourceDictionary.getSourceString();
+        this.sourceString = definition.getSourceString();
         this.lineNumber = definition.getLineNumber();
         this.id = definition.getIdentifier();
         this.arguments = arguments;

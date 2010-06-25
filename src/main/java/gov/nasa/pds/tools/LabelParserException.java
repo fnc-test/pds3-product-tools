@@ -239,7 +239,7 @@ public class LabelParserException extends Exception {
         this.lineNumber = lineNumber;
         this.column = column;
         this.type = type;
-        this.key = null;
+        this.key = e.getMessage();
         this.arguments = null;
     }
 
