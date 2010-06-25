@@ -663,7 +663,7 @@ public class Label {
     // behavior from getSkipBytes()
     private Integer getStartByte(final Numeric startPosition,
             final Integer recordBytes) {
-        if (startPosition == null) {
+        if (startPosition == null || startPosition.getValue().equals("0")) {
             return null;
         }
         final String units = startPosition.getUnits();

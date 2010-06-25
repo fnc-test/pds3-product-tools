@@ -59,7 +59,7 @@ public class FileReference {
         this.lineNumber = lineNumber;
         this.identifier = identifier;
         this.parent = parent;
-        this.startPosition = startPosition;
+        this.startPosition = startPosition == null ? new Numeric("0") : startPosition; //$NON-NLS-1$
     }
 
     public String getPath() {
