@@ -51,6 +51,8 @@ public class Label {
 
     private final File labelFile;
 
+    private String labelPath;
+
     // used to determine if problems should be captured. This is turned off for
     // included files since they are evaluated separately. However, since
     // circular pointer problems will always be swallowed, that type is
@@ -79,7 +81,7 @@ public class Label {
 
     private final List<LabelParserException> problems = new ArrayList<LabelParserException>();
 
-    private final List<String> includePointerPaths = new ArrayList<String>();
+    private final List<String> ancestorPaths = new ArrayList<String>();
 
     // indication as to whether label terminates with END statement. It should
     // not if it's a label fragment. Note that this is not impacted by attached
@@ -133,6 +135,9 @@ public class Label {
     public Label(final URI labelURI) {
         this.statements = new HashMap<DictIdentifier, List<Statement>>();
         this.labelURI = labelURI;
+        if (labelURI != null) {
+            this.labelPath = labelURI.toString();
+        }
         this.labelFile = null;
     }
 
@@ -140,6 +145,9 @@ public class Label {
         this.statements = new HashMap<DictIdentifier, List<Statement>>();
         this.labelURI = null;
         this.labelFile = labelFile;
+        if (labelFile != null) {
+            this.labelPath = labelFile.toString();
+        }
     }
 
     public boolean isValid() {
@@ -160,6 +168,10 @@ public class Label {
 
     public boolean hasAttachedContent() {
         return this.attachedStartByte != null;
+    }
+
+    public String getLabelPath() {
+        return this.labelPath;
     }
 
     // should only be used when you don't have a statement since statements
@@ -421,46 +433,38 @@ public class Label {
         return this.problems;
     }
 
-    public void addIncludePointer(final File pointer) {
-        addIncludePointer(pointer.toString());
-    }
-
-    public void addIncludePointer(final URI pointer) {
-        addIncludePointer(pointer.toString());
-    }
-
-    private void addIncludePointer(final String path) {
-        if (!this.includePointerPaths.contains(path)) {
-            this.includePointerPaths.add(path);
+    public void addAncestor(final String path) {
+        if (!this.ancestorPaths.contains(path)) {
+            this.ancestorPaths.add(path);
         }
     }
 
-    public void addIncludePointers(final List<String> pointers) {
+    public void addAncestors(final List<String> pointers) {
         for (final String pointer : pointers) {
-            addIncludePointer(pointer);
+            addAncestor(pointer);
         }
     }
 
-    public boolean hasIncludePointer(final URI pointer) {
+    public boolean hasAncestor(final URI pointer) {
         if (pointer.equals(this.labelURI)) {
             return true;
         }
-        return this.includePointerPaths.contains(pointer.toString());
+        return this.ancestorPaths.contains(pointer.toString());
     }
 
-    public boolean hasIncludePointer(final File pointer) {
+    public boolean hasAncestor(final File pointer) {
         if (pointer.equals(this.labelFile)) {
             return true;
         }
-        return this.includePointerPaths.contains(pointer.toString());
+        return this.ancestorPaths.contains(pointer.toString());
     }
 
     public boolean hasIncludePointer(final String path) {
-        return this.includePointerPaths.contains(path);
+        return this.ancestorPaths.contains(path);
     }
 
-    public List<String> getIncludePointers() {
-        return this.includePointerPaths;
+    public List<String> getAncestors() {
+        return this.ancestorPaths;
     }
 
     public URI getLabelURI() {
@@ -663,7 +667,7 @@ public class Label {
     // behavior from getSkipBytes()
     private Integer getStartByte(final Numeric startPosition,
             final Integer recordBytes) {
-        if (startPosition == null || startPosition.getValue().equals("0")) {
+        if (startPosition == null || startPosition.getValue().equals("0")) { //$NON-NLS-1$
             return null;
         }
         final String units = startPosition.getUnits();

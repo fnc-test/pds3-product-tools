@@ -235,8 +235,8 @@ public class DictionaryParser {
      * document and formulates a {@link Dictionary} with a flag to indicated
      * whether aliases should be read in.
      * 
-     * @param url
-     *            points to the location of the dictionary
+     * @param input
+     *            input stream to dictionary
      * @param aliasing
      *            indicates if aliases should be read in
      * @return a data dictionary with element, group, and object definitions

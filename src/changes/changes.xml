@@ -23,6 +23,10 @@
   </properties>
   <body>
     <release version="3.0.3-dev" date="TBD" description="TBD">
+    
+    	<action dev="jagander" type="fix">
+      	 Changing circular pointer tests to only check if a pointed to file is in your ancestor list. Old logic failed when you used a format file in multiple table defs in the same label.
+      	</action>
     	<action dev="jagander" type="fix">
       	 Defaulting numeric position of a FileReference to the beginning of a file. This was causing issues in file maps where null positions resulted in record overwriting.
       	</action>

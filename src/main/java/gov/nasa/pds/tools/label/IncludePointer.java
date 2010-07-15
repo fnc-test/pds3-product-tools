@@ -80,8 +80,7 @@ public abstract class IncludePointer extends SpecialPointer {
             // final Numeric start = entry.getKey();
             // TODO: make sure file is not in the stack of files pointed
             // from check if in labels list
-            if (!parentLabel.hasIncludePointer(foundFile)) {
-                parentLabel.addIncludePointer(foundFile);
+            if (!parentLabel.hasAncestor(foundFile)) {
                 LabelParser parser = null;
                 if (parentLabel.getAllowExternalProblems()) {
                     parser = new DefaultLabelParser(true, parentLabel
@@ -125,8 +124,7 @@ public abstract class IncludePointer extends SpecialPointer {
                 // final Numeric start = entry.getKey();
                 // TODO: make sure file is not in the stack of files pointed
                 // from check if in labels list
-                if (!parentLabel.hasIncludePointer(foundFile)) {
-                    parentLabel.addIncludePointer(foundFile);
+                if (!parentLabel.hasAncestor(foundFile)) {
                     LabelParser parser = null;
                     if (parentLabel.getAllowExternalProblems()) {
                         parser = new DefaultLabelParser(true, parentLabel

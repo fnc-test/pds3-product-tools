@@ -416,11 +416,12 @@ public class DefaultLabelParser implements LabelParser {
             final Label label, final Label parent) throws IOException,
             LabelParserException {
 
-        // add include pointers to label to be able to test for circular
+        // add ancestors to label to be able to test for circular
         // references
         if (parent != null) {
-            label.addIncludePointers(parent.getIncludePointers());
+            label.addAncestors(parent.getAncestors());
         }
+        label.addAncestor(label.getLabelPath());
 
         List<SFDULabel> sfdus = consumeSFDUHeader(inputStream);
         int numConsumed = sfdus.size();
