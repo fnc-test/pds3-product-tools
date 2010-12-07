@@ -27,6 +27,7 @@ import gov.nasa.pds.tools.label.Statement;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -41,6 +42,7 @@ import java.util.Map;
  */
 public class Validator {
     private Map<String, Boolean> properties = new HashMap<String, Boolean>();
+    private List<LabelValidator> otherValidators = new ArrayList<LabelValidator>();
 
     public static final String LINE_LEN_CHECK = "gov.nasa.pds.tools.label.validate.LineCheck"; //$NON-NLS-1$
     public static final String DUP_ID_CHECK = "gov.nasa.pds.tools.label.validate.DuplicateIdentifierValidator"; //$NON-NLS-1$
@@ -146,6 +148,11 @@ public class Validator {
         if (performsDuplicateIdCheck()) {
             // TODO: Integrate back file characteristic check if needed
         }
+
+        // Perform any additional checks that were loaded
+        for (LabelValidator ov : otherValidators) {
+            ov.validate(label);
+        }
     }
 
     public boolean getProperty(String property) {
@@ -201,4 +208,7 @@ public class Validator {
         return getProperty(FILE_CHAR_CHECK);
     }
 
+    public void addValidator(LabelValidator validator) {
+        otherValidators.add(validator);
+    }
 }
