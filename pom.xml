@@ -152,8 +152,7 @@
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
-        <artifactId>maven-buildnumber-plugin</artifactId>
-        <version>0.9.6</version>
+        <artifactId>buildnumber-maven-plugin</artifactId>
         <executions>
           <execution>
             <phase>validate</phase>
