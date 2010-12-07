@@ -10,7 +10,7 @@
 // may be required before exporting such information to foreign countries or
 // providing access to foreign nationals.
 //
-// $Id$ 
+// $Id$
 //
 
 package gov.nasa.pds.tools.label;
@@ -130,4 +130,44 @@ public class GroupStatement extends Statement {
             statementList.addAll(stmts);
         return statementList;
     }
+
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
+        if ((object == null) || (object.getClass() != this.getClass())) {
+            return false;
+        }
+
+        GroupStatement thatGroup = (GroupStatement) object;
+        List<AttributeStatement> thoseAttributes = thatGroup.getAttributes();
+
+        for (AttributeStatement thisAttribute : getAttributes()) {
+            AttributeStatement thatAttribute = thatGroup
+                    .getAttribute(thisAttribute.getIdentifier().getId());
+            if (thatAttribute == null) {
+                return false;
+            } else {
+                if (!thisAttribute.equals(thatAttribute)) {
+                    return false;
+                } else {
+                    thoseAttributes.remove(thatAttribute);
+                }
+            }
+        }
+        if (!thoseAttributes.isEmpty()) {
+            return false;
+        }
+        return true;
+    }
+
+    public int hashcode() {
+        int hash = 7;
+
+        hash = 31 * hash
+                + (null == getAttributes() ? 0 : getAttributes().hashCode());
+
+        return hash;
+    }
+
 }

@@ -10,13 +10,14 @@
 // may be required before exporting such information to foreign countries or
 // providing access to foreign nationals.
 //
-// $Id$ 
+// $Id$
 //
 
 package gov.nasa.pds.tools.label;
 
 import gov.nasa.arc.pds.tools.util.StrUtils;
 import gov.nasa.pds.tools.dict.parser.DictIDFactory;
+import gov.nasa.pds.tools.util.Utility;
 
 /**
  * @author pramirez
@@ -146,6 +147,46 @@ public class AttributeStatement extends Statement {
         return StrUtils.toString(this.identifier) + " = "
                 + StrUtils.toString(this.value) + "("
                 + StrUtils.getNonNull(this.sourceFile, this.sourceURI) + ")";
+    }
+
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
+        if ((object == null) || (object.getClass() != this.getClass())) {
+            return false;
+        }
+        AttributeStatement as = (AttributeStatement) object;
+        if (value == null) {
+            return (identifier == as.identifier || (identifier != null && identifier
+                    .equals(as.identifier)));
+        } else {
+            boolean sameIdentifier = (identifier == as.identifier || (identifier != null && identifier
+                    .equals(as.identifier)));
+            boolean sameValue = (value == as.value || (value != null && value
+                    .toString().equals(as.value.toString())));
+            if (sameValue == false) {
+                String strippedValue1 = Utility
+                        .stripOnlyWhitespaceAndNewLine(value.toString());
+                String strippedValue2 = Utility
+                        .stripOnlyWhitespaceAndNewLine(as.value.toString());
+                sameValue = (strippedValue1.equals(strippedValue2));
+            }
+            return (sameIdentifier && sameValue);
+        }
+    }
+
+    public int hashcode() {
+        int hash = 7;
+
+        hash = 31 * hash + (null == identifier ? 0 : identifier.hashCode());
+        if (value != null)
+            hash = 31
+                    * hash
+                    + (null == value.toString() ? 0 : value.toString()
+                            .hashCode());
+
+        return hash;
     }
 
 }

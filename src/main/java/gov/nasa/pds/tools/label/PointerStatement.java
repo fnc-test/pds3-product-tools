@@ -131,9 +131,10 @@ public class PointerStatement extends Statement {
                             getLineNumber(), getIdentifier(),
                             (Numeric) this.value);
                 } else {
-                    fileRef = new FileReference(StrUtils
-                            .getURIFilename(this.sourceURI), getLineNumber(),
-                            getIdentifier(), (Numeric) this.value);
+                    fileRef = new FileReference(
+                            StrUtils.getURIFilename(this.sourceURI),
+                            getLineNumber(), getIdentifier(),
+                            (Numeric) this.value);
                 }
                 this.fileRefs.add(fileRef);
             } else {
@@ -144,6 +145,38 @@ public class PointerStatement extends Statement {
             }
         }
         return this.fileRefs;
+    }
+
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
+        if ((object == null) || (object.getClass() != this.getClass())) {
+            return false;
+        }
+        PointerStatement ps = (PointerStatement) object;
+        if (value == null) {
+            return (identifier == ps.identifier || (identifier != null && identifier
+                    .equals(ps.identifier)));
+        } else {
+            return (identifier == ps.identifier || (identifier != null && identifier
+                    .equals(ps.identifier)))
+                    && (value == ps.value || (value != null && value.toString()
+                            .equals(ps.value.toString())));
+        }
+    }
+
+    public int hashcode() {
+        int hash = 7;
+
+        hash = 31 * hash + (null == identifier ? 0 : identifier.hashCode());
+        if (value != null)
+            hash = 31
+                    * hash
+                    + (null == value.toString() ? 0 : value.toString()
+                            .hashCode());
+
+        return hash;
     }
 
 }
