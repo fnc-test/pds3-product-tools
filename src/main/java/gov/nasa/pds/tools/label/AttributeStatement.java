@@ -153,7 +153,7 @@ public class AttributeStatement extends Statement {
         if (this == object) {
             return true;
         }
-        if ((object == null) || (object.getClass() != this.getClass())) {
+        if (!(object instanceof AttributeStatement)) {
             return false;
         }
         AttributeStatement as = (AttributeStatement) object;
@@ -164,8 +164,9 @@ public class AttributeStatement extends Statement {
             boolean sameIdentifier = (identifier == as.identifier || (identifier != null && identifier
                     .equals(as.identifier)));
             boolean sameValue = (value == as.value || (value != null && value
-                    .toString().equals(as.value.toString())));
+                    .equals(as.value)));
             if (sameValue == false) {
+                // Strip out extra whitespaces and newline characters
                 String strippedValue1 = Utility
                         .stripOnlyWhitespaceAndNewLine(value.toString());
                 String strippedValue2 = Utility

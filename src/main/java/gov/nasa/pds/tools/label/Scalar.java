@@ -10,7 +10,7 @@
 // may be required before exporting such information to foreign countries or
 // providing access to foreign nationals.
 //
-// $Id$ 
+// $Id$
 //
 
 package gov.nasa.pds.tools.label;
@@ -54,4 +54,19 @@ public abstract class Scalar implements Value {
     }
 
     public abstract boolean isSupportedPDSType(DictionaryType type);
+
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
+        if (!(object instanceof Scalar)) {
+            return false;
+        }
+        Scalar that = (Scalar) object;
+        return this.value.equals(that.getValue());
+    }
+
+    public int hashcode() {
+        return this.value.hashCode();
+    }
 }

@@ -10,7 +10,7 @@
 // may be required before exporting such information to foreign countries or
 // providing access to foreign nationals.
 //
-// $Id$ 
+// $Id$
 //
 
 package gov.nasa.pds.tools.label;
@@ -162,6 +162,43 @@ public class Set implements Collection<Scalar>, Value {
 
     public String normalize() {
         return StrUtils.normalize(this.toString());
+    }
+
+    public String toString() {
+        String value = "{";
+
+        for (Iterator<Scalar> i = iterator(); i.hasNext();) {
+            value += i.next().toString();
+            if (i.hasNext()) {
+                value += ", ";
+            }
+        }
+        value += "}";
+
+        return value;
+    }
+
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
+        if (!(object instanceof Set)) {
+            return false;
+        }
+        Set that = (Set) object;
+        if (this.size() != that.size()) {
+            return false;
+        }
+        for (Iterator<Scalar> i = this.iterator(); i.hasNext();) {
+            if (!that.contains(i.next())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public int hashcode() {
+        return this.values.hashCode();
     }
 
 }

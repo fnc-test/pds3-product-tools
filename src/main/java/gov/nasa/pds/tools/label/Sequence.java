@@ -10,7 +10,7 @@
 // may be required before exporting such information to foreign countries or
 // providing access to foreign nationals.
 //
-// $Id$ 
+// $Id$
 //
 
 package gov.nasa.pds.tools.label;
@@ -282,4 +282,41 @@ public class Sequence implements List<Value>, Value {
         return StrUtils.normalize(this.toString());
     }
 
+    public String toString() {
+        String value = "(";
+
+        for (Iterator<Value> i = listIterator(); i.hasNext();) {
+            value += i.next().toString();
+            if (i.hasNext()) {
+                value += ", ";
+            }
+        }
+        value += ")";
+
+        return value;
+    }
+
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
+
+        if (!(object instanceof Sequence)) {
+            return false;
+        }
+        Sequence that = (Sequence) object;
+        if (this.size() != that.size()) {
+            return false;
+        }
+        for (int i = 0; i < this.size(); i++) {
+            if (!this.get(i).equals(that.get(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public int hashcode() {
+        return this.values.hashCode();
+    }
 }
