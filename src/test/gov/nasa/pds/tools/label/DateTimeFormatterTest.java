@@ -187,12 +187,6 @@ public class DateTimeFormatterTest extends BaseTestCase {
     final Label label = PARSER.parseLabel(testFile);
     validate(label);
 
-    for (LabelParserException lpe : label.getProblems()) {
-      System.out.println("Line: " + lpe.getLineNumber());
-      System.out.println(lpe.getKey());
-      for (Object arg : lpe.getArguments())
-        System.out.println(arg);
-    }
     assertEquals(14, label.getProblems().size());
   }
 
