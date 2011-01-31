@@ -65,9 +65,15 @@ import gov.nasa.pds.tools.constants.Constants.ProblemType;
 @parser::members {
 
     private PointerResolver pointerResolver;
+    
+    private Boolean loadIncludes = true;
 
     public void setPointerResolver(final PointerResolver pointerResolver) {
         this.pointerResolver = pointerResolver;
+    }
+    
+    public void setLoadIncludes(Boolean loadIncludes) {
+        this.loadIncludes = loadIncludes;
     }
     
     private Label label = null;
@@ -278,7 +284,7 @@ pointer_statement[Label label] returns [PointerStatement result = null]
       {
         if(a != null) {
         	result = PointerStatementFactory.newInstance(label, a.getLineNumber(), a.getIdentifier().getId(), a.getValue());
-	         if (result != null && result instanceof IncludePointer) {
+	         if (loadIncludes && result != null && result instanceof IncludePointer) {
 	            IncludePointer sp = (IncludePointer) result;
 	            try {
 	               // When using ManualPathResolver problems will be added at this time to the pointer's label.
