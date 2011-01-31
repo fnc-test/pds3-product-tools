@@ -29,61 +29,58 @@ import java.util.Date;
  */
 public class DateTime extends Scalar {
 
-    private Date date;
+  private Date date;
 
-    /**
-     * @param value
-     *            represented as a string which is in a PDS compatible format
-     * @param lineNumber
-     *            in which this value was found
-     */
-    public DateTime(final Label label, final String value, final int lineNumber)
-            throws LabelParserException {
-        this(label, value, lineNumber, false);
-    }
+  /**
+   * @param value
+   *          represented as a string which is in a PDS compatible format
+   * @param lineNumber
+   *          in which this value was found
+   */
+  public DateTime(final Label label, final String value, final int lineNumber)
+      throws LabelParserException {
+    this(label, value, lineNumber, false);
+  }
 
-    /**
-     * @param value
-     *            represented as a string which is in a PDS compatible format
-     * @param lineNumber
-     *            in which this value was found
-     * @param lenient
-     *            a flag to indicate how to parse the date
-     */
-    public DateTime(final Label label, final String value,
-            final int lineNumber, final boolean lenient)
-            throws LabelParserException {
-        super(value);
-        if (lenient) {
-            this.date = DateTimeFormatter
-                    .lenientParse(label, value, lineNumber);
-        } else {
-            this.date = DateTimeFormatter.parse(label, value, lineNumber);
-        }
+  /**
+   * @param value
+   *          represented as a string which is in a PDS compatible format
+   * @param lineNumber
+   *          in which this value was found
+   * @param lenient
+   *          a flag to indicate how to parse the date
+   */
+  public DateTime(final Label label, final String value, final int lineNumber,
+      final boolean lenient) throws LabelParserException {
+    super(value);
+    if (lenient) {
+      this.date = DateTimeFormatter.lenientParse(label, value, lineNumber);
+    } else {
+      this.date = DateTimeFormatter.parse(label, value, lineNumber);
     }
+  }
 
-    public DateTime(Date date) {
-        super(date.toString());
-        this.date = date;
-    }
+  public DateTime(Date date) {
+    super(date.toString());
+    this.date = date;
+  }
 
-    public Date getDate() {
-        return this.date;
-    }
+  public Date getDate() {
+    return this.date;
+  }
 
-    public String normalize() {
-        return StrUtils.normalize(this.toString());
-    }
+  public String normalize() {
+    return StrUtils.normalize(this.toString());
+  }
 
-    @Override
-    public boolean isSupportedPDSType(DictionaryType type) {
-        if (DictionaryType.DATE.equals(type)
-                || DictionaryType.TIME.equals(type)
-                || DictionaryType.CONTEXT_DEPENDENT.equals(type)
-                || DictionaryType.CONTEXTDEPENDENT.equals(type)) {
-            return true;
-        }
-        return false;
+  @Override
+  public boolean isSupportedPDSType(DictionaryType type) {
+    if (DictionaryType.DATE.equals(type) || DictionaryType.TIME.equals(type)
+        || DictionaryType.CONTEXT_DEPENDENT.equals(type)
+        || DictionaryType.CONTEXTDEPENDENT.equals(type)) {
+      return true;
     }
+    return false;
+  }
 
 }

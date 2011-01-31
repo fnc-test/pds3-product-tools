@@ -23,7 +23,9 @@
   </properties>
   <body>
     <release version="3.0.3-dev" date="TBD" description="TBD">
-    
+      <action dev="merose,pramirez" type="fix">
+        Changed the way date times were parsed to be simpler and cleaner. Also addressed a bug found in old parsing code. For the time being the invalid date messages may be less specific than in the past.
+      </action>
     	<action dev="jagander" type="fix">
       	 Changing circular pointer tests to only check if a pointed to file is in your ancestor list. Old logic failed when you used a format file in multiple table defs in the same label.
       	</action>

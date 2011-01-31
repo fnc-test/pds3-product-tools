@@ -18,237 +18,59 @@ package gov.nasa.pds.tools.label;
 import gov.nasa.pds.tools.LabelParserException;
 import gov.nasa.pds.tools.constants.Constants.ProblemType;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
+ * Implements a parser for a PDS3 date/time string.
+ * 
  * @author pramirez
  * @author jagander
+ * @author merose
  * @version $Revision$
- * 
  */
 public class DateTimeFormatter {
-    @SuppressWarnings("nls")
-    private static SimpleDateFormat[] formats = {
-            new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"),
-            new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS"),
-            new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SS'Z'"),
-            new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SS"),
-            new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S'Z'"),
-            new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S"),
-            new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'"),
-            new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss"),
-            new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'"),
-            new SimpleDateFormat("yyyy-MM-dd'T'HH:mm"),
-            new SimpleDateFormat("yyyy-MM-dd'T'HH'Z'"),
-            new SimpleDateFormat("yyyy-MM-dd'T'HH"),
-
-            // Must have day-of-year formats after formats with month,
-            // so that yyyy-mm is not misinterpreted as a day-of-year.
-            new SimpleDateFormat("yyyy-DDD'T'HH:mm:ss.SSS'Z'"),
-            new SimpleDateFormat("yyyy-DDD'T'HH:mm:ss.SSS"),
-            new SimpleDateFormat("yyyy-DDD'T'HH:mm:ss.SS'Z'"),
-            new SimpleDateFormat("yyyy-DDD'T'HH:mm:ss.SS"),
-            new SimpleDateFormat("yyyy-DDD'T'HH:mm:ss.S'Z'"),
-            new SimpleDateFormat("yyyy-DDD'T'HH:mm:ss.S"),
-            new SimpleDateFormat("yyyy-DDD'T'HH:mm:ss'Z'"),
-            new SimpleDateFormat("yyyy-DDD'T'HH:mm:ss"),
-            new SimpleDateFormat("yyyy-DDD'T'HH:mm'Z'"),
-            new SimpleDateFormat("yyyy-DDD'T'HH:mm"),
-            new SimpleDateFormat("yyyy-DDD'T'HH'Z'"),
-            new SimpleDateFormat("yyyy-DDD'T'HH"),
-
-            // do ones without 'T' last as they are less specific
-            new SimpleDateFormat("yyyy-MM-dd"), //
-            new SimpleDateFormat("yyyy-MM"), //
-            new SimpleDateFormat("yyyy-DDD"), //
-            new SimpleDateFormat("yyyy"), //
-    };
-
-    private static SimpleDateFormat hackDateFormat = new SimpleDateFormat(
-            "yyyy-DDD"); //$NON-NLS-1$
-
-    @SuppressWarnings("nls")
-    private static SimpleDateFormat[] dateFormats = {
-            new SimpleDateFormat("yyyy-MM-dd"), //
-            new SimpleDateFormat("yyyy-MM"), //
-            new SimpleDateFormat("yyyy-DDD"), //
-            new SimpleDateFormat("yyyy"), //
-    };
-
-    @SuppressWarnings("nls")
-    private static SimpleDateFormat[] timeFormats = {
-            new SimpleDateFormat("HH:mm:ss.SSS'Z'"), //
-            new SimpleDateFormat("HH:mm:ss.SSS"), //
-            new SimpleDateFormat("HH:mm:ss.SS'Z'"), //
-            new SimpleDateFormat("HH:mm:ss.SS"), //
-            new SimpleDateFormat("HH:mm:ss.S'Z'"), //
-            new SimpleDateFormat("HH:mm:ss.S"), //
-            new SimpleDateFormat("HH:mm:ss'Z'"), //
-            new SimpleDateFormat("HH:mm:ss"), //
-            new SimpleDateFormat("HH:mm'Z'"), //
-            new SimpleDateFormat("HH:mm"), //
-            new SimpleDateFormat("HH'Z'"), //
-            new SimpleDateFormat("HH"), };
-
-    static {
-        for (int i = 0; i < formats.length; ++i) {
-            formats[i].setLenient(false);
-        }
-        hackDateFormat.setLenient(false);
-    }
-
-    public static Date parse(final Label label, final String dateTime,
-            final int lineNumber) throws LabelParserException {
-        checkComponents(label, dateTime, lineNumber);
-        Date d = lenientParse(label, dateTime, lineNumber);
-
-        // Now format the date part back, to see if we get the same result, or a
-        // prefix.
-        String[] dateParts = dateTime.split("T"); //$NON-NLS-1$
-        for (int i = 0; i < dateFormats.length; ++i) {
-            String checkDate = dateFormats[i].format(d);
-            if (dateParts[0].equals(checkDate)) {
-                // if has time component, compare that
-                if (dateParts.length > 1) {
-                    for (int j = 0; j < timeFormats.length; ++j) {
-                        String checkTime = timeFormats[j].format(d);
-                        if (dateParts[1].equals(checkTime)) {
-                            return d;
-                        }
-                    }
-                } else {
-                    return d;
-                }
-            }
-        }
-
-        // If we get here, then we didn't get back the same digits we put in,
-        // which means the label author used something like "13" for a month,
-        // or other value out of normal range, which SimpleDateFormat accepts,
-        // and adjusts the date accordingly.
+  /**
+   * Parses a date/time string into a Java {@link Date}. Throws error exceptions
+   * with respect to a designated label, if there are parse errors.
+   * 
+   * @param label
+   *          the label in which the date/time string appears
+   * @param dateTime
+   *          the date/time string from the label
+   * @param lineNumber
+   *          the line number within the label where the date/time string
+   *          appears
+   * @return the date corresponding to the date/time string
+   * @throws LabelParserException
+   *           if there are any parse errors
+   */
+  public static Date parse(final Label label, final String dateTime,
+      final int lineNumber) throws LabelParserException {
+    try {
+      return ParseDateTime.parse(dateTime);
+    } catch (ParseDateTime.ParseException ex) {
+      if (ex.getField() < 0) {
         throw new LabelParserException(label, lineNumber, null,
-                "parser.error.dateOutOfRange", ProblemType.INVALID_DATE, //$NON-NLS-1$
-                dateTime);
+            "parser.error.invalidDate", //$NON-NLS-1$
+            ProblemType.INVALID_DATE, dateTime);
+      }
+
+      throw new LabelParserException(label, lineNumber, null,
+          "parser.error.dateOutOfRange", //$NON-NLS-1$
+          ProblemType.INVALID_DATE, dateTime);
+    }
+  }
+
+  public static Date lenientParse(final Label label, final String dateTime,
+      final int lineNumber) throws LabelParserException {
+    try {
+      return ParseDateTime.lenientParse(dateTime);
+    } catch (ParseDateTime.ParseException ex) {
+      // ignore
     }
 
-    protected static Date lenientParse(final Label label,
-            final String dateTime, final int lineNumber)
-            throws LabelParserException {
-        // hack to deal with date format stuff being too lenient on input
-        if (dateTime.matches("[0-9]{4}-[0-9]{3}")) { //$NON-NLS-1$
-            try {
-                Date d = hackDateFormat.parse(dateTime);
-                return d;
-            } catch (ParseException ex) {
-                // ignore
-            } catch (NumberFormatException ex) {
-                // ignore
-            }
-        }
-
-        for (int i = 0; i < formats.length; ++i) {
-            try {
-                Date d = formats[i].parse(dateTime);
-                return d;
-            } catch (ParseException ex) {
-                // ignore
-            } catch (NumberFormatException ex) {
-                // ignore
-            }
-        }
-
-        // If we get here, no format matched.
-        throw new LabelParserException(label, lineNumber, null,
-                "parser.error.invalidDate", ProblemType.INVALID_DATE, dateTime); //$NON-NLS-1$
-    }
-
-    protected static void checkComponents(final Label label,
-            final String dateTime, final int lineNumber)
-            throws LabelParserException {
-        String[] dateAndTime = dateTime.split("T"); //$NON-NLS-1$
-        checkDateComponents(label, dateAndTime[0], lineNumber);
-        if (dateAndTime.length > 1) {
-            checkTimeComponents(label, dateAndTime[1], lineNumber);
-        }
-    }
-
-    protected static void checkDateComponents(final Label label,
-            final String dateStr, final int lineNumber)
-            throws LabelParserException {
-        String[] dateComponents = dateStr.split("-"); //$NON-NLS-1$
-        // must at least have years
-        if (dateComponents.length < 1) {
-            throw new LabelParserException(label, lineNumber, null,
-                    "parser.error.missingDateParts", ProblemType.INVALID_DATE, //$NON-NLS-1$
-                    dateStr);
-        }
-        // may not have more than years months and days on this side
-        if (dateComponents.length > 3) {
-            throw new LabelParserException(label, lineNumber, null,
-                    "parser.error.extraDateParts", ProblemType.INVALID_DATE, //$NON-NLS-1$
-                    dateStr);
-        }
-
-        // years must be 4 digits
-        checkComponent(label, dateComponents[0], 4, 4,
-                "parser.error.badYearLength", //$NON-NLS-1$
-                lineNumber);
-
-        // if has 2 parts, second may be days of year or month
-        if (dateComponents.length == 2) {
-            // yyyy-doy or yyyy-mm
-            checkComponent(label, dateComponents[1], 2, 3,
-                    "parser.error.badMonthDayLength", lineNumber); //$NON-NLS-1$
-        }
-
-        // if 3 parts, second is months, third is day of month
-        if (dateComponents.length == 3) {
-            // yyyy-mm-dd
-            checkComponent(label, dateComponents[1], 2, 2,
-                    "parser.error.badMonthLength", lineNumber); //$NON-NLS-1$
-            checkComponent(label, dateComponents[2], 2, 2,
-                    "parser.error.badDayLength", lineNumber); //$NON-NLS-1$
-        }
-    }
-
-    protected static void checkComponent(final Label label,
-            final String component, final int minLength, int maxLength,
-            String key, int lineNumber) throws LabelParserException {
-        if (component.length() < minLength || component.length() > maxLength) {
-            throw new LabelParserException(label, lineNumber, null, key,
-                    ProblemType.INVALID_DATE, component);
-        }
-
-    }
-
-    protected static void checkTimeComponents(final Label label,
-            final String timeStr, final int lineNumber)
-            throws LabelParserException {
-        String timeString = timeStr;
-        if (timeString.endsWith("Z")) { //$NON-NLS-1$
-            timeString = timeString.substring(0, timeString.length() - 1);
-        }
-
-        String[] timeAndFraction = timeString.split("\\."); //$NON-NLS-1$
-        if (timeAndFraction.length > 1) {
-            // Check fraction. (It's guaranteed to be of length >=1, because of
-            // the way split() works.)
-            if (timeAndFraction[1].length() > 3) {
-                throw new LabelParserException(label, lineNumber, null,
-                        "parser.error.badFractionalDate", //$NON-NLS-1$
-                        ProblemType.INVALID_DATE, timeAndFraction[1]);
-            }
-        }
-
-        String[] timeComponents = timeAndFraction[0].split(":"); //$NON-NLS-1$
-        for (int i = 0; i < timeComponents.length; ++i) {
-            if (timeComponents[i].length() != 2) {
-                throw new LabelParserException(label, lineNumber, null,
-                        "parser.error.badTimeSection", //$NON-NLS-1$
-                        ProblemType.INVALID_DATE, timeString);
-            }
-        }
-    }
+    throw new LabelParserException(label, lineNumber, null,
+        "parser.error.invalidDate", //$NON-NLS-1$
+        ProblemType.INVALID_DATE, dateTime);
+  }
 }

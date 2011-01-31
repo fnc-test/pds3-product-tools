@@ -1,6 +1,6 @@
 <projectDescription>
   <name>product-tools</name>
-  <comment>The Product Tools Library project supports design/generation, validation and submission of archival products to the PDS. This project consists of a library of software classes to support the development of tools to perform these functions and is designed to be utilized by developers from the Engineering Node, Discipline Nodes and the PDS community.</comment>
+  <comment>The Product Tools Library project supports design/generation, validation and submission of archival products to the PDS. This project consists of a library of software classes to support the development of tools to perform these functions and is designed to be utilized by developers from the Engineering Node, Discipline Nodes and the PDS community. NO_M2ECLIPSE_SUPPORT: Project files created with the maven-eclipse-plugin are not supported in M2Eclipse.</comment>
   <projects/>
   <buildSpec>
     <buildCommand>
