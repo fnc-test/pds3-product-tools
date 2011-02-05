@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-  Copyright 2006-2009, by the California Institute of Technology.
+  Copyright 2006-2011, by the California Institute of Technology.
   ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
   Any commercial use must be negotiated with the Office of Technology Transfer
   at the California Institute of Technology.
@@ -39,7 +39,7 @@
       </p>
 
       <subsection name="Java Requirement">
-        <p>The Product Tools software was developed using Java and will run on any platform with a supported Java Runtime Environment (JRE). The tools were specifically developed under Sun Java version 1.5, so the tool will execute correctly under versions 1.5 or 1.6.
+        <p>The Product Tools software was developed using Java and will run on any platform with a supported Java Runtime Environment (JRE). The tools were specifically developed under Sun Java version 1.6, so the tool will execute correctly under 1.6 and future versions.
         </p>
 
         <p>Since the tools are developed using Sun's Java, this is the preferred Java environment for operation. The Sun Java package can be obtained from the <a href="http://java.sun.com/" target="_blank"> Sun Java</a> web site. Other Java environments are relatively compatible with Sun's Java.
@@ -53,7 +53,7 @@
     </section>
 
     <section name="Unpacking the Tools Package">
-      <p>Download the <i>${xdoc-artifactId}</i> package from the <a href="http://pds.nasa.gov/tools/" target="_blank">Tools &amp; Documentation</a> web page. The binary distribution is available in identical zip or tar/gzip packages. Unpack the selected binary distribution file with one of the following commands:
+      <p>Download the <i>${xdoc-artifactId}</i> package from the <a href="http://pds.nasa.gov/tools/product-tools-library.shtml" target="_blank">Product Tools Library</a> web page. The binary distribution is available in identical zip or tar/gzip packages. Unpack the selected binary distribution file with one of the following commands:
       </p>
 
       <source>
@@ -78,7 +78,7 @@ or
           </p>
         </li>
         <li><b>doc/</b><br/>
-          <p>This document directory contains a local web site with the Product Tools Guide, javadoc, unit test results and other configuration management related information. Just point your favorite browser to the <i>index.html</i> file in this directory.
+          <p>This document directory contains a local web site with the Product Tools Library Guide, javadoc, unit test results and other configuration management related information. Just point your favorite browser to the <i>index.html</i> file in this directory.
           </p>
         </li>
         <li><b>lib/</b><br/>

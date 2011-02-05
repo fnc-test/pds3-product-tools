@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-  Copyright 2007-2010, by the California Institute of Technology.
+  Copyright 2007-2011, by the California Institute of Technology.
   ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
   Any commercial use must be negotiated with the Office of Technology Transfer
   at the California Institute of Technology.
@@ -24,13 +24,29 @@
 
   <body>
     <section name="Release Notes">
-      <p>The purpose of this section is to provide a description of a Product Tools release including any impact that the new or modified capabilities will have on the Discipline Nodes or the PDS user community. A somewhat itemized list of changes for each release can be found on the <a href="../changes-report.html">Release Changes</a> page. If viewing this document in PDF form, the release change details are not available.
+      <p>The purpose of this section is to provide a description of a Product Tools Library release including any impact that the new or modified capabilities will have on the Discipline Nodes or the PDS user community. A somewhat itemized list of changes for each release can be found on the <a href="../changes-report.html">Release Changes</a> page. If viewing this document in PDF form, the release change details are not available.
       </p>
     </section>
 
-    <section name="Release 3.0.3-dev">
-      <p>TBD
+    <section name="Release 3.0.3">
+      <p>This maintenance release of the Product Tools software includes a number of corrections and modifications. These include:
       </p>
+
+      <ul>
+        <li>Corrected an issue dealing with how date/time values are validated.</li>
+        <li>Added functionality back into the library that used to be in the 2.X.X version of the library that was utilized by the Catalog Ingest Tool.</li>
+        <li>Corrected an issue with following pointers.</li>
+        <li>Corrected a number of issues related to support for the Volume Validator.</li>
+        <li>Corrected other miscellaneous issues.</li>
+      </ul>
+
+      <p>The liens for this release are as follows:
+      </p>
+
+      <ul>
+        <li>Plural forms of valid unit names are not supported.</li>
+        <li>Full checking of file characteristics not supported as of yet.</li>
+      </ul>
     </section>
 
     <section name="Release 3.0.2">
