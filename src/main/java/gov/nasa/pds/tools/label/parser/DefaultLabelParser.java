@@ -38,7 +38,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -461,14 +460,10 @@ public class DefaultLabelParser implements LabelParser {
         // no op
       }
     } else {
-      try {
-        relativePath = FileUtils.getRelativePath(this.resolver.getBaseURI()
-            .toURL(), label.getLabelURI().toURL());
-      } catch (MalformedURLException e) {
-        // noop
-      } catch (RuntimeException re) {
-        // If the files don't share a path
-        // no op
+      if (label.getLabelURI().toString().startsWith(
+          this.resolver.getBaseURI().toString())) {
+        relativePath = label.getLabelURI().toString().substring(
+            this.resolver.getBaseURI().toString().length());
       }
     }
     return relativePath;
