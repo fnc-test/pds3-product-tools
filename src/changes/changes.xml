@@ -22,7 +22,10 @@
     <author email="Sean.Hardman@jpl.nasa.gov">Sean Hardman</author>
   </properties>
   <body>
-    <release version="3.0.3" date="TBD" description="This maintenance release of the Product Tools software includes a number of corrections and modifications.">      
+    <release version="3.0.3" date="TBD" description="This maintenance release of the Product Tools software includes a number of corrections and modifications.">  
+      <action dev="pramirez" type="fix">
+        PDSEN-335 - Updated messaging for min and max value checking to display the number as a string to stop rounding from occuring. Some extreme cases still round in messaging but min/max checks remain working as published.
+      </action>
       <action dev="pramirez" type="fix">
         PDSEN-316 - Fixed truncation of file names in some of the log messages.
       </action>
