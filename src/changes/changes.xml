@@ -36,6 +36,9 @@
         PDSEN-332 - Added the equals implementation for the Value class.
       </action>
       <action dev="pramirez" type="fix">
+        PDSEN-277 - Fix for valid value match with "_" replaced by " ". Will still issue a warning letting one know the value has been manipulated.
+      </action>
+      <action dev="pramirez" type="fix">
         Make sure that loading statements from include pointers only happens when the option is set.
       </action>
       <action dev="jagander" type="fix">
