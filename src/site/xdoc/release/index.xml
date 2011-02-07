@@ -34,8 +34,10 @@
 
       <ul>
         <li>Corrected an issue dealing with how date/time values are validated.</li>
-        <li>Added functionality back into the library that used to be in the 2.X.X version of the library that was utilized by the Catalog Ingest Tool.</li>
+        <li>Corrected a couple of issues dealing with malformed messages.</li>
+        <li>Corrected an issue involving value manipulation when matching values.</li>
         <li>Corrected an issue with following pointers.</li>
+        <li>Added functionality back into the library that used to be in the 2.X.X version of the library that was utilized by the Catalog Ingest Tool.</li>
         <li>Corrected a number of issues related to support for the Volume Validator.</li>
         <li>Corrected other miscellaneous issues.</li>
       </ul>
