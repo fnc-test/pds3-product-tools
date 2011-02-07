@@ -23,6 +23,9 @@
   </properties>
   <body>
     <release version="3.0.3" date="TBD" description="This maintenance release of the Product Tools software includes a number of corrections and modifications.">
+      <action dev="pramirez" type="fix">
+        PDSEN-277 - Fix for valid value match with "_" replaced by " ". Will still issue a warning letting one know the value has been manipulated.
+      </action>
       <action dev="merose, pramirez" type="fix">
         PDSEN-329 - Changed the way date/times were parsed to be simpler and cleaner. Also addressed a bug found in old parsing code. For the time being the invalid date messages may be less specific than in the past.
       </action>
@@ -34,9 +37,6 @@
       </action>
       <action dev="mcayanan" type="add">
         PDSEN-332 - Added the equals implementation for the Value class.
-      </action>
-      <action dev="pramirez" type="fix">
-        PDSEN-277 - Fix for valid value match with "_" replaced by " ". Will still issue a warning letting one know the value has been manipulated.
       </action>
       <action dev="pramirez" type="fix">
         Make sure that loading statements from include pointers only happens when the option is set.
