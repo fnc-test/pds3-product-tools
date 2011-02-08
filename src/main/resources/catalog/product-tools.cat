@@ -2,21 +2,20 @@
 PDS_VERSION_ID                    = PDS3
 RECORD_TYPE                       = STREAM
 LABEL_REVISION_NOTE               = "
-2010-03-23, SH(EN) V3.0.2;
- This release of the Product Tools software includes corrections and 
- modifications resulting from the beta test results of the Validation 
- Tool integration."
+2011-02-08, SH(EN) V3.1.0;
+ This maintenance release of the Product Tools Library software includes 
+ a number of corrections and modifications."
 
 OBJECT                            = SOFTWARE
   SOFTWARE_ID                     = "product-tools"
-  SOFTWARE_VERSION_ID             = "3.0.2"
+  SOFTWARE_VERSION_ID             = "3.1.0"
 
   OBJECT                          = SOFTWARE_INFORMATION
     SOFTWARE_NAME                 = "PDS Product Tools"
     DATA_FORMAT                   = "PDS"
     SOFTWARE_LICENSE_TYPE         = "PUBLIC_DOMAIN"
     TECHNICAL_SUPPORT_TYPE        = "FULL"
-    REQUIRED_STORAGE_BYTES        = "3.7 MB"
+    REQUIRED_STORAGE_BYTES        = "4.5 MB"
     PDS_USER_ID                   = "PDS_OPERATOR"
     NODE_ID                       = "EN"
     SOFTWARE_DESC                 = "
@@ -42,13 +41,13 @@ OBJECT                            = SOFTWARE
 
  Compilers Used
  ====================
- Sun Java version 1.5
+ Sun Java version 1.6
 
 
  Platforms Supported
  ===================
  Any platform with a supported Java Runtime Environment (JRE),
- versions 1.5 or 1.6"
+ versions 1.6 or later"
 
   END_OBJECT                      = SOFTWARE_INFORMATION
 

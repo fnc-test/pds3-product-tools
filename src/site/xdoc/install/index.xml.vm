@@ -82,7 +82,11 @@ or
           </p>
         </li>
         <li><b>lib/</b><br/>
-          <p>This directory contains the dependent jar files for the tool along with the jar file (${xdoc-artifactId}-${xdoc-version}.jar) containing the product tools software.
+          <p>This directory contains the dependent jar files for the tool along with the jar file (${xdoc-artifactId}-${xdoc-version}.jar) containing the Product Tools Library software.
+          </p>
+        </li>
+        <li><b>src/</b><br/>
+          <p>This directory contains the jar files with the source code for the Product Tools Library software.
           </p>
         </li>
       </ul>

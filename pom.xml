@@ -28,7 +28,7 @@
 
   <groupId>gov.nasa.pds</groupId>
   <artifactId>product-tools</artifactId>
-  <version>3.0.3-dev</version>
+  <version>3.1.0</version>
   <packaging>jar</packaging>
 
   <name>Product Tools Library</name>
@@ -206,6 +206,20 @@
             </configuration>
             <goals>
               <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>jar</goal>
+              <goal>test-jar</goal>
             </goals>
           </execution>
         </executions>
