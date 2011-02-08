@@ -22,7 +22,10 @@
     <author email="Sean.Hardman@jpl.nasa.gov">Sean Hardman</author>
   </properties>
   <body>
-    <release version="3.1.0" date="2011-02-08" description="This maintenance release of the Product Tools Library software includes a number of corrections and modifications.">  
+    <release version="3.2.0" date="TBD" description="TBD">
+    </release>
+
+    <release version="3.1.0" date="2011-02-08" description="This maintenance release of the Product Tools Library software includes a number of corrections and modifications.">
       <action dev="pramirez" type="fix">
         PDSEN-277 - Fix for valid value match with "_" replaced by " ". Will still issue a warning letting one know the value has been manipulated.
       </action>

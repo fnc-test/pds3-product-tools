@@ -19,7 +19,7 @@
 <project>
   <id>product-tools</id>
   <name>Product Tools Library</name>
-  <currentVersion>3.1.0</currentVersion>
+  <currentVersion>3.2.0-dev</currentVersion>
 
   <organization>
     <name>NASA Jet Propulsion Laboratory, California Institute of Technology</name>
