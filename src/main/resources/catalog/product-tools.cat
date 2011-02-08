@@ -31,7 +31,8 @@ OBJECT                            = SOFTWARE
 
  Available Support Material
  ==========================
- Installation and development guides are bundled with the binary package.
+ Installation and development guides are bundled with the binary package. 
+ The binary package also includes jar files with the source code.
 
 
  Programming Language
