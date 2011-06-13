@@ -10,11 +10,12 @@
 // may be required before exporting such information to foreign countries or
 // providing access to foreign nationals.
 //
-// $Id$ 
+// $Id$
 //
 
 package gov.nasa.pds.tools.label.validate;
 
+import gov.nasa.pds.tools.LabelParserException;
 import gov.nasa.pds.tools.constants.Constants.ProblemType;
 import gov.nasa.pds.tools.dict.DictIdentifier;
 import gov.nasa.pds.tools.dict.Dictionary;
@@ -36,63 +37,64 @@ import java.util.List;
  */
 public class GroupValidator {
 
-    public static boolean validate(final GroupStatement group,
-            final Dictionary dictionary, final Label label)
-            throws DefinitionNotFoundException, UnsupportedTypeException {
-        boolean valid = true;
+  public static boolean validate(final GroupStatement group,
+      final Dictionary dictionary, final Label label)
+      throws DefinitionNotFoundException, UnsupportedTypeException {
+    boolean valid = true;
 
-        // Lookup group definition, can't do anything without it
-        GroupDefinition definition = dictionary.findGroupClassDefinition(group
-                .getIdentifier());
-        if (definition == null) {
-            label.addProblem(new DefinitionNotFoundException(group));
-        } else {
+    // Lookup group definition, can't do anything without it
+    GroupDefinition definition = dictionary.findGroupClassDefinition(group
+        .getIdentifier());
+    if (definition == null) {
+      label.addProblem(new DefinitionNotFoundException(group));
+    } else {
 
-            // First check that required elements are captured in object
-            for (Iterator<DictIdentifier> i = definition.getRequiredElements()
-                    .iterator(); i.hasNext();) {
-                DictIdentifier required = i.next();
-                if (!group.hasAttribute(required.toString())) {
-                    valid = false;
-                    label.addProblem(
-                            group,
-                            "parser.error.missingRequiredElement", //$NON-NLS-1$
-                            ProblemType.MISSING_PROPERTY,
-                            group.getIdentifier(), required);
-                }
-            }
-
-            // Check to make sure all attributes are allowed within this
-            // definition
-            // If the definition contains the element PSDD then anything is
-            // allowed and this check can be skipped
-            if (!definition.allowsAnyElement()) {
-                for (Iterator<AttributeStatement> i = group.getAttributes()
-                        .iterator(); i.hasNext();) {
-                    AttributeStatement attribute = i.next();
-                    if (!definition.isAllowed(attribute.getIdentifier())) {
-                        valid = false;
-                        label.addProblem(attribute,
-                                "parser.error.invalidElement", //$NON-NLS-1$
-                                ProblemType.INVALID_MEMBER, group
-                                        .getIdentifier(), attribute
-                                        .getIdentifier());
-                    }
-                }
-            }
+      // First check that required elements are captured in object
+      for (Iterator<DictIdentifier> i = definition.getRequiredElements()
+          .iterator(); i.hasNext();) {
+        DictIdentifier required = i.next();
+        if (!group.hasAttribute(required.toString())) {
+          valid = false;
+          label.addProblem(group, "parser.error.missingRequiredElement", //$NON-NLS-1$
+              ProblemType.MISSING_PROPERTY, group.getIdentifier(), required);
         }
+      }
 
-        // Validate all attributes
-        List<AttributeStatement> attributes = group.getAttributes();
-        Collections.sort(attributes);
+      // Check to make sure all attributes are allowed within this
+      // definition
+      // If the definition contains the element PSDD then anything is
+      // allowed and this check can be skipped
+      if (!definition.allowsAnyElement()) {
         for (Iterator<AttributeStatement> i = group.getAttributes().iterator(); i
-                .hasNext();) {
-            AttributeStatement attribute = i.next();
-            if (!ElementValidator.validate(attribute, label, dictionary)) {
-                valid = false;
-            }
+            .hasNext();) {
+          AttributeStatement attribute = i.next();
+          if (!definition.isAllowed(attribute.getIdentifier())) {
+            valid = false;
+            label.addProblem(attribute,
+                "parser.error.invalidElement", //$NON-NLS-1$
+                ProblemType.INVALID_MEMBER, group.getIdentifier(),
+                attribute.getIdentifier());
+          }
         }
-
-        return valid;
+      }
     }
+
+    // Validate all attributes
+    List<AttributeStatement> attributes = group.getAttributes();
+    Collections.sort(attributes);
+    for (Iterator<AttributeStatement> i = group.getAttributes().iterator(); i
+        .hasNext();) {
+      AttributeStatement attribute = i.next();
+      try {
+        if (!ElementValidator.validate(attribute, label, dictionary)) {
+          valid = false;
+        }
+      } catch (LabelParserException lpe) {
+        label.addProblem(lpe);
+        valid = false;
+      }
+    }
+
+    return valid;
+  }
 }
