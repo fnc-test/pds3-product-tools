@@ -23,6 +23,12 @@
   </properties>
   <body>
     <release version="3.2.0" date="TBD" description="TBD">
+      <action dev="pramirez" type="fix">
+        PDSEN-341 - Fix to associate aliases with Group definitions.
+      </action>
+      <action dev="mcayanan" type="fix">
+        PDSEN-345 - Fix to capture and report all errors in a Group object during a single validation run.
+      </action>
     </release>
 
     <release version="3.1.0" date="2011-02-08" description="This maintenance release of the Product Tools Library software includes a number of corrections and modifications.">
@@ -74,7 +80,7 @@
     </release>
 
     <release version="3.0.2" date="2010-03-23" description="This release of the Product Tools software includes corrections and modifications resulting from the beta test results of the Validation Tool integration.">
-      
+
       <action dev="jagander" type="fix">
         PDSEN-259 - Wrapping BufferedInputStream in a custom stream that returns EOF after the first non-whitespace character is found following the END statement. This was done in an effort to prevent memory overflow issues with large attached labels.
       </action>
@@ -98,13 +104,13 @@
       </action>
       <action dev="mcayanan" type="update">
         PDSEN-307 - Update to truncate long values when error messages get thrown for exceeding the acceptable maximum length of an element definition.
-      </action>    
+      </action>
       <action dev="mcayanan" type="fix">
         PDSEN-310 - Fixed to capture problems if errors occurred in a nested fragment file.
       </action>
       <action dev="jagander" type="fix">
         PDSEN-314 - Fixed issue where lines containing only a CRLF preceded by a line ending with only an LF falsely reported a bad line ending.
-      </action>   
+      </action>
       <action dev="jagander" type="update">
         Correcting a typo in wrong line length message (RECORD_LENGTH vs RECORD_BYTES) and expanding the message to indicate that CRLF chars are not counted.
       </action>
@@ -112,7 +118,7 @@
         Updating included dictionary to current release.
       </action>
       <action dev="jagander" type="update">
-        Updating a message for start byte mismatch to be more clear 
+        Updating a message for start byte mismatch to be more clear
       </action>
       <action dev="jagander" type="update">
         Updating version display to be in X.XX format rather than XrXX format to match standard and published materials.
@@ -133,7 +139,7 @@
         PDSEN-266 - Consume newline after SFDU header so that new line read reads next line rather than reading an empty line. This solves the erroneous error about pds version being mislocated when SFDU. Removed no longer necessary skip based on presence of SFDU header. Note that this represents an improvement since skip always assumed 2 newline chars which was not always true.
       </action>
       <action dev="pramirez" type="fix">
-        PDSEN-269 - Sets the dev mode to off for LocaleUtils. This will prevent RuntimeExceptions from being thrown. 
+        PDSEN-269 - Sets the dev mode to off for LocaleUtils. This will prevent RuntimeExceptions from being thrown.
       </action>
       <action dev="pramirez" type="fix">
         PDSEN-270 - Problem was with Windows pathing and the way it converted from URIs to Files (i.e. change in slashing). Simplified method of getting parent path by avoiding substring. This was only related to the ManaulPathResolver.
@@ -157,7 +163,7 @@
         PDSEN-288 - Null protecting parsing of pointers when assignment statement parsing fails.
       </action>
       <action dev="pramirez" type="fix">
-        PDSEN-289 - Pointer Statements were sharing identifiers with attributes statements. This caused them to be grouped together. When accessed through ObjectStatement.hasAttribute() this caused a ClassCastException. The PointerStatementFactory was updated to use the appropriate type of dictionary identifier. In addition, the ObjectValidator was update to allow pointers to satisfy the required element part of a definition. 
+        PDSEN-289 - Pointer Statements were sharing identifiers with attributes statements. This caused them to be grouped together. When accessed through ObjectStatement.hasAttribute() this caused a ClassCastException. The PointerStatementFactory was updated to use the appropriate type of dictionary identifier. In addition, the ObjectValidator was update to allow pointers to satisfy the required element part of a definition.
       </action>
       <action dev="pramirez" type="fix">
         PDSEN-292 - Error only appeared when alias shared same identifier with an existing definition. When a dictionary identifier is created from the toString method which contains the object context instead of just the identifier.
@@ -166,7 +172,7 @@
         PDSEN-293 - Modifying displayRecognitionError to handle two more explicit cases per the examples in the issue's attached labels. Also modified the fall through case to pass the exception message through but warn the user that it is an unhandled message and they should report it.
       </action>
       <action dev="pramirez" type="update">
-        PDSEN-294 - Allows required element checks in objects to pass if a description pointer with the required identifier exists. This is a restriction of older behavior in original product tools library but was something not present in the merged product tools. This was done with consultation with the standards team and is common practice in labels. 
+        PDSEN-294 - Allows required element checks in objects to pass if a description pointer with the required identifier exists. This is a restriction of older behavior in original product tools library but was something not present in the merged product tools. This was done with consultation with the standards team and is common practice in labels.
       </action>
       <action dev="pramirez" type="add">
         Added the capability to report line lengths greater than 80 characters (78 + CR/LF).
@@ -202,16 +208,16 @@
         Added numerous unit tests to support the evolution of the code base.
       </action>
       <action dev="jagander, pramirez" type="update">
-        The grammar has been retooled to recover from errors which previously caused issues (e.g. Missing end quote). The messages generated from these type of errors is now easier to understand. 
+        The grammar has been retooled to recover from errors which previously caused issues (e.g. Missing end quote). The messages generated from these type of errors is now easier to understand.
       </action>
       <action dev="jagander, pramirez" type="update">
         Enhanced messaging due to messages are now externalized from the library in a resources file. In addition, the messages generated are now easier to sort through as they contain keys. This will help those that need to programmatically interface with the library.
       </action>
       <action dev="pramirez, jagander" type="update">
-        Much of the code was overhauled and simplified. For instance, parsing of labels is no longer mixed with dictionary validation. 
+        Much of the code was overhauled and simplified. For instance, parsing of labels is no longer mixed with dictionary validation.
       </action>
       <action dev="pramirez, jagander" type="update">
-        Updated code to use Java 1.5 generics constructs pervasively to support stronger type checking. 
+        Updated code to use Java 1.5 generics constructs pervasively to support stronger type checking.
       </action>
     </release>
 
@@ -281,7 +287,7 @@
       </action>
       <action dev="mcayanan" type="fix">
         PDSEN-115 - Lines in generated report files appear to not be terminated with CR/LF.
-      </action> 
+      </action>
       <action dev="pramirez" type="fix">
         PDSEN-124 - Need a way to distinguish specific vs. generic object type.
       </action>
@@ -293,7 +299,7 @@
       </action>
       <action dev="mcayanan" type="fix">
         PDSEN-136 - Improve messaging when a bad character is found in a label.
-      </action> 
+      </action>
       <action dev="pramirez" type="add">
         PDSEN-146 - VTool needs to support microsecond precision in date/time values according to SCR 3-1104.
       </action>
@@ -302,8 +308,8 @@
       </action>
       <action dev="pramirez" type="fix">
         PDSEN-154 - VTool does not throw errors for certain values that don't match the element's data type.
-      </action>  
-      <action dev="pramirez" type="add">      
+      </action>
+      <action dev="pramirez" type="add">
         PDSEN-155 - Add support to allow required groups to be defined as required objects (via the REQUIRED_OBJECT_SET attribute) within an object definition in the data dictionary. This is a result of the implementation of SCR 3-1037 in the PSDD.
       </action>
     </release>
@@ -319,7 +325,7 @@
         When writing data dictionaries out to file, made sure that objects, groups and elements with namespaces are quoted.
       </action>
     </release>
-    
+
     <release version="1.1.1" date="2007-11-08" description="This is a maintenance release of the Product Tools software to support release 0.3.0 of the Label Template Design Tool.">
       <action dev="mcayanan" type="add">
         Added handler classes for the tools logging capability.
@@ -371,27 +377,27 @@
       </action>
     </release>
 
-    <release version="1.0.0" date="2007-05-04" description="This release of the Product Tools software, including the Validation Tool, represents the operational release for the Phase I targeted capabilities.">         
+    <release version="1.0.0" date="2007-05-04" description="This release of the Product Tools software, including the Validation Tool, represents the operational release for the Phase I targeted capabilities.">
       <action dev="pramirez" type="add">
         Added support for validation of label fragments.
-      </action>      
-      
+      </action>
+
       <action dev="mcayanan" type="add">
         Added the capability to return an appropriate exit status value based on validation results or tool application failure.
-      </action>      
-      
+      </action>
+
       <action dev="mcayanan" type="add">
         Created batch and shell scripts for simpler execution of VTool.
       </action>
-      
+
       <action dev="mcayanan" type="add">
         Added the capability for targets to be specified implicitly.
       </action>
-      
+
       <action dev="mcayanan" type="add">
         Added -f or --force flag option to perform standalone label fragment validation.
       </action>
-      
+
       <action dev="pramirez" type="update">
         Validation of units is now performed against the master list of unit values. This comparison is case sensitive.
       </action>
@@ -403,23 +409,23 @@
       <action dev="pramirez" type="update">
         Cleaned up reporting including replacing SEVERE with ERROR in all instances and properly representing fragment messages when they are included in a label validation.
       </action>
-      
+
       <action dev="mcayanan" type="update">
-        Implemented new log file behavior to allow logs to be written to memory. This allows generation of reports without the need of explicitly specifying the log file flag option. 
+        Implemented new log file behavior to allow logs to be written to memory. This allows generation of reports without the need of explicitly specifying the log file flag option.
       </action>
 
       <action dev="mcayanan" type="update">
         Changed the log file flag (-l or --log) option to optionally allow a file specification. See Use and Operation guide for log generation details.
       </action>
-      
+
       <action dev="mcayanan" type="update">
         Added time and date of tool execution in final reports.
       </action>
-           
+
       <action dev="mcayanan" type="update">
         Enhanced user guide with more details regarding command-line flag options, report examples, etc.
-      </action>      
-           
+      </action>
+
       <action dev="mcayanan" type="fix">
         Fixed support for UNC pathnames.
       </action>
@@ -428,7 +434,7 @@
         Fixed the minimal report stylesheet to work correctly on the Linux platform.
       </action>
     </release>
-    
+
     <release version="0.4.0" date="2007-02-01" description="Binary release for the beta test phase.">
       <action dev="pramirez" type="add">
         Added the following capabilities related to semantic validation: white space stripping for element value comparison, support for element and object aliases and verifying the existence of referenced data objects and files.
@@ -470,60 +476,60 @@
         Fixed to properly handle URLs (for targets, dictionaries, Includes).
       </action>
     </release>
-    
+
     <release version="0.3.0" date="2006-09-12" description="Binary release for the second phase of alpha testing.">
       <action dev="mcayanan" type="add">
         Added a user guide for VTool.
       </action>
-      
+
       <action dev="mcayanan" type="add">
         Added the following command-line options: (-o, Write the validation results to a file), (-p, Specify files/file patterns to include in validation), (-X, Specify files/file patterns to exclude in validation), (-c, Specify a configuration file to set default behaviors), (-F, Do not follow STRUCTURE pointers).
       </action>
-      
+
       <action dev="pramirez" type="add">
         Pointers are now followed. This feature can be turned on and off. This will allow arbitrary length nesting of pointers. Object and group statements should not begin and end in different files. Their contents may be in separate files but the open and close should be contained within the same file. This will allow the label to be valid even when semantic validation is done.
       </action>
-      
+
       <action dev="pramirez" type="add">
         Added support for PDS_VERSION_ID. Now files that don't have this in the first line will be skipped and logged as a warning if passed to the parser.
       </action>
-      
+
       <action dev="pramirez" type="add">
         Added support for SFDUs. Now the SFDUs will be logged and then skipped. This has not added validation of SFDUs.
       </action>
-      
+
       <action dev="mcayanan" type="update">
         Changed the "f" (file) flag to a "t" (target) flag.
-      </action> 
-      
+      </action>
+
       <action dev="pramirez" type="update">
         Dates are now checked to ensure that they are not only properly formed but are actual valid dates. One can now get a Date object through the API for convenience.
       </action>
-      
+
       <action dev="pramirez" type="update">
         More logging information about file being parsed and dictionaries being used.
       </action>
-      
+
       <action dev="mcayanan" type="fix">
         Fixed multiple dictionary support.
       </action>
-      
+
       <action dev="pramirez" type="fix">
         Properly handle the "Z" at the end of the date when attempting to create an actual Date object.
       </action>
-      
+
       <action dev="pramirez" type="fix">
         Allow group statements to be within object statements.
       </action>
-      
+
       <action dev="pramirez" type="fix">
         Allow for objects and groups with the same name to appear at the same level within a label or fragment. This required changes to method signatures on the Label class.
       </action>
-      
+
       <action dev="pramirez" type="fix">
         Fixed convenience methods on Label class. This would have only caused a problem if people called the tool directly.
       </action>
-      
+
       <action dev="pramirez" type="fix">
         PSDD will now be adhered to properly as an optional element. This essentially allows any element definition to appear within an object or group statement without generating an error.
       </action>
