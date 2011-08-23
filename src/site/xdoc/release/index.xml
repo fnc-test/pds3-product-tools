@@ -29,8 +29,16 @@
     </section>
 
     <section name="Release 3.2.0">
-      <p>TBD
+      <p>This maintenance release of the Product Tools Library software includes fixes dealing with validation of Group objects and support for aliases in Group definitions.
       </p>
+      
+      <p>The liens for this release are as follows:
+      </p>
+
+      <ul>
+        <li>Plural forms of valid unit names are not supported.</li>
+        <li>Full checking of file characteristics not supported as of yet.</li>
+      </ul>
     </section>
 
     <section name="Release 3.1.0">

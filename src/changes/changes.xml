@@ -22,7 +22,7 @@
     <author email="Sean.Hardman@jpl.nasa.gov">Sean Hardman</author>
   </properties>
   <body>
-    <release version="3.2.0" date="2011-08-25" description="This maintenance release of the Product Tools Library software includes fixes dealing with validation of Group objects.">
+    <release version="3.2.0" date="2011-08-24" description="This maintenance release of the Product Tools Library software includes fixes dealing with validation of Group objects.">
       <action dev="pramirez" type="fix">
         PDSEN-341 - Fix to associate aliases with Group definitions.
       </action>

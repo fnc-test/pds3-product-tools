@@ -2,13 +2,14 @@
 PDS_VERSION_ID                    = PDS3
 RECORD_TYPE                       = STREAM
 LABEL_REVISION_NOTE               = "
-2011-02-08, SH(EN) V3.1.0;
+2011-08-24, SH(EN) V3.2.0;
  This maintenance release of the Product Tools Library software includes 
- a number of corrections and modifications."
+ fixes dealing with validation of Group objects and support for aliases in 
+ Group definitions."
 
 OBJECT                            = SOFTWARE
   SOFTWARE_ID                     = "product-tools"
-  SOFTWARE_VERSION_ID             = "3.1.0"
+  SOFTWARE_VERSION_ID             = "3.2.0"
 
   OBJECT                          = SOFTWARE_INFORMATION
     SOFTWARE_NAME                 = "PDS Product Tools"
