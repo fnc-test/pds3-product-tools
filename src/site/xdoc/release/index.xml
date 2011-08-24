@@ -28,6 +28,11 @@
       </p>
     </section>
 
+    <section name="Release 3.3.0">
+      <p>TBD
+      </p>
+    </section>
+
     <section name="Release 3.2.0">
       <p>This maintenance release of the Product Tools Library software includes fixes dealing with validation of Group objects and support for aliases in Group definitions.
       </p>
