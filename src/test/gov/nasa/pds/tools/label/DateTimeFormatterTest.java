@@ -10,7 +10,7 @@ import java.io.IOException;
 @SuppressWarnings("nls")
 public class DateTimeFormatterTest extends BaseTestCase {
 
-  public void testTooManyMilliseconds() throws LabelParserException,
+  public void testFractionalSecondsOOR() throws LabelParserException,
       IOException {
     final File testFile = new File(LABEL_DIR, "datetime.lbl");
 
@@ -19,7 +19,7 @@ public class DateTimeFormatterTest extends BaseTestCase {
 
     LabelParserException lpe = assertHasProblem(label,
         ProblemType.INVALID_DATE, 28);
-    assertProblemEquals(lpe, 28, null, "parser.error.invalidDate",
+    assertProblemEquals(lpe, 28, null, "parser.error.dateOutOfRange",
         ProblemType.INVALID_DATE, "2000-12-22T23:59:59.9999");
   }
 
@@ -187,7 +187,20 @@ public class DateTimeFormatterTest extends BaseTestCase {
     final Label label = PARSER.parseLabel(testFile);
     validate(label);
 
-    assertEquals(14, label.getProblems().size());
+    assertEquals(15, label.getProblems().size());
+  }
+
+  public void testTooManyFractionalSeconds() throws LabelParserException,
+      IOException {
+    final File testFile = new File(LABEL_DIR, "datetime.lbl");
+
+    final Label label = PARSER.parseLabel(testFile);
+    validate(label);
+
+    LabelParserException lpe = assertHasProblem(label,
+        ProblemType.INVALID_DATE, 49);
+    assertProblemEquals(lpe, 49, null, "parser.error.invalidDate",
+        ProblemType.INVALID_DATE, "2000-12-22T23:59:59.1234567890");
   }
 
 }

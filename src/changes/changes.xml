@@ -23,38 +23,41 @@
   </properties>
   <body>
     <release version="3.3.0" date="TBD" description="TBD">
+      <action dev="pramirez" type="fix" issue="PDSEN-351">
+        Allow up to 9 digits of fractional seconds. 
+      </action>
     </release>
 
     <release version="3.2.0" date="2011-08-24" description="This maintenance release of the Product Tools Library software includes fixes dealing with validation of Group objects.">
-      <action dev="pramirez" type="fix">
-        PDSEN-341 - Fix to associate aliases with Group definitions.
+      <action dev="pramirez" type="fix" issue="PDSEN-341">
+        Fix to associate aliases with Group definitions.
       </action>
-      <action dev="mcayanan" type="fix">
-        PDSEN-345 - Fix to capture and report all errors in a Group object during a single validation run.
+      <action dev="mcayanan" type="fix" issue="PDSEN-345">
+        Fix to capture and report all errors in a Group object during a single validation run.
       </action>
     </release>
 
     <release version="3.1.0" date="2011-02-08" description="This maintenance release of the Product Tools Library software includes a number of corrections and modifications.">
-      <action dev="pramirez" type="fix">
-        PDSEN-277 - Fix for valid value match with "_" replaced by " ". Will still issue a warning letting one know the value has been manipulated.
+      <action dev="pramirez" type="fix" issue="PDSEN-277">
+        Fix for valid value match with "_" replaced by " ". Will still issue a warning letting one know the value has been manipulated.
       </action>
-      <action dev="pramirez" type="fix">
-        PDSEN-316 - Fixed truncation of file names in some of the log messages.
+      <action dev="pramirez" type="fix" issue="PDSEN-316">
+        Fixed truncation of file names in some of the log messages.
       </action>
-      <action dev="merose, pramirez" type="fix">
-        PDSEN-329 - Changed the way date/times were parsed to be simpler and cleaner. Also addressed a bug found in old parsing code. For the time being the invalid date messages may be less specific than in the past.
+      <action dev="merose, pramirez" type="fix" issue="PDSEN-329">
+        Changed the way date/times were parsed to be simpler and cleaner. Also addressed a bug found in old parsing code. For the time being the invalid date messages may be less specific than in the past.
       </action>
-      <action dev="mcayanan" type="update">
-        PDSEN-330 - Added back the capability to add outside implementations of the LabelValidator class.
+      <action dev="mcayanan" type="update" issue="PDSEN-330">
+        Added back the capability to add outside implementations of the LabelValidator class.
       </action>
-      <action dev="mcayanan" type="update">
-        PDSEN-331 - Added back the equals implementation for the Statement class.
+      <action dev="mcayanan" type="update" issue="PDSEN-331">
+        Added back the equals implementation for the Statement class.
       </action>
-      <action dev="mcayanan" type="add">
-        PDSEN-332 - Added the equals implementation for the Value class.
+      <action dev="mcayanan" type="add" issue="PDSEN-332">
+        Added the equals implementation for the Value class.
       </action>
-      <action dev="pramirez" type="fix">
-        PDSEN-335 - Updated messaging for min and max value checking to display the number as a string to stop rounding from occurring. Some extreme cases still round in messaging but min/max checks remain working as published.
+      <action dev="pramirez" type="fix" issue="PDSEN-335">
+        Updated messaging for min and max value checking to display the number as a string to stop rounding from occurring. Some extreme cases still round in messaging but min/max checks remain working as published.
       </action>
       <action dev="pramirez" type="fix">
         Make sure that loading statements from include pointers only happens when the option is set.
@@ -84,35 +87,35 @@
 
     <release version="3.0.2" date="2010-03-23" description="This release of the Product Tools software includes corrections and modifications resulting from the beta test results of the Validation Tool integration.">
 
-      <action dev="jagander" type="fix">
-        PDSEN-259 - Wrapping BufferedInputStream in a custom stream that returns EOF after the first non-whitespace character is found following the END statement. This was done in an effort to prevent memory overflow issues with large attached labels.
+      <action dev="jagander" type="fix" issue="PDSEN-259">
+        Wrapping BufferedInputStream in a custom stream that returns EOF after the first non-whitespace character is found following the END statement. This was done in an effort to prevent memory overflow issues with large attached labels.
       </action>
-      <action dev="mcayanan" type="fix">
-        PDSEN-297 - Fixed dictionary parser to support reading a default dictionary located inside the product tools jar file.
+      <action dev="mcayanan" type="fix" issue="PDSEN-297">
+        Fixed dictionary parser to support reading a default dictionary located inside the product tools jar file.
       </action>
-      <action dev="mcayanan" type="fix">
-        PDSEN-298 - Fixed dictionary parser to support dictionary definitions where the MAXIMUM attribute is set to UNK.
+      <action dev="mcayanan" type="fix" issue="PDSEN-298">
+        Fixed dictionary parser to support dictionary definitions where the MAXIMUM attribute is set to UNK.
       </action>
-      <action dev="mcayanan" type="fix">
-        PDSEN-300 - Fixed dictionary parser to support SPECIFIC_GROUP definitions.
+      <action dev="mcayanan" type="fix" issue="PDSEN-300">
+        Fixed dictionary parser to support SPECIFIC_GROUP definitions.
       </action>
-      <action dev="mcayanan" type="fix">
-        PDSEN-303 - Fixed parser to correctly throw the referenced file name when it cannot be found. This bug only occurred in pointer statements that contained multiple referenced files (Example: ^DATA_SET_CATALOG = {"L0_DS.CAT", "L1B_DS.CAT"}).
+      <action dev="mcayanan" type="fix" issue="PDSEN-303">
+        Fixed parser to correctly throw the referenced file name when it cannot be found. This bug only occurred in pointer statements that contained multiple referenced files (Example: ^DATA_SET_CATALOG = {"L0_DS.CAT", "L1B_DS.CAT"}).
       </action>
-      <action dev="mcayanan" type="fix">
-        PDSEN-304 - Fixed to support proper checking of required/optional nested objects with descriptor names.
+      <action dev="mcayanan" type="fix" issue="PDSEN-304">
+        Fixed to support proper checking of required/optional nested objects with descriptor names.
       </action>
-      <action dev="jagander" type="fix">
-        PDSEN-306 - Getting attached data start byte from custom input stream instead of lexer due to tokenization and error recovery issues skipping until start of next line when encountering non-parseable binary data.
+      <action dev="jagander" type="fix" issue="PDSEN-306">
+        Getting attached data start byte from custom input stream instead of lexer due to tokenization and error recovery issues skipping until start of next line when encountering non-parseable binary data.
       </action>
-      <action dev="mcayanan" type="update">
-        PDSEN-307 - Update to truncate long values when error messages get thrown for exceeding the acceptable maximum length of an element definition.
+      <action dev="mcayanan" type="update" issue="PDSEN-307">
+        Update to truncate long values when error messages get thrown for exceeding the acceptable maximum length of an element definition.
       </action>
-      <action dev="mcayanan" type="fix">
-        PDSEN-310 - Fixed to capture problems if errors occurred in a nested fragment file.
+      <action dev="mcayanan" type="fix" issue="PDSEN-310">
+        Fixed to capture problems if errors occurred in a nested fragment file.
       </action>
-      <action dev="jagander" type="fix">
-        PDSEN-314 - Fixed issue where lines containing only a CRLF preceded by a line ending with only an LF falsely reported a bad line ending.
+      <action dev="jagander" type="fix" issue="PDSEN-314">
+        Fixed issue where lines containing only a CRLF preceded by a line ending with only an LF falsely reported a bad line ending.
       </action>
       <action dev="jagander" type="update">
         Correcting a typo in wrong line length message (RECORD_LENGTH vs RECORD_BYTES) and expanding the message to indicate that CRLF chars are not counted.
@@ -129,53 +132,53 @@
     </release>
 
     <release version="3.0.1" date="2010-02-05" description="This release of the Product Tools software supports the beta release of the Validation Tool and includes a number of updates and corrections.">
-      <action dev="pramirez" type="update">
-        PDSEN-255 - Updates the ManualPathResolver to add problems to the pointers label instead of logging them.
+      <action dev="pramirez" type="update" issue="PDSEN-255">
+        Updates the ManualPathResolver to add problems to the pointers label instead of logging them.
       </action>
-      <action dev="pramirez" type="fix">
-        PDSEN-260 - Fixed group definition lookups. Used DictIdentifiers instead of strings.
+      <action dev="pramirez" type="fix" issue="PDSEN-260">
+        Fixed group definition lookups. Used DictIdentifiers instead of strings.
       </action>
-      <action dev="jagander" type="fix">
-        PDSEN-263 - Fixing issue where "+" sign on integer caused an error. Issue was the conversion to a Long value rather than the integer test itself. Resolution was to strip "+" before parsing into a Long value.
+      <action dev="jagander" type="fix" issue="PDSEN-263">
+        Fixing issue where "+" sign on integer caused an error. Issue was the conversion to a Long value rather than the integer test itself. Resolution was to strip "+" before parsing into a Long value.
       </action>
-      <action dev="jagander" type="fix">
-        PDSEN-266 - Consume newline after SFDU header so that new line read reads next line rather than reading an empty line. This solves the erroneous error about pds version being mislocated when SFDU. Removed no longer necessary skip based on presence of SFDU header. Note that this represents an improvement since skip always assumed 2 newline chars which was not always true.
+      <action dev="jagander" type="fix" issue="PDSEN-266">
+        Consume newline after SFDU header so that new line read reads next line rather than reading an empty line. This solves the erroneous error about pds version being mislocated when SFDU. Removed no longer necessary skip based on presence of SFDU header. Note that this represents an improvement since skip always assumed 2 newline chars which was not always true.
       </action>
-      <action dev="pramirez" type="fix">
-        PDSEN-269 - Sets the dev mode to off for LocaleUtils. This will prevent RuntimeExceptions from being thrown.
+      <action dev="pramirez" type="fix" issue="PDSEN-269">
+        Sets the dev mode to off for LocaleUtils. This will prevent RuntimeExceptions from being thrown.
       </action>
-      <action dev="pramirez" type="fix">
-        PDSEN-270 - Problem was with Windows pathing and the way it converted from URIs to Files (i.e. change in slashing). Simplified method of getting parent path by avoiding substring. This was only related to the ManaulPathResolver.
+      <action dev="pramirez" type="fix" issue="PDSEN-270">
+        Problem was with Windows pathing and the way it converted from URIs to Files (i.e. change in slashing). Simplified method of getting parent path by avoiding substring. This was only related to the ManaulPathResolver.
       </action>
-      <action dev="pramirez" type="update">
-        PDSEN-271 - Converted some System.out.println over to logging. Using System.out conflicts with command-line interfaces
+      <action dev="pramirez" type="update" issue="PDSEN-271">
+        Converted some System.out.println over to logging. Using System.out conflicts with command-line interfaces
       </action>
-      <action dev="pramirez" type="add">
-        PDSEN-276 - Implemented a flag to allow child label problems to be captured by a label. Allowing external problems to be logged to a label could mean duplication of problems and thus usage of this flag should be used with caution.
+      <action dev="pramirez" type="add" issue="PDSEN-276">
+        Implemented a flag to allow child label problems to be captured by a label. Allowing external problems to be logged to a label could mean duplication of problems and thus usage of this flag should be used with caution.
       </action>
-      <action dev="jagander" type="fix">
-        PDSEN-279 - Updated error name and message to be more explicit about start byte mismatch being about attached data rather than column def issues.
+      <action dev="jagander" type="fix" issue="PDSEN-279">
+        Updated error name and message to be more explicit about start byte mismatch being about attached data rather than column def issues.
       </action>
-      <action dev="jagander" type="fix">
-        PDSEN-280 - Updating message to indicate that time might be out of range, not just date.
+      <action dev="jagander" type="fix" issue="PDSEN-280">
+        Updating message to indicate that time might be out of range, not just date.
       </action>
-      <action dev="pramirez" type="fix">
-        PDSEN-285 - Pointers don't have to share paths and therefore may not have the same relative path. The call to get relative path was wrapped to ignore this and return label path. This was encapsulated in a new function as to not conflict with the existing one.
+      <action dev="pramirez" type="fix" issue="PDSEN-285">
+        Pointers don't have to share paths and therefore may not have the same relative path. The call to get relative path was wrapped to ignore this and return label path. This was encapsulated in a new function as to not conflict with the existing one.
       </action>
-      <action dev="jagander" type="fix">
-        PDSEN-288 - Null protecting parsing of pointers when assignment statement parsing fails.
+      <action dev="jagander" type="fix" issue="PDSEN-288">
+        Null protecting parsing of pointers when assignment statement parsing fails.
       </action>
-      <action dev="pramirez" type="fix">
-        PDSEN-289 - Pointer Statements were sharing identifiers with attributes statements. This caused them to be grouped together. When accessed through ObjectStatement.hasAttribute() this caused a ClassCastException. The PointerStatementFactory was updated to use the appropriate type of dictionary identifier. In addition, the ObjectValidator was update to allow pointers to satisfy the required element part of a definition.
+      <action dev="pramirez" type="fix" issue="PDSEN-289">
+        Pointer Statements were sharing identifiers with attributes statements. This caused them to be grouped together. When accessed through ObjectStatement.hasAttribute() this caused a ClassCastException. The PointerStatementFactory was updated to use the appropriate type of dictionary identifier. In addition, the ObjectValidator was update to allow pointers to satisfy the required element part of a definition.
       </action>
-      <action dev="pramirez" type="fix">
-        PDSEN-292 - Error only appeared when alias shared same identifier with an existing definition. When a dictionary identifier is created from the toString method which contains the object context instead of just the identifier.
+      <action dev="pramirez" type="fix" issue="PDSEN-292">
+        Error only appeared when alias shared same identifier with an existing definition. When a dictionary identifier is created from the toString method which contains the object context instead of just the identifier.
       </action>
-      <action dev="jagander" type="update">
-        PDSEN-293 - Modifying displayRecognitionError to handle two more explicit cases per the examples in the issue's attached labels. Also modified the fall through case to pass the exception message through but warn the user that it is an unhandled message and they should report it.
+      <action dev="jagander" type="update" issue="PDSEN-293">
+        Modifying displayRecognitionError to handle two more explicit cases per the examples in the issue's attached labels. Also modified the fall through case to pass the exception message through but warn the user that it is an unhandled message and they should report it.
       </action>
-      <action dev="pramirez" type="update">
-        PDSEN-294 - Allows required element checks in objects to pass if a description pointer with the required identifier exists. This is a restriction of older behavior in original product tools library but was something not present in the merged product tools. This was done with consultation with the standards team and is common practice in labels.
+      <action dev="pramirez" type="update" issue="PDSEN-294">
+        Allows required element checks in objects to pass if a description pointer with the required identifier exists. This is a restriction of older behavior in original product tools library but was something not present in the merged product tools. This was done with consultation with the standards team and is common practice in labels.
       </action>
       <action dev="pramirez" type="add">
         Added the capability to report line lengths greater than 80 characters (78 + CR/LF).
@@ -186,26 +189,26 @@
       <action dev="pramirez" type="add">
         Added the capability to combine attribute value lists of two identical dictionary definitions together instead of one overwriting the other when two dictionaries are merged (i.e. STANDARD_VALUE_SET, REQUIRED_ELEMENT_SET, OPTIONAL_ELEMENT_SET, etc.).
       </action>
-      <action dev="pramirez" type="fix">
+      <action dev="pramirez" type="fix" issue="PDSEN-269">
         Related to PDSEN-269 - Set the overriding locale utils when an override is passed in. Previously, the method was just dropping the override on the floor.
       </action>
-      <action dev="pramirez" type="fix">
+      <action dev="pramirez" type="fix" issue="PDSEN-276">
         Related to PDSEN-276 - Update to fix a bug with allowing external problems to be reported such that the source URI would match the place where the error in which the file occurred. The source was erroneously being overwritten by the parent's label URI. This was only occurred with the addition of the allow external problems flag. The issue is now resolved.
       </action>
     </release>
 
     <release version="3.0.0" date="2009-10-12" description="This release of the Product Tools software represents the reconciliation of the Ames and JPL versions of the library.">
-      <action dev="pramirez, jagander" type="update">
-        PDSEN-133 - Improve VTool's Reporting on Malformed Numbers in Exponential Notation. This was addressed as a result of message infrastructure modification.
+      <action dev="pramirez, jagander" type="update" issue="PDSEN-133">
+        Improve VTool's Reporting on Malformed Numbers in Exponential Notation. This was addressed as a result of message infrastructure modification.
       </action>
-      <action dev="pramirez, jagander" type="fix">
-        PDSEN-158 - VTool validation does not examine END statement.
+      <action dev="pramirez, jagander" type="fix" issue="PDSEN-158">
+        VTool validation does not examine END statement.
       </action>
-      <action dev="pramirez, jagander" type="update">
-        PDSEN-246 - Truncate reporting of values that span multiple lines.
+      <action dev="pramirez, jagander" type="update" issue="PDSEN-246">
+        Truncate reporting of values that span multiple lines.
       </action>
-      <action dev="pramirez, jagander" type="fix">
-        PDSEN-249 - Product Tools library does not properly handle objects and elements of the same name in the data dictionary.
+      <action dev="pramirez, jagander" type="fix" issue="PDSEN-249">
+        Product Tools library does not properly handle objects and elements of the same name in the data dictionary.
       </action>
       <action dev="pramirez, jagander" type="add">
         Added numerous unit tests to support the evolution of the code base.
@@ -240,29 +243,29 @@
     </release>
 
     <release version="2.0.0" date="2009-01-09" description="This release of the Product Tools software incorporates the Phase II capability supporting validation of catalog files.">
-      <action dev="pramirez" type="fix">
-        PDSEN-107 - Inconsistent validation of values with quotation marks based on the associated element's general data type. The issue related to quoted date/time strings has been resolved. The issue related to quoted variables was determined to be a LTDTool issue and a new issue was created and assigned to that component.
+      <action dev="pramirez" type="fix" issue="PDSEN-107">
+        Inconsistent validation of values with quotation marks based on the associated element's general data type. The issue related to quoted date/time strings has been resolved. The issue related to quoted variables was determined to be a LTDTool issue and a new issue was created and assigned to that component.
       </action>
-      <action dev="pramirez" type="add">
-        PDSEN-116 - Support validation of catalog files.
+      <action dev="pramirez" type="add" issue="PDSEN-116">
+        Support validation of catalog files.
       </action>
-      <action dev="pramirez" type="fix">
-        PDSEN-147 - VTool exits ungracefully when validating a catalog directory in a GCJ environment. This is believed to be associated with the limitation in catalog file support (PDSEN-116) as opposed to the GCJ environment so it should also be resolved in this release.
+      <action dev="pramirez" type="fix" issue="PDSEN-147">
+        VTool exits ungracefully when validating a catalog directory in a GCJ environment. This is believed to be associated with the limitation in catalog file support (PDSEN-116) as opposed to the GCJ environment so it should also be resolved in this release.
       </action>
     </release>
 
     <release version="1.2.1" date="2008-09-09" description="This is a maintenance release of the Product Tools software to support release 2.0.0 of the Label Template Design Tool.">
-      <action dev="pramirez" type="fix">
-        PDSEN-104 - The AttributeStatement.hasNamespace() method returns an incorrect value.
+      <action dev="pramirez" type="fix" issue="PDSEN-104">
+        The AttributeStatement.hasNamespace() method returns an incorrect value.
       </action>
-      <action dev="pramirez" type="add">
-        PDSEN-119 - Add another constructor to GroupStatement class to initialize the Map used to store the statements.
+      <action dev="pramirez" type="add" issue="PDSEN-119">
+        Add another constructor to GroupStatement class to initialize the Map used to store the statements.
       </action>
-      <action dev="pramirez" type="fix">
-        PDSEN-121 - Quotes missing for keywords with colon ":" when writing to DD.
+      <action dev="pramirez" type="fix" issue="PDSEN-121">
+        Quotes missing for keywords with colon ":" when writing to DD.
       </action>
-      <action dev="pramirez" type="fix">
-        PDSEN-124 - Need a way to distinguish specific vs. generic object type.
+      <action dev="pramirez" type="fix" issue="PDSEN-124">
+        Need a way to distinguish specific vs. generic object type.
       </action>
       <action dev="pramirez" type="fix">
         When parsing a label fragment passing the follow pointer property was not being propagated.
@@ -273,47 +276,47 @@
     </release>
 
     <release version="1.2.0" date="2008-07-24" description="This is a maintenance release of the Product Tools software to support release 2.0.0 of the Label Template Design Tool and release 1.2.0 of the Validation Tool.">
-      <action dev="pramirez" type="update">
-        PDSEN-100 - Reporting needs to be revisited as using XSLT becomes too time consuming on large files.
+      <action dev="pramirez" type="update" issue="PDSEN-100">
+        Reporting needs to be revisited as using XSLT becomes too time consuming on large files.
       </action>
-      <action dev="pramirez" type="fix">
-        PDSEN-101 - There is an issue validating date/time strings that contain a DOY with leading 0's.
+      <action dev="pramirez" type="fix" issue="PDSEN-101">
+        There is an issue validating date/time strings that contain a DOY with leading 0's.
       </action>
-      <action dev="pramirez" type="update">
-        PDSEN-102 - Error message not descriptive for numeric elements that contain string values.
+      <action dev="pramirez" type="update" issue="PDSEN-102">
+        Error message not descriptive for numeric elements that contain string values.
       </action>
-      <action dev="pramirez" type="fix">
-        PDSEN-109 - There is an issue regarding validation of date/time strings for elements that have a general data type of CHARACTER.
+      <action dev="pramirez" type="fix" issue="PDSEN-109">
+        There is an issue regarding validation of date/time strings for elements that have a general data type of CHARACTER.
       </action>
-      <action dev="pramirez" type="fix">
-        PDSEN-114 - An error occurs when encountering files without full names (e.g., .lbl) in the target directory.
+      <action dev="pramirez" type="fix" issue="PDSEN-114">
+        An error occurs when encountering files without full names (e.g., .lbl) in the target directory.
       </action>
-      <action dev="mcayanan" type="fix">
-        PDSEN-115 - Lines in generated report files appear to not be terminated with CR/LF.
+      <action dev="mcayanan" type="fix" issue="PDSEN-115">
+        Lines in generated report files appear to not be terminated with CR/LF.
       </action>
-      <action dev="pramirez" type="fix">
-        PDSEN-124 - Need a way to distinguish specific vs. generic object type.
+      <action dev="pramirez" type="fix" issue="PDSEN-124">
+        Need a way to distinguish specific vs. generic object type.
       </action>
-      <action dev="pramirez" type="fix">
-        PDSEN-134 - VTool does not check keywords in undefined GROUPs/OBJECTs.
+      <action dev="pramirez" type="fix" issue="PDSEN-134">
+        VTool does not check keywords in undefined GROUPs/OBJECTs.
       </action>
-      <action dev="pramirez" type="update">
-        PDSEN-135 - VTool should improve its reporting of values of incorrect data type.
+      <action dev="pramirez" type="update" issue="PDSEN-135">
+        VTool should improve its reporting of values of incorrect data type.
       </action>
-      <action dev="mcayanan" type="fix">
-        PDSEN-136 - Improve messaging when a bad character is found in a label.
+      <action dev="mcayanan" type="fix" issue="PDSEN-136">
+        Improve messaging when a bad character is found in a label.
       </action>
-      <action dev="pramirez" type="add">
-        PDSEN-146 - VTool needs to support microsecond precision in date/time values according to SCR 3-1104.
+      <action dev="pramirez" type="add" issue="PDSEN-146">
+        VTool needs to support microsecond precision in date/time values according to SCR 3-1104.
       </action>
-      <action dev="pramirez" type="fix">
-        PDSEN-151 - VTool does not support leap year dates properly.
+      <action dev="pramirez" type="fix" issue="PDSEN-151">
+        VTool does not support leap year dates properly.
       </action>
-      <action dev="pramirez" type="fix">
-        PDSEN-154 - VTool does not throw errors for certain values that don't match the element's data type.
+      <action dev="pramirez" type="fix" issue="PDSEN-154">
+        VTool does not throw errors for certain values that don't match the element's data type.
       </action>
-      <action dev="pramirez" type="add">
-        PDSEN-155 - Add support to allow required groups to be defined as required objects (via the REQUIRED_OBJECT_SET attribute) within an object definition in the data dictionary. This is a result of the implementation of SCR 3-1037 in the PSDD.
+      <action dev="pramirez" type="add" issue="PDSEN-155">
+        Add support to allow required groups to be defined as required objects (via the REQUIRED_OBJECT_SET attribute) within an object definition in the data dictionary. This is a result of the implementation of SCR 3-1037 in the PSDD.
       </action>
     </release>
 

@@ -39,13 +39,12 @@ import java.util.regex.Pattern;
  * <p>
  * In the second format, the day is a day-of-year number from 1 to 366 (in leap
  * years). All numeric values in the two formats must have exactly the number of
- * digits shown, except for the fractional second value (NNN). That value may be
- * from 1 to 3 digitis in length. Each format may be abbreviated to indicate a
- * lower precision, in these ways:
+ * digits shown, except for the fractional second value (NNNNNNNNN). That value
+ * may be from 1 to 3 digitis in length. Each format may be abbreviated to
+ * indicate a lower precision, in these ways:
  * </p>
- * 
- * yyyy-mm-ddTHH:MM:SS.NNNZ<br />
- * yyyy-mm-ddTHH:MM:SS.NNN<br />
+ * yyyy-mm-ddTHH:MM:SS.NNNNNNNNNZ<br />
+ * yyyy-mm-ddTHH:MM:SS.NNNNNNNNN<br />
  * yyyy-mm-ddTHH:MM:SSZ<br />
  * yyyy-mm-ddTHH:MM:SS<br />
  * yyyy-mm-ddTHH:MMZ<br />
@@ -55,8 +54,8 @@ import java.util.regex.Pattern;
  * yyyy-mm-dd<br />
  * yyyy-mm<br />
  * yyyy<br />
- * yyyy-dddTHH:MM:SS.NNNZ<br />
- * yyyy-dddTHH:MM:SS.NNN<br />
+ * yyyy-dddTHH:MM:SS.NNNNNNNNNZ<br />
+ * yyyy-dddTHH:MM:SS.NNNNNNNNN<br />
  * yyyy-dddTHH:MM:SSZ<br />
  * yyyy-dddTHH:MM:SS<br />
  * yyyy-dddTHH:MMZ<br />
@@ -74,12 +73,12 @@ class ParseDateTime {
   // PDS date/time value. All fields other than the hour are optional.
   // The optional 'Z' is for historic purposes
   private static final String TIME_PATTERN_STRING = // HH : mm : ss .nnn Z
-  "(\\d{2})(?::(\\d{2})(?::(\\d{2})(\\.\\d{1,3})?)?)?(Z)?"; //$NON-NLS-1$
+  "(\\d{2})(?::(\\d{2})(?::(\\d{2})(\\.\\d{1,9})?)?)?(Z)?"; //$NON-NLS-1$
 
   // Lenient version of time. Allows for comparison of datetimes as problems
   // will already be logged. Accounts for shorter versions of fields and a
   // backwards compatible longer milliseconds.
-  private static final String LENIENT_TIME_PATTERN_STRING = "(\\d{1,2})(?::(\\d{1,2})(?::(\\d{1,2})(\\.\\d{1,4})?)?)?(Z)?";
+  private static final String LENIENT_TIME_PATTERN_STRING = "(\\d{1,2})(?::(\\d{1,2})(?::(\\d{1,2})(\\.\\d{1,10})?)?)?(Z)?";
 
   // A regular expression (in 3 parts) describing a PDS3 date/time string
   // with a year, month, and day.

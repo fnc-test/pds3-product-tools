@@ -40,4 +40,12 @@ START_TIME = 2000-1-22T23:59:59.999 /* short months */
 START_TIME = 1-12-22T23:59:59.999 /* short years */
 START_TIME = 999
 
+/* PDSEN-351 */
+/* valid dates */
+START_TIME = 2000-12-22T23:59:59.888888888 /* 9 digits fractional seconds */
+START_TIME = 2000-12-22T23:59:59.888888 /* 6 digits of fractional seconds * 
+
+/* invalid dates */ 
+START_TIME = 2000-12-22T23:59:59.1234567890 /* exceeds fractional precision */
+
 END
