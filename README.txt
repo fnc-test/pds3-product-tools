@@ -1,7 +1,5 @@
 The Product Tools Library is a set of software classes for manipulating 
-PDS product labels.
-
-The software is packaged in a JAR file.
+PDS product labels. The software is packaged in a JAR file.
 
 The software can be compiled with the "mvn compile" command but in order 
 to create the JAR file, you must execute the "mvn package" command. The 
@@ -14,8 +12,14 @@ In order to create a complete package for distribution, execute the
 following commands: 
 
 % mvn site
-% maven pdf
 % mvn package
 
-The project still relies on Maven 1 functionality to generate the PDF form 
-of the documentation.
+Note: The build in the Mac OS X environment is flakey and occasionally 
+produces the following error when as the result of compiling the Antlr
+output:
+
+[INFO] Compilation failure
+/Users/shardman/dev/pds/tools/product-tools/target/generated-sources/antlr3/gov/nasa/pds/tools/label/antlr/ODLParser.java:[7559,19] code too large
+
+Upgrading to Antlr 3.3 did not resolve the issue. The good news is that
+it works just fine in a Linux environment.

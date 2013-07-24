@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-  Copyright 2006-2011, by the California Institute of Technology.
+  Copyright 2006-2013, by the California Institute of Technology.
   ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
   Any commercial use must be negotiated with the Office of Technology Transfer
   at the California Institute of Technology.
@@ -23,7 +23,7 @@
   </properties>
   <body>
     <release version="3.3.0" date="TBD" description="TBD">
-      <action dev="pramirez" type="fix" issue="PDSEN-351">
+      <action dev="pramirez" type="update" issue="PDSEN-351">
         Allow up to 9 digits of fractional seconds. 
       </action>
     </release>

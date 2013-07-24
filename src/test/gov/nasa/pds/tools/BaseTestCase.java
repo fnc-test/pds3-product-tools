@@ -40,7 +40,7 @@ import junit.framework.TestCase;
 @SuppressWarnings("nls")
 public abstract class BaseTestCase extends TestCase {
 
-  public static final File TEST_DIR = new File("test-data"); //$NON-NLS-1$
+  public static final File TEST_DIR = new File("src/test-data"); //$NON-NLS-1$
 
   protected static final StandardPathResolver RESOLVER = new StandardPathResolver();
 
