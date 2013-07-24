@@ -1,4 +1,4 @@
-// Copyright 2006-2010, by the California Institute of Technology.
+// Copyright 2006-2013, by the California Institute of Technology.
 // ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
 // Any commercial use must be negotiated with the Office of Technology Transfer
 // at the California Institute of Technology.
@@ -47,7 +47,7 @@ public class CharacterCheckerTest extends BaseTestCase {
                 "Numeric", "7");
     }
 
-    public void testNonACII() throws LabelParserException, IOException {
+    public void testNonASCII() throws LabelParserException, IOException {
         final File testFile = new File(LABEL_DIR, "character.lbl");
 
         final Label label = PARSER.parseLabel(testFile);
@@ -93,7 +93,8 @@ public class CharacterCheckerTest extends BaseTestCase {
         final Label label = PARSER.parseLabel(testFile);
         validate(label);
 
-        assertEquals(4, label.getProblems().size());
+        // Line 6 of the test label throws 2 errors accounting for the extra test.
+        assertEquals(5, label.getProblems().size());
     }
 
 }
