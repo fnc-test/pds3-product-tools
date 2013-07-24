@@ -56,7 +56,7 @@ public class CharacterCheckerTest extends BaseTestCase {
         LabelParserException lpe = assertHasProblem(label,
                 ProblemType.INVALID_TYPE);
         assertProblemEquals(lpe, 6, null, "parser.error.badCharacters",
-                ProblemType.INVALID_TYPE, "Ö");
+                ProblemType.INVALID_TYPE, "Ã–");
     }
 
     public void testLong() throws LabelParserException, IOException {
