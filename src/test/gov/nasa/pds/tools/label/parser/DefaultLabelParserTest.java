@@ -1,4 +1,4 @@
-// Copyright 2006-2010, by the California Institute of Technology.
+// Copyright 2006-2013, by the California Institute of Technology.
 // ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
 // Any commercial use must be negotiated with the Office of Technology Transfer
 // at the California Institute of Technology.
@@ -47,7 +47,7 @@ public class DefaultLabelParserTest extends BaseTestCase {
     public void testSFDU() throws LabelParserException, IOException {
         final File sampleDir = new File(TEST_DIR, "labels");
 
-        final File testFile = new File(sampleDir, "SFDULabel.LBL");
+        final File testFile = new File(sampleDir, "SFDULabel.lbl");
 
         StandardPathResolver resolver = new StandardPathResolver();
         DefaultLabelParser parser = new DefaultLabelParser(resolver);
