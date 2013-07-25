@@ -21,5 +21,6 @@ output:
 [INFO] Compilation failure
 /Users/shardman/dev/pds/tools/product-tools/target/generated-sources/antlr3/gov/nasa/pds/tools/label/antlr/ODLParser.java:[7559,19] code too large
 
-Upgrading to Antlr 3.3 did not resolve the issue. The good news is that
-it works just fine in a Linux environment.
+Upgrading to Antlr 3.3 did not resolve the issue. The good news is that 
+it works just fine in a Linux environment. In addition, one of the unit tests 
+fails (CharacterCheckerTest) in Mac OS X where it succeeds in Linux.
