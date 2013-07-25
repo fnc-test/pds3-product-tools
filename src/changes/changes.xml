@@ -22,9 +22,9 @@
     <author email="Sean.Hardman@jpl.nasa.gov">Sean Hardman</author>
   </properties>
   <body>
-    <release version="3.3.0" date="TBD" description="TBD">
+    <release version="3.3.0" date="2013-07-25" description="This maintenance release of the Product Tools Library software includes a modification to support up to 9 digits for fractional seconds in a date/time value.">
       <action dev="pramirez" type="update" issue="PDSEN-351">
-        Allow up to 9 digits of fractional seconds. 
+        Allow up to 9 digits of fractional seconds in a date/time value.
       </action>
     </release>
 

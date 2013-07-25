@@ -2,21 +2,21 @@
 PDS_VERSION_ID                    = PDS3
 RECORD_TYPE                       = STREAM
 LABEL_REVISION_NOTE               = "
-2011-08-24, SH(EN) V3.2.0;
+2013-07-25, SH(EN) V3.3.0;
  This maintenance release of the Product Tools Library software includes 
- fixes dealing with validation of Group objects and support for aliases in 
- Group definitions."
+ a modification to support up to 9 digits for fractional seconds in a 
+ date/time value."
 
 OBJECT                            = SOFTWARE
   SOFTWARE_ID                     = "product-tools"
-  SOFTWARE_VERSION_ID             = "3.2.0"
+  SOFTWARE_VERSION_ID             = "3.3.0"
 
   OBJECT                          = SOFTWARE_INFORMATION
     SOFTWARE_NAME                 = "PDS Product Tools"
     DATA_FORMAT                   = "PDS"
     SOFTWARE_LICENSE_TYPE         = "PUBLIC_DOMAIN"
     TECHNICAL_SUPPORT_TYPE        = "FULL"
-    REQUIRED_STORAGE_BYTES        = "4.5 MB"
+    REQUIRED_STORAGE_BYTES        = "3.3 MB"
     PDS_USER_ID                   = "PDS_OPERATOR"
     NODE_ID                       = "EN"
     SOFTWARE_DESC                 = "
