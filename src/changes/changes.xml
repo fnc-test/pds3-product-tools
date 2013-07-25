@@ -189,10 +189,10 @@
       <action dev="pramirez" type="add">
         Added the capability to combine attribute value lists of two identical dictionary definitions together instead of one overwriting the other when two dictionaries are merged (i.e. STANDARD_VALUE_SET, REQUIRED_ELEMENT_SET, OPTIONAL_ELEMENT_SET, etc.).
       </action>
-      <action dev="pramirez" type="fix" issue="PDSEN-269">
+      <action dev="pramirez" type="fix">
         Related to PDSEN-269 - Set the overriding locale utils when an override is passed in. Previously, the method was just dropping the override on the floor.
       </action>
-      <action dev="pramirez" type="fix" issue="PDSEN-276">
+      <action dev="pramirez" type="fix">
         Related to PDSEN-276 - Update to fix a bug with allowing external problems to be reported such that the source URI would match the place where the error in which the file occurred. The source was erroneously being overwritten by the parent's label URI. This was only occurred with the addition of the allow external problems flag. The issue is now resolved.
       </action>
     </release>
