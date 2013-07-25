@@ -63,7 +63,7 @@ Java HotSpot(TM) 64-Bit Server VM (build 20.1-b02-384, mixed mode)
     </section>
 
     <section name="Unpacking the Tools Package">
-      <p>Download the <i>${project.artifactId}</i> package from the <a href="http://pds.nasa.gov/tools/product-tools-library.shtml" target="_blank">Product Tools Library</a> web page. The binary distribution is available in identical zip or tar/gzip packages. Unpack the selected binary distribution file with one of the following commands:
+      <p>Download the <i>${project.artifactId}</i> package from the <a href="http://pds.nasa.gov/tools/product-tools-library.shtml" target="_blank">Product Tools Library</a> web page. The binary distribution is available in identical zip or tar/gzip packages. The installation directory may vary from environment to environment but in UNIX-based environments it is typical to install software packages in the <i>/usr/local</i> directory and in Windows-based environments it is typical to install software packages in the <i>C:\Program Files</i> directory. Unpack the selected binary distribution file with one of the following commands:
       </p>
 
       <source>
@@ -88,7 +88,7 @@ or
           </p>
         </li>
         <li><b>doc/</b><br/>
-          <p>This document directory contains a local web site with the Product Tools Library Guide, javadoc, unit test results and other configuration management related information. Just point your favorite browser to the <i>index.html</i> file in this directory.
+          <p>This document directory contains a local web site with the Product Tools Library documentation, javadoc, unit test results and other configuration management related information. Just point the desired web browser to the <i>index.html</i> file in this directory.
           </p>
         </li>
         <li><b>lib/</b><br/>
@@ -100,7 +100,6 @@ or
           </p>
         </li>
       </ul>
-
     </section>
   </body>
 </document>
