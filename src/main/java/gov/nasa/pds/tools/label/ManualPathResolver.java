@@ -10,7 +10,7 @@
 // may be required before exporting such information to foreign countries or
 // providing access to foreign nationals.
 //
-// $Id$ 
+// $Id$
 //
 
 package gov.nasa.pds.tools.label;
@@ -42,180 +42,181 @@ import org.apache.log4j.Logger;
  * 
  */
 public class ManualPathResolver implements PointerResolver {
-    private static Logger log = Logger.getLogger(ManualPathResolver.class
-            .getName());
+  private static Logger log = Logger.getLogger(ManualPathResolver.class
+      .getName());
 
-    private List<URL> includePaths = new ArrayList<URL>();
-    private URI baseURI = null;
+  private List<URL> includePaths = new ArrayList<URL>();
+  private URI baseURI = null;
 
-    public void setIncludePaths(final List<URL> paths) {
-        this.includePaths.addAll(paths);
+  public void setIncludePaths(final List<URL> paths) {
+    this.includePaths.addAll(paths);
+  }
+
+  @SuppressWarnings("nls")
+  private URI resolveURI(final FileReference fileRef,
+      final PointerStatement pointer) throws URISyntaxException {
+    final String path = fileRef.getPath();
+    List<URL> searchPaths = new ArrayList<URL>(this.includePaths);
+
+    // Add the base URI into the areas to search and default it to the
+    // first place to look
+    try {
+      if (this.baseURI != null) {
+        searchPaths.add(0, this.baseURI.toURL());
+      }
+    } catch (MalformedURLException e) {
+      log.error("Problem using base URI " + this.baseURI);
     }
 
-    @SuppressWarnings("nls")
-    private URI resolveURI(final FileReference fileRef,
-            final PointerStatement pointer) throws URISyntaxException {
-        final String path = fileRef.getPath();
-        List<URL> searchPaths = new ArrayList<URL>(this.includePaths);
+    // Add in the base URI of the label this pointer resides in to the
+    // list of include paths if it is not equal to the base URI for this
+    // resolver
+    URI pointerLabelBaseURI = null;
+    try {
+      pointerLabelBaseURI = ManualPathResolver.getBaseURI(pointer.label
+          .getLabelURI());
+      if (!pointerLabelBaseURI.equals(this.baseURI)) {
+        searchPaths.add(0, pointerLabelBaseURI.toURL());
+      }
 
-        // Add the base URI into the areas to search and default it to the
-        // first place to look
-        try {
-            if (this.baseURI != null) {
-                searchPaths.add(0, this.baseURI.toURL());
-            }
-        } catch (MalformedURLException e) {
-            log.error("Problem using base URI " + this.baseURI);
-        }
+    } catch (MalformedURLException e) {
+      log.error("Problem using pointer's label URI " + pointerLabelBaseURI);
+    }
 
-        // Add in the base URI of the label this pointer resides in to the
-        // list of include paths if it is not equal to the base URI for this
-        // resolver
-        URI pointerLabelBaseURI = null;
-        try {
-            pointerLabelBaseURI = ManualPathResolver.getBaseURI(pointer.label
-                    .getLabelURI());
-            if (!pointerLabelBaseURI.equals(this.baseURI)) {
-                searchPaths.add(0, pointerLabelBaseURI.toURL());
-            }
+    for (Iterator<URL> i = searchPaths.iterator(); i.hasNext();) {
+      URL baseURL = i.next();
+      String url = baseURL.toString();
 
-        } catch (MalformedURLException e) {
-            log.error("Problem using pointer's label URI "
-                    + pointerLabelBaseURI);
-        }
+      // add trailing slash if necessary - MUST be a directory
+      if (!url.endsWith("/")) //$NON-NLS-1$
+        url += "/"; //$NON-NLS-1$
 
-        for (Iterator<URL> i = searchPaths.iterator(); i.hasNext();) {
-            URL baseURL = i.next();
-            String url = baseURL.toString();
+      URL fileURL = null;
+      // Check to see if this is the right URL for the file.
+      // Depending on the OS and/or protocol this may never get called as
+      // the underlying OS may be case insensitive
+      try {
+        fileURL = new URL(url + path);
+        fileURL.openStream();
+        return new URI(fileURL.toString());
+      } catch (IOException ioEx) {
+        // Ignore this must not be the path to the pointed file
+      }
 
-            // add trailing slash if necessary - MUST be a directory
-            if (!url.endsWith("/")) //$NON-NLS-1$
-                url += "/"; //$NON-NLS-1$
-
-            URL fileURL = null;
-            // Check to see if this is the right URL for the file.
-            // Depending on the OS and/or protocol this may never get called as
-            // the underlying OS may be case insensitive
-            try {
-                fileURL = new URL(url + path);
-                fileURL.openStream();
-                return new URI(fileURL.toString());
-            } catch (IOException ioEx) {
-                // Ignore this must not be the path to the pointed file
-            }
-
-            // Check to see if we can find the file as upper case.
-            try {
-                fileURL = new URL(url + path.toUpperCase());
-                fileURL.openStream();
-                // Found the file by upper casing the name so report it
-                pointer.label.addProblem(new LabelParserException(pointer,
-                        null, "parser.error.mismatchedPointerReference",
-                        ProblemType.POTENTIAL_POINTER_PROBLEM));
-                return new URI(fileURL.toString());
-            } catch (IOException ioEx) {
-                // Ignore this must not be the path to the pointed file
-            }
-
-            // Check to see if we can find the file as lower case
-            try {
-                fileURL = new URL(url + path.toLowerCase());
-                fileURL.openStream();
-                // Found the file by lower casing the name so report it
-                pointer.label.addProblem(new LabelParserException(pointer,
-                        null, "parser.error.mismatchedPointerReference",
-                        ProblemType.POTENTIAL_POINTER_PROBLEM));
-                return new URI(fileURL.toString());
-            } catch (IOException ioEx) {
-                // Ignore this must not be the path to the pointed file
-            }
-
-        }
-
-        // The file just can not be found so now report it
+      // Check to see if we can find the file as upper case.
+      try {
+        fileURL = new URL(url + path.toUpperCase());
+        fileURL.openStream();
+        // Found the file by upper casing the name so report it
         pointer.label.addProblem(new LabelParserException(pointer, null,
-                "parser.error.missingRefFile", ProblemType.MISSING_RESOURCE,
-                path));
-        return null;
+            "parser.error.mismatchedPointerReference",
+            ProblemType.POTENTIAL_POINTER_PROBLEM));
+        return new URI(fileURL.toString());
+      } catch (IOException ioEx) {
+        // Ignore this must not be the path to the pointed file
+      }
+
+      // Check to see if we can find the file as lower case
+      try {
+        fileURL = new URL(url + path.toLowerCase());
+        fileURL.openStream();
+        // Found the file by lower casing the name so report it
+        pointer.label.addProblem(new LabelParserException(pointer, null,
+            "parser.error.mismatchedPointerReference",
+            ProblemType.POTENTIAL_POINTER_PROBLEM));
+        return new URI(fileURL.toString());
+      } catch (IOException ioEx) {
+        // Ignore this must not be the path to the pointed file
+      }
+
     }
 
-    public List<URI> resolveURIs(PointerStatement pointer) throws IOException {
+    // The file just can not be found so now report it
+    pointer.label.addProblem(new LabelParserException(pointer, null,
+        "parser.error.missingRefFile", ProblemType.MISSING_RESOURCE, path));
+    return null;
+  }
 
-        List<URI> resolvedURIs = new ArrayList<URI>();
+  public List<URI> resolveURIs(PointerStatement pointer) throws IOException {
 
-        List<FileReference> fileRefs = pointer.getFileRefs();
+    List<URI> resolvedURIs = new ArrayList<URI>();
 
-        for (final FileReference fileRef : fileRefs) {
-            URI foundURI = null;
-            try {
-                foundURI = resolveURI(fileRef, pointer);
-            } catch (URISyntaxException e) {
-                // noop
-            }
-            if (foundURI != null) {
-                resolvedURIs.add(foundURI);
-            }
-        }
+    List<FileReference> fileRefs = pointer.getFileRefs();
 
-        return resolvedURIs;
+    for (final FileReference fileRef : fileRefs) {
+      URI foundURI = null;
+      try {
+        foundURI = resolveURI(fileRef, pointer);
+      } catch (URISyntaxException e) {
+        // noop
+      }
+      if (foundURI != null) {
+        resolvedURIs.add(foundURI);
+      }
     }
 
-    public Map<Numeric, URI> resolveURIMap(PointerStatement pointer)
-            throws IOException {
-        Map<Numeric, URI> resolvedURIs = new HashMap<Numeric, URI>();
+    return resolvedURIs;
+  }
 
-        List<FileReference> fileRefs = pointer.getFileRefs();
+  public Map<Numeric, URI> resolveURIMap(PointerStatement pointer)
+      throws IOException {
+    Map<Numeric, URI> resolvedURIs = new HashMap<Numeric, URI>();
 
-        for (final FileReference fileRef : fileRefs) {
-            URI foundURI = null;
-            try {
-                foundURI = resolveURI(fileRef, pointer);
-            } catch (URISyntaxException e) {
-                // noop
-            }
-            if (foundURI != null) {
-                resolvedURIs.put(fileRef.getStartPosition(), foundURI);
-            }
-        }
+    List<FileReference> fileRefs = pointer.getFileRefs();
 
-        return resolvedURIs;
+    for (final FileReference fileRef : fileRefs) {
+      URI foundURI = null;
+      try {
+        foundURI = resolveURI(fileRef, pointer);
+      } catch (URISyntaxException e) {
+        // noop
+      }
+      if (foundURI != null) {
+        resolvedURIs.put(fileRef.getStartPosition(), foundURI);
+      }
     }
 
-    public File getBaseFile() {
-        if (this.baseURI == null) {
-            return null;
-        }
-        return new File(this.baseURI);
-    }
+    return resolvedURIs;
+  }
 
-    public URI getBaseURI() {
-        return this.baseURI;
+  public File getBaseFile() {
+    if (this.baseURI == null) {
+      return null;
     }
+    return new File(this.baseURI);
+  }
 
-    public String getBaseString() {
-        if (this.baseURI == null) {
-            return null;
-        }
-        return this.baseURI.getPath();
-    }
+  public URI getBaseURI() {
+    return this.baseURI;
+  }
 
-    public void setBaseURI(URI baseURI) {
-        this.baseURI = baseURI;
+  public String getBaseString() {
+    if (this.baseURI == null) {
+      return null;
     }
+    return this.baseURI.getPath();
+  }
 
-    public static URI getBaseURI(URI uri) {
-        if (uri == null) {
-            return null;
-        }
-        File uriFilePath = new File(uri.getPath());
-        return uriFilePath.getParentFile().toURI();
-    }
+  public void setBaseURI(URI baseURI) {
+    this.baseURI = baseURI;
+  }
 
-    public Map<Numeric, File> resolveFileMap(PointerStatement pointer) {
-        return new HashMap<Numeric, File>();
+  public static URI getBaseURI(URI uri) {
+    if (uri == null) {
+      return null;
     }
+    if (uri.getPath().endsWith("/")) {
+      return uri.resolve("..");
+    } else {
+      return uri.resolve(".");
+    }
+  }
 
-    public List<File> resolveFiles(PointerStatement pointer) {
-        return new ArrayList<File>();
-    }
+  public Map<Numeric, File> resolveFileMap(PointerStatement pointer) {
+    return new HashMap<Numeric, File>();
+  }
+
+  public List<File> resolveFiles(PointerStatement pointer) {
+    return new ArrayList<File>();
+  }
 }
