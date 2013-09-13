@@ -26,6 +26,9 @@
       <action dev="mcayanan" type="fix" issue="PDSEN-361">
         Fix to allow the ManualPathResolver to return the correct base uri.
       </action>
+      <action dev="mcayanan" type="fix">
+        Fix to be able to retrieve the offending statement (when possible) associated with the problem being reported.
+      </action>
     </release>
 
     <release version="3.3.0" date="2013-07-25" description="This maintenance release of the Product Tools Library software includes a modification to support up to 9 digits for fractional seconds in a date/time value.">
