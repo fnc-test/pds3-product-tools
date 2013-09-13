@@ -10,7 +10,7 @@
 // may be required before exporting such information to foreign countries or
 // providing access to foreign nationals.
 //
-// $Id$ 
+// $Id$
 //
 
 package gov.nasa.pds.tools.label;
@@ -195,11 +195,27 @@ public class Label {
   public void addProblem(final Statement statement, final Integer column,
       final String key, final ProblemType type, final Object... arguments) {
     if (statement.getSourceFile() != null) {
-      addProblem(statement.getSourceFile(), statement.getLineNumber(), column,
-          key, type, arguments);
+      final LabelParserException e = new LabelParserException(statement,
+          column, key, type, arguments);
+      if (((this.allowExternalProblems || this.labelFile.equals(statement
+          .getSourceFile())) && this.captureProblems)
+          || e.getType().equals(ProblemType.CIRCULAR_POINTER_REF)) {
+        addProblemLocal(e);
+      }
     } else {
-      addProblem(statement.getSourceURI(), statement.getLineNumber(), column,
-          key, type, arguments);
+      if (this.captureProblems) {
+        if (this.labelURI == null
+            || this.labelURI.equals(statement.getSourceURI())) {
+          final LabelParserException e = new LabelParserException(statement,
+              column, key, type, arguments);
+          addProblemLocal(e);
+        } else if (this.allowExternalProblems) {
+          final LabelParserException e = new LabelParserException(statement,
+              column, key, type, arguments);
+          addProblemLocal(e);
+        }
+      }
+
     }
   }
 

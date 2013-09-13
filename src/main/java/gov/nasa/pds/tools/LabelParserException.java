@@ -34,276 +34,287 @@ import java.net.URI;
  */
 public class LabelParserException extends Exception {
 
-    private static final long serialVersionUID = -1;
+  private static final long serialVersionUID = -1;
 
-    private final Integer lineNumber;
+  private final Integer lineNumber;
 
-    private final Integer column;
+  private final Integer column;
 
-    private final ProblemType type;
+  private final ProblemType type;
 
-    private final Object[] arguments;
+  private final Object[] arguments;
 
-    private final String key;
+  private final String key;
 
-    protected final URI sourceURI;
+  private final Statement statement;
 
-    protected final File sourceFile;
+  protected final URI sourceURI;
 
-    /**
-     * Use of this constructor is encouraged where possible as it retains the
-     * context of the exception.
-     * 
-     * @param statement
-     *            in which the exception occurred
-     * @param column
-     *            within the file where the exception started
-     * @param key
-     *            used to quickly associate lookup or filter this type of
-     *            exception
-     * @param type
-     *            classification of the problem
-     * @param arguments
-     *            to be used in generating problem messages
-     * 
-     */
-    public LabelParserException(final Statement statement,
-            final Integer column, final String key, final ProblemType type,
-            final Object... arguments) {
-        super(key);
-        this.sourceFile = statement.getSourceFile();
-        this.sourceURI = statement.getSourceURI();
-        this.lineNumber = statement.getLineNumber();
-        this.column = column;
-        this.type = type;
-        this.key = key;
-        this.arguments = arguments;
-    }
+  protected final File sourceFile;
 
-    /**
-     * Use this constructor for exceptions not associated to a specific file
-     * such as not being able to parse due to missing file or bad URL
-     * 
-     * @param key
-     *            used to quickly associate lookup or filter this type of
-     *            exception
-     * @param type
-     *            classification of the problem
-     * @param arguments
-     *            to be used in generating problem messages
-     */
-    public LabelParserException(final String key, final ProblemType type,
-            final Object... arguments) {
-        super(key);
-        this.sourceFile = null;
-        this.sourceURI = null;
-        this.lineNumber = null;
-        this.column = null;
-        this.type = type;
-        this.key = key;
-        this.arguments = arguments;
-    }
+  /**
+   * Use of this constructor is encouraged where possible as it retains the
+   * context of the exception.
+   * 
+   * @param statement
+   *          in which the exception occurred
+   * @param column
+   *          within the file where the exception started
+   * @param key
+   *          used to quickly associate lookup or filter this type of exception
+   * @param type
+   *          classification of the problem
+   * @param arguments
+   *          to be used in generating problem messages
+   * 
+   */
+  public LabelParserException(final Statement statement, final Integer column,
+      final String key, final ProblemType type, final Object... arguments) {
+    super(key);
+    this.sourceFile = statement.getSourceFile();
+    this.sourceURI = statement.getSourceURI();
+    this.lineNumber = statement.getLineNumber();
+    this.column = column;
+    this.type = type;
+    this.key = key;
+    this.arguments = arguments;
+    this.statement = statement;
+  }
 
-    /**
-     * Use this constructor for exceptions that are associated with a specific
-     * file but not on a given line (e.g. missing statements)
-     * 
-     * @param label
-     *            within which the exception occurred
-     * @param lineNumber
-     *            within the file where the exception started
-     * @param column
-     *            within the file where the exception started
-     * @param key
-     *            used to quickly associate lookup or filter this type of
-     *            exception
-     * @param type
-     *            classification of the problem
-     * @param arguments
-     *            to be used in generating problem messages
-     */
-    public LabelParserException(final Label label, final Integer lineNumber,
-            final Integer column, final String key, final ProblemType type,
-            final Object... arguments) {
-        super(key);
-        this.sourceFile = label.getLabelFile();
-        this.sourceURI = label.getLabelURI();
-        this.lineNumber = lineNumber;
-        this.column = column;
-        this.type = type;
-        this.key = key;
-        this.arguments = arguments;
-    }
+  /**
+   * Use this constructor for exceptions not associated to a specific file such
+   * as not being able to parse due to missing file or bad URL
+   * 
+   * @param key
+   *          used to quickly associate lookup or filter this type of exception
+   * @param type
+   *          classification of the problem
+   * @param arguments
+   *          to be used in generating problem messages
+   */
+  public LabelParserException(final String key, final ProblemType type,
+      final Object... arguments) {
+    super(key);
+    this.sourceFile = null;
+    this.sourceURI = null;
+    this.lineNumber = null;
+    this.column = null;
+    this.type = type;
+    this.key = key;
+    this.arguments = arguments;
+    this.statement = null;
+  }
 
-    /**
-     * Use this constructor for exceptions to be reported about a file that can
-     * be traced back to a line and column
-     * 
-     * @param sourceFile
-     *            within which the exception occurred
-     * @param lineNumber
-     *            within the file where the exception started
-     * @param column
-     *            within the file where the exception started
-     * @param key
-     *            used to quickly associate lookup or filter this type of
-     *            exception
-     * @param type
-     *            classification of the problem
-     * @param arguments
-     *            to be used in generating problem messages
-     */
-    public LabelParserException(final File sourceFile,
-            final Integer lineNumber, final Integer column, final String key,
-            final ProblemType type, final Object... arguments) {
-        super(key);
-        this.sourceFile = sourceFile;
-        this.sourceURI = null;
-        this.lineNumber = lineNumber;
-        this.column = column;
-        this.type = type;
-        this.key = key;
-        this.arguments = arguments;
-    }
+  /**
+   * Use this constructor for exceptions that are associated with a specific
+   * file but not on a given line (e.g. missing statements)
+   * 
+   * @param label
+   *          within which the exception occurred
+   * @param lineNumber
+   *          within the file where the exception started
+   * @param column
+   *          within the file where the exception started
+   * @param key
+   *          used to quickly associate lookup or filter this type of exception
+   * @param type
+   *          classification of the problem
+   * @param arguments
+   *          to be used in generating problem messages
+   */
+  public LabelParserException(final Label label, final Integer lineNumber,
+      final Integer column, final String key, final ProblemType type,
+      final Object... arguments) {
+    super(key);
+    this.sourceFile = label.getLabelFile();
+    this.sourceURI = label.getLabelURI();
+    this.lineNumber = lineNumber;
+    this.column = column;
+    this.type = type;
+    this.key = key;
+    this.arguments = arguments;
+    this.statement = null;
+  }
 
-    /**
-     * Use this constructor for exceptions to be reported about a URI that can
-     * be traced back to a line and column
-     * 
-     * @param sourceURI
-     *            within which the exception occurred
-     * @param lineNumber
-     *            within the file where the exception started
-     * @param column
-     *            within the file where the exception started
-     * @param key
-     *            used to quickly associate lookup or filter this type of
-     *            exception
-     * @param type
-     *            classification of the problem
-     * @param arguments
-     *            to be used in generating problem messages
-     */
-    public LabelParserException(final URI sourceURI, final Integer lineNumber,
-            final Integer column, final String key, final ProblemType type,
-            final Object... arguments) {
-        super(key);
-        this.sourceFile = null;
-        this.sourceURI = sourceURI;
-        this.lineNumber = lineNumber;
-        this.column = column;
-        this.type = type;
-        this.key = key;
-        this.arguments = arguments;
-    }
+  /**
+   * Use this constructor for exceptions to be reported about a file that can be
+   * traced back to a line and column
+   * 
+   * @param sourceFile
+   *          within which the exception occurred
+   * @param lineNumber
+   *          within the file where the exception started
+   * @param column
+   *          within the file where the exception started
+   * @param key
+   *          used to quickly associate lookup or filter this type of exception
+   * @param type
+   *          classification of the problem
+   * @param arguments
+   *          to be used in generating problem messages
+   */
+  public LabelParserException(final File sourceFile, final Integer lineNumber,
+      final Integer column, final String key, final ProblemType type,
+      final Object... arguments) {
+    super(key);
+    this.sourceFile = sourceFile;
+    this.sourceURI = null;
+    this.lineNumber = lineNumber;
+    this.column = column;
+    this.type = type;
+    this.key = key;
+    this.arguments = arguments;
+    this.statement = null;
+  }
 
-    /**
-     * 
-     * @param sourceDictionary
-     * @param lineNumber
-     * @param column
-     * @param key
-     * @param type
-     * @param arguments
-     */
-    // this should only be thrown from the creation of a dictionary, while it's
-    // structurally possible to throw from ElementValidator, the definitions are
-    // found from an already created dictionary so, presumably, each definition
-    // will already have been checked for invalid type
-    public LabelParserException(final Dictionary sourceDictionary,
-            final Integer lineNumber, final Integer column, final String key,
-            final ProblemType type, final Object... arguments) {
-        super(key);
-        this.sourceFile = sourceDictionary.getDictionaryFile();
-        this.sourceURI = sourceDictionary.getDictionaryURI();
-        this.lineNumber = lineNumber;
-        this.column = column;
-        this.type = type;
-        this.key = key;
-        this.arguments = arguments;
-    }
+  /**
+   * Use this constructor for exceptions to be reported about a URI that can be
+   * traced back to a line and column
+   * 
+   * @param sourceURI
+   *          within which the exception occurred
+   * @param lineNumber
+   *          within the file where the exception started
+   * @param column
+   *          within the file where the exception started
+   * @param key
+   *          used to quickly associate lookup or filter this type of exception
+   * @param type
+   *          classification of the problem
+   * @param arguments
+   *          to be used in generating problem messages
+   */
+  public LabelParserException(final URI sourceURI, final Integer lineNumber,
+      final Integer column, final String key, final ProblemType type,
+      final Object... arguments) {
+    super(key);
+    this.sourceFile = null;
+    this.sourceURI = sourceURI;
+    this.lineNumber = lineNumber;
+    this.column = column;
+    this.type = type;
+    this.key = key;
+    this.arguments = arguments;
+    this.statement = null;
+  }
 
-    /**
-     * 
-     * @param e
-     * @param lineNumber
-     * @param column
-     * @param type
-     */
-    // to be used as little as possible
-    public LabelParserException(final Exception e, final Integer lineNumber,
-            final Integer column, final ProblemType type) {
-        super(e);
-        this.sourceFile = null;
-        this.sourceURI = null;
-        this.lineNumber = lineNumber;
-        this.column = column;
-        this.type = type;
-        this.key = e.getMessage();
-        this.arguments = null;
-    }
+  /**
+   * 
+   * @param sourceDictionary
+   * @param lineNumber
+   * @param column
+   * @param key
+   * @param type
+   * @param arguments
+   */
+  // this should only be thrown from the creation of a dictionary, while it's
+  // structurally possible to throw from ElementValidator, the definitions are
+  // found from an already created dictionary so, presumably, each definition
+  // will already have been checked for invalid type
+  public LabelParserException(final Dictionary sourceDictionary,
+      final Integer lineNumber, final Integer column, final String key,
+      final ProblemType type, final Object... arguments) {
+    super(key);
+    this.sourceFile = sourceDictionary.getDictionaryFile();
+    this.sourceURI = sourceDictionary.getDictionaryURI();
+    this.lineNumber = lineNumber;
+    this.column = column;
+    this.type = type;
+    this.key = key;
+    this.arguments = arguments;
+    this.statement = null;
+  }
 
-    /**
-     * 
-     * @return URI of the file in which the exception occurred
-     */
-    public URI getSourceURI() {
-        return this.sourceURI;
-    }
+  /**
+   * 
+   * @param e
+   * @param lineNumber
+   * @param column
+   * @param type
+   */
+  // to be used as little as possible
+  public LabelParserException(final Exception e, final Integer lineNumber,
+      final Integer column, final ProblemType type) {
+    super(e);
+    this.sourceFile = null;
+    this.sourceURI = null;
+    this.lineNumber = lineNumber;
+    this.column = column;
+    this.type = type;
+    this.key = e.getMessage();
+    this.arguments = null;
+    this.statement = null;
+  }
 
-    /**
-     * 
-     * @return File in which the exception occurred
-     */
-    public File getSourceFile() {
-        return this.sourceFile;
-    }
+  /**
+   * 
+   * @return URI of the file in which the exception occurred
+   */
+  public URI getSourceURI() {
+    return this.sourceURI;
+  }
 
-    /**
-     * 
-     * @return Line number of the exception if applicable
-     */
-    public Integer getLineNumber() {
-        return this.lineNumber;
-    }
+  /**
+   * 
+   * @return File in which the exception occurred
+   */
+  public File getSourceFile() {
+    return this.sourceFile;
+  }
 
-    /**
-     * 
-     * @return Column number of the exception if applicable
-     */
-    public Integer getColumn() {
-        return this.column;
-    }
+  /**
+   * 
+   * @return Line number of the exception if applicable
+   */
+  public Integer getLineNumber() {
+    return this.lineNumber;
+  }
 
-    /**
-     * 
-     * @return classification of the problem
-     */
-    public ProblemType getType() {
-        return this.type;
-    }
+  /**
+   * 
+   * @return Column number of the exception if applicable
+   */
+  public Integer getColumn() {
+    return this.column;
+  }
 
-    /**
-     * 
-     * @return arguments to be used in producing a message about this exception
-     */
-    public Object[] getArguments() {
-        return this.arguments;
-    }
+  /**
+   * 
+   * @return classification of the problem
+   */
+  public ProblemType getType() {
+    return this.type;
+  }
 
-    /**
-     * 
-     * @return key of this exception which is useful for filtering
-     */
-    public String getKey() {
-        return this.key;
-    }
+  /**
+   * 
+   * @return arguments to be used in producing a message about this exception
+   */
+  public Object[] getArguments() {
+    return this.arguments;
+  }
 
-    @SuppressWarnings("nls")
-    @Override
-    public String toString() {
-        return "[" + this.type.toString() + " - \"" + this.key + "\" on line "
-                + this.lineNumber + "] ("
-                + StrUtils.toSeparatedString(this.arguments) + ")";
-    }
+  /**
+   * 
+   * @return key of this exception which is useful for filtering
+   */
+  public String getKey() {
+    return this.key;
+  }
+
+  /**
+   * 
+   * @return statement in which the exception occurred.
+   */
+  public Statement getStatement() {
+    return this.statement;
+  }
+
+  @SuppressWarnings("nls")
+  @Override
+  public String toString() {
+    return "[" + this.type.toString() + " - \"" + this.key + "\" on line "
+        + this.lineNumber + "] (" + StrUtils.toSeparatedString(this.arguments)
+        + ")";
+  }
 }
