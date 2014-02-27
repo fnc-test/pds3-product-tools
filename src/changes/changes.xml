@@ -23,6 +23,9 @@
   </properties>
   <body>
     <release version="3.4.0" date="TBD" description="TBD">
+      <action dev="mcayanan" type="update" issue="PDSEN-365">
+        Update to check that a TABLE object contains at least one COLUMN object.
+      </action>
       <action dev="mcayanan" type="fix" issue="PDSEN-361">
         Fix to allow the ManualPathResolver to return the correct base uri.
       </action>
