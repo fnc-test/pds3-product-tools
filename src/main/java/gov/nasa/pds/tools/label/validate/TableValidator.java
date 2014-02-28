@@ -71,7 +71,8 @@ public class TableValidator implements LabelValidator {
       if (statement instanceof ObjectStatement
           && identifier.equals((statement.getIdentifier().getId()))) {
         results.add((ObjectStatement) statement);
-      } else if (statement instanceof ObjectStatement) {
+      } else if (statement instanceof ObjectStatement
+          && statement.getIdentifier().getId().equals("CONTAINER")) {
         ObjectStatement o = (ObjectStatement) statement;
         unprocessed.addAll(o.getStatements());
       }
