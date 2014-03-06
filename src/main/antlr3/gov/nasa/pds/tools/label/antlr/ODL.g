@@ -1,5 +1,5 @@
 grammar ODL;
-options { 
+options {
     backtrack = false;
     memoize = false;
 }
@@ -23,7 +23,7 @@ tokens {
 // may be required before exporting such information to foreign countries or
 // providing access to foreign nationals.
 //
-// $Id$ 
+// $Id$
 //
 
 @parser::header {
@@ -48,6 +48,7 @@ import gov.nasa.pds.tools.label.Statement;
 import gov.nasa.pds.tools.label.IncludePointer;
 import gov.nasa.pds.tools.label.Symbol;
 import gov.nasa.pds.tools.label.TextString;
+import gov.nasa.pds.tools.label.ValueType;
 import gov.nasa.pds.tools.label.Value;
 import gov.nasa.pds.tools.util.AntlrUtils;
 
@@ -65,19 +66,19 @@ import gov.nasa.pds.tools.constants.Constants.ProblemType;
 @parser::members {
 
     private PointerResolver pointerResolver;
-    
+
     private Boolean loadIncludes = true;
 
     public void setPointerResolver(final PointerResolver pointerResolver) {
         this.pointerResolver = pointerResolver;
     }
-    
+
     public void setLoadIncludes(Boolean loadIncludes) {
         this.loadIncludes = loadIncludes;
     }
-    
+
     private Label label = null;
-    
+
     @Override
     public void displayRecognitionError(String[] tokenNames,
                                         RecognitionException e) {
@@ -99,7 +100,7 @@ import gov.nasa.pds.tools.constants.Constants.ProblemType;
             }
         }
     }
-    
+
     public void reportExtraTokens(final List<Token> extraTokens, final Value value, final String idText) {
     	if(extraTokens.size() > 0) {
     		final Token first = extraTokens.get(0);
@@ -115,7 +116,7 @@ import gov.nasa.pds.tools.constants.Constants.ProblemType;
 	private boolean stopAtEND = true;
 	private boolean foundEND = false;
 	private boolean pastEndLine = false;
-	
+
 	private Stack<String> paraphrase = new Stack<String>();
 
 	private Label label;
@@ -123,7 +124,7 @@ import gov.nasa.pds.tools.constants.Constants.ProblemType;
 	public void setStopAtEND(boolean stopAtEND) {
 		this.stopAtEND = stopAtEND;
 	}
-	
+
 	@Override
 	public Token nextToken() {
 		final Token tok = super.nextToken();
@@ -138,21 +139,21 @@ import gov.nasa.pds.tools.constants.Constants.ProblemType;
 				return Token.EOF_TOKEN;
 			}
 		}
-		
+
 		if (tok.getType() == END) {
 			this.foundEND = true;
 		}
-		
+
 		return tok;
 	}
-	
+
 	@Override
     public void reportError(RecognitionException e) {
 		if (this.label != null && !this.foundEND) {
 			this.label.addProblem(e.line, e.charPositionInLine, "parser.error.illegalCharacter", ProblemType.PARSE_ERROR, displayableString(e.c));
 		}
-    }    
-    
+    }
+
     protected String displayableString(final int c) {
     	StringBuffer result = new StringBuffer();
     	if (' ' <= c && c <= '~') {
@@ -170,7 +171,7 @@ import gov.nasa.pds.tools.constants.Constants.ProblemType;
     		input.consume();
     	}
     }
-	
+
 	public void setLabel(Label label) {
 		this.label = label;
 	}
@@ -192,7 +193,7 @@ label[Label label]
     : ( s=statement[label] {if (s != null) {label.addStatement(s);}} )*
       (END {label.setHasEndStatement();} | EOF )
     ;
-    
+
 // an expression is an assignment like identifer = value
 //      or an object block
 statement[Label label] returns [Statement result = null]
@@ -206,14 +207,14 @@ statement[Label label] returns [Statement result = null]
     catch [RecognitionException re] {
 	    while(input.LA(1)!= EOL && input.LA(1) != CharStream.EOF) {
 			input.consume();
-			
+
 		}
 		if(input.LA(1) == EOL) {
 			input.consume();
 		}
 	    label.addProblem(re.line, re.charPositionInLine, re.getMessage(), ProblemType.PARSE_ERROR);
     }
-    
+
 simple_statement[Label label] returns [Statement result = null]
     : /*empty statement*/ (c=COMMENT)? EOL
         {
@@ -232,7 +233,7 @@ simple_statement[Label label] returns [Statement result = null]
            result = p;
         }
     ;
-    
+
 // an object block
 object_statement[Label label] returns [ObjectStatement result = null]
     : 'OBJECT' nl '=' nl id=IDENTIFIER (c=COMMENT)? EOL
@@ -245,7 +246,7 @@ object_statement[Label label] returns [ObjectStatement result = null]
       	|
         (~(END_OBJECT|END|EOF|'OBJECT') (~(EOL|END|EOF))* EOL) => t = . (~(EOL|END|EOF))* EOL
           {label.addProblem(t.getLine(),t.getCharPositionInLine(), "parser.error.illegalStatementStart", ProblemType.PARSE_ERROR, t.getText());}
-          
+
       )*
       // TODO: complain if id mismatch
       (END_OBJECT|END|EOF) => ( (END_OBJECT) => (t = END_OBJECT ('=' id2 = IDENTIFIER)? (c2 = COMMENT)? EOL)
@@ -267,13 +268,13 @@ group_statement[Label label] returns [GroupStatement result = null]
       }
       (
         (~(END_GROUP)) => s=simple_statement[label] {if (s != null) {result.addStatement(s);}}
-      	| 
+      	|
         (~(END_GROUP|END|EOF)) => t = . (~EOL)* EOL
           {label.addProblem(t.getLine(), t.getCharPositionInLine(), "parser.error.illegalStatementStart", ProblemType.PARSE_ERROR, t.getText());}
-        
+
       )*
       (END_GROUP|END|EOF) => ( (END_GROUP) => (END_GROUP ('=' id2=IDENTIFIER)? (c3=COMMENT)? EOL)
-     | 
+     |
 	  {label.addProblem(id.getLine(),id.getCharPositionInLine(), "parser.error.missingEndGroup", ProblemType.PARSE_ERROR, id.getText(), id.getLine());}
 	  )
 	;
@@ -288,8 +289,8 @@ pointer_statement[Label label] returns [PointerStatement result = null]
 	            IncludePointer sp = (IncludePointer) result;
 	            try {
 	               // When using ManualPathResolver problems will be added at this time to the pointer's label.
-	               // This is a different behavior than the StandardPathResolver and reference checking will need 
-	               // at a higher level to be done. 
+	               // This is a different behavior than the StandardPathResolver and reference checking will need
+	               // at a higher level to be done.
 	               sp.loadReferencedStatements(label, this.pointerResolver);
 	            } catch (LabelParserException lpe) {
 	               // don't add problem since for a different file
@@ -297,7 +298,7 @@ pointer_statement[Label label] returns [PointerStatement result = null]
 	            } catch (IOException ioe) {
 	              // for now, missing files are tested elsewhere
 	              // label.addProblem(a.getLineNumber(), ioe.getMessage(), ProblemType.PARSE_ERROR);
-	            } 
+	            }
 	         }
          }
       }
@@ -314,13 +315,13 @@ assignment_statement[Label label] returns [AttributeStatement result = null]
                 int line = eq.getLine();
                 Value val = v != null ? v : b;
                 String idText = id != null ? id.getText() : "";
-                
+
                 result = new AttributeStatement(label, line, idText, val);
-                
+
                 reportExtraTokens(extraTokens, val, idText);
-                
+
                 result.attachComment(c);
-                
+
                 // report if bad value
                 if(b != null) {
                  	label.addProblem(line, null, "parser.error.badValue", ProblemType.BAD_VALUE, idText, b.getValue());
@@ -332,18 +333,18 @@ assignment_statement[Label label] returns [AttributeStatement result = null]
                 int line = eq.getLine();
                 Value val = v != null ? v : b;
                 String idText = id != null ? id.getText() : "";
-                
+
                 result = new AttributeStatement(label, line, idText, val);
-		        
+
 		        reportExtraTokens(extraTokens, val, idText);
-		        
+
 		        result.attachComment(c);
             }
         // missing value
         | ((id = IDENTIFIER)? eq = '=' (c = COMMENT)? EOL) {
             int line = eq.getLine();
             String idText = id != null ? id.getText() : "";
-	        
+
 	        result = new AttributeStatement(label, line, idText, null);
 	        result.attachComment(c);
         }
@@ -352,9 +353,9 @@ assignment_statement[Label label] returns [AttributeStatement result = null]
         | (IDENTIFIER '=' QUOTED_UNTERMINATED EOF ) =>
         ((id = IDENTIFIER) eq = '=' txt = text_string_value_unterminated[label]) {
             int line = eq.getLine();
-	        
+
 	        String idText = id != null ? id.getText() : "";
-	        
+
 	        label.addProblem(line, null, "parser.error.missingEndQuote", ProblemType.BAD_VALUE, idText);
 	        result = new AttributeStatement(label, line, idText, txt);
         }
@@ -363,7 +364,7 @@ assignment_statement[Label label] returns [AttributeStatement result = null]
 // a value is a scalar, sequence, or set
 value[Label label] returns [Value result = null]
     : v1=scalar_value[label]
-        {result = v1;} 
+        {result = v1;}
     | v2=sequence_value[label]
         {result = v2;}
     | v3=set_value[label]
@@ -381,7 +382,7 @@ scalar_value[Label label] returns [Scalar result = null]
     | s=symbol_value[label]
         {result = s;}
     ;
-    
+
 // a numeric is an integer, based integer, or real followed by optional units
 numeric_value[Label label] returns [Numeric result = null]
     : i=INTEGER (u=UNITS)?
@@ -404,21 +405,21 @@ numeric_value[Label label] returns [Numeric result = null]
 // a text string is quoted with double quotes
 text_string_value[Label label] returns [TextString result = null]
     : q=QUOTED
-        {result = new TextString(q.getText());}
+        {result = new TextString(q.getText(), ValueType.DOUBLE_QUOTED);}
     ;
-    
+
 bad_value[Label label] returns [TextString result = null]
 	: v=BAD_TOKEN
 	{result = new TextString(v.getText());}
 	;
-    
+
 // a text string is quoted with double quotes
 text_string_value_unterminated[Label label] returns [TextString result = null]
     : q=QUOTED_UNTERMINATED
-    	{result = new TextString(q.getText());}
+    	{result = new TextString(q.getText(), ValueType.QUOTED_UNTERMINATED);}
     ;
 
-// a date time formatted to PDS specification 
+// a date time formatted to PDS specification
 date_time_value[Label label] returns [DateTime result = null]
     : dt=DATETIME
         {
@@ -440,13 +441,13 @@ date_time_value[Label label] returns [DateTime result = null]
            }
         }
     ;
-    
-// a symbol  
+
+// a symbol
 symbol_value[Label label] returns [Symbol result = null]
     : id=IDENTIFIER
         {result = new Symbol(id.getText());}
     | qs=SYMBOL
-        {result = new Symbol(qs.getText());}
+        {result = new Symbol(qs.getText(), ValueType.SINGLE_QUOTED);}
     ;
 
 sequence_value[Label label] returns [Sequence result = null]
@@ -455,12 +456,12 @@ sequence_value[Label label] returns [Sequence result = null]
     | s2=sequence_1d[label]
         {result = s2;}
     ;
-    
+
 sequence_1d[Label label] returns [Sequence result = null]
     : '(' nl s=scalar_list[label] ')'
         {result = s;}
     ;
-    
+
 scalar_list[Label label] returns [Sequence result=new Sequence()]
     : /*empty*/
     | s=scalar_value[label] {result.add(s);} nl
@@ -481,7 +482,7 @@ sequence_list[Label label] returns [Sequence result = new Sequence()]
 set_value[Label label] returns [Set result = null;]
     : '{' nl s=item_list[label] {result=s;} '}'
     ;
-    
+
 item_list[Label label] returns [Set result = new Set()]
     : /*empty*/
     | s=scalar_value[label] {result.add(s);} nl
@@ -504,28 +505,28 @@ SIGN
     : '+' | '-'
     ;
 
-// digits are only numbers 
+// digits are only numbers
 fragment
 DIGIT
     : ('0'..'9')
     ;
-    
+
 fragment
 LETTER
     : ('a'..'z'|'A'..'Z')
     ;
 
-fragment  
+fragment
 EOF
 : '\uFFFF'
 ;
-  
+
 // extended digit is a digit or letter
 fragment
 EXTENDED_DIGIT
     : DIGIT | LETTER
     ;
-   
+
 fragment
 DIGITS
     : (DIGIT)+
@@ -568,7 +569,7 @@ UNITS
 @after {paraphrase.pop();}
     : '<' (LETTER | DIGIT | SPECIALCHAR | '(' | ')' | '/' | WS)* '>'
     ;
- 
+
 // real numbers
 REAL
 @init {paraphrase.push("real");}
@@ -585,7 +586,7 @@ BASED_INTEGER
     //: DIGITS '#' SIGN? EXTENDED_DIGIT (EXTENDED_DIGIT|' ')+ '#'
     : DIGITS '#' SIGN? EXTENDED_DIGIT+ '#'
     ;
-    
+
 // Dates and times
 DATETIME
 @init {paraphrase.push("date-time");}
@@ -610,18 +611,18 @@ TIME
 /*options {greedy=FALSE;}*/
     : DIGITS ':' DIGITS (':' DIGITS ('.' DIGITS)?)? 'Z'?
     ;
-    
+
 // integer positive or negative no commas
 fragment
 INTEGER
     : SIGN? DIGITS
     ;
-    
+
 // string literals
 QUOTED
     : '"' (EOL|~('"'|'\uFFFF'|'\r'|'\n'))* '"'
     ;
-    
+
 // string literals
 QUOTED_UNTERMINATED
     : '"' (EOL|~('"'|'\uFFFF'|'\r'|'\n'))*
@@ -648,7 +649,7 @@ EOL
             label.addProblem($line, "parser.error.badLineEnding", ProblemType.ILLEGAL_LINE_ENDING);
         }
     ;
-    
+
 BAD_TOKEN
 	:(LETTER|DIGIT|SPECIALCHAR)+
 	;

@@ -34,289 +34,319 @@ import java.util.ListIterator;
  * 
  */
 public class Sequence implements List<Value>, Value {
-    private List<Value> values;
+  private List<Value> values;
 
-    /**
-     * Constructs an empty sequence of values.
-     */
-    public Sequence() {
-        this.values = new ArrayList<Value>();
+  /**
+   * Constructs an empty sequence of values.
+   */
+  public Sequence() {
+    this.values = new ArrayList<Value>();
+  }
+
+  /**
+   * Constructs a sequence with the ordered value
+   * 
+   * @param values
+   *          to load into sequence
+   */
+  public Sequence(List<Value> values) {
+    this.values = new ArrayList<Value>(values);
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see java.util.List#containsAll(java.util.Collection)
+   */
+  public boolean containsAll(Collection<?> vals) {
+    return this.values.containsAll(vals);
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see java.util.List#addAll(java.util.Collection)
+   */
+  public boolean addAll(Collection<? extends Value> vals) {
+    return this.values.addAll(vals);
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see java.util.List#addAll(int, java.util.Collection)
+   */
+  public boolean addAll(int index, Collection<? extends Value> vals) {
+    return this.values.addAll(index, vals);
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see java.util.List#removeAll(java.util.Collection)
+   */
+  public boolean removeAll(Collection<?> vals) {
+    return this.values.removeAll(vals);
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see java.util.List#retainAll(java.util.Collection)
+   */
+  public boolean retainAll(Collection<?> vals) {
+    return this.values.retainAll(vals);
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see java.util.List#clear()
+   */
+  public void clear() {
+    this.values.clear();
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see java.util.List#get(int)
+   */
+  public Value getValue(int index) {
+    return this.values.get(index);
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see java.util.List#set(int, java.lang.Object)
+   */
+  public Value set(int index, Value value) {
+    return this.values.set(index, value);
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see java.util.List#remove(int)
+   */
+  public Scalar removeScalar(int index) {
+    return (Scalar) this.values.remove(index);
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see java.util.List#listIterator()
+   */
+  public ListIterator<Value> listIterator() {
+    return this.values.listIterator();
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see java.util.List#listIterator(int)
+   */
+  public ListIterator<Value> listIterator(int index) {
+    return this.values.listIterator(index);
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see java.util.List#subList(int, int)
+   */
+  public List<Value> subList(int fromIndex, int toIndex) {
+    return this.values.subList(fromIndex, toIndex);
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see java.util.List#contains(java.lang.Object)
+   */
+  public boolean contains(Object object) {
+    return this.values.contains(object);
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see java.util.List#toArray(java.lang.Object[])
+   */
+  public <T> T[] toArray(T[] objects) {
+    return this.values.toArray(objects);
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see java.util.List#add(java.lang.Object)
+   */
+  public boolean add(Value object) {
+    return this.values.add(object);
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see java.util.List#remove(java.lang.Object)
+   */
+  public boolean remove(Object object) {
+    return this.values.remove(object);
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see java.util.List#add(int, java.lang.Object)
+   */
+  public void add(int index, Value object) {
+    this.values.add(index, object);
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see java.util.List#indexOf(java.lang.Object)
+   */
+  public int indexOf(Object object) {
+    return this.values.indexOf(object);
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see java.util.List#lastIndexOf(java.lang.Object)
+   */
+  public int lastIndexOf(Object object) {
+    return this.values.lastIndexOf(object);
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see java.util.List#toArray()
+   */
+  public Object[] toArray() {
+    return this.values.toArray();
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see java.util.List#get(int)
+   */
+  public Value get(int index) {
+    return this.values.get(index);
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see java.util.List#remove(int)
+   */
+  public Value remove(int index) {
+    return this.values.remove(index);
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see java.util.List#size()
+   */
+  public int size() {
+    return this.values.size();
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see java.util.List#isEmpty()
+   */
+  public boolean isEmpty() {
+    return this.values.isEmpty();
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see java.util.List#iterator()
+   */
+  public Iterator<Value> iterator() {
+    return this.values.iterator();
+  }
+
+  public String normalize() {
+    return StrUtils.normalize(this.toString());
+  }
+
+  public String toString() {
+    String value = "(";
+
+    for (Iterator<Value> i = listIterator(); i.hasNext();) {
+      value += i.next().toString();
+      if (i.hasNext()) {
+        value += ", ";
+      }
+    }
+    value += ")";
+
+    return value;
+  }
+
+  /**
+   * Provides a string representation of the Sequence with single or double
+   * quotes surrounding each value if the retainQuotes flag is set to true and
+   * the ValueType was SINGLE_QUOTED or DOUBLE_QUOTED for a value.
+   * 
+   * @param retainQuotes
+   *          Set to true to return the value with quotes surrounding it if it
+   *          was originally there in the label.
+   * 
+   * @return The string representation of the Sequence.
+   */
+  public String toString(boolean retainQuotes) {
+    String value = "(";
+
+    for (Iterator<Value> i = listIterator(); i.hasNext();) {
+      Value v = i.next();
+      if (v instanceof Scalar) {
+        value += ((Scalar) v).toString(retainQuotes);
+      } else {
+        value += v.toString();
+      }
+      if (i.hasNext()) {
+        value += ", ";
+      }
+    }
+    value += ")";
+
+    return value;
+  }
+
+  public boolean equals(Object object) {
+    if (this == object) {
+      return true;
     }
 
-    /**
-     * Constructs a sequence with the ordered value
-     * 
-     * @param values
-     *            to load into sequence
-     */
-    public Sequence(List<Value> values) {
-        this.values = new ArrayList<Value>(values);
+    if (!(object instanceof Sequence)) {
+      return false;
     }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.util.List#containsAll(java.util.Collection)
-     */
-    public boolean containsAll(Collection<?> vals) {
-        return this.values.containsAll(vals);
+    Sequence that = (Sequence) object;
+    if (this.size() != that.size()) {
+      return false;
     }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.util.List#addAll(java.util.Collection)
-     */
-    public boolean addAll(Collection<? extends Value> vals) {
-        return this.values.addAll(vals);
+    for (int i = 0; i < this.size(); i++) {
+      if (!this.get(i).equals(that.get(i))) {
+        return false;
+      }
     }
+    return true;
+  }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.util.List#addAll(int, java.util.Collection)
-     */
-    public boolean addAll(int index, Collection<? extends Value> vals) {
-        return this.values.addAll(index, vals);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.util.List#removeAll(java.util.Collection)
-     */
-    public boolean removeAll(Collection<?> vals) {
-        return this.values.removeAll(vals);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.util.List#retainAll(java.util.Collection)
-     */
-    public boolean retainAll(Collection<?> vals) {
-        return this.values.retainAll(vals);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.util.List#clear()
-     */
-    public void clear() {
-        this.values.clear();
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.util.List#get(int)
-     */
-    public Value getValue(int index) {
-        return this.values.get(index);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.util.List#set(int, java.lang.Object)
-     */
-    public Value set(int index, Value value) {
-        return this.values.set(index, value);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.util.List#remove(int)
-     */
-    public Scalar removeScalar(int index) {
-        return (Scalar) this.values.remove(index);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.util.List#listIterator()
-     */
-    public ListIterator<Value> listIterator() {
-        return this.values.listIterator();
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.util.List#listIterator(int)
-     */
-    public ListIterator<Value> listIterator(int index) {
-        return this.values.listIterator(index);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.util.List#subList(int, int)
-     */
-    public List<Value> subList(int fromIndex, int toIndex) {
-        return this.values.subList(fromIndex, toIndex);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.util.List#contains(java.lang.Object)
-     */
-    public boolean contains(Object object) {
-        return this.values.contains(object);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.util.List#toArray(java.lang.Object[])
-     */
-    public <T> T[] toArray(T[] objects) {
-        return this.values.toArray(objects);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.util.List#add(java.lang.Object)
-     */
-    public boolean add(Value object) {
-        return this.values.add(object);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.util.List#remove(java.lang.Object)
-     */
-    public boolean remove(Object object) {
-        return this.values.remove(object);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.util.List#add(int, java.lang.Object)
-     */
-    public void add(int index, Value object) {
-        this.values.add(index, object);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.util.List#indexOf(java.lang.Object)
-     */
-    public int indexOf(Object object) {
-        return this.values.indexOf(object);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.util.List#lastIndexOf(java.lang.Object)
-     */
-    public int lastIndexOf(Object object) {
-        return this.values.lastIndexOf(object);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.util.List#toArray()
-     */
-    public Object[] toArray() {
-        return this.values.toArray();
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.util.List#get(int)
-     */
-    public Value get(int index) {
-        return this.values.get(index);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.util.List#remove(int)
-     */
-    public Value remove(int index) {
-        return this.values.remove(index);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.util.List#size()
-     */
-    public int size() {
-        return this.values.size();
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.util.List#isEmpty()
-     */
-    public boolean isEmpty() {
-        return this.values.isEmpty();
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.util.List#iterator()
-     */
-    public Iterator<Value> iterator() {
-        return this.values.iterator();
-    }
-
-    public String normalize() {
-        return StrUtils.normalize(this.toString());
-    }
-
-    public String toString() {
-        String value = "(";
-
-        for (Iterator<Value> i = listIterator(); i.hasNext();) {
-            value += i.next().toString();
-            if (i.hasNext()) {
-                value += ", ";
-            }
-        }
-        value += ")";
-
-        return value;
-    }
-
-    public boolean equals(Object object) {
-        if (this == object) {
-            return true;
-        }
-
-        if (!(object instanceof Sequence)) {
-            return false;
-        }
-        Sequence that = (Sequence) object;
-        if (this.size() != that.size()) {
-            return false;
-        }
-        for (int i = 0; i < this.size(); i++) {
-            if (!this.get(i).equals(that.get(i))) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public int hashcode() {
-        return this.values.hashCode();
-    }
+  public int hashcode() {
+    return this.values.hashCode();
+  }
 }

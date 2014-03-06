@@ -10,7 +10,7 @@
 // may be required before exporting such information to foreign countries or
 // providing access to foreign nationals.
 //
-// $Id$ 
+// $Id$
 //
 
 package gov.nasa.pds.tools.label;
@@ -26,29 +26,36 @@ import gov.nasa.pds.tools.constants.Constants.DictionaryType;
  */
 public class Symbol extends Scalar {
 
-    /**
-     * @param value
-     */
-    public Symbol(String value) {
-        super(value.replaceAll("'", "")); //$NON-NLS-1$ //$NON-NLS-2$
-    }
+  /**
+   * @param value
+   */
+  public Symbol(String value) {
+    this(value, null);
+  }
 
-    public String normalize() {
-        return StrUtils.normalize(this.toString());
-    }
+  /**
+   * @param value
+   * @param type
+   */
+  public Symbol(String value, ValueType type) {
+    super(value.replaceAll("'", ""), type); //$NON-NLS-1$ //$NON-NLS-2$
+  }
 
-    @Override
-    public boolean isSupportedPDSType(DictionaryType type) {
-        if (DictionaryType.IDENTIFIER.equals(type)
-                || DictionaryType.CHARACTER.equals(type)
-                || DictionaryType.DATA_SET.equals(type)
-                || DictionaryType.ALPHABET.equals(type)
-                || DictionaryType.ALPHANUMERIC.equals(type)
-                || DictionaryType.CONTEXT_DEPENDENT.equals(type)
-                || DictionaryType.CONTEXTDEPENDENT.equals(type)) {
-            return true;
-        }
-        return false;
-    }
+  public String normalize() {
+    return StrUtils.normalize(this.toString());
+  }
 
+  @Override
+  public boolean isSupportedPDSType(DictionaryType type) {
+    if (DictionaryType.IDENTIFIER.equals(type)
+        || DictionaryType.CHARACTER.equals(type)
+        || DictionaryType.DATA_SET.equals(type)
+        || DictionaryType.ALPHABET.equals(type)
+        || DictionaryType.ALPHANUMERIC.equals(type)
+        || DictionaryType.CONTEXT_DEPENDENT.equals(type)
+        || DictionaryType.CONTEXTDEPENDENT.equals(type)) {
+      return true;
+    }
+    return false;
+  }
 }
