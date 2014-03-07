@@ -24,7 +24,7 @@
   <body>
     <release version="3.4.0" date="TBD" description="TBD">
       <action dev="mcayanan" type="add">
-        Added new methods to the API that will return a string representation of a scalar or symbol with quotes surrounding it if it was originally there in the label. This also applies to Scalars and Symbols found within Sets and Sequences.
+        Added new methods to the API that will return a string representation of a Scalar with quotes surrounding it if it was originally there in the label. This also applies to Scalars found within Sets and Sequences. Currently, the only Scalar child classes that are affected by this change are TextStrings and Symbols.
       </action>
       <action dev="mcayanan" type="update" issue="PDSEN-365">
         Update to check that a TABLE object contains at least one COLUMN object.
