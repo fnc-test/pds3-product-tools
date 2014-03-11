@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-  Copyright 2006-2013, by the California Institute of Technology.
+  Copyright 2006-2014, by the California Institute of Technology.
   ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
   Any commercial use must be negotiated with the Office of Technology Transfer
   at the California Institute of Technology.
@@ -22,15 +22,18 @@
     <author email="Sean.Hardman@jpl.nasa.gov">Sean Hardman</author>
   </properties>
   <body>
-    <release version="3.4.0" date="TBD" description="TBD">
-      <action dev="mcayanan" type="add">
-        Added new methods to the API that will return a string representation of a Scalar with quotes surrounding it if it was originally there in the label. This also applies to Scalars found within Sets and Sequences. Currently, the only Scalar child classes that are affected by this change are TextStrings and Symbols.
-      </action>
-      <action dev="mcayanan" type="update" issue="PDSEN-365">
-        Update to check that a TABLE object contains at least one COLUMN object.
+    <release version="3.4.0" date="2014-03-11" description="This is a maintenance release of the Product Tools Library software including a number of modifications.">
+      <action dev="jho" type="fix" issue="PDSEN-349">
+        Updated PDS data dictionary version 1r91 to not require a COLUMN object in a TABLE object. See PDSEN-365 for implementation of this check programmatically.
       </action>
       <action dev="mcayanan" type="fix" issue="PDSEN-361">
         Fix to allow the ManualPathResolver to return the correct base uri.
+      </action>
+      <action dev="mcayanan" type="update" issue="PDSEN-365">
+        Updated to check that a TABLE object contains at least one COLUMN object at the top-level of the object or within an optional CONTAINER object.
+      </action>
+      <action dev="mcayanan" type="add">
+        Added new methods to the API that will return a string representation of a Scalar with quotes surrounding it if it was originally there in the label. This also applies to Scalars found within Sets and Sequences. Currently, the only Scalar child classes that are affected by this change are TextStrings and Symbols.
       </action>
       <action dev="mcayanan" type="fix">
         Fix to be able to retrieve the offending statement (when possible) associated with the problem being reported.

@@ -19,8 +19,9 @@ produces the following error when as the result of compiling the Antlr
 output:
 
 [INFO] Compilation failure
-/Users/shardman/dev/pds/tools/product-tools/target/generated-sources/antlr3/gov/nasa/pds/tools/label/antlr/ODLParser.java:[7559,19] code too large
+/Users/shardman/dev/pds/tools/product-tools/target/generated-sources\
+/antlr3/gov/nasa/pds/tools/label/antlr/ODLParser.java:[7559,19] code too large
 
 Upgrading to Antlr 3.3 did not resolve the issue. The good news is that 
-it works just fine in a Linux environment. In addition, one of the unit tests 
-fails (CharacterCheckerTest) in Mac OS X where it succeeds in Linux.
+it works just fine in a Linux environment. In addition, if the build does
+actually succeed in a Mac OS X environment, one of the unit tests fails.
