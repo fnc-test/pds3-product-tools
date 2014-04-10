@@ -23,6 +23,9 @@
   </properties>
   <body>
     <release version="3.5.0" date="TBD" description="TBD">
+      <action dev="mcayanan" type="fix" issue="PDSEN-357">
+        Fixed to support the merging of unit lists when multiple dictionaries are merged.
+      </action>
     </release>
 
     <release version="3.4.0" date="2014-03-11" description="This is a maintenance release of the Product Tools Library software including a number of modifications.">
