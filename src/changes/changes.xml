@@ -26,6 +26,9 @@
       <action dev="mcayanan" type="fix" issue="PDSEN-357">
         Fixed to support the merging of unit lists when multiple dictionaries are merged.
       </action>
+      <action dev="mcayanan" type="fix">
+        Fixed an issue where a "Resetting to invalid mark" exception was being thrown when running under Java 1.7.
+      </action>
     </release>
 
     <release version="3.4.0" date="2014-03-11" description="This is a maintenance release of the Product Tools Library software including a number of modifications.">
