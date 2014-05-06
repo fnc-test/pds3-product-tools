@@ -72,6 +72,8 @@ public class DefaultLabelParser implements LabelParser {
 
   private final PointerResolver resolver;
 
+  private final int MARK_LIMIT = 100;
+
   // default constructor, assumes you want to load included statements and
   // capture parse errors
   public DefaultLabelParser(final PointerResolver resolver) {
@@ -118,9 +120,9 @@ public class DefaultLabelParser implements LabelParser {
 
   public Label parseLabel(final URL url, final boolean forceParse)
       throws LabelParserException, IOException {
-    final BufferedInputStream inputStream = new BufferedInputStream(url
-        .openStream());
-    inputStream.mark(100);
+    final BufferedInputStream inputStream = new BufferedInputStream(
+        url.openStream());
+    inputStream.mark(MARK_LIMIT);
     URI labelURI = null;
     try {
       labelURI = url.toURI();
@@ -140,7 +142,7 @@ public class DefaultLabelParser implements LabelParser {
     BufferedInputStream inputStream;
     try {
       inputStream = new BufferedInputStream(new FileInputStream(file));
-      inputStream.mark(100);
+      inputStream.mark(MARK_LIMIT);
     } catch (FileNotFoundException e) {
       if (file.exists()) {
         throw new LabelParserException(file, null, null,
@@ -165,8 +167,12 @@ public class DefaultLabelParser implements LabelParser {
 
     // Now look for PDS_VERSION_ID to ensure that this is a file we want to
     // validate
+
+    // Set the buffer size to the mark limit to ensure that we don't
+    // invalidate the mark and throw an exception when calling the
+    // inputStream.reset() method
     BufferedReader reader = new BufferedReader(new InputStreamReader(
-        inputStream));
+        inputStream), MARK_LIMIT);
 
     String versionLine = null;
     boolean hasExtraNewLines = false;
@@ -300,7 +306,7 @@ public class DefaultLabelParser implements LabelParser {
     // consume LF if present
     consumeNewline(input);
     // marking location so not rewound to just prior to last newline char
-    input.mark(100);
+    input.mark(MARK_LIMIT);
   }
 
   private void consumeNewline(final InputStream input) throws IOException {
@@ -342,7 +348,7 @@ public class DefaultLabelParser implements LabelParser {
     BufferedInputStream inputStream;
     try {
       inputStream = new BufferedInputStream(new FileInputStream(file));
-      inputStream.mark(100);
+      inputStream.mark(MARK_LIMIT);
     } catch (FileNotFoundException e) {
       if (file.exists()) {
         throw new LabelParserException(file, null, null,
@@ -372,9 +378,9 @@ public class DefaultLabelParser implements LabelParser {
   public Label parsePartial(final URL url, final Label parent,
       final boolean captureProbs, final boolean allowExternalProbs)
       throws IOException, LabelParserException {
-    final BufferedInputStream inputStream = new BufferedInputStream(url
-        .openStream());
-    inputStream.mark(100);
+    final BufferedInputStream inputStream = new BufferedInputStream(
+        url.openStream());
+    inputStream.mark(MARK_LIMIT);
     URI labelURI = null;
     try {
       labelURI = url.toURI();
@@ -411,8 +417,12 @@ public class DefaultLabelParser implements LabelParser {
 
     // Now look for PDS_VERSION_ID to ensure that this is a file we want to
     // validate
+    
+    // Set the buffer size to the mark limit to ensure that we don't
+    // invalidate the mark and throw an exception when calling the
+    // inputStream.reset() method    
     BufferedReader reader = new BufferedReader(new InputStreamReader(
-        inputStream));
+        inputStream), MARK_LIMIT);
     String versionLine = null;
 
     do {
@@ -460,10 +470,10 @@ public class DefaultLabelParser implements LabelParser {
         // no op
       }
     } else {
-      if (label.getLabelURI().toString().startsWith(
-          this.resolver.getBaseURI().toString())) {
-        relativePath = label.getLabelURI().toString().substring(
-            this.resolver.getBaseURI().toString().length());
+      if (label.getLabelURI().toString()
+          .startsWith(this.resolver.getBaseURI().toString())) {
+        relativePath = label.getLabelURI().toString()
+            .substring(this.resolver.getBaseURI().toString().length());
       }
     }
     return relativePath;
