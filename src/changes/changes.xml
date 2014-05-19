@@ -22,6 +22,9 @@
     <author email="Sean.Hardman@jpl.nasa.gov">Sean Hardman</author>
   </properties>
   <body>
+    <release version="3.5.0" date="TBD" description="TBD">
+    </release>
+
     <release version="3.4.1" date="2014-05-19" description="This is a maintenance release of the Product Tools Library mainly addressing support for Java 7.">
       <action dev="mcayanan" type="fix" issue="PDSEN-357">
         Fixed to support the merging of unit lists when multiple dictionaries are merged.
