@@ -22,7 +22,7 @@
     <author email="Sean.Hardman@jpl.nasa.gov">Sean Hardman</author>
   </properties>
   <body>
-    <release version="3.5.0" date="TBD" description="TBD">
+    <release version="3.4.1" date="2014-05-19" description="This is a maintenance release of the Product Tools Library mainly addressing support for Java 7.">
       <action dev="mcayanan" type="fix" issue="PDSEN-357">
         Fixed to support the merging of unit lists when multiple dictionaries are merged.
       </action>
@@ -36,7 +36,7 @@
         Updated PDS data dictionary version 1r91 to not require a COLUMN object in a TABLE object. See PDSEN-365 for implementation of this check programmatically.
       </action>
       <action dev="mcayanan" type="fix" issue="PDSEN-361">
-        Fix to allow the ManualPathResolver to return the correct base uri.
+        Fix to allow the ManualPathResolver to return the correct base URI.
       </action>
       <action dev="mcayanan" type="update" issue="PDSEN-365">
         Updated to check that a TABLE object contains at least one COLUMN object at the top-level of the object or within an optional CONTAINER object.
