@@ -97,7 +97,7 @@ public class ManualPathResolver implements PointerResolver {
       // the underlying OS may be case insensitive
       try {
         fileURL = new URL(url + path);
-        fileURL.openStream();
+        fileURL.openStream().close();
         return new URI(fileURL.toString());
       } catch (IOException ioEx) {
         // Ignore this must not be the path to the pointed file
@@ -106,7 +106,7 @@ public class ManualPathResolver implements PointerResolver {
       // Check to see if we can find the file as upper case.
       try {
         fileURL = new URL(url + path.toUpperCase());
-        fileURL.openStream();
+        fileURL.openStream().close();
         // Found the file by upper casing the name so report it
         pointer.label.addProblem(new LabelParserException(pointer, null,
             "parser.error.mismatchedPointerReference",
@@ -119,7 +119,7 @@ public class ManualPathResolver implements PointerResolver {
       // Check to see if we can find the file as lower case
       try {
         fileURL = new URL(url + path.toLowerCase());
-        fileURL.openStream();
+        fileURL.openStream().close();
         // Found the file by lower casing the name so report it
         pointer.label.addProblem(new LabelParserException(pointer, null,
             "parser.error.mismatchedPointerReference",

@@ -10,7 +10,7 @@
 // may be required before exporting such information to foreign countries or
 // providing access to foreign nationals.
 //
-// $Id$ 
+// $Id$
 //
 
 package gov.nasa.pds.tools.label.parser;
@@ -48,6 +48,7 @@ import org.antlr.runtime.ANTLRInputStream;
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Level;
@@ -122,41 +123,49 @@ public class DefaultLabelParser implements LabelParser {
       throws LabelParserException, IOException {
     final BufferedInputStream inputStream = new BufferedInputStream(
         url.openStream());
-    inputStream.mark(MARK_LIMIT);
-    URI labelURI = null;
     try {
-      labelURI = url.toURI();
-    } catch (URISyntaxException e) {
-      throw new LabelParserException("bad url", ProblemType.INVALID_LABEL, //$NON-NLS-1$
-          url.getFile());
-    }
+      inputStream.mark(MARK_LIMIT);
+      URI labelURI = null;
+      try {
+        labelURI = url.toURI();
+      } catch (URISyntaxException e) {
+        throw new LabelParserException("bad url", ProblemType.INVALID_LABEL, //$NON-NLS-1$
+            url.getFile());
+      }
 
-    final Label label = new Label(labelURI);
-    label.setCaptureProblems(this.captureProblems);
-    label.setAllowExternalProblems(this.allowExternalProblems);
-    return parseLabel(inputStream, label, forceParse);
+      final Label label = new Label(labelURI);
+      label.setCaptureProblems(this.captureProblems);
+      label.setAllowExternalProblems(this.allowExternalProblems);
+      return parseLabel(inputStream, label, forceParse);
+    } finally {
+      IOUtils.closeQuietly(inputStream);
+    }
   }
 
   public Label parseLabel(final File file, final boolean forceParse)
       throws LabelParserException, IOException {
-    BufferedInputStream inputStream;
+    BufferedInputStream inputStream = null;
     try {
-      inputStream = new BufferedInputStream(new FileInputStream(file));
-      inputStream.mark(MARK_LIMIT);
-    } catch (FileNotFoundException e) {
-      if (file.exists()) {
+      try {
+        inputStream = new BufferedInputStream(new FileInputStream(file));
+        inputStream.mark(MARK_LIMIT);
+      } catch (FileNotFoundException e) {
+        if (file.exists()) {
+          throw new LabelParserException(file, null, null,
+              "parser.error.unableToRead", ProblemType.INVALID_LABEL, file //$NON-NLS-1$
+                  .toString());
+        }
         throw new LabelParserException(file, null, null,
-            "parser.error.unableToRead", ProblemType.INVALID_LABEL, file //$NON-NLS-1$
-                .toString());
+            "parser.error.missingFile", ProblemType.INVALID_LABEL, file //$NON-NLS-1$
+                .getName());
       }
-      throw new LabelParserException(file, null, null,
-          "parser.error.missingFile", ProblemType.INVALID_LABEL, file //$NON-NLS-1$
-              .getName());
+      final Label label = new Label(file);
+      label.setCaptureProblems(this.captureProblems);
+      label.setAllowExternalProblems(this.allowExternalProblems);
+      return parseLabel(inputStream, label, forceParse);
+    } finally {
+      IOUtils.closeQuietly(inputStream);
     }
-    final Label label = new Label(file);
-    label.setCaptureProblems(this.captureProblems);
-    label.setAllowExternalProblems(this.allowExternalProblems);
-    return parseLabel(inputStream, label, forceParse);
   }
 
   private Label parseLabel(final BufferedInputStream inputStream,
@@ -235,35 +244,37 @@ public class DefaultLabelParser implements LabelParser {
 
   private Label parseLabel(final BufferedInputStream inputStream,
       final Label label) throws LabelParserException, IOException {
-
-    CustomAntlrInputStream customIs = new CustomAntlrInputStream(inputStream);
-    CharStream antlrInput = new ANTLRInputStream(customIs);
-
-    ODLLexer lexer = new ODLLexer(antlrInput);
-    lexer.setLabel(label);
-    CommonTokenStream tokens = new CommonTokenStream(lexer);
-    ODLParser parser = new ODLParser(tokens);
-
-    parser.setLoadIncludes(this.loadIncludes);
-
-    if (this.loadIncludes) {
-      parser.setPointerResolver(this.resolver);
-    }
-
+    CustomAntlrInputStream customIs = null;
     try {
-      parser.label(label);
-    } catch (RecognitionException ex) {
-      label.setInvalid();
-      throw new LabelParserException(ex, ex.line, ex.charPositionInLine,
-          ProblemType.INVALID_LABEL);
+      customIs = new CustomAntlrInputStream(inputStream);
+      CharStream antlrInput = new ANTLRInputStream(customIs);
+
+      ODLLexer lexer = new ODLLexer(antlrInput);
+      lexer.setLabel(label);
+      CommonTokenStream tokens = new CommonTokenStream(lexer);
+      ODLParser parser = new ODLParser(tokens);
+
+      parser.setLoadIncludes(this.loadIncludes);
+
+      if (this.loadIncludes) {
+        parser.setPointerResolver(this.resolver);
+      }
+
+      try {
+        parser.label(label);
+      } catch (RecognitionException ex) {
+        label.setInvalid();
+        throw new LabelParserException(ex, ex.line, ex.charPositionInLine,
+            ProblemType.INVALID_LABEL);
+      }
+      label.setAttachedStartByte(customIs.getAttachedContentStartByte());
+      label.setHasBlankFill(customIs.hasBlankFill());
+
+      return label;
+    } finally {
+      IOUtils.closeQuietly(inputStream);
+      IOUtils.closeQuietly(customIs);
     }
-
-    inputStream.close();
-
-    label.setAttachedStartByte(customIs.getAttachedContentStartByte());
-    label.setHasBlankFill(customIs.hasBlankFill());
-
-    return label;
   }
 
   private List<SFDULabel> consumeSFDUHeader(InputStream input)
@@ -345,24 +356,28 @@ public class DefaultLabelParser implements LabelParser {
   public Label parsePartial(final File file, final Label parent,
       final boolean captureProbs, final boolean allowExternalProbs)
       throws IOException, LabelParserException {
-    BufferedInputStream inputStream;
+    BufferedInputStream inputStream = null;
     try {
-      inputStream = new BufferedInputStream(new FileInputStream(file));
-      inputStream.mark(MARK_LIMIT);
-    } catch (FileNotFoundException e) {
-      if (file.exists()) {
+      try {
+        inputStream = new BufferedInputStream(new FileInputStream(file));
+        inputStream.mark(MARK_LIMIT);
+      } catch (FileNotFoundException e) {
+        if (file.exists()) {
+          throw new LabelParserException(file, null, null,
+              "parser.error.unableToRead", ProblemType.INVALID_LABEL, file //$NON-NLS-1$
+                  .toString());
+        }
         throw new LabelParserException(file, null, null,
-            "parser.error.unableToRead", ProblemType.INVALID_LABEL, file //$NON-NLS-1$
-                .toString());
+            "parser.error.missingFile", ProblemType.INVALID_LABEL, file //$NON-NLS-1$
+                .getName());
       }
-      throw new LabelParserException(file, null, null,
-          "parser.error.missingFile", ProblemType.INVALID_LABEL, file //$NON-NLS-1$
-              .getName());
+      final Label label = new Label(file);
+      label.setCaptureProblems(captureProbs);
+      label.setAllowExternalProblems(allowExternalProbs);
+      return parsePartial(inputStream, label, parent);
+    } finally {
+      IOUtils.closeQuietly(inputStream);
     }
-    final Label label = new Label(file);
-    label.setCaptureProblems(captureProbs);
-    label.setAllowExternalProblems(allowExternalProbs);
-    return parsePartial(inputStream, label, parent);
   }
 
   public Label parsePartial(final URL url, final Label parent)
@@ -380,19 +395,23 @@ public class DefaultLabelParser implements LabelParser {
       throws IOException, LabelParserException {
     final BufferedInputStream inputStream = new BufferedInputStream(
         url.openStream());
-    inputStream.mark(MARK_LIMIT);
-    URI labelURI = null;
     try {
-      labelURI = url.toURI();
-    } catch (URISyntaxException e) {
-      throw new LabelParserException("bad url", ProblemType.INVALID_LABEL, //$NON-NLS-1$
-          url.getFile());
-    }
+      inputStream.mark(MARK_LIMIT);
+      URI labelURI = null;
+      try {
+        labelURI = url.toURI();
+      } catch (URISyntaxException e) {
+        throw new LabelParserException("bad url", ProblemType.INVALID_LABEL, //$NON-NLS-1$
+            url.getFile());
+      }
 
-    final Label label = new Label(labelURI);
-    label.setCaptureProblems(captureProbs);
-    label.setAllowExternalProblems(allowExternalProbs);
-    return parsePartial(inputStream, label, parent);
+      final Label label = new Label(labelURI);
+      label.setCaptureProblems(captureProbs);
+      label.setAllowExternalProblems(allowExternalProbs);
+      return parsePartial(inputStream, label, parent);
+    } finally {
+      IOUtils.closeQuietly(inputStream);
+    }
   }
 
   /*
@@ -417,10 +436,10 @@ public class DefaultLabelParser implements LabelParser {
 
     // Now look for PDS_VERSION_ID to ensure that this is a file we want to
     // validate
-    
+
     // Set the buffer size to the mark limit to ensure that we don't
     // invalidate the mark and throw an exception when calling the
-    // inputStream.reset() method    
+    // inputStream.reset() method
     BufferedReader reader = new BufferedReader(new InputStreamReader(
         inputStream), MARK_LIMIT);
     String versionLine = null;

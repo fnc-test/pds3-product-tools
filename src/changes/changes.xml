@@ -23,6 +23,9 @@
   </properties>
   <body>
     <release version="3.5.0" date="TBD" description="TBD">
+      <action dev="mcayanan" type="fix" issue="PDSEN-376">
+        File stream needs to be properly closed when certain errors are thrown when parsing a label.
+      </action>
     </release>
 
     <release version="3.4.1" date="2014-05-19" description="This is a maintenance release of the Product Tools Library mainly addressing support for Java 7.">
