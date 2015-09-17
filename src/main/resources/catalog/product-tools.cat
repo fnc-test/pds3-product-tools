@@ -2,13 +2,14 @@
 PDS_VERSION_ID                    = PDS3
 RECORD_TYPE                       = STREAM
 LABEL_REVISION_NOTE               = "
-2014-03-11, SH(EN) V3.4.0;
- This is a maintenance release of the Product Tools Library software 
- including a number of modifications."
+2015-09-17, SH(EN) V3.5.0;
+  This is a maintenance release of the Product Tools Library that fixes
+  an issue that would occur in large validation runs on a Linux
+  environment."
 
 OBJECT                            = SOFTWARE
   SOFTWARE_ID                     = "product-tools"
-  SOFTWARE_VERSION_ID             = "3.4.0"
+  SOFTWARE_VERSION_ID             = "3.5.0"
 
   OBJECT                          = SOFTWARE_INFORMATION
     SOFTWARE_NAME                 = "PDS Product Tools"
@@ -22,16 +23,16 @@ OBJECT                            = SOFTWARE
 
  Software Overview
  =================
- The Product Tools Library project supports design/generation, validation 
- and submission of archival products to the PDS. This project consists of 
- a library of software classes to support the development of tools to 
- perform these functions and is designed to be utilized by developers from 
+ The Product Tools Library project supports design/generation, validation
+ and submission of archival products to the PDS. This project consists of
+ a library of software classes to support the development of tools to
+ perform these functions and is designed to be utilized by developers from
  the Engineering Node, Discipline Nodes and the PDS community.
 
 
  Available Support Material
  ==========================
- Installation and development guides are bundled with the binary package. 
+ Installation and development guides are bundled with the binary package.
  The binary package also includes jar files with the source code.
 
 
