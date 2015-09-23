@@ -54,7 +54,7 @@ OBJECT                            = SOFTWARE
   END_OBJECT                      = SOFTWARE_INFORMATION
 
   OBJECT                          = SOFTWARE_ONLINE
-    ON_LINE_IDENTIFICATION        = "http://starbeam.jpl.nasa.gov/tools/license_ptoolspkg.html"
+    ON_LINE_IDENTIFICATION        = "https://pds.nasa.gov/tools/release/license_ptoolspkg.shtml"
     ON_LINE_NAME                  = "PDS Product Tools"
     NODE_ID                       = "EN"
     PROTOCOL_TYPE                 = "URL"
