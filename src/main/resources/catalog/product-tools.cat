@@ -2,7 +2,7 @@
 PDS_VERSION_ID                    = PDS3
 RECORD_TYPE                       = STREAM
 LABEL_REVISION_NOTE               = "
-2015-09-17, SH(EN) V3.5.0;
+2015-09-23, MC(EN) V3.5.0;
   This is a maintenance release of the Product Tools Library that fixes
   an issue that would occur in large validation runs on a Linux
   environment."

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <!--
-  Copyright 2009-2014, by the California Institute of Technology.
+  Copyright 2009-2015, by the California Institute of Technology.
   ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
   Any commercial use must be negotiated with the Office of Technology 
   Transfer at the California Institute of Technology.
@@ -28,7 +28,7 @@
 
   <groupId>gov.nasa.pds</groupId>
   <artifactId>product-tools</artifactId>
-  <version>3.5.0-dev</version>
+  <version>3.5.0</version>
   <packaging>jar</packaging>
 
   <name>Product Tools Library</name>
@@ -56,21 +56,21 @@
       </roles>
     </developer>
     <developer>
-      <name>Paul Ramirez</name>
-      <id>pramirez</id>
-      <email>Paul.Ramirez@jpl.nasa.gov</email>
-      <organization>NASA Jet Propulsion Laboratory</organization>
-      <roles>
-        <role>Developer</role>
-      </roles>
-    </developer>
-    <developer>
       <name>Michael Cayanan</name>
       <id>mcayanan</id>
       <email>Michael.Cayanan@jpl.nasa.gov</email>
       <organization>NASA Jet Propulsion Laboratory</organization>
       <roles>
         <role>Developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Paul Ramirez</name>
+      <id>pramirez</id>
+      <email>Paul.Ramirez@jpl.nasa.gov</email>
+      <organization>NASA Jet Propulsion Laboratory</organization>
+      <roles>
+        <role>Former Developer</role>
       </roles>
     </developer>
     <developer>
