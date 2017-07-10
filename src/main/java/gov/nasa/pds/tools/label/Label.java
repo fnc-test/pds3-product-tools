@@ -1,4 +1,4 @@
-// Copyright 2006-2010, by the California Institute of Technology.
+// Copyright 2006-2017, by the California Institute of Technology.
 // ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
 // Any commercial use must be negotiated with the Office of Technology Transfer
 // at the California Institute of Technology.
@@ -15,21 +15,22 @@
 
 package gov.nasa.pds.tools.label;
 
+import java.io.File;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import gov.nasa.arc.pds.tools.util.StrUtils;
 import gov.nasa.arc.pds.tools.util.URLUtils;
 import gov.nasa.pds.tools.LabelParserException;
 import gov.nasa.pds.tools.constants.Constants.ProblemType;
 import gov.nasa.pds.tools.dict.DictIdentifier;
 import gov.nasa.pds.tools.dict.parser.DictIDFactory;
-
-import java.io.File;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 /**
  * This class represents a PDS label.
@@ -44,7 +45,7 @@ public class Label {
   // able to be parsed as label
   private boolean valid = true;
 
-  private Map<DictIdentifier, List<Statement>> statements;
+  private LinkedHashMap<DictIdentifier, List<Statement>> statements;
 
   // may have source URL or file but not both
   private final URI labelURI;
@@ -133,7 +134,7 @@ public class Label {
    * 
    */
   public Label(final URI labelURI) {
-    this.statements = new HashMap<DictIdentifier, List<Statement>>();
+    this.statements = new LinkedHashMap<DictIdentifier, List<Statement>>();
     this.labelURI = labelURI;
     if (labelURI != null) {
       this.labelPath = labelURI.toString();
@@ -142,7 +143,7 @@ public class Label {
   }
 
   public Label(final File labelFile) {
-    this.statements = new HashMap<DictIdentifier, List<Statement>>();
+    this.statements = new LinkedHashMap<DictIdentifier, List<Statement>>();
     this.labelURI = null;
     this.labelFile = labelFile;
     if (labelFile != null) {
@@ -195,10 +196,11 @@ public class Label {
   public void addProblem(final Statement statement, final Integer column,
       final String key, final ProblemType type, final Object... arguments) {
     if (statement.getSourceFile() != null) {
-      final LabelParserException e = new LabelParserException(statement,
-          column, key, type, arguments);
-      if (((this.allowExternalProblems || this.labelFile.equals(statement
-          .getSourceFile())) && this.captureProblems)
+      final LabelParserException e = new LabelParserException(statement, column,
+          key, type, arguments);
+      if (((this.allowExternalProblems
+          || this.labelFile.equals(statement.getSourceFile()))
+          && this.captureProblems)
           || e.getType().equals(ProblemType.CIRCULAR_POINTER_REF)) {
         addProblemLocal(e);
       }
@@ -254,9 +256,10 @@ public class Label {
     // if capture problems and (same context add or allowing external
     // problems) else, if non-suppresable error, pass through anyway
     if (this.captureProblems
-        && ((this.labelFile != null && (this.allowExternalProblems || this.labelFile
-            .equals(e.getSourceFile()))) || (this.labelURI != null && (this.allowExternalProblems || this.labelURI
-            .equals(e.getSourceURI()))))) {
+        && ((this.labelFile != null && (this.allowExternalProblems
+            || this.labelFile.equals(e.getSourceFile())))
+            || (this.labelURI != null && (this.allowExternalProblems
+                || this.labelURI.equals(e.getSourceURI()))))) {
       this.problems.add(e);
     } else if (e.getType().equals(ProblemType.CIRCULAR_POINTER_REF)) {
       this.problems.add(e);
@@ -264,20 +267,23 @@ public class Label {
   }
 
   public void addProblem(final URI sourceURI, final LabelParserException e) {
-    if (((this.allowExternalProblems || this.labelURI.equals(sourceURI)) && this.captureProblems)
+    if (((this.allowExternalProblems || this.labelURI.equals(sourceURI))
+        && this.captureProblems)
         || e.getType().equals(ProblemType.CIRCULAR_POINTER_REF)) {
       addProblemLocal(e);
     }
   }
 
   public void addProblem(final File sourceFile, final LabelParserException e) {
-    if (((this.allowExternalProblems || this.labelFile.equals(sourceFile)) && this.captureProblems)
+    if (((this.allowExternalProblems || this.labelFile.equals(sourceFile))
+        && this.captureProblems)
         || e.getType().equals(ProblemType.CIRCULAR_POINTER_REF)) {
       addProblemLocal(e);
     }
   }
 
-  public void addProblem(final Statement statement, final LabelParserException e) {
+  public void addProblem(final Statement statement,
+      final LabelParserException e) {
     if (statement.getSourceURI() != null) {
       addProblem(statement.getSourceURI(), e);
     } else {
@@ -572,7 +578,8 @@ public class Label {
     if (hasAttachedContent() && recordBytes != null) {
 
       // get first internal pointer to check where attached content starts
-      final PointerStatement internalPointer = getLowestInternalPointer(recordBytes);
+      final PointerStatement internalPointer = getLowestInternalPointer(
+          recordBytes);
 
       // if has internal pointer - get lowest value internal pointer
       if (internalPointer != null) {
@@ -583,16 +590,14 @@ public class Label {
         // don't agree
         int foundStartByte = this.attachedStartByte.intValue();
         if (startByte > foundStartByte) {
-          addProblem(
-              internalPointer.getLineNumber(),
+          addProblem(internalPointer.getLineNumber(),
               "parser.error.startByteMismatch", //$NON-NLS-1$
               ProblemType.ATTACHED_START_BYTE_MISMATCH, this.attachedStartByte,
               startByte);
         } else if (startByte < foundStartByte) {
           // if found start is after listed, might be that data starts
           // with whitespace
-          addProblem(
-              internalPointer.getLineNumber(),
+          addProblem(internalPointer.getLineNumber(),
               "parser.warning.startBytePossibleMismatch", //$NON-NLS-1$
               ProblemType.START_BYTE_POSSIBLE_MISMATCH, this.attachedStartByte,
               startByte);
@@ -639,7 +644,8 @@ public class Label {
         maxFound = entry.getValue();
       }
     }
-    final boolean similar = (maxFound.doubleValue() / getLineLengths().size()) > .5;
+    final boolean similar = (maxFound.doubleValue()
+        / getLineLengths().size()) > .5;
     return similar;
   }
 
