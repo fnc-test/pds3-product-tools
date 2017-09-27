@@ -22,6 +22,9 @@
     <author email="Sean.Hardman@jpl.nasa.gov">Sean Hardman</author>
   </properties>
   <body>
+    <release version="3.7.0" date="TBD" description="TBD">
+    </release>
+
     <release version="3.6.0" date="2017-09-27" description="This is a maintenance release of the Product Tools Library addressing parsed statement ordering.">
       <action dev="mcayanan" type="update" issue="PDSEN-385">
         Updated to store the parsed statements in the order in which they appear in the label.
