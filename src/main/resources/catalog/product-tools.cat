@@ -2,14 +2,13 @@
 PDS_VERSION_ID                    = PDS3
 RECORD_TYPE                       = STREAM
 LABEL_REVISION_NOTE               = "
-2015-09-23, MC(EN) V3.5.0;
-  This is a maintenance release of the Product Tools Library that fixes
-  an issue that would occur in large validation runs on a Linux
-  environment."
+2017-09-27, MC(EN) V3.6.0;
+  This is a maintenance release of the Product Tools Library addressing 
+  parsed statement ordering."
 
 OBJECT                            = SOFTWARE
   SOFTWARE_ID                     = "product-tools"
-  SOFTWARE_VERSION_ID             = "3.5.0"
+  SOFTWARE_VERSION_ID             = "3.6.0"
 
   OBJECT                          = SOFTWARE_INFORMATION
     SOFTWARE_NAME                 = "PDS Product Tools"
@@ -43,13 +42,13 @@ OBJECT                            = SOFTWARE
 
  Compilers Used
  ====================
- Sun Java version 1.6
+ Java version 1.7
 
 
  Platforms Supported
  ===================
  Any platform with a supported Java Runtime Environment (JRE),
- versions 1.6 or later"
+ versions 1.7 or later"
 
   END_OBJECT                      = SOFTWARE_INFORMATION
 

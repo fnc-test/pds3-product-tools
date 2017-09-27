@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <!--
-  Copyright 2009-2015, by the California Institute of Technology.
+  Copyright 2009-2017, by the California Institute of Technology.
   ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
   Any commercial use must be negotiated with the Office of Technology 
   Transfer at the California Institute of Technology.
@@ -28,7 +28,7 @@
 
   <groupId>gov.nasa.pds</groupId>
   <artifactId>product-tools</artifactId>
-  <version>3.6.0-dev</version>
+  <version>3.6.0</version>
   <packaging>jar</packaging>
 
   <name>Product Tools Library</name>
@@ -339,6 +339,7 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
       </plugin>
+      <!--
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
@@ -350,6 +351,7 @@
           <findbugsXmlOutput>true</findbugsXmlOutput>
         </configuration>
       </plugin>
+      -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-report-plugin</artifactId>

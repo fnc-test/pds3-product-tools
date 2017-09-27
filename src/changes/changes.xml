@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-  Copyright 2006-2015, by the California Institute of Technology.
+  Copyright 2006-2017, by the California Institute of Technology.
   ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
   Any commercial use must be negotiated with the Office of Technology Transfer
   at the California Institute of Technology.
@@ -22,9 +22,12 @@
     <author email="Sean.Hardman@jpl.nasa.gov">Sean Hardman</author>
   </properties>
   <body>
-    <release version="3.6.0" date="TBD" description="TBD">
+    <release version="3.6.0" date="2017-09-27" description="This is a maintenance release of the Product Tools Library addressing parsed statement ordering.">
       <action dev="mcayanan" type="update" issue="PDSEN-385">
         Updated to store the parsed statements in the order in which they appear in the label.
+      </action>
+      <action dev="shardman" type="update">
+        Updated PDS data dictionary version to 1r102.
       </action>
     </release>
 
