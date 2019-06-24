@@ -32,15 +32,8 @@
   POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project>
   <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>gov.nasa.pds</groupId>
-    <artifactId>pds</artifactId>
-    <version>0.0.0</version>
-  </parent>
 
   <groupId>gov.nasa.pds</groupId>
   <artifactId>product-tools</artifactId>
@@ -51,7 +44,7 @@
   <description>
     The Product Tools Library project supports design/generation, validation and submission of archival products to the PDS. This project consists of a library of software classes to support the development of tools to perform these functions and is designed to be utilized by developers from the Engineering Node, Discipline Nodes and the PDS community.
   </description>
-  <url>http://pds-cm.jpl.nasa.gov/product-tools/</url>
+  <url>https://github.com/NASA-PDS-Incubator/pds3-product-tools</url>
 
   <licenses>
     <license>
@@ -151,8 +144,14 @@
     </resources>
     <plugins>
       <plugin>
+	<groupId>org.apache.maven.plugins</groupId>
+	<artifactId>maven-site-plugin</artifactId>
+	<version>3.7.1</version>
+      </plugin>
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
+	<version>3.0.0</version>
         <configuration>
           <archive>
             <manifest>
@@ -173,6 +172,7 @@
           </execution>
         </executions>
         <configuration>
+	  <revisionOnScmFailure>unknownbuild</revisionOnScmFailure>
           <format>{0,date,yyyy-MM-dd HH:mm:ss}</format>
           <items>
             <item>timestamp</item>
@@ -250,25 +250,24 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 
-  <repositories>
-    <!-- Hosts the PDS and OODT artifacts. -->
-    <repository>
-      <id>pds-repo</id>
-      <name>PDS Repository</name>
-      <url>http://pds-cm.jpl.nasa.gov/maven2</url>
-      <releases>
-        <enabled>true</enabled>
-        <updatePolicy>always</updatePolicy>
-        <checksumPolicy>warn</checksumPolicy>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-  </repositories>
+  <!-- Dummy SCM Repo for buildnumber plugin -->
+  <scm>
+    <connection>scm:svn:http://127.0.0.1/dummy</connection>
+    <developerConnection>scm:svn:https://127.0.0.1/dummy</developerConnection>
+    <tag>HEAD</tag>
+    <url>http://127.0.0.1/dummy</url>
+  </scm>
 
   <dependencies>
     <dependency>
@@ -290,12 +289,6 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>gov.nasa.arc</groupId>
-      <artifactId>pds-utils</artifactId>
-      <version>1.0.1</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
       <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>
       <version>1.2.12</version>
@@ -310,7 +303,7 @@
     <dependency>
       <groupId>org.incava</groupId>
       <artifactId>java-diff</artifactId>
-      <version>1.1.0</version>
+      <version>1.1</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
@@ -331,10 +324,10 @@
           <reportSet>
             <reports>
               <report>dependencies</report>
-              <report>issue-tracking</report>
-              <report>license</report>
-              <report>mailing-list</report>
-              <report>project-team</report>
+              <report>issue-management</report>
+              <report>licenses</report>
+              <report>mailing-lists</report>
+              <report>team</report>
               <report>summary</report>
             </reports>
           </reportSet>
@@ -354,6 +347,10 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
+	<configuration>
+          <source>1.8</source>
+	  <failOnError>false</failOnError>
+	</configuration>
       </plugin>
       <!--
       <plugin>
