@@ -37,7 +37,7 @@
 
   <groupId>gov.nasa.pds</groupId>
   <artifactId>product-tools</artifactId>
-  <version>3.7.0-dev</version>
+  <version>3.7.0</version>
   <packaging>jar</packaging>
 
   <name>Product Tools Library</name>
@@ -48,8 +48,8 @@
 
   <licenses>
     <license>
-      <name>California Institute of Technology</name>
-      <url>file:///${basedir}/LICENSE.txt</url>
+      <name>Apache License, Version 2.0</name>
+      <url>https://github.com/NASA-PDS-Incubator/pds3-product-tools/blob/master/LICENSE.txt</url>
       <distribution>repo</distribution>
     </license>
   </licenses>

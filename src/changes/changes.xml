@@ -38,7 +38,10 @@
     <author email="Sean.Hardman@jpl.nasa.gov">Sean Hardman</author>
   </properties>
   <body>
-    <release version="3.7.0" date="TBD" description="TBD">
+    <release version="3.7.0" date="2019-06-24" description="First release using open source repo.">
+      <action dev="jpadams" type="update">
+	Update build and tests to prep for first release under open source repo.
+      </action>
     </release>
 
     <release version="3.6.0" date="2017-09-27" description="This is a maintenance release of the Product Tools Library addressing parsed statement ordering.">
