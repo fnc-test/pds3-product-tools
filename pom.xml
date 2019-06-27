@@ -37,7 +37,7 @@
 
   <groupId>gov.nasa.pds</groupId>
   <artifactId>pds3-product-tools</artifactId>
-  <version>4.0.0</version>
+  <version>4.1.0-alpha</version>
   <packaging>jar</packaging>
 
   <name>Product Tools Library</name>
@@ -352,19 +352,6 @@
 	  <failOnError>false</failOnError>
 	</configuration>
       </plugin>
-      <!--
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-checkstyle-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>findbugs-maven-plugin</artifactId>
-        <configuration>
-          <findbugsXmlOutput>true</findbugsXmlOutput>
-        </configuration>
-      </plugin>
-      -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-report-plugin</artifactId>
