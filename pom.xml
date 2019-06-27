@@ -36,7 +36,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>gov.nasa.pds</groupId>
-  <artifactId>product-tools</artifactId>
+  <artifactId>pds3-product-tools</artifactId>
   <version>3.7.0</version>
   <packaging>jar</packaging>
 
