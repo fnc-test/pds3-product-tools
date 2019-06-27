@@ -37,7 +37,7 @@
 
   <groupId>gov.nasa.pds</groupId>
   <artifactId>pds3-product-tools</artifactId>
-  <version>3.8.0</version>
+  <version>4.0.0</version>
   <packaging>jar</packaging>
 
   <name>Product Tools Library</name>
