@@ -16,8 +16,10 @@ to create the JAR file, you must execute the "mvn compile jar:jar" command.
 In order to create a complete distribution package, execute the
 following commands:
 
-% mvn site
-% mvn package
+```
+mvn site
+mvn package
+```
 
 # Release
 Here is the procedure for releasing the software both in Github and pushing the JARs to the public Maven Central repo.
@@ -40,7 +42,7 @@ Here is the procedure for releasing the software both in Github and pushing the 
 </profiles>
 ```
 
-## Procedure
+## Operational Release
 1. Checkout the dev branch.
 
 2. Version the software:
@@ -48,9 +50,10 @@ Here is the procedure for releasing the software both in Github and pushing the 
 mvn versions:set -DnewVersion=1.2.0
 ```
 
-3. Deploy the new software to Sonatype Maven repo:
+3. Deploy software to Sonatype Maven repo:
 ```
-mvn clean deploy -P release
+# Operational release
+mvn clean site deploy -P release
 ```
 
 4. Create pull request from dev -> master and merge.
@@ -62,15 +65,37 @@ mvn clean deploy -P release
 mvn versions:set -DnewVersion=1.3.0-SNAPSHOT
 ```
 
+## SNAPSHOT Release
+1. Checkout the dev branch.
+
+2. Deploy software to Sonatype Maven repo:
+```
+# Operational release
+mvn clean site deploy
+```
+
 # JAR Dependency Reference
 
-This package has been deployed to Maven Central and can be referenced in your POM as:
+## Official Releases
+https://search.maven.org/search?q=g:gov.nasa.pds%20AND%20a:pds3-product-tools&core=gav
 
+## Snapshots
+https://oss.sonatype.org/content/repositories/snapshots/gov/nasa/pds/pds3-product-tools
+
+If you want to access snapshots, add the following to your `~/.m2/settings.xml`:
 ```
-    <dependency>
-      <groupId>gov.nasa.pds</groupId>
-      <artifactId>pds3-product-tools</artifactId>
-      <version>4.0.1</version>
-      <scope>test</scope>
-    </dependency>
+<profiles>
+  <profile>
+     <id>allow-snapshots</id>
+     <activation><activeByDefault>true</activeByDefault></activation>
+     <repositories>
+       <repository>
+         <id>snapshots-repo</id>
+         <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+         <releases><enabled>false</enabled></releases>
+         <snapshots><enabled>true</enabled></snapshots>
+       </repository>
+     </repositories>
+   </profile>
+</profiles>
 ```
