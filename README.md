@@ -25,6 +25,7 @@ A release candidate should be created after the community has determined that a 
 
 Update pom.xml for the release version or use the Maven Versions Plugin, e.g.:
 ```
+VERSION=4.1.0
 mvn versions:set -DnewVersion=$VERSION
 ```
 
@@ -37,7 +38,7 @@ github_changelog_generator --future-release v$VERSION
 ## Commit Changes
 Commit changes using following template commit message:
 ```
-[RELEASE] PDS3 Product Tools v$VERSION
+git commit -m "[RELEASE] PDS3 Product Tools v$VERSION"
 ```
 
 ## Build and Deploy Software to [Sonatype Maven Repo](https://repo.maven.apache.org/maven2/gov/nasa/pds/).
@@ -90,7 +91,8 @@ git push origin gh-pages
 
 Update `pom.xml` with the next SNAPSHOT version either manually or using Github Versions Plugin, e.g.:
 ```
-VERSION=1.16.0-SNAPSHOT
+git checkout master
+VERSION=4.2.0-SNAPSHOT
 mvn versions:set -DnewVersion=$VERSION
 git add pom.xml
 git commit -m "Update version for $VERSION development"
