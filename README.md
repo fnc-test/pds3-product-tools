@@ -1,32 +1,52 @@
-# PDS3 Product Tools Library 
-Java library of software classes for manipulating 
-PDS product labels. The software is packaged in a JAR file.
+# PDS3 Product Tools Library
+Java library of software classes for manipulating PDS product labels. The software is packaged in a JAR file.
 
 # Documentation
-The documentation including release notes, installation and operation of the
-software should be online at
-https://pds-engineering.jpl.nasa.gov/development/pds4/current/preparation/validate/. If it is not
-accessible, you can execute the "mvn site:run" command and view the
-documentation locally at http://localhost:8080.
+The documentation for the latest release of the PDS3 Product Tools, including release notes, installation and operation of the software are online at https://nasa-pds-incubator.github.io/pds3-product-tools/.
+
+If you would like to get the latest documentation, including any updates since the last release, you can execute the "mvn site:run" command and view the documentation locally at http://localhost:8080.
 
 # Build
-The software can be compiled and built with the "mvn compile" command but in order
-to create the JAR file, you must execute the "mvn compile jar:jar" command.
+The software can be compiled and built with the "mvn compile" command but in order 
+to create the JAR file, you must execute the "mvn compile jar:jar" command. 
 
-In order to create a complete distribution package, execute the
-following commands:
+In order to create a complete distribution package, execute the 
+following commands: 
 
 ```
-mvn site
-mvn package
+% mvn site
+% mvn package
+```
+# Operational Release
+
+A release candidate should be created after the community has determined that a release should occur. These steps should be followed when generating a release candidate and when completing the release.
+
+## Update Version Numbers
+
+Update pom.xml for the release version or use the Maven Versions Plugin, e.g.:
+```
+mvn versions:set -DnewVersion=$VERSION
 ```
 
-# Release
-Here is the procedure for releasing the software both in Github and pushing the JARs to the public Maven Central repo.
+## Update Changelog
+Update Changelog using [Github Changelog Generator](https://github.com/github-changelog-generator/github-changelog-generator). Note: Make sure you set `$CHANGELOG_GITHUB_TOKEN` in your `.bash_profile` or use the `--token` flag.
+```
+github_changelog_generator --future-release v$VERSION
+```
 
-## Pre-Requisites
-* Make sure you have your GPG Key created and sent to server.
-* Make sure you have your .settings configured correctly for GPG:
+## Commit Changes
+Commit changes using following template commit message:
+```
+[RELEASE] PDS3 Product Tools v$VERSION
+```
+
+## Build and Deploy Software to [Sonatype Maven Repo](https://repo.maven.apache.org/maven2/gov/nasa/pds/).
+
+```
+mvn clean site deploy -P release
+```
+
+Note: If you have issues with GPG, be sure to make sure you've created your GPG key, sent to server, and have the following in your `~/.m2/settings.xml`:
 ```
 <profiles>
   <profile>
@@ -40,47 +60,63 @@ Here is the procedure for releasing the software both in Github and pushing the 
     </properties>
   </profile>
 </profiles>
+
 ```
 
-## Operational Release
-1. Checkout the dev branch.
-
-2. Version the software:
+## Push Tagged Release
 ```
-mvn versions:set -DnewVersion=1.2.0
+git tag v$VERSION
+git push --tags
 ```
 
-3. Deploy software to Sonatype Maven repo:
+## Deploy Site to Github Pages
+
+From cloned repo:
 ```
-# Operational release
-mvn clean site deploy -P release
+git checkout gh-pages
+
+# Create specific version site
+mv target/site $VERSION
+rm -fr target
+
+# Sync latest version to ops 
+rsync -av $VERSION/* .
+git add .
+git commit -m "Deploy v$VERSION docs"
+git push origin gh-pages
 ```
 
-4. Create pull request from dev -> master and merge.
+## Update Versions For Development
 
-5. Tag release in Github
-
-6. Update version to next snapshot:
+Update `pom.xml` with the next SNAPSHOT version either manually or using Github Versions Plugin, e.g.:
 ```
-mvn versions:set -DnewVersion=1.3.0-SNAPSHOT
+VERSION=1.16.0-SNAPSHOT
+mvn versions:set -DnewVersion=$VERSION
+git add pom.xml
+git commit -m "Update version for $VERSION development"
+git push -u origin master
 ```
 
-## SNAPSHOT Release
-1. Checkout the dev branch.
+## Complete Release in Github
+Currently the process to create more formal release notes and attach Assets is done manually through the [Github UI](https://github.com/NASA-PDS-Incubator/pds3-product-tools/releases/new) but should eventually be automated via script.
 
-2. Deploy software to Sonatype Maven repo:
+
+# Snapshot Release
+
+Deploy software to Sonatype SNAPSHOTS Maven repo:
+
 ```
 # Operational release
 mvn clean site deploy
 ```
 
-# JAR Dependency Reference
+# Maven JAR Dependency Reference
 
-## Official Releases
+## Operational Releases
 https://search.maven.org/search?q=g:gov.nasa.pds%20AND%20a:pds3-product-tools&core=gav
 
 ## Snapshots
-https://oss.sonatype.org/content/repositories/snapshots/gov/nasa/pds/pds3-product-tools
+https://oss.sonatype.org/content/repositories/snapshots/gov/nasa/pds/pds3-product-tools/
 
 If you want to access snapshots, add the following to your `~/.m2/settings.xml`:
 ```
