@@ -35,7 +35,7 @@
 <project name="PDS3 Product Tools Library">
   <bannerLeft>
     <src>images/pds_logo.jpg</src>
-    <href>https://nasa-pds-incubator.github.io/${project.artifactId}/</href>
+    <href>https://github.com/NASA-PDS-Incubator/pds3-product-tools</href>
   </bannerLeft>
 
   <bannerRight>
@@ -46,7 +46,7 @@
 
   <body>
     <links>
-      <item name="PDS3 Product Tools" href="https://nasa-pds-incubator.github.io/${project.artifactId}/index.html" />
+      <item name="PDS3 Product Tools Github Repo" href="https://github.com/NASA-PDS-Incubator/pds3-product-tools" />
     </links>
 
     <menu name="Software Documentation">
