@@ -1,8 +1,8 @@
 # Changelog
 
-## [«unknown»](https://github.com/NASA-PDS/pds3-product-tools/tree/«unknown») (2021-07-17)
+## [v4.2.0-SNAPSHOT](https://github.com/NASA-PDS/pds3-product-tools/tree/v4.2.0-SNAPSHOT) (2021-07-17)
 
-[Full Changelog](https://github.com/NASA-PDS/pds3-product-tools/compare/v4.1.0...«unknown»)
+[Full Changelog](https://github.com/NASA-PDS/pds3-product-tools/compare/v4.1.0...v4.2.0-SNAPSHOT)
 
 **Other closed issues:**
 
