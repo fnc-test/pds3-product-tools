@@ -4,6 +4,8 @@ Java library of software classes for manipulating PDS product labels. The softwa
 # Documentation
 The documentation for the latest release of the PDS3 Product Tools, including release notes, installation and operation of the software are online at https://nasa-pds-incubator.github.io/pds3-product-tools/.
 
+**Looking for a Python equivalent? See the [Planetary Data Reader (pdr)](https://github.com/MillionConcepts/pdr)**
+
 If you would like to get the latest documentation, including any updates since the last release, you can execute the "mvn site:run" command and view the documentation locally at http://localhost:8080.
 
 # Build
