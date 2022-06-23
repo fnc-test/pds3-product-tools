@@ -1,7 +1,7 @@
 # PDS3 Product Tools Library
 Java library of software classes for manipulating PDS product labels. The software is packaged in a JAR file.
 
-[![DOI](https://zenodo.org/badge/193572640.svg)] (https://zenodo.org/badge/latestdoi/193572640)[![🤪 Unstable integration & delivery](https://github.com/NASA-PDS/pds3-product-tools/actions/workflows/unstable-cicd.yaml/badge.svg)](https://github.com/NASA-PDS/pds3-product-tools/actions/workflows/unstable-cicd.yaml) [![😌 Stable integration & delivery](https://github.com/NASA-PDS/pds3-product-tools/actions/workflows/stable-cicd.yaml/badge.svg)](https://github.com/NASA-PDS/pds3-product-tools/actions/workflows/stable-cicd.yaml)
+[![DOI](https://zenodo.org/badge/193572640.svg)](https://zenodo.org/badge/latestdoi/193572640) [![🤪 Unstable integration & delivery](https://github.com/NASA-PDS/pds3-product-tools/actions/workflows/unstable-cicd.yaml/badge.svg)](https://github.com/NASA-PDS/pds3-product-tools/actions/workflows/unstable-cicd.yaml) [![😌 Stable integration & delivery](https://github.com/NASA-PDS/pds3-product-tools/actions/workflows/stable-cicd.yaml/badge.svg)](https://github.com/NASA-PDS/pds3-product-tools/actions/workflows/stable-cicd.yaml)
 
 # Documentation
 The documentation for the latest release of the PDS3 Product Tools, including release notes, installation and operation of the software are online at https://nasa-pds-incubator.github.io/pds3-product-tools/.
