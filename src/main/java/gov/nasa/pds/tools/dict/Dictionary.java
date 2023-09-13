@@ -30,11 +30,6 @@
 
 package gov.nasa.pds.tools.dict;
 
-import gov.nasa.pds.tools.LabelParserException;
-import gov.nasa.pds.tools.constants.Constants.DictionaryType;
-import gov.nasa.pds.tools.containers.SimpleDictionaryChange;
-import gov.nasa.pds.tools.dict.parser.DictIDFactory;
-
 import java.io.File;
 import java.io.Serializable;
 import java.net.URI;
@@ -47,8 +42,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import gov.nasa.pds.tools.LabelParserException;
+import gov.nasa.pds.tools.constants.Constants.DictionaryType;
+import gov.nasa.pds.tools.containers.SimpleDictionaryChange;
+import gov.nasa.pds.tools.dict.parser.DictIDFactory;
 
 /**
  * This class represents a PDS data dictionary.
@@ -59,13 +58,11 @@ import org.apache.log4j.Logger;
  * 
  */
 public class Dictionary implements Serializable {
-  private static final Logger log = Logger
-      .getLogger(Dictionary.class.getName());
+  private static final Logger log = LogManager.getLogger(Dictionary.class.getName());
 
   private static final long serialVersionUID = 1L;
 
-  public static final Pattern VERSION_REGEX = Pattern
-      .compile("Online Database: pdscat(.+) \\*"); //$NON-NLS-1$
+  public static final Pattern VERSION_REGEX = Pattern.compile("Online Database: pdscat(.+) \\*"); //$NON-NLS-1$
 
   private Map<DictIdentifier, Definition> definitions = new HashMap<DictIdentifier, Definition>();
 
@@ -130,15 +127,14 @@ public class Dictionary implements Serializable {
   /**
    * Merges the definitions in the dictionaries
    * 
-   * @param dictionary
-   *          to be merged into this dictionary. dictionary merged in will
-   *          override values in this dictionary if scalars or be added if lists
+   * @param dictionary to be merged into this dictionary. dictionary merged in will override values
+   *        in this dictionary if scalars or be added if lists
    */
 
   public void merge(final Dictionary dictionary) {
     // iterate over passed in dictionary and put defs in local
-    final Iterator<Entry<DictIdentifier, Definition>> it = dictionary.definitions
-        .entrySet().iterator();
+    final Iterator<Entry<DictIdentifier, Definition>> it =
+        dictionary.definitions.entrySet().iterator();
     while (it.hasNext()) {
       final Entry<DictIdentifier, Definition> entry = it.next();
       final DictIdentifier key = entry.getKey();
@@ -294,17 +290,14 @@ public class Dictionary implements Serializable {
 
           }
 
-        } else if (overwrite instanceof GroupDefinition
-            || overwrite instanceof ObjectDefinition) {
+        } else if (overwrite instanceof GroupDefinition || overwrite instanceof ObjectDefinition) {
           ContainerDefinition overwriteElement = (ContainerDefinition) overwrite;
           ContainerDefinition localElement = (ContainerDefinition) local;
 
           // merge option elements
           if (overwriteElement.hasOptionalElements()) {
-            final List<DictIdentifier> newVals = overwriteElement
-                .getOptionalElements();
-            final List<DictIdentifier> oldVals = localElement
-                .getOptionalElements();
+            final List<DictIdentifier> newVals = overwriteElement.getOptionalElements();
+            final List<DictIdentifier> oldVals = localElement.getOptionalElements();
 
             // iterate over local
             for (final DictIdentifier value : newVals) {
@@ -313,8 +306,7 @@ public class Dictionary implements Serializable {
                 localElement.addOptional(value);
                 // TODO: move out of loop and consolidate
                 // message?
-                addMerge(overwriteElement,
-                    "dictionary.text.optionalElementAdded", //$NON-NLS-1$
+                addMerge(overwriteElement, "dictionary.text.optionalElementAdded", //$NON-NLS-1$
                     value);
               }
             }
@@ -322,10 +314,8 @@ public class Dictionary implements Serializable {
 
           // merge required elements
           if (overwriteElement.hasRequiredElements()) {
-            final List<DictIdentifier> newVals = overwriteElement
-                .getRequiredElements();
-            final List<DictIdentifier> oldVals = localElement
-                .getRequiredElements();
+            final List<DictIdentifier> newVals = overwriteElement.getRequiredElements();
+            final List<DictIdentifier> oldVals = localElement.getRequiredElements();
 
             // iterate over local
             for (final DictIdentifier value : newVals) {
@@ -334,8 +324,7 @@ public class Dictionary implements Serializable {
                 localElement.addRequired(value);
                 // TODO: move out of loop and consolidate
                 // message?
-                addMerge(overwriteElement,
-                    "dictionary.text.requiredElementAdded", //$NON-NLS-1$
+                addMerge(overwriteElement, "dictionary.text.requiredElementAdded", //$NON-NLS-1$
                     value);
               }
             }
@@ -348,10 +337,8 @@ public class Dictionary implements Serializable {
 
           // merge optional objects
           if (overwriteElement.hasOptionalObjects()) {
-            final List<DictIdentifier> newVals = overwriteElement
-                .getOptionalObjects();
-            final List<DictIdentifier> oldVals = localElement
-                .getOptionalObjects();
+            final List<DictIdentifier> newVals = overwriteElement.getOptionalObjects();
+            final List<DictIdentifier> oldVals = localElement.getOptionalObjects();
 
             // iterate over local
             for (final DictIdentifier value : newVals) {
@@ -360,8 +347,7 @@ public class Dictionary implements Serializable {
                 localElement.addOptional(value);
                 // TODO: move out of loop and consolidate
                 // message?
-                addMerge(overwriteElement,
-                    "dictionary.text.optionalObjectAdded", //$NON-NLS-1$
+                addMerge(overwriteElement, "dictionary.text.optionalObjectAdded", //$NON-NLS-1$
                     value);
               }
             }
@@ -369,10 +355,8 @@ public class Dictionary implements Serializable {
 
           // merge optional objects
           if (overwriteElement.hasRequiredObjects()) {
-            final List<DictIdentifier> newVals = overwriteElement
-                .getRequiredObjects();
-            final List<DictIdentifier> oldVals = localElement
-                .getRequiredObjects();
+            final List<DictIdentifier> newVals = overwriteElement.getRequiredObjects();
+            final List<DictIdentifier> oldVals = localElement.getRequiredObjects();
 
             // iterate over local
             for (final DictIdentifier value : newVals) {
@@ -381,8 +365,7 @@ public class Dictionary implements Serializable {
                 localElement.addRequired(value);
                 // TODO: move out of loop and consolidate
                 // message?
-                addMerge(overwriteElement,
-                    "dictionary.text.requiredObjectAdded", //$NON-NLS-1$
+                addMerge(overwriteElement, "dictionary.text.requiredObjectAdded", //$NON-NLS-1$
                     value);
               }
             }
@@ -402,8 +385,7 @@ public class Dictionary implements Serializable {
   /**
    * Tests to see whether or not a definition exists
    * 
-   * @param identifier
-   *          of the definition
+   * @param identifier of the definition
    * @return flag indicating existence
    */
   public boolean containsDefinition(DictIdentifier identifier) {
@@ -413,8 +395,7 @@ public class Dictionary implements Serializable {
   /**
    * Tests to see whether or not an object is defined
    * 
-   * @param identifier
-   *          of the object
+   * @param identifier of the object
    * @return flag indicating existence
    */
   public boolean containsObjectDefinition(DictIdentifier identifier) {
@@ -424,8 +405,7 @@ public class Dictionary implements Serializable {
   /**
    * Tests to see whether or not a group is defined
    * 
-   * @param identifier
-   *          of the the group
+   * @param identifier of the the group
    * @return flag indicating existence
    */
   public boolean containsGroupDefinition(DictIdentifier identifier) {
@@ -435,21 +415,19 @@ public class Dictionary implements Serializable {
   /**
    * Tests to see whether or not an element is defined
    * 
-   * @param identifier
-   *          of the element
+   * @param identifier of the element
    * @return flag indicating existence
    */
   public boolean containsElementDefinition(DictIdentifier identifier) {
     return containsElementDefinition(null, identifier);
   }
 
-  public boolean containsElementDefinition(String objectContext,
-      DictIdentifier identifier) {
+  public boolean containsElementDefinition(String objectContext, DictIdentifier identifier) {
 
     // try with context first
     if (objectContext != null) {
-      DictIdentifier id = DictIDFactory.createElementDefId(objectContext
-          + "." + identifier.toString()); //$NON-NLS-1$
+      DictIdentifier id =
+          DictIDFactory.createElementDefId(objectContext + "." + identifier.toString()); //$NON-NLS-1$
       if (containsDefinition(id)) {
         return true;
       }
@@ -461,8 +439,7 @@ public class Dictionary implements Serializable {
   /**
    * Retrieves the definition from the dictionary or null if not found
    * 
-   * @param identifier
-   *          of the definition
+   * @param identifier of the definition
    * @return the definition
    */
   public Definition getDefinition(DictIdentifier identifier) {
@@ -472,8 +449,7 @@ public class Dictionary implements Serializable {
   /**
    * Retrieves the object definition from the dictionary or null if not found
    * 
-   * @param identifier
-   *          of the definition
+   * @param identifier of the definition
    * @return the object definition
    */
   public ObjectDefinition getObjectDefinition(DictIdentifier identifier) {
@@ -487,8 +463,7 @@ public class Dictionary implements Serializable {
   /**
    * Retrieves the group definition from the dictionary or null if not found
    * 
-   * @param identifier
-   *          of the definition
+   * @param identifier of the definition
    * @return the group definition
    */
   public GroupDefinition getGroupDefinition(DictIdentifier identifier) {
@@ -502,22 +477,20 @@ public class Dictionary implements Serializable {
   /**
    * Retrieves the element definition from the dictionary or null if not found.
    * 
-   * @param identifier
-   *          of the definition
+   * @param identifier of the definition
    * @return the element definition
    */
   public ElementDefinition getElementDefinition(DictIdentifier identifier) {
     return getElementDefinition(null, identifier);
   }
 
-  public ElementDefinition getElementDefinition(String objectContext,
-      DictIdentifier identifier) {
+  public ElementDefinition getElementDefinition(String objectContext, DictIdentifier identifier) {
     Definition definition = null;
 
     // try with context first
     if (objectContext != null) {
-      DictIdentifier id = DictIDFactory.createElementDefId(objectContext
-          + "." + identifier.toString());//$NON-NLS-1$
+      DictIdentifier id =
+          DictIDFactory.createElementDefId(objectContext + "." + identifier.toString());//$NON-NLS-1$
       definition = this.definitions.get(id);
       if (definition != null) {
         return (ElementDefinition) definition;
@@ -535,8 +508,7 @@ public class Dictionary implements Serializable {
   /**
    * Adds a definition to this dictionary.
    * 
-   * @param definition
-   *          to be added to the dictionary
+   * @param definition to be added to the dictionary
    */
   public void addDefinition(Definition definition) {
     final DictIdentifier id = definition.getIdentifier();
@@ -544,8 +516,7 @@ public class Dictionary implements Serializable {
       this.definitions.put(id, definition);
       for (Iterator<Alias> i = definition.getAliases().iterator(); i.hasNext();) {
         Alias alias = i.next();
-        final DictIdentifier aliasId = new DictIdentifier(alias,
-            definition.getClass());
+        final DictIdentifier aliasId = new DictIdentifier(alias, definition.getClass());
         this.definitions.put(aliasId, definition);
       }
     } else {
@@ -555,8 +526,8 @@ public class Dictionary implements Serializable {
   }
 
   /**
-   * Sets the description information for a dictionary. This is often captured
-   * informally in comments at the top of a dictionary file.
+   * Sets the description information for a dictionary. This is often captured informally in
+   * comments at the top of a dictionary file.
    * 
    * @param information
    */
@@ -574,11 +545,10 @@ public class Dictionary implements Serializable {
   }
 
   /**
-   * Adds a list of definitions to this dictionary. The flag indicates whether
-   * the definitions should be overwritten.
+   * Adds a list of definitions to this dictionary. The flag indicates whether the definitions
+   * should be overwritten.
    * 
-   * @param defs
-   *          to be added to the dictionary
+   * @param defs to be added to the dictionary
    */
   public void addDefinitions(Collection<Definition> defs) {
     for (Iterator<Definition> i = defs.iterator(); i.hasNext();) {
@@ -587,15 +557,13 @@ public class Dictionary implements Serializable {
   }
 
   /**
-   * Retrieves the class definition for an object with the given identifier.
-   * This method will search the dictionary for an ObjectDefinition whose
-   * identifier is the greatest length and matches the end of the given
-   * identifier
+   * Retrieves the class definition for an object with the given identifier. This method will search
+   * the dictionary for an ObjectDefinition whose identifier is the greatest length and matches the
+   * end of the given identifier
    * 
-   * @param identifier
-   *          to lookup up class of
-   * @return {@link ObjectDefinition} of class that will constrain object with
-   *         given identifier. Returns null if not found.
+   * @param identifier to lookup up class of
+   * @return {@link ObjectDefinition} of class that will constrain object with given identifier.
+   *         Returns null if not found.
    */
   public ObjectDefinition findObjectClassDefinition(DictIdentifier identifier) {
     ObjectDefinition definition = null;
@@ -630,14 +598,13 @@ public class Dictionary implements Serializable {
   }
 
   /**
-   * Retrieves the class definition for a group with the given identifier. This
-   * method will search the dictionary for a GroupDefinition whose identifier is
-   * the greatest length and matches the end of the given identifier
+   * Retrieves the class definition for a group with the given identifier. This method will search
+   * the dictionary for a GroupDefinition whose identifier is the greatest length and matches the
+   * end of the given identifier
    * 
-   * @param identifier
-   *          to lookup up class of
-   * @return {@link GroupDefinition} of class that will constrain object with
-   *         given identifier. Returns null if not found.
+   * @param identifier to lookup up class of
+   * @return {@link GroupDefinition} of class that will constrain object with given identifier.
+   *         Returns null if not found.
    */
   public GroupDefinition findGroupClassDefinition(DictIdentifier identifier) {
     GroupDefinition definition = null;
@@ -693,8 +660,8 @@ public class Dictionary implements Serializable {
 
   private void addMerge(final Definition definition, final String messageKey,
       final Object... arguments) {
-    final SimpleDictionaryChange change = new SimpleDictionaryChange(
-        definition, messageKey, arguments);
+    final SimpleDictionaryChange change =
+        new SimpleDictionaryChange(definition, messageKey, arguments);
     this.mergeChanges.add(change);
   }
 }

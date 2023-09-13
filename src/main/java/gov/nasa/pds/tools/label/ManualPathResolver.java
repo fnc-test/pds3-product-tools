@@ -30,10 +30,6 @@
 
 package gov.nasa.pds.tools.label;
 
-import gov.nasa.pds.tools.LabelParserException;
-import gov.nasa.pds.tools.constants.Constants.ProblemType;
-import gov.nasa.pds.tools.containers.FileReference;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -45,8 +41,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import gov.nasa.pds.tools.LabelParserException;
+import gov.nasa.pds.tools.constants.Constants.ProblemType;
+import gov.nasa.pds.tools.containers.FileReference;
 
 /**
  * This is a utility class to resolve URLs for pointers.
@@ -57,8 +56,7 @@ import org.apache.log4j.Logger;
  * 
  */
 public class ManualPathResolver implements PointerResolver {
-  private static Logger log = Logger.getLogger(ManualPathResolver.class
-      .getName());
+  private static Logger log = LogManager.getLogger(ManualPathResolver.class.getName());
 
   private List<URL> includePaths = new ArrayList<URL>();
   private URI baseURI = null;
@@ -68,8 +66,8 @@ public class ManualPathResolver implements PointerResolver {
   }
 
   @SuppressWarnings("nls")
-  private URI resolveURI(final FileReference fileRef,
-      final PointerStatement pointer) throws URISyntaxException {
+  private URI resolveURI(final FileReference fileRef, final PointerStatement pointer)
+      throws URISyntaxException {
     final String path = fileRef.getPath();
     List<URL> searchPaths = new ArrayList<URL>(this.includePaths);
 
@@ -88,8 +86,7 @@ public class ManualPathResolver implements PointerResolver {
     // resolver
     URI pointerLabelBaseURI = null;
     try {
-      pointerLabelBaseURI = ManualPathResolver.getBaseURI(pointer.label
-          .getLabelURI());
+      pointerLabelBaseURI = ManualPathResolver.getBaseURI(pointer.label.getLabelURI());
       if (!pointerLabelBaseURI.equals(this.baseURI)) {
         searchPaths.add(0, pointerLabelBaseURI.toURL());
       }
@@ -124,8 +121,7 @@ public class ManualPathResolver implements PointerResolver {
         fileURL.openStream().close();
         // Found the file by upper casing the name so report it
         pointer.label.addProblem(new LabelParserException(pointer, null,
-            "parser.error.mismatchedPointerReference",
-            ProblemType.POTENTIAL_POINTER_PROBLEM));
+            "parser.error.mismatchedPointerReference", ProblemType.POTENTIAL_POINTER_PROBLEM));
         return new URI(fileURL.toString());
       } catch (IOException ioEx) {
         // Ignore this must not be the path to the pointed file
@@ -137,8 +133,7 @@ public class ManualPathResolver implements PointerResolver {
         fileURL.openStream().close();
         // Found the file by lower casing the name so report it
         pointer.label.addProblem(new LabelParserException(pointer, null,
-            "parser.error.mismatchedPointerReference",
-            ProblemType.POTENTIAL_POINTER_PROBLEM));
+            "parser.error.mismatchedPointerReference", ProblemType.POTENTIAL_POINTER_PROBLEM));
         return new URI(fileURL.toString());
       } catch (IOException ioEx) {
         // Ignore this must not be the path to the pointed file
@@ -147,8 +142,8 @@ public class ManualPathResolver implements PointerResolver {
     }
 
     // The file just can not be found so now report it
-    pointer.label.addProblem(new LabelParserException(pointer, null,
-        "parser.error.missingRefFile", ProblemType.MISSING_RESOURCE, path));
+    pointer.label.addProblem(new LabelParserException(pointer, null, "parser.error.missingRefFile",
+        ProblemType.MISSING_RESOURCE, path));
     return null;
   }
 
@@ -173,8 +168,7 @@ public class ManualPathResolver implements PointerResolver {
     return resolvedURIs;
   }
 
-  public Map<Numeric, URI> resolveURIMap(PointerStatement pointer)
-      throws IOException {
+  public Map<Numeric, URI> resolveURIMap(PointerStatement pointer) throws IOException {
     Map<Numeric, URI> resolvedURIs = new HashMap<Numeric, URI>();
 
     List<FileReference> fileRefs = pointer.getFileRefs();

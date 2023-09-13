@@ -30,6 +30,32 @@
 
 package gov.nasa.pds.tools.label.parser;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import org.antlr.runtime.ANTLRInputStream;
+import org.antlr.runtime.CharStream;
+import org.antlr.runtime.CommonTokenStream;
+import org.antlr.runtime.RecognitionException;
+import org.apache.commons.io.IOUtils;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.appender.ConsoleAppender;
+import org.apache.logging.log4j.core.config.Configurator;
+import org.apache.logging.log4j.core.config.builder.api.AppenderComponentBuilder;
+import org.apache.logging.log4j.core.config.builder.api.ConfigurationBuilder;
+import org.apache.logging.log4j.core.config.builder.api.ConfigurationBuilderFactory;
+import org.apache.logging.log4j.core.config.builder.impl.BuiltConfiguration;
 import gov.nasa.arc.pds.tools.util.FileUtils;
 import gov.nasa.pds.tools.LabelParserException;
 import gov.nasa.pds.tools.constants.Constants.ProblemType;
@@ -44,30 +70,6 @@ import gov.nasa.pds.tools.label.antlr.ODLParser;
 import gov.nasa.pds.tools.label.validate.Validator;
 import gov.nasa.pds.tools.util.MessageUtils;
 import gov.nasa.pds.tools.util.VersionInfo;
-
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.antlr.runtime.ANTLRInputStream;
-import org.antlr.runtime.CharStream;
-import org.antlr.runtime.CommonTokenStream;
-import org.antlr.runtime.RecognitionException;
-import org.apache.commons.io.IOUtils;
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.Level;
-import org.apache.log4j.PatternLayout;
 
 /**
  * Default implementation
@@ -96,14 +98,13 @@ public class DefaultLabelParser implements LabelParser {
     this(true, true, resolver);
   }
 
-  public DefaultLabelParser(final boolean loadIncludes,
-      final boolean captureProblems, final PointerResolver resolver) {
+  public DefaultLabelParser(final boolean loadIncludes, final boolean captureProblems,
+      final PointerResolver resolver) {
     this(loadIncludes, captureProblems, false, resolver);
   }
 
-  public DefaultLabelParser(final boolean loadIncludes,
-      final boolean captureProblems, final boolean allowExternalProblems,
-      final PointerResolver resolver) {
+  public DefaultLabelParser(final boolean loadIncludes, final boolean captureProblems,
+      final boolean allowExternalProblems, final PointerResolver resolver) {
     this.loadIncludes = loadIncludes;
     this.captureProblems = captureProblems;
     this.allowExternalProblems = allowExternalProblems;
@@ -113,8 +114,7 @@ public class DefaultLabelParser implements LabelParser {
     if (loadIncludes && resolver == null) {
       // statement not externalized since only for internal development
       // use
-      throw new RuntimeException(
-          "A PointerResolver is required to load include statements"); //$NON-NLS-1$
+      throw new RuntimeException("A PointerResolver is required to load include statements"); //$NON-NLS-1$
     }
   }
 
@@ -124,20 +124,17 @@ public class DefaultLabelParser implements LabelParser {
    * @see gov.nasa.jpl.pds.tools.label.parser.LabelParser#parse(java.net.URL)
    */
 
-  public Label parseLabel(final URL url) throws LabelParserException,
-      IOException {
+  public Label parseLabel(final URL url) throws LabelParserException, IOException {
     return parseLabel(url, false);
   }
 
-  public Label parseLabel(final File file) throws LabelParserException,
-      IOException {
+  public Label parseLabel(final File file) throws LabelParserException, IOException {
     return parseLabel(file, false);
   }
 
   public Label parseLabel(final URL url, final boolean forceParse)
       throws LabelParserException, IOException {
-    final BufferedInputStream inputStream = new BufferedInputStream(
-        url.openStream());
+    final BufferedInputStream inputStream = new BufferedInputStream(url.openStream());
     try {
       inputStream.mark(MARK_LIMIT);
       URI labelURI = null;
@@ -166,13 +163,11 @@ public class DefaultLabelParser implements LabelParser {
         inputStream.mark(MARK_LIMIT);
       } catch (FileNotFoundException e) {
         if (file.exists()) {
-          throw new LabelParserException(file, null, null,
-              "parser.error.unableToRead", ProblemType.INVALID_LABEL, file //$NON-NLS-1$
-                  .toString());
+          throw new LabelParserException(file, null, null, "parser.error.unableToRead", //$NON-NLS-1$
+              ProblemType.INVALID_LABEL, file.toString());
         }
-        throw new LabelParserException(file, null, null,
-            "parser.error.missingFile", ProblemType.INVALID_LABEL, file //$NON-NLS-1$
-                .getName());
+        throw new LabelParserException(file, null, null, "parser.error.missingFile", //$NON-NLS-1$
+            ProblemType.INVALID_LABEL, file.getName());
       }
       final Label label = new Label(file);
       label.setCaptureProblems(this.captureProblems);
@@ -183,9 +178,8 @@ public class DefaultLabelParser implements LabelParser {
     }
   }
 
-  private Label parseLabel(final BufferedInputStream inputStream,
-      final Label label, final boolean forceParse) throws LabelParserException,
-      IOException {
+  private Label parseLabel(final BufferedInputStream inputStream, final Label label,
+      final boolean forceParse) throws LabelParserException, IOException {
 
     consumeSFDUHeader(inputStream);
 
@@ -195,8 +189,7 @@ public class DefaultLabelParser implements LabelParser {
     // Set the buffer size to the mark limit to ensure that we don't
     // invalidate the mark and throw an exception when calling the
     // inputStream.reset() method
-    BufferedReader reader = new BufferedReader(new InputStreamReader(
-        inputStream), MARK_LIMIT);
+    BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream), MARK_LIMIT);
 
     String versionLine = null;
     boolean hasExtraNewLines = false;
@@ -209,20 +202,19 @@ public class DefaultLabelParser implements LabelParser {
     } while (versionLine != null && versionLine.trim().length() == 0);
 
     if (hasExtraNewLines) {
-      label.addProblem(new CommentStatement(label, 1),
-          "parser.error.mislocatedVersion", //$NON-NLS-1$
+      label.addProblem(new CommentStatement(label, 1), "parser.error.mislocatedVersion", //$NON-NLS-1$
           ProblemType.PARSE_ERROR);
     }
 
-    String[] line = new String[] { "" }; //$NON-NLS-1$
+    String[] line = new String[] {""}; //$NON-NLS-1$
     if (versionLine != null) {
       line = versionLine.trim().split("="); //$NON-NLS-1$
     }
 
     if (line.length != 2) {
       label.setInvalid();
-      final LabelParserException lpe = new LabelParserException(label, null,
-          null, "parser.error.missingVersion", ProblemType.INVALID_LABEL, //$NON-NLS-1$
+      final LabelParserException lpe = new LabelParserException(label, null, null,
+          "parser.error.missingVersion", ProblemType.INVALID_LABEL, //$NON-NLS-1$
           label.getSourceNameString());
       if (!forceParse) {
         throw lpe;
@@ -234,8 +226,8 @@ public class DefaultLabelParser implements LabelParser {
 
       if (!"PDS_VERSION_ID".equals(name)) { //$NON-NLS-1$
         label.setInvalid();
-        final LabelParserException lpe = new LabelParserException(label, null,
-            null, "parser.error.missingVersion", ProblemType.INVALID_LABEL, //$NON-NLS-1$
+        final LabelParserException lpe = new LabelParserException(label, null, null,
+            "parser.error.missingVersion", ProblemType.INVALID_LABEL, //$NON-NLS-1$
             label.getSourceNameString());
         if (!forceParse) {
           throw lpe;
@@ -250,15 +242,14 @@ public class DefaultLabelParser implements LabelParser {
 
     // this is a label so it should end in END
     if (!label.hasEndStatement()) {
-      label.addProblem(new CommentStatement(label, 1),
-          "parser.error.missingEndStatement", //$NON-NLS-1$
+      label.addProblem(new CommentStatement(label, 1), "parser.error.missingEndStatement", //$NON-NLS-1$
           ProblemType.PARSE_ERROR);
     }
     return label;
   }
 
-  private Label parseLabel(final BufferedInputStream inputStream,
-      final Label label) throws LabelParserException, IOException {
+  private Label parseLabel(final BufferedInputStream inputStream, final Label label)
+      throws LabelParserException, IOException {
     CustomAntlrInputStream customIs = null;
     try {
       customIs = new CustomAntlrInputStream(inputStream);
@@ -292,8 +283,7 @@ public class DefaultLabelParser implements LabelParser {
     }
   }
 
-  private List<SFDULabel> consumeSFDUHeader(InputStream input)
-      throws IOException {
+  private List<SFDULabel> consumeSFDUHeader(InputStream input) throws IOException {
     List<SFDULabel> sfdus = new ArrayList<SFDULabel>();
     boolean foundHeader = false;
 
@@ -363,14 +353,13 @@ public class DefaultLabelParser implements LabelParser {
     return parsePartial(file, parent, this.captureProblems);
   }
 
-  public Label parsePartial(final File file, final Label parent,
-      final boolean captureProbs) throws IOException, LabelParserException {
+  public Label parsePartial(final File file, final Label parent, final boolean captureProbs)
+      throws IOException, LabelParserException {
     return parsePartial(file, parent, captureProbs, this.allowExternalProblems);
   }
 
-  public Label parsePartial(final File file, final Label parent,
-      final boolean captureProbs, final boolean allowExternalProbs)
-      throws IOException, LabelParserException {
+  public Label parsePartial(final File file, final Label parent, final boolean captureProbs,
+      final boolean allowExternalProbs) throws IOException, LabelParserException {
     BufferedInputStream inputStream = null;
     try {
       try {
@@ -378,13 +367,11 @@ public class DefaultLabelParser implements LabelParser {
         inputStream.mark(MARK_LIMIT);
       } catch (FileNotFoundException e) {
         if (file.exists()) {
-          throw new LabelParserException(file, null, null,
-              "parser.error.unableToRead", ProblemType.INVALID_LABEL, file //$NON-NLS-1$
-                  .toString());
+          throw new LabelParserException(file, null, null, "parser.error.unableToRead", //$NON-NLS-1$
+              ProblemType.INVALID_LABEL, file.toString());
         }
-        throw new LabelParserException(file, null, null,
-            "parser.error.missingFile", ProblemType.INVALID_LABEL, file //$NON-NLS-1$
-                .getName());
+        throw new LabelParserException(file, null, null, "parser.error.missingFile", //$NON-NLS-1$
+            ProblemType.INVALID_LABEL, file.getName());
       }
       final Label label = new Label(file);
       label.setCaptureProblems(captureProbs);
@@ -400,16 +387,14 @@ public class DefaultLabelParser implements LabelParser {
     return parsePartial(url, parent, this.captureProblems);
   }
 
-  public Label parsePartial(final URL url, final Label parent,
-      final boolean captureProbs) throws IOException, LabelParserException {
+  public Label parsePartial(final URL url, final Label parent, final boolean captureProbs)
+      throws IOException, LabelParserException {
     return parsePartial(url, parent, captureProbs, this.allowExternalProblems);
   }
 
-  public Label parsePartial(final URL url, final Label parent,
-      final boolean captureProbs, final boolean allowExternalProbs)
-      throws IOException, LabelParserException {
-    final BufferedInputStream inputStream = new BufferedInputStream(
-        url.openStream());
+  public Label parsePartial(final URL url, final Label parent, final boolean captureProbs,
+      final boolean allowExternalProbs) throws IOException, LabelParserException {
+    final BufferedInputStream inputStream = new BufferedInputStream(url.openStream());
     try {
       inputStream.mark(MARK_LIMIT);
       URI labelURI = null;
@@ -432,12 +417,10 @@ public class DefaultLabelParser implements LabelParser {
   /*
    * (non-Javadoc)
    * 
-   * @see gov.nasa.pds.tools.label.parser.LabelParser#parsePartial(java.net.URL,
-   * boolean)
+   * @see gov.nasa.pds.tools.label.parser.LabelParser#parsePartial(java.net.URL, boolean)
    */
-  public Label parsePartial(final BufferedInputStream inputStream,
-      final Label label, final Label parent) throws IOException,
-      LabelParserException {
+  public Label parsePartial(final BufferedInputStream inputStream, final Label label,
+      final Label parent) throws IOException, LabelParserException {
 
     // add ancestors to label to be able to test for circular
     // references
@@ -455,15 +438,14 @@ public class DefaultLabelParser implements LabelParser {
     // Set the buffer size to the mark limit to ensure that we don't
     // invalidate the mark and throw an exception when calling the
     // inputStream.reset() method
-    BufferedReader reader = new BufferedReader(new InputStreamReader(
-        inputStream), MARK_LIMIT);
+    BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream), MARK_LIMIT);
     String versionLine = null;
 
     do {
       versionLine = reader.readLine();
     } while (versionLine != null && versionLine.trim().length() == 0);
 
-    String[] line = new String[] { "" }; //$NON-NLS-1$
+    String[] line = new String[] {""}; //$NON-NLS-1$
     if (versionLine != null) {
       line = versionLine.trim().split("="); //$NON-NLS-1$
     }
@@ -473,9 +455,9 @@ public class DefaultLabelParser implements LabelParser {
 
       // Label fragments should not have PDS_VERSION_ID
       if ("PDS_VERSION_ID".equals(name)) { //$NON-NLS-1$
-        label.addProblem(new LabelParserException(label, null, null,
-            "parser.warning.versionPresent", //$NON-NLS-1$
-            ProblemType.FRAGMENT_HAS_VERSION, getDisplayPath(label)));
+        label
+            .addProblem(new LabelParserException(label, null, null, "parser.warning.versionPresent", //$NON-NLS-1$
+                ProblemType.FRAGMENT_HAS_VERSION, getDisplayPath(label)));
       }
     }
 
@@ -484,8 +466,7 @@ public class DefaultLabelParser implements LabelParser {
     if (numConsumed != 0) {
       // TODO: when pds utils library updated, use getRelativePath(String,
       // String)
-      label.addProblem(new LabelParserException(label, null, null,
-          "parser.warning.sfduPresent", //$NON-NLS-1$
+      label.addProblem(new LabelParserException(label, null, null, "parser.warning.sfduPresent", //$NON-NLS-1$
           ProblemType.FRAGMENT_HAS_SFDU, getDisplayPath(label)));
     }
 
@@ -497,15 +478,13 @@ public class DefaultLabelParser implements LabelParser {
     String relativePath = null;
     if (label.getLabelFile() != null) {
       try {
-        relativePath = FileUtils.getRelativePath(this.resolver.getBaseFile(),
-            label.getLabelFile());
+        relativePath = FileUtils.getRelativePath(this.resolver.getBaseFile(), label.getLabelFile());
       } catch (RuntimeException re) {
         // If the files don't share a path
         // no op
       }
     } else {
-      if (label.getLabelURI().toString()
-          .startsWith(this.resolver.getBaseURI().toString())) {
+      if (label.getLabelURI().toString().startsWith(this.resolver.getBaseURI().toString())) {
         relativePath = label.getLabelURI().toString()
             .substring(this.resolver.getBaseURI().toString().length());
       }
@@ -527,15 +506,20 @@ public class DefaultLabelParser implements LabelParser {
   }
 
   public static void main(String[] args) throws Exception {
-    ConsoleAppender console = new ConsoleAppender(
-        new PatternLayout("%-5p %m%n")); //$NON-NLS-1$
-    console.setThreshold(Level.FATAL);
-    BasicConfigurator.configure(console);
+    ConfigurationBuilder<BuiltConfiguration> builder =
+        ConfigurationBuilderFactory.newConfigurationBuilder();
+    builder.setStatusLevel(Level.ERROR);
+
+    AppenderComponentBuilder appenderBuilder = builder.newAppender("Stdout", "CONSOLE")
+        .addAttribute("target", ConsoleAppender.Target.SYSTEM_OUT);
+    appenderBuilder.add(builder.newLayout("PatternLayout").addAttribute("pattern", "%-5p %m%n"));
+    LoggerContext ctx = Configurator.initialize(builder.build());
+    ctx.updateLoggers();
+
     ManualPathResolver resolver = new ManualPathResolver();
     URL labelURL = new URL(args[0]);
     resolver.setBaseURI(ManualPathResolver.getBaseURI(labelURL.toURI()));
-    DefaultLabelParser parser = new DefaultLabelParser(true, true, true,
-        resolver);
+    DefaultLabelParser parser = new DefaultLabelParser(true, true, true, resolver);
     Label label = parser.parseLabel(labelURL, true);
     Validator validator = new Validator();
     validator.validate(label);

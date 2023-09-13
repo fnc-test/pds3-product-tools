@@ -53,6 +53,32 @@ import static gov.nasa.pds.tools.dict.DictionaryTokens.UNIT_LIST;
 import static gov.nasa.pds.tools.dict.DictionaryTokens.UNIT_SEQUENCE;
 import static gov.nasa.pds.tools.dict.DictionaryTokens.VALUES;
 import static gov.nasa.pds.tools.dict.DictionaryTokens.VALUE_TYPE;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import org.antlr.runtime.ANTLRInputStream;
+import org.antlr.runtime.CharStream;
+import org.antlr.runtime.CommonTokenStream;
+import org.antlr.runtime.RecognitionException;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.appender.ConsoleAppender;
+import org.apache.logging.log4j.core.config.Configurator;
+import org.apache.logging.log4j.core.config.builder.api.AppenderComponentBuilder;
+import org.apache.logging.log4j.core.config.builder.api.ConfigurationBuilder;
+import org.apache.logging.log4j.core.config.builder.api.ConfigurationBuilderFactory;
+import org.apache.logging.log4j.core.config.builder.impl.BuiltConfiguration;
 import gov.nasa.pds.tools.LabelParserException;
 import gov.nasa.pds.tools.constants.Constants.ProblemType;
 import gov.nasa.pds.tools.dict.Alias;
@@ -71,33 +97,10 @@ import gov.nasa.pds.tools.label.Value;
 import gov.nasa.pds.tools.label.antlr.ODLLexer;
 import gov.nasa.pds.tools.label.antlr.ODLParser;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import org.antlr.runtime.ANTLRInputStream;
-import org.antlr.runtime.CharStream;
-import org.antlr.runtime.CommonTokenStream;
-import org.antlr.runtime.RecognitionException;
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
-
 /**
- * This class provides the means to parse a PDS compliant data dictionary. The
- * {@link Dictionary} created can be used for validation purposes or just to
- * examine the contents programmatically. To parse a dictionary use the
- * following:
+ * This class provides the means to parse a PDS compliant data dictionary. The {@link Dictionary}
+ * created can be used for validation purposes or just to examine the contents programmatically. To
+ * parse a dictionary use the following:
  * <p>
  * <code>
  * Dictionary dictionary = DictionaryParser.parse(new URL("<url to dictionary>"));
@@ -116,95 +119,83 @@ import org.apache.log4j.PatternLayout;
  */
 public class DictionaryParser {
 
-  private static Logger log = Logger
-      .getLogger(DictionaryParser.class.getName());
+  private static Logger log = LogManager.getLogger(DictionaryParser.class.getName());
 
-  protected final static DictIdentifier OBJECT_TYPE_ID = DictIDFactory
-      .createElementDefId(OBJECT_TYPE);
+  protected final static DictIdentifier OBJECT_TYPE_ID =
+      DictIDFactory.createElementDefId(OBJECT_TYPE);
 
-  protected final static DictIdentifier DESCRIPTION_ID = DictIDFactory
-      .createElementDefId(DESCRIPTION);
+  protected final static DictIdentifier DESCRIPTION_ID =
+      DictIDFactory.createElementDefId(DESCRIPTION);
 
-  protected final static DictIdentifier STATUS_TYPE_ID = DictIDFactory
-      .createElementDefId(STATUS_TYPE);
+  protected final static DictIdentifier STATUS_TYPE_ID =
+      DictIDFactory.createElementDefId(STATUS_TYPE);
 
-  protected final static DictIdentifier REQUIRED_OBJECTS_ID = DictIDFactory
-      .createElementDefId(REQUIRED_OBJECTS);
+  protected final static DictIdentifier REQUIRED_OBJECTS_ID =
+      DictIDFactory.createElementDefId(REQUIRED_OBJECTS);
 
-  protected final static DictIdentifier OPTIONAL_OBJECTS_ID = DictIDFactory
-      .createElementDefId(OPTIONAL_OBJECTS);
+  protected final static DictIdentifier OPTIONAL_OBJECTS_ID =
+      DictIDFactory.createElementDefId(OPTIONAL_OBJECTS);
 
-  protected final static DictIdentifier REQUIRED_ELEMENTS_ID = DictIDFactory
-      .createElementDefId(REQUIRED_ELEMENTS);
+  protected final static DictIdentifier REQUIRED_ELEMENTS_ID =
+      DictIDFactory.createElementDefId(REQUIRED_ELEMENTS);
 
-  protected final static DictIdentifier OPTIONAL_ELEMENTS_ID = DictIDFactory
-      .createElementDefId(OPTIONAL_ELEMENTS);
+  protected final static DictIdentifier OPTIONAL_ELEMENTS_ID =
+      DictIDFactory.createElementDefId(OPTIONAL_ELEMENTS);
 
-  protected final static DictIdentifier NAME_ID = DictIDFactory
-      .createElementDefId(NAME);
+  protected final static DictIdentifier NAME_ID = DictIDFactory.createElementDefId(NAME);
 
-  protected final static DictIdentifier DATA_TYPE_ID = DictIDFactory
-      .createElementDefId(DATA_TYPE);
+  protected final static DictIdentifier DATA_TYPE_ID = DictIDFactory.createElementDefId(DATA_TYPE);
 
-  protected final static DictIdentifier UNITS_ID = DictIDFactory
-      .createElementDefId(DictionaryTokens.UNITS);
+  protected final static DictIdentifier UNITS_ID =
+      DictIDFactory.createElementDefId(DictionaryTokens.UNITS);
 
-  protected final static DictIdentifier MIN_LENGTH_ID = DictIDFactory
-      .createElementDefId(MIN_LENGTH);
+  protected final static DictIdentifier MIN_LENGTH_ID =
+      DictIDFactory.createElementDefId(MIN_LENGTH);
 
-  protected final static DictIdentifier MAX_LENGTH_ID = DictIDFactory
-      .createElementDefId(MAX_LENGTH);
+  protected final static DictIdentifier MAX_LENGTH_ID =
+      DictIDFactory.createElementDefId(MAX_LENGTH);
 
-  protected final static DictIdentifier VALUES_ID = DictIDFactory
-      .createElementDefId(VALUES);
+  protected final static DictIdentifier VALUES_ID = DictIDFactory.createElementDefId(VALUES);
 
-  protected final static DictIdentifier VALUE_TYPE_ID = DictIDFactory
-      .createElementDefId(VALUE_TYPE);
+  protected final static DictIdentifier VALUE_TYPE_ID =
+      DictIDFactory.createElementDefId(VALUE_TYPE);
 
-  protected final static DictIdentifier MINIMUM_ID = DictIDFactory
-      .createElementDefId(MINIMUM);
+  protected final static DictIdentifier MINIMUM_ID = DictIDFactory.createElementDefId(MINIMUM);
 
-  protected final static DictIdentifier MAXIMUM_ID = DictIDFactory
-      .createElementDefId(MAXIMUM);
+  protected final static DictIdentifier MAXIMUM_ID = DictIDFactory.createElementDefId(MAXIMUM);
 
-  protected final static DictIdentifier UNIT_SEQUENCE_ID = DictIDFactory
-      .createElementDefId(UNIT_SEQUENCE);
+  protected final static DictIdentifier UNIT_SEQUENCE_ID =
+      DictIDFactory.createElementDefId(UNIT_SEQUENCE);
 
-  protected final static DictIdentifier OBJECT_ALIASES_ID = DictIDFactory
-      .createElementDefId(OBJECT_ALIASES);
+  protected final static DictIdentifier OBJECT_ALIASES_ID =
+      DictIDFactory.createElementDefId(OBJECT_ALIASES);
 
-  protected final static DictIdentifier ELEMENT_ALIASES_ID = DictIDFactory
-      .createElementDefId(ELEMENT_ALIASES);
+  protected final static DictIdentifier ELEMENT_ALIASES_ID =
+      DictIDFactory.createElementDefId(ELEMENT_ALIASES);
 
-  protected final static DictIdentifier ALIAS_LIST_ID = DictIDFactory
-      .createObjectDefId(ALIAS_LIST);
+  protected final static DictIdentifier ALIAS_LIST_ID = DictIDFactory.createObjectDefId(ALIAS_LIST);
 
-  protected final static DictIdentifier UNIT_LIST_ID = DictIDFactory
-      .createObjectDefId(UNIT_LIST);
+  protected final static DictIdentifier UNIT_LIST_ID = DictIDFactory.createObjectDefId(UNIT_LIST);
 
-  protected final static DictIdentifier GENERIC_OBJECT_ID = DictIDFactory
-      .createObjectDefId(GENERIC_OBJECT);
+  protected final static DictIdentifier GENERIC_OBJECT_ID =
+      DictIDFactory.createObjectDefId(GENERIC_OBJECT);
 
-  protected final static DictIdentifier SPECIFIC_OBJECT_ID = DictIDFactory
-      .createObjectDefId(SPECIFIC_OBJECT);
+  protected final static DictIdentifier SPECIFIC_OBJECT_ID =
+      DictIDFactory.createObjectDefId(SPECIFIC_OBJECT);
 
-  protected final static DictIdentifier ELEMENT_DEFINITION_ID = DictIDFactory
-      .createObjectDefId(ELEMENT_DEFINITION);
+  protected final static DictIdentifier ELEMENT_DEFINITION_ID =
+      DictIDFactory.createObjectDefId(ELEMENT_DEFINITION);
 
   /**
-   * Parses a {@link URL} that is compliant with the PDS Data Dictionary
-   * document and formulates a {@link Dictionary} with aliases turned off.
+   * Parses a {@link URL} that is compliant with the PDS Data Dictionary document and formulates a
+   * {@link Dictionary} with aliases turned off.
    * 
-   * @param url
-   *          points to the location of the dictionary
+   * @param url points to the location of the dictionary
    * @return a data dictionary with element, group, and object definitions
-   * @throws LabelParserException
-   *           thrown when dictionary can not be parsed correctly
-   * @throws IOException
-   *           thrown when dictionary can not be accessed
+   * @throws LabelParserException thrown when dictionary can not be parsed correctly
+   * @throws IOException thrown when dictionary can not be accessed
    */
-  public static Dictionary parse(final URL url) throws LabelParserException,
-      IOException {
+  public static Dictionary parse(final URL url) throws LabelParserException, IOException {
     return parse(url, false, false);
   }
 
@@ -213,8 +204,8 @@ public class DictionaryParser {
     return parse(url, aliasing, false);
   }
 
-  public static Dictionary parse(final URL url, final boolean aliasing,
-      final boolean storeProblems) throws LabelParserException, IOException {
+  public static Dictionary parse(final URL url, final boolean aliasing, final boolean storeProblems)
+      throws LabelParserException, IOException {
     URI uri;
     try {
       uri = url.toURI();
@@ -227,8 +218,7 @@ public class DictionaryParser {
     return parse(is, dictionary, aliasing, storeProblems);
   }
 
-  public static Dictionary parse(final File file) throws LabelParserException,
-      IOException {
+  public static Dictionary parse(final File file) throws LabelParserException, IOException {
     return parse(file, false);
   }
 
@@ -245,23 +235,17 @@ public class DictionaryParser {
   }
 
   /**
-   * Parses a {@link URL} that is compliant with the PDS Data Dictionary
-   * document and formulates a {@link Dictionary} with a flag to indicated
-   * whether aliases should be read in.
+   * Parses a {@link URL} that is compliant with the PDS Data Dictionary document and formulates a
+   * {@link Dictionary} with a flag to indicated whether aliases should be read in.
    * 
-   * @param input
-   *          input stream to dictionary
-   * @param aliasing
-   *          indicates if aliases should be read in
+   * @param input input stream to dictionary
+   * @param aliasing indicates if aliases should be read in
    * @return a data dictionary with element, group, and object definitions
-   * @throws LabelParserException
-   *           thrown when dictionary can not be parsed correctly
-   * @throws IOException
-   *           thrown when dictionary can not be accessed
+   * @throws LabelParserException thrown when dictionary can not be parsed correctly
+   * @throws IOException thrown when dictionary can not be accessed
    */
-  public static Dictionary parse(final InputStream input,
-      final Dictionary dictionary, boolean aliasing, boolean storeProblems)
-      throws LabelParserException, IOException {
+  public static Dictionary parse(final InputStream input, final Dictionary dictionary,
+      boolean aliasing, boolean storeProblems) throws LabelParserException, IOException {
 
     CharStream antlrInput = new ANTLRInputStream(input);
     ODLLexer lexer = new ODLLexer(antlrInput);
@@ -314,8 +298,8 @@ public class DictionaryParser {
                 units = generateUnits((ObjectStatement) statement);
               } else {
                 try {
-                  definitions.add(DefinitionFactory.createDefinition(
-                      dictionary, (ObjectStatement) statement));
+                  definitions.add(
+                      DefinitionFactory.createDefinition(dictionary, (ObjectStatement) statement));
                 } catch (UnknownDefinitionException e) {
                   if (storeProblems) {
                     dictionary.addProblem(e);
@@ -340,8 +324,8 @@ public class DictionaryParser {
             // trying to formulate the aliases for a GroupDefinition it must be
             // looked up using an DictIdentifer that is based on an
             // ObjectDefinition.
-            final DictIdentifier identifier = (d instanceof GroupDefinition) ? DictIDFactory
-                .createObjectDefId(d.getIdentifier().getId())
+            final DictIdentifier identifier = (d instanceof GroupDefinition)
+                ? DictIDFactory.createObjectDefId(d.getIdentifier().getId())
                 : d.getIdentifier();
             if (aliases.containsKey(identifier)) {
               d.addAliases(aliases.get(identifier));
@@ -355,8 +339,7 @@ public class DictionaryParser {
       // TODO: Update to catch thrown exception not all exceptions
     } catch (RecognitionException ex) {
       log.error(ex.getMessage());
-      throw new LabelParserException(ex, ex.line, ex.charPositionInLine,
-          ProblemType.PARSE_ERROR);
+      throw new LabelParserException(ex, ex.line, ex.charPositionInLine, ProblemType.PARSE_ERROR);
     }
 
     log.info("Finshed parsing dictionary " + dictionary.getSourceString()); //$NON-NLS-1$
@@ -364,21 +347,18 @@ public class DictionaryParser {
     return dictionary;
   }
 
-  private static Map<DictIdentifier, List<Alias>> generateAliases(
-      ObjectStatement object) {
+  private static Map<DictIdentifier, List<Alias>> generateAliases(ObjectStatement object) {
     Map<DictIdentifier, List<Alias>> aliases = new HashMap<DictIdentifier, List<Alias>>();
 
     // Process object aliases
     // They take the form (alias, identifier)
     AttributeStatement objectAliases = object.getAttribute(OBJECT_ALIASES_ID);
     if (objectAliases != null) {
-      for (Iterator<Value> i = ((Sequence) objectAliases.getValue()).iterator(); i
-          .hasNext();) {
+      for (Iterator<Value> i = ((Sequence) objectAliases.getValue()).iterator(); i.hasNext();) {
         Sequence values = (Sequence) i.next();
         if (values.size() == 2) {
           Alias alias = new Alias(values.get(0).toString());
-          DictIdentifier identifier = DictIDFactory.createObjectDefId(values
-              .get(1).toString());
+          DictIdentifier identifier = DictIDFactory.createObjectDefId(values.get(1).toString());
           List<Alias> as = aliases.get(identifier);
           if (as == null) {
             as = new ArrayList<Alias>();
@@ -393,14 +373,11 @@ public class DictionaryParser {
     // They take the form (alias, object, identifier)
     AttributeStatement elementAliases = object.getAttribute(ELEMENT_ALIASES_ID);
     if (elementAliases != null) {
-      for (Iterator<Value> i = ((Sequence) elementAliases.getValue())
-          .iterator(); i.hasNext();) {
+      for (Iterator<Value> i = ((Sequence) elementAliases.getValue()).iterator(); i.hasNext();) {
         Sequence values = (Sequence) i.next();
         if (values.size() == 3) {
-          Alias alias = new Alias(values.get(1).toString(), values.get(0)
-              .toString());
-          DictIdentifier identifier = DictIDFactory.createElementDefId(values
-              .get(2).toString());
+          Alias alias = new Alias(values.get(1).toString(), values.get(0).toString());
+          DictIdentifier identifier = DictIDFactory.createElementDefId(values.get(2).toString());
           List<Alias> as = aliases.get(identifier);
           if (as == null) {
             as = new ArrayList<Alias>();
@@ -422,8 +399,7 @@ public class DictionaryParser {
     // (('A','ampere'), ('A/m', 'ampere/meter') ....)
     AttributeStatement unitSequence = object.getAttribute(UNIT_SEQUENCE_ID);
     if (unitSequence != null) {
-      for (Iterator<Value> i = ((Sequence) unitSequence.getValue()).iterator(); i
-          .hasNext();) {
+      for (Iterator<Value> i = ((Sequence) unitSequence.getValue()).iterator(); i.hasNext();) {
         String unit = null;
         String name = null;
         Sequence value = (Sequence) i.next();
@@ -444,8 +420,15 @@ public class DictionaryParser {
   }
 
   public static void main(String[] args) throws Exception {
-    BasicConfigurator.configure(new ConsoleAppender(new PatternLayout(
-        "%-5p %m%n"))); //$NON-NLS-1$
+    ConfigurationBuilder<BuiltConfiguration> builder =
+        ConfigurationBuilderFactory.newConfigurationBuilder();
+    builder.setStatusLevel(Level.ERROR);
+
+    AppenderComponentBuilder appenderBuilder = builder.newAppender("Stdout", "CONSOLE")
+        .addAttribute("target", ConsoleAppender.Target.SYSTEM_OUT);
+    appenderBuilder.add(builder.newLayout("PatternLayout").addAttribute("pattern", "%-5p %m%n"));
+    LoggerContext ctx = Configurator.initialize(builder.build());
+    ctx.updateLoggers();
     DictionaryParser.parse(new URL(args[0]));
   }
 }
