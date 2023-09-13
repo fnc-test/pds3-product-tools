@@ -226,6 +226,10 @@
           <doUpdate>false</doUpdate>
         </configuration>
       </plugin>
+      <!-- Commenting out due to class too large error from generated ODLParser class
+           copied these generated files to src/main
+        -->
+      <!--
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-antrun-plugin</artifactId>
@@ -263,6 +267,7 @@
           </execution>
         </executions>
       </plugin>
+      -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
