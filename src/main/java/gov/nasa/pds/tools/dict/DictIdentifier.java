@@ -31,62 +31,59 @@
 package gov.nasa.pds.tools.dict;
 
 import java.io.Serializable;
-
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class DictIdentifier implements Serializable {
-    private static final Logger log = Logger.getLogger(DictIdentifier.class
-            .getName());
+  private static final Logger log = LogManager.getLogger(DictIdentifier.class.getName());
 
-    private static final long serialVersionUID = 5818359213098660993L;
+  private static final long serialVersionUID = 5818359213098660993L;
 
-    private final String id;
+  private final String id;
 
-    private final Class<? extends Definition> clazz;
+  private final Class<? extends Definition> clazz;
 
-    public DictIdentifier(final Alias alias,
-            final Class<? extends Definition> clazz) {
-        this(alias.toString(), clazz);
+  public DictIdentifier(final Alias alias, final Class<? extends Definition> clazz) {
+    this(alias.toString(), clazz);
+  }
+
+  public DictIdentifier(final String id, final Class<? extends Definition> clazz) {
+    this.id = id == null ? "" : id; //$NON-NLS-1$
+    this.clazz = clazz;
+  }
+
+  public Class<? extends Definition> getType() {
+    return this.clazz;
+  }
+
+  public String getId() {
+    return this.id;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (!(o instanceof DictIdentifier)) {
+      log.info(o.toString() + " is not an instance of DictIdentifier"); //$NON-NLS-1$
+      return false;
     }
-
-    public DictIdentifier(final String id,
-            final Class<? extends Definition> clazz) {
-        this.id = id == null ? "" : id; //$NON-NLS-1$
-        this.clazz = clazz;
+    DictIdentifier oId = (DictIdentifier) o;
+    if (!this.clazz.equals(oId.getType())) {
+      return false;
+    } else if (!this.id.equals(oId.getId())) {
+      return false;
     }
+    return true;
+  }
 
-    public Class<? extends Definition> getType() {
-        return this.clazz;
-    }
+  @Override
+  public int hashCode() {
+    String name = this.id + this.clazz.getSimpleName();
+    return name.hashCode();
+  }
 
-    public String getId() {
-        return this.id;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof DictIdentifier)) {
-            log.info(o.toString() + " is not an instance of DictIdentifier"); //$NON-NLS-1$
-            return false;
-        }
-        DictIdentifier oId = (DictIdentifier) o;
-        if (!this.clazz.equals(oId.getType())) {
-            return false;
-        } else if (!this.id.equals(oId.getId())) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        String name = this.id + this.clazz.getSimpleName();
-        return name.hashCode();
-    }
-
-    @Override
-    public String toString() {
-        return this.id;
-    }
+  @Override
+  public String toString() {
+    return this.id;
+  }
 
 }
