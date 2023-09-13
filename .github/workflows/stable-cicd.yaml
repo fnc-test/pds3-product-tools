@@ -33,7 +33,7 @@ name: 😌 Stable integration & delivery
 
 on:
     push:
-        branches:
+        tags:
             - 'release/*'
 concurrency: roundup
 
@@ -72,6 +72,7 @@ jobs:
                 uses: NASA-PDS/roundup-action@stable
                 with:
                     assembly: stable
+                    packages: openjdk11-jdk
                 env:
                     ossrh_username: ${{secrets.OSSRH_USERNAME}}
                     ossrh_password: ${{secrets.OSSRH_PASSWORD}}
