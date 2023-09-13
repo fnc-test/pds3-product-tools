@@ -1,8 +1,12 @@
 # Changelog
 
-## [«unknown»](https://github.com/NASA-PDS/pds3-product-tools/tree/«unknown») (2023-03-22)
+## [«unknown»](https://github.com/NASA-PDS/pds3-product-tools/tree/«unknown») (2023-09-13)
 
 [Full Changelog](https://github.com/NASA-PDS/pds3-product-tools/compare/v4.1.0...«unknown»)
+
+**Defects:**
+
+- \[SECURITY\] Upgrade to latest log4j-api/log4-core [\#17](https://github.com/NASA-PDS/pds3-product-tools/issues/17) [[s.critical](https://github.com/NASA-PDS/pds3-product-tools/labels/s.critical)]
 
 **Other closed issues:**
 
