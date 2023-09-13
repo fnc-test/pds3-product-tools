@@ -6,6 +6,7 @@
 
 **Defects:**
 
+- `code too large` error on generated ODLParser class preventing build and tag of upgraded log4j dependencies needed by pds4-jparser [\#21](https://github.com/NASA-PDS/pds3-product-tools/issues/21) [[s.critical](https://github.com/NASA-PDS/pds3-product-tools/labels/s.critical)]
 - \[SECURITY\] Upgrade to latest log4j-api/log4-core [\#17](https://github.com/NASA-PDS/pds3-product-tools/issues/17) [[s.critical](https://github.com/NASA-PDS/pds3-product-tools/labels/s.critical)]
 
 **Other closed issues:**
