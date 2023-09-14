@@ -37,9 +37,16 @@
 	 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
+  <!-- Inherit release profile, reporting, SNAPSHOT repo, etc. from parent repo -->
+  <parent>
+    <groupId>gov.nasa</groupId>
+    <artifactId>pds</artifactId>
+    <version>1.13.0</version>
+  </parent>
+
   <groupId>gov.nasa.pds</groupId>
   <artifactId>pds3-product-tools</artifactId>
-  <version>4.2.0</version>
+  <version>4.2.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>${project.groupId}:${project.artifactId}</name>
@@ -54,112 +61,6 @@
       <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
     </license>
   </licenses>
-
-  <developers>
-    <developer>
-      <name>Jordan Padams</name>
-      <id>jpadams</id>
-      <email>Jordan.H.Padams@jpl.nasa.gov</email>
-      <organization>NASA Jet Propulsion Laboratory</organization>
-      <roles>
-        <role>PDS Engineering Node Manager</role>
-      </roles>
-    </developer>
-    <developer>
-      <name>Galen Hollins</name>
-      <id>ghollins</id>
-      <email>Galen.Hollins@jpl.nasa.gov</email>
-      <organization>NASA Jet Propulsion Laboratory</organization>
-      <roles>
-        <role>PDS Engineering Node Development Lead</role>
-      </roles>
-    </developer>
-    <developer>
-      <name>Sean Hardman</name>
-      <id>shardman</id>
-      <email>Sean.Hardman@jpl.nasa.gov</email>
-      <organization>NASA Jet Propulsion Laboratory</organization>
-      <roles>
-        <role>Former Development Lead</role>
-      </roles>
-    </developer>
-    <developer>
-      <name>Michael Cayanan</name>
-      <id>mcayanan</id>
-      <email>Michael.Cayanan@jpl.nasa.gov</email>
-      <organization>NASA Jet Propulsion Laboratory</organization>
-      <roles>
-        <role>Former Developer</role>
-      </roles>
-    </developer>
-    <developer>
-      <name>Paul Ramirez</name>
-      <id>pramirez</id>
-      <email>Paul.Ramirez@jpl.nasa.gov</email>
-      <organization>NASA Jet Propulsion Laboratory</organization>
-      <roles>
-        <role>Former Developer</role>
-      </roles>
-    </developer>
-    <developer>
-      <name>Joshua Ganderson</name>
-      <id>jagander</id>
-      <organization>NASA Ames Research Center</organization>
-      <roles>
-        <role>Former Developer</role>
-      </roles>
-    </developer>
-  </developers>
-
-  <contributors>
-    <contributor>
-      <name>Steve Hughes</name>
-      <email>Steve.Hughes@jpl.nasa.gov</email>
-      <organization>NASA Jet Propulsion Laboratory</organization>
-      <roles>
-        <role>System Engineer</role>
-      </roles>
-    </contributor>
-    <contributor>
-      <name>Ron Joyner</name>
-      <email>Ron.Joyner@jpl.nasa.gov</email>
-      <organization>NASA Jet Propulsion Laboratory</organization>
-      <roles>
-        <role>System Engineer</role>
-      </roles>
-    </contributor>
-    <contributor>
-      <name>Elizabeth Rye</name>
-      <email>Elizabeth.Rye@jpl.nasa.gov</email>
-      <organization>NASA Jet Propulsion Laboratory</organization>
-      <roles>
-        <role>System Engineer</role>
-      </roles>
-    </contributor>
-    <contributor>
-      <name>Mark Rose</name>
-      <email>Mark.Rose@nasa.gov</email>
-      <organization>NASA Ames Research Center</organization>
-      <roles>
-        <role>Consultant</role>
-      </roles>
-    </contributor>
-  </contributors>
-
-  <distributionManagement>
-    <snapshotRepository>
-      <id>ossrh</id>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-    </snapshotRepository>
-    <repository>
-      <id>ossrh</id>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-    </repository>
-    <site>
-      <id>dummy URL to enabling doc staging</id>
-      <url>https://{project.artifactId}</url>
-    </site>
-  </distributionManagement>
 
   <build>
     <testSourceDirectory>src/test</testSourceDirectory>
@@ -177,26 +78,22 @@
       </resource>
     </resources>
     <plugins>
-      <plugin>
-	<groupId>org.sonatype.plugins</groupId>
-	<artifactId>nexus-staging-maven-plugin</artifactId>
-	<version>1.6.7</version>
-	<extensions>true</extensions>
-	<configuration>
-          <serverId>ossrh</serverId>
-          <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-          <autoReleaseAfterClose>true</autoReleaseAfterClose>
-	</configuration>
-      </plugin>
-      <plugin>
-	<groupId>org.apache.maven.plugins</groupId>
-	<artifactId>maven-site-plugin</artifactId>
-	<version>3.8.2</version>
-      </plugin>
+       <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-site-plugin</artifactId>
+          <version>4.0.0-M8</version>
+          <dependencies>
+            <dependency><!-- add support for ssh/scp -->
+              <groupId>org.apache.maven.wagon</groupId>
+              <artifactId>wagon-ssh</artifactId>
+              <version>1.0</version>
+            </dependency>
+          </dependencies>
+       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
-	    <version>3.0.0</version>
+	    <version>3.2.0</version>
         <configuration>
           <archive>
             <manifest>
@@ -208,6 +105,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>buildnumber-maven-plugin</artifactId>
+        <version>1.4</version>
         <executions>
           <execution>
             <phase>validate</phase>
@@ -227,7 +125,8 @@
         </configuration>
       </plugin>
       <!-- Commenting out due to class too large error from generated ODLParser class
-           copied these generated files to src/main
+           copied these generated files to src/main. Leaving here in case future
+           developers need to re-generate.
         -->
       <!--
       <plugin>
@@ -271,6 +170,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
+        <version>3.3.0</version>
         <executions>
           <execution>
             <id>bin-release</id>
@@ -287,93 +187,22 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>
+<!--      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
           <source>1.8</source>
           <target>1.8</target>
         </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.sonatype.plugins</groupId>
-        <artifactId>nexus-staging-maven-plugin</artifactId>
-        <version>1.6.7</version>
-        <extensions>true</extensions>
-        <configuration>
-           <serverId>ossrh</serverId>
-           <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-           <autoReleaseAfterClose>true</autoReleaseAfterClose>
-        </configuration>
-      </plugin>
+      </plugin>-->
     </plugins>
   </build>
 
   <scm>
-    <url>https://github.com/NASA-PDS-Incubator/pds3-product-tools/tree/master</url>
-    <connection>scm:git:git://github.com/NASA-PDS-Incubator/pds3-product-tools.git</connection>
-    <developerConnection>scm:git:ssh://github.com:NASA-PDS-Incubator/pds3-product-tools.git</developerConnection>
+    <url>https://github.com/NASA-PDS/pds3-product-tools/tree/main</url>
+    <connection>scm:git:git://github.com/NASA-PDS/pds3-product-tools.git</connection>
+    <developerConnection>scm:git:ssh://github.com:NASA-PDS/pds3-product-tools.git</developerConnection>
   </scm>
-  
-  <profiles>
-    <profile> 
-      <id>release</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-source-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>attach-sources</id>
-                <phase>prepare-package</phase>
-                <goals>
-                  <goal>jar-no-fork</goal>
-                  <goal>test-jar</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-javadoc-plugin</artifactId>
-    		<configuration>
-              <source>1.8</source>
-    	  	  <failOnError>false</failOnError>
-            </configuration>
-            <executions>
-              <execution>
-                <id>attach-javadocs</id>
-                <goals>
-                  <goal>jar</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-gpg-plugin</artifactId>
-            <version>1.5</version>
-            <executions>
-                <execution>
-                    <id>sign-artifacts</id>
-                    <phase>verify</phase>
-                    <goals>
-                        <goal>sign</goal>
-                    </goals>
-                    <configuration>
-                        <gpgArguments>
-                            <arg>--pinentry-mode</arg>
-                            <arg>loopback</arg>
-                        </gpgArguments>
-                    </configuration>
-                </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
 
   <dependencies>
     <dependency>
@@ -421,47 +250,9 @@
     </dependency>
   </dependencies>
 
-  <reporting>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-project-info-reports-plugin</artifactId>
-        <reportSets>
-          <reportSet>
-            <reports>
-              <report>dependencies</report>
-              <report>issue-management</report>
-              <report>licenses</report>
-              <report>mailing-lists</report>
-              <report>team</report>
-              <report>summary</report>
-            </reports>
-          </reportSet>
-        </reportSets>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-changes-plugin</artifactId>
-        <reportSets>
-          <reportSet>
-            <reports>
-              <report>changes-report</report>
-            </reports>
-          </reportSet>
-        </reportSets>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-		<configuration>
-          <source>1.8</source>
-	  	  <failOnError>false</failOnError>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-report-plugin</artifactId>
-      </plugin>
-    </plugins>
-  </reporting>
+  <!-- Inherit from parent -->
+  <developers />
+  <profiles />
+  <distributionManagement />
+  <reporting />
 </project>
